@@ -9,7 +9,7 @@ Music playing
         *	Previous
         *  Repeat ( one, all)
         *	Shuffle
-    *.	Songs must still play while screen is off
+    *	Songs must still play while screen is off
     *	Songs must still play in background
 2.	Users may play music from soundcloud
     *	Users may play a song from soundcloud by clicking a link
