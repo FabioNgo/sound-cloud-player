@@ -16,6 +16,11 @@ Music playing
     *	Users may play all songs from a user
     *.	Users may play songs by tags
     *	Users may download songs ( if apllicable)
+3.  Users may upload their audio/song to the soundcloud
+4.  Users may login to the app by facebook account or soundcloud account
+5. 	Users may logout
+6.	Users can search the songs, authors, singer...
+
 
 Apprearance
 =============
