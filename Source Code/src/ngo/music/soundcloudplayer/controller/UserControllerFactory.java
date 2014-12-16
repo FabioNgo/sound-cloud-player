@@ -1,10 +1,9 @@
 package ngo.music.soundcloudplayer.controller;
 
-public abstract class UserController {
+public class UserControllerFactory {
 
-	public UserController() {
+	public UserControllerFactory() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public abstract void login();
 }
