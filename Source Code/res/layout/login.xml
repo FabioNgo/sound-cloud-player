@@ -7,27 +7,29 @@
         android:id="@+id/login_soundcloud_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
         android:text="Login with SoundCloud" />
 
     <Button
         android:id="@+id/login_google_plus_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/login_soundcloud_button"
-        android:layout_centerVertical="true"
+		android:layout_below="@+id/login_soundcloud_button"
         android:text="Login with Google Plus" />
 
     <Button
         android:id="@+id/login_facebook_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/login_google_plus_button"
-        android:layout_alignRight="@+id/login_google_plus_button"
         android:layout_below="@+id/login_google_plus_button"
-        android:layout_marginTop="34dp"
         android:text="Login with Facebook" />
+    
+    <WebView 
+        android:id = "@+id/webview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_facebook_button"
+        />
 
 </RelativeLayout>

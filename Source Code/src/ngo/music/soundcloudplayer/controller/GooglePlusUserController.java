@@ -1,5 +1,7 @@
 package ngo.music.soundcloudplayer.controller;
 
+import java.net.URI;
+
 public class GooglePlusUserController extends UserController {
 
 	public GooglePlusUserController() {
@@ -7,7 +9,8 @@ public class GooglePlusUserController extends UserController {
 	}
 
 	@Override
-	public void login() {
+	public URI login() {
+		return null;
 		// TODO Auto-generated method stub
 		
 	}

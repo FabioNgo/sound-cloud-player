@@ -14,7 +14,15 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width = "wrap_content"
+            android:layout_height = "wrap_content"
+            android:text="Login Button" />
+
+    </FrameLayout>
 
     <!--
          android:layout_gravity="start" tells DrawerLayout to treat
@@ -31,7 +39,7 @@
     <fragment
         android:id="@+id/navigation_drawer"
         android:name="ngo.music.soundcloudplayer.boundary.NavigationDrawerFragment"
-        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         tools:layout="@layout/fragment_navigation_drawer" />

@@ -18,9 +18,12 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class GreetingScreen extends Activity implements
@@ -50,6 +53,18 @@ public class GreetingScreen extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+		
+		Button loginButton  = (Button) findViewById(R.id.login_button);
+		loginButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				LoginUI fragment = new LoginUI();
+				int fragmentTransaction = getFragmentManager().beginTransaction().replace(R.id.container, fragment).commit();
+				
+			}
+		});
 	}
 
 	@Override

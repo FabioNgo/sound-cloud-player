@@ -7,6 +7,9 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+    <permission android:name="android.permission.INTERNET">
+        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+    </permission>
 
     <application
         android:allowBackup="true"
@@ -23,5 +26,7 @@
             </intent-filter>
         </activity>
     </application>
+    
+    
 
 </manifest>
