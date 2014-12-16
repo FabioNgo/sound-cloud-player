@@ -7,7 +7,8 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MIME;
-import org.apache.http.entity.mime.MultipartEntity;
+
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.AbstractContentBody;
 import org.apache.http.entity.mime.content.ContentBody;
 import org.apache.http.entity.mime.content.FileBody;
@@ -339,16 +340,12 @@ public class Request implements Iterable<NameValuePair> {
      * @param contentType the content type
      * @return this
      */
-    public Request withContent(String content, String contentType) {
-        try {
-            StringEntity stringEntity = new StringEntity(content, UTF_8);
-            if (contentType != null) {
-                stringEntity.setContentType(contentType);
-            }
-            return withEntity(stringEntity);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+    public Request withContent(String content, String contentType) throws UnsupportedEncodingException {
+        StringEntity stringEntity = new StringEntity(content, UTF_8);
+		if (contentType != null) {
+		    stringEntity.setContentType(contentType);
+		}
+		return withEntity(stringEntity);
     }
 
     public Request range(long... ranges) {
@@ -403,10 +400,12 @@ public class Request implements Iterable<NameValuePair> {
 
                 final Charset charSet = java.nio.charset.Charset.forName(UTF_8);
                 if (isMultipart()) {
-                    MultipartEntity multiPart = new MultipartEntity(
-                            HttpMultipartMode.BROWSER_COMPATIBLE,  // XXX change this to STRICT once rack on server is upgraded
-                            null,
-                            charSet);
+                	MultipartEntityBuilder multiPart = MultipartEntityBuilder.create();
+                	multiPart.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//                    MultipartEntity multiPart = new MultipartEntity(
+//                            HttpMultipartMode.BROWSER_COMPATIBLE,  // XXX change this to STRICT once rack on server is upgraded
+//                            null,
+//                            charSet);
 
                     if (mFiles != null) {
                         for (Map.Entry<String, Attachment> e : mFiles.entrySet()) {
@@ -417,9 +416,9 @@ public class Request implements Iterable<NameValuePair> {
                     for (NameValuePair pair : mParams) {
                         multiPart.addPart(pair.getName(), new StringBody(pair.getValue(), "text/plain", charSet));
                     }
-
-                    enclosingRequest.setEntity(listener == null ? multiPart :
-                        new CountingMultipartEntity(multiPart, listener));
+                    HttpEntity entity = multiPart.build();
+                    enclosingRequest.setEntity(listener == null ? entity :
+                        new CountingMultipartEntity(entity, listener));
 
                     request.setURI(URI.create(mResource));
 
