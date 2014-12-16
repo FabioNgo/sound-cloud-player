@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 public class LoginUI extends Fragment {
 
@@ -26,7 +27,11 @@ public class LoginUI extends Fragment {
 		// TODO Auto-generated method stub
 		View rootView = inflater.inflate(R.layout.login, container, false);
 		
-		Button loginFacebook =  rootView.fi
+		Button loginFacebook =  (Button)rootView.findViewById(R.id.login_facebook_button);
+		
+		Button loginGooglePlus = (Button) rootView.findViewById(R.id.login_google_plus_button);
+		
+		Button loginSoundCloud = (Button) rootView.findViewById(R.id.login_soundcloud_button);
 		
 		return rootView;
 	}
