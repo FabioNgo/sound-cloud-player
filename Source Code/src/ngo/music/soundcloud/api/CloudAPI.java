@@ -1,4 +1,4 @@
-package com.soundcloud.api;
+package ngo.music.soundcloud.api;
 
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -184,7 +184,7 @@ public interface CloudAPI {
      *
      * @param uri SoundCloud stream URI, e.g. https://api.soundcloud.com/tracks/25272620/stream
      * @param skipLogging skip logging the play of this track (client needs
-     *        {@link com.soundcloud.api.Token#SCOPE_PLAYCOUNT})
+     *        {@link ngo.music.soundcloud.api.Token#SCOPE_PLAYCOUNT})
      * @return the resolved stream
      * @throws IOException network errors
      * @throws com.com.soundcloud.api.CloudAPI.ResolverException resolver error (invalid status etc)

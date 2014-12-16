@@ -1,4 +1,4 @@
-package com.soundcloud.api;
+package ngo.music.soundcloud.api;
 
 /**
  * Various SoundCloud API endpoints.

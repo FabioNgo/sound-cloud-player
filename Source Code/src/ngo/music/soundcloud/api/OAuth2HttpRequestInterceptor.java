@@ -1,4 +1,4 @@
-package com.soundcloud.api;
+package ngo.music.soundcloud.api;
 
 import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;

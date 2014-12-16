@@ -1,4 +1,4 @@
-package com.soundcloud.api;
+package ngo.music.soundcloud.api;
 
 /**
  * Request parameters for various objects.

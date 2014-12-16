@@ -1,4 +1,4 @@
-package com.soundcloud.api;
+package ngo.music.soundcloud.api;
 
 import org.apache.http.ConnectionReuseStrategy;
 import org.apache.http.Header;

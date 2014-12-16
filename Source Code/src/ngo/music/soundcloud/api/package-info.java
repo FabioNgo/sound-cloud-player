@@ -9,4 +9,4 @@
  * @author Jan Berkel <jan@soundcloud.com>
  * @version 1.3.1, 02/10/13
  */
-package com.soundcloud.api;
+package ngo.music.soundcloud.api;
