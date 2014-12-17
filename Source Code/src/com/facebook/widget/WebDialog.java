@@ -16,7 +16,8 @@
 
 package com.facebook.widget;
 
-import ngo.vnexpress.reader.R;
+
+import ngo.music.soundcloudplayer.R;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;

@@ -4,14 +4,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import com.soundcloud.api.ApiWrapper;
-import com.soundcloud.api.Endpoints;
-import com.soundcloud.api.Token;
+
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.general.Contants;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -40,7 +39,7 @@ public class LoginUI extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		final View rootView = inflater.inflate(R.layout.login, container, false);
+		final View rootView = inflater.inflate(R.layout.login_layout, container, false);
 		
 		Button loginFacebook =  (Button)rootView.findViewById(R.id.login_facebook_button);
 		loginFacebook.setOnClickListener(new OnClickListener() {
@@ -70,7 +69,10 @@ public class LoginUI extends Fragment {
 			@Override
 			public void onClick(View v) {
 				SoundCloudLoginUI soundCloudLoginUI =  new SoundCloudLoginUI();
-				int fragmentTransaction = getFragmentManager().beginTransaction().replace(R.id.container, soundCloudLoginUI).commit();
+				FragmentManager fragmentManager = getActivity().getFragmentManager();
+				int fragmentTransaction = fragmentManager.beginTransaction()
+														.replace(R.id.login_layout, soundCloudLoginUI)
+														.commit();
 				// TODO Auto-generated method stub
 //				//URI url = UserControllerFactory.createUserController(Contants.SOUNDCLOUD_USER).login();
 //				final ApiWrapper wrapper = new ApiWrapper(

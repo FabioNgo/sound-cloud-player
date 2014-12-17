@@ -22,7 +22,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ngo.vnexpress.reader.R;
+
+
+import ngo.music.soundcloudplayer.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

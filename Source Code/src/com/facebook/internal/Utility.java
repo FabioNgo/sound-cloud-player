@@ -38,7 +38,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ngo.vnexpress.reader.BuildConfig;
+
+
+import ngo.music.soundcloudplayer.BuildConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;

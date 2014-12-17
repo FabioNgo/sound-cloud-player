@@ -20,12 +20,12 @@ import android.net.Uri;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.soundcloud.api.ApiWrapper;
-import com.soundcloud.api.Endpoints;
-import com.soundcloud.api.Token;
-import com.soundcloud.api.CloudAPI;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.api.ApiWrapper;
+import ngo.music.soundcloudplayer.api.Endpoints;
+import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.api.CloudAPI;
 import ngo.music.soundcloudplayer.general.Contants;
 
 /**

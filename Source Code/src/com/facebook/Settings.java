@@ -30,7 +30,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
-import ngo.vnexpress.reader.BuildConfig;
+
+
+import ngo.music.soundcloudplayer.BuildConfig;
 
 import org.json.JSONException;
 import org.json.JSONObject;

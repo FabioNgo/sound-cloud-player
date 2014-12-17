@@ -16,7 +16,8 @@
 
 package com.facebook;
 
-import ngo.vnexpress.reader.R;
+
+import ngo.music.soundcloudplayer.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
