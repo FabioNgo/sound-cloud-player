@@ -481,4 +481,14 @@ public abstract class User {
 		this.primaryEmailConfirmed = primaryEmailConfirmed;
 	}
 
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		String temp = "";
+		temp = temp + "ID: " + String.valueOf(getId()) + "\n"; 
+		temp = temp + "Username: " + getUsername() + "\n";
+		
+		
+		return temp;
+	}
 }

@@ -54,26 +54,15 @@ public class SoundCloudUserController extends UserController implements Contants
 		//System.out.println (wrapper);
 		try {
 			//wrapper.
-			Token t = wrapper.login(username,password);
+			Token t = wrapper.login("baoloc1403@gmail.com","ngolebaoloc");
 			
 	        HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 	        JSONObject me = Http.getJSON(resp);
 	        //System.out.println ("USERNAME  = " + me.getString("username"));
 	        addInformation(me);
 
-	        
-//			System.out.println(wrapper.getURI(Request.to("/me"), true, true));
-		//	t.
-//			HttpResponse response = wrapper.put(Request.to("/me"));
-//			//System.out.println(wrapper.getHttpClient().execute("/me"));
-//			
-//			
-//			
-//			for (Header header : resp.getAllHeaders()){
-//				System.out.println ("head =  " + header.getName() + " " + header.getValue() );
-//			}
 			
-			System.out.println(t.access);
+			//System.out.println();
 			//wrapper.getURI(request, api, secure)
 			//System.out.t.access
 			/*
@@ -124,6 +113,7 @@ public class SoundCloudUserController extends UserController implements Contants
 		soundcloudAccount.setWebsite(me.getString(WEBSITE));
 		soundcloudAccount.setWebsiteTitle(me.getString(WEBSITE_TITLE));
 		
+		System.out.println (soundcloudAccount.toString());
 		
 		
 	}

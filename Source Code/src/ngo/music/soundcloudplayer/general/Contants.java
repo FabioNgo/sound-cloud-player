@@ -40,7 +40,7 @@ public interface Contants {
 		String PUBLIC_FAVORITES_COUNT  = "public_favorites_count";
 		String AVATAR_DATA = "avatar_data";
 		String PLAN = "plan";
-		String PRIVATE_TRACK_COUNT = "private_track_count";
+		String PRIVATE_TRACK_COUNT = "private_tracks_count";
 		String PRIVATE_PLAYLISTS_COUNT = "private_playlists_count";
 		String PRIMARY_EMAIL_CONFIRMED = "primary_email_confirmed";
 		
