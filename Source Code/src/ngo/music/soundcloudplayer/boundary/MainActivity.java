@@ -1,23 +1,28 @@
 package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.MyPagerAdapter;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +39,14 @@ public class MainActivity extends SlidingFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_demo);
+		View decorView = getWindow().getDecorView();
+		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+	              
+	
+		setContentView(R.layout.activity_main);
+		/**
+		 * Sliding Menu (Left2Right)
+		 */
 		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);
 		if (savedInstanceState == null) {
@@ -54,11 +66,13 @@ public class MainActivity extends SlidingFragmentActivity {
 		sm.setShadowDrawable(R.drawable.shadow);
 		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		sm.setFadeDegree(0.35f);
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		setSupportActionBar((Toolbar) findViewById(R.id.main_toolbar));
-
+		Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
+		/**
+		 * Sliding Up Panel
+		 */
 		mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 		mLayout.setPanelSlideListener(new PanelSlideListener() {
 			@Override
@@ -89,15 +103,9 @@ public class MainActivity extends SlidingFragmentActivity {
 			}
 		});
 
-		TextView t = (TextView) findViewById(R.id.main);
-		t.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				mLayout.collapsePanel();
-			}
-		});
+		
 
-		t = (TextView) findViewById(R.id.name);
+		TextView t = (TextView) findViewById(R.id.name);
 		t.setText("Test");
 		Button f = (Button) findViewById(R.id.follow);
 		f.setText("Button");
@@ -110,6 +118,21 @@ public class MainActivity extends SlidingFragmentActivity {
 				startActivity(i);
 			}
 		});
+		/**
+		 * Tab Sliding
+		 */
+		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		ViewPager pager = (ViewPager) findViewById(R.id.pager);
+		MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+
+		pager.setAdapter(adapter);
+
+		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+				.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
+
+		tabs.setViewPager(pager);
+		
 	}
 
 	@Override
@@ -174,4 +197,8 @@ public class MainActivity extends SlidingFragmentActivity {
 			super.onBackPressed();
 		}
 	}
+	/**
+	 * Tab Sliding
+	 */
+	
 }
