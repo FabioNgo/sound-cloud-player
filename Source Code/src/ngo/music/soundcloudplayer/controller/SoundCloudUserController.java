@@ -24,6 +24,7 @@ import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
+import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Contants;
 
 
@@ -34,6 +35,8 @@ import ngo.music.soundcloudplayer.general.Contants;
 public class SoundCloudUserController extends UserController implements Contants.UserContant {
 
 	private static final String URL_LOGIN = "http://soundcloud.com/login";
+	private static final String USERNAME_LOGIN = "baoloc1403@gmail.com";
+	private static final String PASSWORD_LOGIN = "ngolebaoloc";
 	/**
 	 * 
 	 */
@@ -48,45 +51,45 @@ public class SoundCloudUserController extends UserController implements Contants
 		
 	}
 	
-	public String validateLogin (String username , String password){
-		//CloudAPI api = new CloudAPI(Contants.CLIENT_ID,Contants.CLIENT_SECRET);
+	/**
+	 * Validate the login.
+	 * If username and password is correct.
+	 * 	- Login to Soundcloud
+	 *  - Get user from soundcloud
+	 *  
+	 * @param username
+	 * @param password
+	 * @return null if cannot login. User object if can login
+	 */
+	public User validateLogin (String username , String password){
+
 		ApiWrapper wrapper = new ApiWrapper(Contants.CLIENT_ID, Contants.CLIENT_SECRET, null,null);
-		//System.out.println (wrapper);
+		User currentUser = null;
+		
 		try {
-			//wrapper.
-			Token t = wrapper.login("baoloc1403@gmail.com","ngolebaoloc");
 			
+			//login
+			wrapper.login(username,password);
+			//Get user information from soundcloud 
 	        HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 	        JSONObject me = Http.getJSON(resp);
-	        //System.out.println ("USERNAME  = " + me.getString("username"));
-	        addInformation(me);
+	        
+	        //set information of logged user
+	        currentUser  = addInformation(me);
 
-			
-			//System.out.println();
-			//wrapper.getURI(request, api, secure)
-			//System.out.t.access
-			/*
-			 * Get id of user
-			 * 
-			 */
-			//long id = wrapper.clientCredentials())("https://api.soundcloud.com/users/3207");
-			//System.out.println(id);
-		//	t.
-//			Log.d("ID OF USER: ", String.(id));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return  "Invalid Username or Password";
+			//e.printStackTrace();
+			return  null;
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			return null;
 		}
 		
-	
-		return "OK";
+		return currentUser;
 	}
 	
-	public void addInformation(JSONObject me) throws JSONException{
+	public User addInformation(JSONObject me) throws JSONException{
 		SoundCloudAccount soundcloudAccount = new SoundCloudAccount();
 		soundcloudAccount.setAvatarUrl(me.getString(AVATAR_URL));
 		soundcloudAccount.setCity(me.getString(CITY));
@@ -113,8 +116,8 @@ public class SoundCloudUserController extends UserController implements Contants
 		soundcloudAccount.setWebsite(me.getString(WEBSITE));
 		soundcloudAccount.setWebsiteTitle(me.getString(WEBSITE_TITLE));
 		
-		System.out.println (soundcloudAccount.toString());
 		
+		return soundcloudAccount;
 		
 	}
 

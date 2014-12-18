@@ -15,6 +15,7 @@ import android.app.ActionBar;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
@@ -40,7 +41,7 @@ import android.widget.TextView;
 public class MainActivity extends SlidingFragmentActivity {
 	private static final String TAG = "DemoActivity";
 	private int mTitleRes;
-	protected ListFragment mFrag;
+	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private MainActivity activity;
 	/**
@@ -75,11 +76,11 @@ public class MainActivity extends SlidingFragmentActivity {
 		if (savedInstanceState == null) {
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
-			mFrag = new SampleListFragment();
+			mFrag = new UserDisplayFragment();
 			t.replace(R.id.menu_frame, mFrag);
 			t.commit();
 		} else {
-			mFrag = (ListFragment) this.getSupportFragmentManager()
+			mFrag = (Fragment) this.getSupportFragmentManager()
 					.findFragmentById(R.id.menu_frame);
 		}
 

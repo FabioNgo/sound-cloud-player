@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF" >
+    android:background="#FFFF00" >
 
     <TextView
         android:id="@+id/textView1"
@@ -42,6 +42,13 @@
         android:ems="10"
         android:inputType="textPassword" />
 
+     <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:text="Username or Password is not correct!" />
+     
     <Button
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
@@ -50,5 +57,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="58dp"
         android:text="Login" />
+
+   
 
 </RelativeLayout>

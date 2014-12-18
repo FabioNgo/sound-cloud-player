@@ -18,6 +18,7 @@ public interface Contants {
 	public static final int SOUNDCLOUD_USER = 2;
 	
 	interface UserContant{
+		String USER  = "user";
 		String USERNAME = "username";
 		String ID = "id";
 		String PERMALINK = "permalink";

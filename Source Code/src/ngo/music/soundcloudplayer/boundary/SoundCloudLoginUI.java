@@ -6,12 +6,15 @@ import java.util.zip.Inflater;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Contants;
-
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.graphics.YuvImage;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,7 +29,7 @@ import android.widget.Toast;
  * @author LEBAO_000
  *
  */
-public class SoundCloudLoginUI extends Fragment {
+public class SoundCloudLoginUI extends Fragment implements Contants.UserContant {
 
 	public SoundCloudLoginUI() {
 		// TODO Auto-generated constructor stub
@@ -55,7 +58,10 @@ public class SoundCloudLoginUI extends Fragment {
 				// TODO Auto-generated method stub
 				String usernameStr = username.getText().toString();
 				String passwordStr = password.getText().toString();
-				new Background(usernameStr, passwordStr).execute();
+				Background background = new  Background(usernameStr, passwordStr);
+				background.execute();
+				
+				
 //				SoundCloudUserController userController = new SoundCloudUserController();
 //				Toast.makeText(getActivity(), userController.validateLogin(usernameStr, passwordStr), Toast.LENGTH_LONG).show();
 				
@@ -70,6 +76,7 @@ public class SoundCloudLoginUI extends Fragment {
 		private ProgressDialog pDialog;
 		String username;
 		String password;
+		boolean isLogin = false;
 		
 		public Background(String username, String password){
 			this.username = username;
@@ -94,7 +101,20 @@ public class SoundCloudLoginUI extends Fragment {
 				public void run() {
 					// TODO Auto-generated method stub
 					SoundCloudUserController userController = new SoundCloudUserController();
-					userController.validateLogin(username, password);
+					User currentUser = userController.validateLogin(username, password);
+					
+					//Cannot login
+					if (currentUser == null){
+						pDialog.dismiss();
+						isLogin = false;
+					}else{
+						Bundle bundle  = getBundle(currentUser);
+						isLogin = true;
+						Intent goToMainActivity  =  new Intent(getActivity(), MainActivity.class);
+						goToMainActivity.putExtra(USER, bundle);
+						startActivity(goToMainActivity);
+					}
+				
 					
 				}
 			});
@@ -111,6 +131,33 @@ public class SoundCloudLoginUI extends Fragment {
 			
 		}
 		
+	}
+	
+	public Bundle getBundle (User user){
+		Bundle bundle = new Bundle();
+		
+		bundle.putInt(ID, user.getId());
+		bundle.putString(USERNAME, user.getUsername());
+		bundle.putString(AVATAR_URL, user.getAvatarUrl());
+		bundle.putString(CITY, user.getCity());
+		bundle.putString(COUNTRY, user.getCountry());
+		bundle.putString(DESCRIPTION, user.getDescription());
+		bundle.putInt(FOLLOWERS_COUNT, user.getFollowersCount());
+		bundle.putInt(FOLLOWINGS_COUNT, user.getFollowingCount());
+		bundle.putString(FULLNAME, user.getFullName());
+		bundle.putBoolean(ONLINE, user.isOnline());
+		bundle.putInt(PLAYLIST_COUNT, user.getPlaylistCount());
+		bundle.putString(PERMALINK, user.getPermalink());
+		bundle.putString(PERMALINK_URL, user.getPermalinkUrl());
+		bundle.putBoolean(PRIMARY_EMAIL_CONFIRMED, user.isPrimaryEmailConfirmed());
+		bundle.putInt(PRIVATE_PLAYLISTS_COUNT, user.getPlaylistCount());
+		bundle.putInt(PRIVATE_TRACK_COUNT, user.getPrivateTracksCount());
+		bundle.putInt(PUBLIC_FAVORITES_COUNT,user.getPublicFavoriteCount());
+		bundle.putString(URI, user.getUri());
+		bundle.putInt(TRACK_COUNT, user.getTrackCount());
+		
+		
+		return bundle;
 	}
 	
 	
