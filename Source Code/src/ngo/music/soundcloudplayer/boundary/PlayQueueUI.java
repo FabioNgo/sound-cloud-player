@@ -10,10 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-public class FullPlayerUI extends Fragment {
+public class PlayQueueUI extends Fragment {
 	Toolbar toolbar;
 
-	public FullPlayerUI() {
+	public PlayQueueUI() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -28,13 +28,13 @@ public class FullPlayerUI extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 
-		View rootView = inflater.inflate(R.layout.fullplayer, container, false);
-		toolbar = (Toolbar)rootView.findViewById(R.id.full_player_toolbar);
+		View rootView = inflater.inflate(R.layout.play_queue, container, false);
+		toolbar = (Toolbar)rootView.findViewById(R.id.play_queue_toolbar);
 		
 		toolbar.setTitle("Title");
 		toolbar.setSubtitle("subtitle");
 		toolbar.inflateMenu(R.menu.global);
-		ImageView full_player_song_image = (ImageView)rootView.findViewById(R.id.full_player_song_image);
+		ImageView full_player_song_image = (ImageView)rootView.findViewById(R.id.play_queue_image);
 		BasicFunctions.ResizeImageView(MainActivity.screenWidth, full_player_song_image);
 		
 		return rootView;

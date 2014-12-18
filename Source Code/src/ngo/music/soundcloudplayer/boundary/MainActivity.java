@@ -1,7 +1,8 @@
 package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.MyPagerAdapter;
+import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -21,13 +22,19 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends SlidingFragmentActivity {
@@ -35,15 +42,31 @@ public class MainActivity extends SlidingFragmentActivity {
 	private int mTitleRes;
 	protected ListFragment mFrag;
 	private SlidingUpPanelLayout mLayout;
+	private MainActivity activity;
+	/**
+	 * Screen's Size
+	 */
+	public static int screenHeight;
+	public static int screenWidth;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		View decorView = getWindow().getDecorView();
-		decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-	              
-	
+		decorView
+				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
 		setContentView(R.layout.activity_main);
+		/**
+		 * get screen's size;
+		 */
+
+		// Get the width and length of the screen
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		screenHeight = displayMetrics.heightPixels;
+		screenWidth = displayMetrics.widthPixels;
+		activity = this;
 		/**
 		 * Sliding Menu (Left2Right)
 		 */
@@ -67,9 +90,12 @@ public class MainActivity extends SlidingFragmentActivity {
 		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
 		sm.setFadeDegree(0.35f);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		//getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		setSupportActionBar((Toolbar) findViewById(R.id.main_toolbar));
-		Toolbar toolbar = (Toolbar)findViewById(R.id.main_toolbar);
+		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		toolbar.setLogo(R.drawable.ic_action_github);
+		setSupportActionBar(toolbar);
+		
+		
 		/**
 		 * Sliding Up Panel
 		 */
@@ -102,37 +128,54 @@ public class MainActivity extends SlidingFragmentActivity {
 				Log.i(TAG, "onPanelHidden");
 			}
 		});
-
+		mLayout.setAnchorPoint((float) 0.5);
+		RelativeLayout dragview = (RelativeLayout) findViewById(R.id.dragView);
 		
-
-		TextView t = (TextView) findViewById(R.id.name);
-		t.setText("Test");
-		Button f = (Button) findViewById(R.id.follow);
-		f.setText("Button");
-		f.setMovementMethod(LinkMovementMethod.getInstance());
-		f.setOnClickListener(new OnClickListener() {
+		FrameLayout lite_player_container = (FrameLayout)findViewById(R.id.lite_player_container);
+		lite_player_container.setOnClickListener(new OnClickListener() {
+			
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse("http://www.twitter.com/umanoapp"));
-				startActivity(i);
+				// TODO Auto-generated method stub
+				mLayout.expandPanel((float) 0.5);
+				
 			}
 		});
+
+		
+		FrameLayout full_player_container = (FrameLayout)findViewById(R.id.full_player_container);
+		full_player_container.getLayoutParams().height = screenHeight;
+		FrameLayout play_queue_container = (FrameLayout)findViewById(R.id.play_queue_container);
+		play_queue_container.getLayoutParams().height = screenHeight;
+		
+		dragview.getLayoutParams().height = screenHeight*2
+				+ BasicFunctions.dpToPx(68, this);
+		
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.lite_player_container, new LitePlayerUI())
+				.commit();
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.full_player_container, new FullPlayerUI())
+				.commit();
+		getSupportFragmentManager().beginTransaction()
+		.replace(R.id.play_queue_container, new PlayQueueUI())
+		.commit();
 		/**
 		 * Tab Sliding
 		 */
 		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
-		MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+		TabsAdapter adapter = new TabsAdapter(getSupportFragmentManager());
 
 		pager.setAdapter(adapter);
 
-		final int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
-				.getDisplayMetrics());
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
 		pager.setPageMargin(pageMargin);
 
 		tabs.setViewPager(pager);
-		
+
 	}
 
 	@Override
@@ -150,10 +193,6 @@ public class MainActivity extends SlidingFragmentActivity {
 		return true;
 	}
 
-	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
-		return super.onPrepareOptionsMenu(menu);
-	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -200,5 +239,5 @@ public class MainActivity extends SlidingFragmentActivity {
 	/**
 	 * Tab Sliding
 	 */
-	
+
 }

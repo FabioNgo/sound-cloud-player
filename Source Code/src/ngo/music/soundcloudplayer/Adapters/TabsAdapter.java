@@ -1,16 +1,16 @@
 package ngo.music.soundcloudplayer.Adapters;
 
-import ngo.music.soundcloudplayer.Adapters.Fragments.SuperAwesomeCardFragment;
+import ngo.music.soundcloudplayer.Adapters.Fragments.SingleSwipePageFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class MyPagerAdapter extends FragmentPagerAdapter {
+public class TabsAdapter extends FragmentPagerAdapter {
 
-	private final String[] TITLES = { "Categories", "Home", "Top Paid", "Top Free", "Top Grossing", "Top New Paid",
-			"Top New Free", "Trending" };
+	private final String[] TITLES = { "Artists", "Albums", "Songs", "Playlists", "Genres", "Sub Genres",
+			"Users", "About Us" };
 
-	public MyPagerAdapter(FragmentManager fm) {
+	public TabsAdapter(FragmentManager fm) {
 		super(fm);
 	}
 
@@ -26,7 +26,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
-		return SuperAwesomeCardFragment.newInstance(position);
+		return SingleSwipePageFragment.newInstance(position);
 	}
 
 }

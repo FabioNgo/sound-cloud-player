@@ -6,6 +6,9 @@ import java.net.URISyntaxException;
 
 
 
+
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.general.Contants;
@@ -23,17 +26,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 
-public class LoginUI extends Fragment {
+public class LoginUI extends android.support.v4.app.Fragment {
 
 	public LoginUI() {
 		// TODO Auto-generated constructor stub
 	}
 	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-	}
+	
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

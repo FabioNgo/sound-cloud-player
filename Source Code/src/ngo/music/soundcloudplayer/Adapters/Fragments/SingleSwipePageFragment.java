@@ -13,14 +13,14 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.TextView;
 
 
-public class SuperAwesomeCardFragment extends Fragment {
+public class SingleSwipePageFragment extends Fragment {
 
 	private static final String ARG_POSITION = "position";
 
 	private int position;
 
-	public static SuperAwesomeCardFragment newInstance(int position) {
-		SuperAwesomeCardFragment f = new SuperAwesomeCardFragment();
+	public static SingleSwipePageFragment newInstance(int position) {
+		SingleSwipePageFragment f = new SingleSwipePageFragment();
 		Bundle b = new Bundle();
 		b.putInt(ARG_POSITION, position);
 		f.setArguments(b);
