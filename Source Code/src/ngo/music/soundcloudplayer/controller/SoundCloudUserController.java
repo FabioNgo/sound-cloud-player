@@ -69,13 +69,14 @@ public class SoundCloudUserController extends UserController implements Contants
 		try {
 			
 			//login
-			wrapper.login(username,password);
+			wrapper.login(USERNAME_LOGIN,PASSWORD_LOGIN);
 			//Get user information from soundcloud 
 	        HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 	        JSONObject me = Http.getJSON(resp);
-	        
+	        System.out.println("aaaa  " + me.getString(ID));
 	        //set information of logged user
 	        currentUser  = addInformation(me);
+	        
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

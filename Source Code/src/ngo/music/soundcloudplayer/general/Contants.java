@@ -46,4 +46,9 @@ public interface Contants {
 		String PRIMARY_EMAIL_CONFIRMED = "primary_email_confirmed";
 		
 	}
+	
+	interface UIContant{
+		String LAYOUT_WIDTH = "layout_width";
+		String LAYOUT_HEIGHT = "layout_height";
+	}
 }

@@ -42,6 +42,13 @@ public class BasicFunctions {
 		float density = context.getResources().getDisplayMetrics().density;
 		return Math.round(dp * density);
 	}
+	/**
+	 * Convert PX to DP
+	 */
+	public static int pxTodp(int px, Context context) {
+		float density = context.getResources().getDisplayMetrics().density;
+		return (int)Math.round(px / density);
+	}
 
 //	public static void IniPullToRefresh(final Activity activity,
 //			ViewGroup viewGroup, View view, final TimerTask timerTask,
@@ -56,9 +63,9 @@ public class BasicFunctions {
 //		// ViewGroup
 //		.options(
 //				Options.create()
-//				.refreshingText("Đang lấy bài mới...")
-//				.pullText("Kéo xuống để cập nhật!")
-//				.releaseText("Nhả ra để cập nhật!!!")
+//				.refreshingText("Ä�ang láº¥y bÃ i má»›i...")
+//				.pullText("KÃ©o xuá»‘ng Ä‘á»ƒ cáº­p nháº­t!")
+//				.releaseText("Nháº£ ra Ä‘á»ƒ cáº­p nháº­t!!!")
 //				.titleTextColor(android.R.color.black)
 //				.progressBarColor(
 //						android.R.color.holo_orange_light)

@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.boundary;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
+import ngo.music.soundcloudplayer.general.Contants;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -38,12 +39,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MainActivity extends SlidingFragmentActivity {
+public class MainActivity extends SlidingFragmentActivity implements Contants.UIContant, Contants.UserContant{
 	private static final String TAG = "DemoActivity";
 	private int mTitleRes;
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private MainActivity activity;
+	
+	
 	/**
 	 * Screen's Size
 	 */
@@ -73,10 +76,32 @@ public class MainActivity extends SlidingFragmentActivity {
 		 */
 		// set the Behind View
 		setBehindContentView(R.layout.menu_frame);
+
+		// customize the SlidingMenu
+		SlidingMenu sm = getSlidingMenu();
+		sm.setShadowWidthRes(R.dimen.shadow_width);
+		sm.setShadowDrawable(R.drawable.shadow);
+		
+		sm.setBehindOffset((int)(BasicFunctions.pxTodp(screenWidth, this)));
+		sm.setFadeDegree(0.35f);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		toolbar.setLogo(R.drawable.ic_action_github);
+		setSupportActionBar(toolbar);
+		
 		if (savedInstanceState == null) {
+			
+			FrameLayout frame = (FrameLayout) findViewById(R.id.menu_frame);
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
 			mFrag = new UserDisplayFragment();
+			
+			//Bundle bundle = new Bundle();
+			//bundle = getIntent().getBundleExtra(USER);
+			//bundle.putInt(LAYOUT_WIDTH, frame.getLayoutParams().width);
+			//bundle.putInt(LAYOUT_HEIGHT,screenHeight);
+			
 			t.replace(R.id.menu_frame, mFrag);
 			t.commit();
 		} else {
@@ -84,17 +109,6 @@ public class MainActivity extends SlidingFragmentActivity {
 					.findFragmentById(R.id.menu_frame);
 		}
 
-		// customize the SlidingMenu
-		SlidingMenu sm = getSlidingMenu();
-		sm.setShadowWidthRes(R.dimen.shadow_width);
-		sm.setShadowDrawable(R.drawable.shadow);
-		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-		sm.setFadeDegree(0.35f);
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		toolbar.setLogo(R.drawable.ic_action_github);
-		setSupportActionBar(toolbar);
 		
 		
 		/**

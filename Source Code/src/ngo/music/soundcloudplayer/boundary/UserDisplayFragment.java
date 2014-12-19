@@ -9,7 +9,9 @@ import java.net.URL;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Contants;
+
 import ngo.music.soundcloudplayer.imageloader.ImageLoader;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -24,44 +26,62 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class UserDisplayFragment extends Fragment implements Contants.UserContant {
+public class UserDisplayFragment extends Fragment implements Contants.UserContant, Contants.UIContant {
 
+	int layoutWidth;
+	int layoutHeight;
+	
+	public UserDisplayFragment(){
+		super();
+		layoutWidth = MainActivity.screenWidth;
+		layoutHeight = MainActivity.screenHeight;
+	}
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		View rootView = inflater.inflate(R.layout.user_profile_layout, container,false);
 		Bundle bundle  = getActivity().getIntent().getBundleExtra(USER);
+		Bundle bundle2 = getArguments();
 		
 		String avatarUrl = bundle.getString(AVATAR_URL);
 		String fullNameString = bundle.getString(FULLNAME);
 		int numFollowers = bundle.getInt(FOLLOWERS_COUNT);
+	
+		
+		//layoutWidth = bundle2.getInt(LAYOUT_WIDTH);
+		
 		
 		/*
 		 * Config FrameLayout
 		 */
-		FrameLayout frame =  (FrameLayout) rootView.findViewById(R.id.frame_avatar);
+		RelativeLayout frame =  (RelativeLayout) rootView.findViewById(R.id.frame_avatar);
 		// Get the width and length of the screen
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		int screenHeight = displayMetrics.heightPixels;
-		int screenWidth = displayMetrics.widthPixels;
-		int size = (int) (Math.min(screenWidth, screenHeight) * 0.3);
-		//frame.getLayoutParams().width = size;
-		frame.getLayoutParams().height = (int)(screenHeight * 0.3);
+		
+		
+		frame.getLayoutParams().width = layoutWidth;
+		frame.getLayoutParams().height = (int)(layoutHeight * 0.2);
 		
 		/*
 		 * load avatar
 		 */
-		ImageView avatar = (ImageView)rootView.findViewById(R.id.avatar_id);
-
-		avatar.getLayoutParams().width = frame.getLayoutParams().width;
-		avatar.getLayoutParams().height = frame.getLayoutParams().height;
+		FrameLayout avatar = (FrameLayout)rootView.findViewById(R.id.avatar_layout);
+		//avatar.setPadding(10, frame.getLayoutParams().height * 0.2,null,null);
+		
+		//BasicFunctions.ResizeImageView(layoutWidth, height, imageView);
+		avatar.getLayoutParams().height = (int) (frame.getLayoutParams().height * 0.5);
+		avatar.getLayoutParams().width = avatar.getLayoutParams().height;
+		
 		ImageLoader imgLoader = new ImageLoader(getActivity().getApplicationContext());
 
 		// Loader image - will be shown before loading image
 		int loader = R.drawable.image_not_found;
-		imgLoader.DisplayImage(avatarUrl, loader, avatar);
-
+		
+		ImageView avatarCore = (ImageView)rootView.findViewById(R.id.avatar_image_id);
+		
+		imgLoader.DisplayImage(avatarUrl, loader,avatarCore);
+		
 		
 		/*
 		 * load fullname

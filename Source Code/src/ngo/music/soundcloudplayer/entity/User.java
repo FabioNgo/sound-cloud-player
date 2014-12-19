@@ -233,7 +233,11 @@ public abstract class User {
 	 * @return the fullName
 	 */
 	public String getFullName() {
-		return fullName;
+		if (fullName.compareTo("") == 0){
+			return username;
+		}else{
+			return fullName;
+		}
 	}
 
 	/**

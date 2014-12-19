@@ -41,11 +41,7 @@ public class SoundCloudLoginUI extends Fragment implements Contants.UserContant 
 		// TODO Auto-generated method stub
 		
 		View rootView = inflater.inflate(R.layout.login_soundcloud_layout,container,false);
-		
-		
 		final EditText username = (EditText)rootView.findViewById(R.id.username_soundcloud);
-		
-		
 		final EditText password = (EditText) rootView.findViewById(R.id.password_soundcloud);
 		
 		

@@ -25,7 +25,7 @@ public class ImageLoader {
 
 	MemoryCache memoryCache = new MemoryCache();
 	FileCache fileCache;
-	private Map<ImageView, String> imageViews = Collections
+	protected Map<ImageView, String> imageViews = Collections
 			.synchronizedMap(new WeakHashMap<ImageView, String>());
 	ExecutorService executorService;
 
@@ -48,12 +48,12 @@ public class ImageLoader {
 		}
 	}
 
-	private void queuePhoto(String url, ImageView imageView) {
+	protected void queuePhoto(String url, ImageView imageView) {
 		PhotoToLoad p = new PhotoToLoad(url, imageView);
 		executorService.submit(new PhotosLoader(p));
 	}
 
-	private Bitmap getBitmap(String url) {
+	protected Bitmap getBitmap(String url) {
 		File f = fileCache.getFile(url);
 
 		// from SD cache
@@ -84,7 +84,7 @@ public class ImageLoader {
 	}
 
 	// decodes image and scales it to reduce memory consumption
-	private Bitmap decodeFile(File f) {
+	protected Bitmap decodeFile(File f) {
 		try {
 			// decode image size
 			BitmapFactory.Options o = new BitmapFactory.Options();
@@ -115,7 +115,7 @@ public class ImageLoader {
 	}
 
 	// Task for the queue
-	private class PhotoToLoad {
+	protected class PhotoToLoad {
 		public String url;
 		public ImageView imageView;
 
