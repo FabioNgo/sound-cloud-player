@@ -4,74 +4,78 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent" >
 
-    <RelativeLayout
+    <!-- UPPER PART -->
+   <RelativeLayout
         android:id="@+id/frame_avatar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/background" >
-        
-        <FrameLayout 
             
-            android:layout_width="fill_parent"
-            android:layout_height= "fill_parent">
-            <RelativeLayout 
-                android:id = "@+id/black_overlay"
-                android:layout_width="fill_parent"
-            	android:layout_height= "fill_parent">
-                
-            </RelativeLayout>
-            
-            <RelativeLayout
-                 
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent">
-                <FrameLayout 
-                    android:id="@+id/avatar_layout"
-                    android:layout_alignParentLeft="true"
-				        android:layout_marginLeft="10dp"
-				        android:layout_above="@+id/fullname"
-                    android:layout_width="fill_parent"
-			        android:layout_height="fill_parent">
+          <!-- AVATAR, NAME , NUMBER OF FOLLOWER -->
+          <RelativeLayout 
+              android:layout_width="fill_parent"
+              android:layout_marginLeft="10dp"
+              android:layout_height="fill_parent">
+              
+            <!-- AVATAR -->  
+           	<ngo.music.soundcloudplayer.general.CircularImageView
+             
+	           	android:layout_alignParentLeft="true"
+				android:layout_above="@+id/fullname"
+	            app:border="true"
+				app:border_color="#FFFFFF"
+				app:border_width="4dp"
+				app:shadow="true"
+	    		android:id = "@+id/avatar_image_id"
+	    		android:layout_width="fill_parent"
+	    		android:layout_height="fill_parent"
+	    		android:src="@drawable/ic_action_github" />
 
-                    <ngo.music.soundcloudplayer.general.CircularImageView
-                        app:border="true"
-        				app:border_color="#FFFFFF"
-        				app:border_width="4dp"
-        				app:shadow="true"
-				        android:id = "@+id/avatar_image_id"
-				        android:layout_width="fill_parent"
-				        android:layout_height="fill_parent"
-				        android:src="@drawable/ic_action_github" />
-                    
-                </FrameLayout>
-		        
-		        
-		    	<TextView 
-		    	    android:id ="@+id/fullname"
-		    	    android:layout_width = "wrap_content"
-		    	    android:layout_height = "wrap_content"
-		    	    android:layout_alignParentLeft = "true"
-		    	    android:layout_marginLeft="10dp"
-		    	    android:textColor="#FFFFFF"
-		    	    android:textAppearance="?android:attr/textAppearanceLarge"
-		    	    android:layout_above="@+id/follower"/>
-		    	
-		    	<TextView 
-		    	    android:id ="@+id/follower"
-		    	    android:layout_width = "wrap_content"
-		    	    android:layout_height = "wrap_content"
-		    	    android:layout_alignParentLeft = "true"
-		    	    android:layout_marginLeft="10dp"
-		    	    android:layout_alignParentBottom="true"
-		    	    android:textColor="#FFFFFF"
-		    	    android:textAppearance="?android:attr/textAppearanceLarge"/>
-		    	</RelativeLayout>
-		    </FrameLayout>
+           	<!-- NAME -->
+	    	<TextView 
+	    	    android:id ="@+id/fullname"
+	    	    android:layout_width = "wrap_content"
+	    	    android:layout_height = "wrap_content"
+	    	    android:layout_alignParentLeft = "true"
+	    	    android:textColor="#FFFFFF"
+	    	    android:textAppearance="?android:attr/textAppearanceLarge"
+	    	    android:layout_above="@+id/follower"/>
+	    	
+	    	<!-- NUMBER OF FOLLOWER -->
+	    	<TextView 
+	    	    android:id ="@+id/follower"
+	    	    android:layout_width = "wrap_content"
+	    	    android:layout_height = "wrap_content"
+	    	    android:layout_alignParentLeft = "true"
+	    	    android:layout_alignParentBottom="true"
+	    	    android:textColor="#FFFFFF"
+	    	    android:textAppearance="?android:attr/textAppearanceLarge"/>
+    	</RelativeLayout>
 
-     
 	</RelativeLayout>
     
+   <!-- LOWER PART -->
+   <TextView 
+       android:id = "@+id/my_music_id"
+        android:layout_marginLeft="10dp"
+        android:clickable="true"
+       android:layout_width = "wrap_content"
+	   android:layout_height = "wrap_content"
+	   android:layout_alignParentLeft = "true"
+	   android:textAppearance="?android:attr/textAppearanceLarge"
+	   android:layout_below="@+id/frame_avatar"
+	   android:text="@string/my_music"/>
+   <TextView 
+       android:id = "@+id/logout_id"
+        android:layout_marginLeft="10dp"
+        android:clickable="true"
+       android:layout_width = "wrap_content"
+	   android:layout_height = "wrap_content"
+	   android:layout_alignParentLeft = "true"
+	   android:textAppearance="?android:attr/textAppearanceLarge"
+	   android:layout_below="@+id/my_music_id"
+	   android:text = "@string/logout"/>
 
 </RelativeLayout>

@@ -15,7 +15,7 @@ public class UserControllerFactory {
 		case Contants.GOOGLE_PLUS_USER:
 			return new GooglePlusUserController();
 		case Contants.SOUNDCLOUD_USER:
-			return new SoundCloudUserController();
+			return  SoundCloudUserController.getInstance();
 		default:
 			return null;
 		}

@@ -15,6 +15,7 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
@@ -23,6 +24,7 @@ import ngo.music.soundcloudplayer.api.Env;
 import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Contants;
@@ -34,13 +36,25 @@ import ngo.music.soundcloudplayer.general.Contants;
  */
 public class SoundCloudUserController extends UserController implements Contants.UserContant {
 
-	private static final String URL_LOGIN = "http://soundcloud.com/login";
-	private static final String USERNAME_LOGIN = "baoloc1403@gmail.com";
-	private static final String PASSWORD_LOGIN = "ngolebaoloc";
-	/**
-	 * 
+
+
+	
+	private Token t = null;
+	private User currentUser = null;
+	/*
+	 *	Singleton Pattern
+	 *	Allow only 1 object is created 
 	 */
-	public SoundCloudUserController() {
+	private static SoundCloudUserController instance = null;
+	   
+	public static SoundCloudUserController getInstance() {
+	      if(instance == null) {
+	         instance = new SoundCloudUserController();
+	      }
+	      return instance;
+	}
+	
+	private SoundCloudUserController() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -64,18 +78,18 @@ public class SoundCloudUserController extends UserController implements Contants
 	public User validateLogin (String username , String password){
 
 		ApiWrapper wrapper = new ApiWrapper(Contants.CLIENT_ID, Contants.CLIENT_SECRET, null,null);
-		User currentUser = null;
+		
 		
 		try {
 			
 			//login
-			wrapper.login(USERNAME_LOGIN,PASSWORD_LOGIN);
+			t = wrapper.login(username,password);
 			//Get user information from soundcloud 
 	        HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 	        JSONObject me = Http.getJSON(resp);
-	        System.out.println("aaaa  " + me.getString(ID));
 	        //set information of logged user
 	        currentUser  = addInformation(me);
+	        
 	        
 
 		} catch (IOException e) {
@@ -90,7 +104,7 @@ public class SoundCloudUserController extends UserController implements Contants
 		return currentUser;
 	}
 	
-	public User addInformation(JSONObject me) throws JSONException{
+	private User addInformation(JSONObject me) throws JSONException{
 		SoundCloudAccount soundcloudAccount = new SoundCloudAccount();
 		soundcloudAccount.setAvatarUrl(me.getString(AVATAR_URL));
 		soundcloudAccount.setCity(me.getString(CITY));
@@ -118,8 +132,57 @@ public class SoundCloudUserController extends UserController implements Contants
 		soundcloudAccount.setWebsiteTitle(me.getString(WEBSITE_TITLE));
 		
 		
+		
 		return soundcloudAccount;
 		
 	}
+
+	public void logout() {
+		// TODO Auto-generated method stub
+		t  = null;
+		
+	}
+
+	public boolean isLogin(){
+		if (t == null) return false;
+		else return true;
+	}
+	
+	/**
+	 * Get infomation of user to a bundle
+	 * @param user current user
+	 * @return a bundle
+	 */
+	public Bundle getBundle (User user){
+		Bundle bundle = new Bundle();
+		
+		bundle.putInt(ID, user.getId());
+		bundle.putString(USERNAME, user.getUsername());
+		bundle.putString(AVATAR_URL, user.getAvatarUrl());
+		bundle.putString(CITY, user.getCity());
+		bundle.putString(COUNTRY, user.getCountry());
+		bundle.putString(DESCRIPTION, user.getDescription());
+		bundle.putInt(FOLLOWERS_COUNT, user.getFollowersCount());
+		bundle.putInt(FOLLOWINGS_COUNT, user.getFollowingCount());
+		bundle.putString(FULLNAME, user.getFullName());
+		bundle.putBoolean(ONLINE, user.isOnline());
+		bundle.putInt(PLAYLIST_COUNT, user.getPlaylistCount());
+		bundle.putString(PERMALINK, user.getPermalink());
+		bundle.putString(PERMALINK_URL, user.getPermalinkUrl());
+		bundle.putBoolean(PRIMARY_EMAIL_CONFIRMED, user.isPrimaryEmailConfirmed());
+		bundle.putInt(PRIVATE_PLAYLISTS_COUNT, user.getPlaylistCount());
+		bundle.putInt(PRIVATE_TRACK_COUNT, user.getPrivateTracksCount());
+		bundle.putInt(PUBLIC_FAVORITES_COUNT,user.getPublicFavoriteCount());
+		bundle.putString(URI, user.getUri());
+		bundle.putInt(TRACK_COUNT, user.getTrackCount());
+		
+		
+		return bundle;
+	}
+	
+	public User getCurrentUser(){
+		return currentUser;
+	}
+
 
 }

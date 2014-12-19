@@ -108,7 +108,7 @@ public class GeneralLoginUI extends Fragment implements Contants.UserContant {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					SoundCloudUserController userController = new SoundCloudUserController();
+					SoundCloudUserController userController = SoundCloudUserController.getInstance();
 					User currentUser = userController.validateLogin(username, password);
 					
 					//Cannot login

@@ -6,6 +6,7 @@ import java.util.zip.Inflater;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Contants;
 import android.support.v4.app.Fragment;
@@ -31,6 +32,11 @@ import android.widget.Toast;
  */
 public class SoundCloudLoginUI extends Fragment implements Contants.UserContant {
 
+
+	
+	private static final String USERNAME_LOGIN = "baoloc1403@gmail.com";
+	private static final String PASSWORD_LOGIN = "ngolebaoloc";
+	View rootView;
 	public SoundCloudLoginUI() {
 		// TODO Auto-generated constructor stub
 	}
@@ -40,7 +46,16 @@ public class SoundCloudLoginUI extends Fragment implements Contants.UserContant 
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		
-		View rootView = inflater.inflate(R.layout.login_soundcloud_layout,container,false);
+		rootView = inflater.inflate(R.layout.login_soundcloud_layout,container,false);
+		configLayout();
+		
+		return rootView;
+	}
+
+	/**
+	 * @param background.rootView
+	 */
+	private void configLayout() {
 		final EditText username = (EditText)rootView.findViewById(R.id.username_soundcloud);
 		final EditText password = (EditText) rootView.findViewById(R.id.password_soundcloud);
 		
@@ -56,18 +71,13 @@ public class SoundCloudLoginUI extends Fragment implements Contants.UserContant 
 				String passwordStr = password.getText().toString();
 				Background background = new  Background(usernameStr, passwordStr);
 				background.execute();
-				
-				
-//				SoundCloudUserController userController = new SoundCloudUserController();
-//				Toast.makeText(getActivity(), userController.validateLogin(usernameStr, passwordStr), Toast.LENGTH_LONG).show();
+
 				
 			}
 		});
-		
-		return rootView;
 	}
 	
-	private class Background extends AsyncTask<String, String, String>{
+	public class Background extends AsyncTask<String, String, String>{
 
 		private ProgressDialog pDialog;
 		String username;
@@ -96,7 +106,9 @@ public class SoundCloudLoginUI extends Fragment implements Contants.UserContant 
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					SoundCloudUserController userController = new SoundCloudUserController();
+					SoundCloudUserController userController = SoundCloudUserController.getInstance();
+					username = USERNAME_LOGIN;
+					password = PASSWORD_LOGIN;
 					User currentUser = userController.validateLogin(username, password);
 					
 					//Cannot login
@@ -104,8 +116,9 @@ public class SoundCloudLoginUI extends Fragment implements Contants.UserContant 
 						pDialog.dismiss();
 						isLogin = false;
 					}else{
-						Bundle bundle  = getBundle(currentUser);
-						isLogin = true;
+						DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
+						databaseHandler.addLoginInfo(username, password);
+						Bundle bundle  = userController.getBundle(currentUser);
 						Intent goToMainActivity  =  new Intent(getActivity(), MainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);
 						startActivity(goToMainActivity);
@@ -129,32 +142,7 @@ public class SoundCloudLoginUI extends Fragment implements Contants.UserContant 
 		
 	}
 	
-	public Bundle getBundle (User user){
-		Bundle bundle = new Bundle();
-		
-		bundle.putInt(ID, user.getId());
-		bundle.putString(USERNAME, user.getUsername());
-		bundle.putString(AVATAR_URL, user.getAvatarUrl());
-		bundle.putString(CITY, user.getCity());
-		bundle.putString(COUNTRY, user.getCountry());
-		bundle.putString(DESCRIPTION, user.getDescription());
-		bundle.putInt(FOLLOWERS_COUNT, user.getFollowersCount());
-		bundle.putInt(FOLLOWINGS_COUNT, user.getFollowingCount());
-		bundle.putString(FULLNAME, user.getFullName());
-		bundle.putBoolean(ONLINE, user.isOnline());
-		bundle.putInt(PLAYLIST_COUNT, user.getPlaylistCount());
-		bundle.putString(PERMALINK, user.getPermalink());
-		bundle.putString(PERMALINK_URL, user.getPermalinkUrl());
-		bundle.putBoolean(PRIMARY_EMAIL_CONFIRMED, user.isPrimaryEmailConfirmed());
-		bundle.putInt(PRIVATE_PLAYLISTS_COUNT, user.getPlaylistCount());
-		bundle.putInt(PRIVATE_TRACK_COUNT, user.getPrivateTracksCount());
-		bundle.putInt(PUBLIC_FAVORITES_COUNT,user.getPublicFavoriteCount());
-		bundle.putString(URI, user.getUri());
-		bundle.putInt(TRACK_COUNT, user.getTrackCount());
-		
-		
-		return bundle;
-	}
+	
 	
 	
 }

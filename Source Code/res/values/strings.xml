@@ -19,4 +19,6 @@
      <string name="com_facebook_internet_permission_error_title">AndroidManifest Error</string>
     <string name="com_facebook_internet_permission_error_message">WebView login requires INTERNET permission</string>
     <string name="com_facebook_loading">Loading...</string>
+    <string name="logout">Log Out</string>
+    <string name="my_music">My Music</string>
 </resources>
