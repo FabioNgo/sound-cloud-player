@@ -6,9 +6,11 @@ import java.util.zip.Inflater;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Contants;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.YuvImage;
@@ -29,9 +31,9 @@ import android.widget.Toast;
  * @author LEBAO_000
  *
  */
-public class SoundCloudLoginUI extends Fragment implements Contants.UserContant {
+public class GeneralLoginUI extends Fragment implements Contants.UserContant {
 
-	public SoundCloudLoginUI() {
+	public GeneralLoginUI() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -40,30 +42,40 @@ public class SoundCloudLoginUI extends Fragment implements Contants.UserContant 
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		
-		View rootView = inflater.inflate(R.layout.login_soundcloud_layout,container,false);
-		final EditText username = (EditText)rootView.findViewById(R.id.username_soundcloud);
-		final EditText password = (EditText) rootView.findViewById(R.id.password_soundcloud);
+		View rootView = inflater.inflate(R.layout.login_general_layout,container,false);
 		
-		
-		Button loginButton = (Button) rootView.findViewById(R.id.login_button);
-		
-		loginButton.setOnClickListener(new OnClickListener() {
+		Button loginGooglePlus = (Button) rootView.findViewById(R.id.login_google_plus_button);
+		loginGooglePlus.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				String usernameStr = username.getText().toString();
-				String passwordStr = password.getText().toString();
-				Background background = new  Background(usernameStr, passwordStr);
-				background.execute();
-				
-				
-//				SoundCloudUserController userController = new SoundCloudUserController();
-//				Toast.makeText(getActivity(), userController.validateLogin(usernameStr, passwordStr), Toast.LENGTH_LONG).show();
-				
+				UserControllerFactory.createUserController(Contants.GOOGLE_PLUS_USER).login();
 			}
 		});
 		
+		Button loginSoundCloud = (Button) rootView.findViewById(R.id.login_soundcloud_button);
+		loginSoundCloud.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				SoundCloudLoginUI soundCloudLoginUI =  new SoundCloudLoginUI();
+				((LoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
+				// TODO Auto-generated method stub
+
+			}
+		});
+		Button loginFacebook =  (Button)rootView.findViewById(R.id.login_facebook_button);
+		loginFacebook.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				UserControllerFactory.createUserController(Contants.FACEBOOK_USER).login();
+				// TODO Auto-generated method stub
+				
+				
+			}
+		});
 		return rootView;
 	}
 	

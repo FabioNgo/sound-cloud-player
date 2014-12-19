@@ -1213,10 +1213,23 @@ public class SlidingUpPanelLayout extends ViewGroup {
 
             if (direction > 0) {
                 // swipe up -> expand
-                target = computePanelTopPosition(1.0f);
+            	if(mSlideOffset >= mAnchorPoint) {
+            		target = computePanelTopPosition(1.0f);
+            		
+            	}else {
+            		target = computePanelTopPosition(mAnchorPoint);
+            		
+            	}
+                
             } else if (direction < 0) {
                 // swipe down -> collapse
-                target = computePanelTopPosition(0.0f);
+            	if(mSlideOffset <= mAnchorPoint) {
+            		target = computePanelTopPosition(0.0f);
+            		
+            	}else {
+            		target = computePanelTopPosition(mAnchorPoint);
+            		
+            	}
             } else if (mAnchorPoint != 1 && mSlideOffset >= (1.f + mAnchorPoint) / 2) {
                 // zero velocity, and far enough from anchor point => expand to the top
                 target = computePanelTopPosition(1.0f);

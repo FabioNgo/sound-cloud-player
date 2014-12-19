@@ -29,9 +29,9 @@ import android.widget.Toast;
  * @author LEBAO_000
  *
  */
-public class SoundCloudLoginUI extends Fragment implements Contants.UserContant {
+public class GoogleLoginUI extends Fragment implements Contants.UserContant {
 
-	public SoundCloudLoginUI() {
+	public GoogleLoginUI() {
 		// TODO Auto-generated constructor stub
 	}
 
