@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -20,4 +21,17 @@
         android:layout_below="@+id/full_player_toolbar" 
         android:src="@drawable/ic_launcher"
         />
+    <com.todddavies.components.progressbar.ProgressWheel   
+    android:id="@+id/full_player_progress_bar"     
+    android:layout_below="@+id/full_player_song_image"
+    android:layout_width="150dp"    
+    android:layout_height="150dp"   
+    android:layout_centerInParent="true"   
+    ProgressWheel:textColor="#222"   
+    ProgressWheel:textSize="14sp"   
+    ProgressWheel:rimColor="#330097D6"   
+    ProgressWheel:barLength="60dp"    
+    ProgressWheel:barColor="#0097D6"   
+    ProgressWheel:barWidth="15dp"   
+    ProgressWheel:rimWidth="15dp" /> 
 </RelativeLayout>

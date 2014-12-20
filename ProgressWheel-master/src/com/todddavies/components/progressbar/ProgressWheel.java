@@ -367,10 +367,14 @@ public class ProgressWheel extends View {
     /**
      * Set the progress to a specific value
      */
-    public void setProgress(int i) {
+    public void setProgressDegree(int i) {
         isSpinning = false;
         progress = i;
         postInvalidate();
+    }
+    public void setProgressPercentage(double i) {
+        isSpinning = false;
+        setProgressDegree((int) (i*3.6));
     }
 
     //----------------------------------
