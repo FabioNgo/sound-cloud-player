@@ -183,6 +183,10 @@ public class SoundCloudUserController extends UserController implements Contants
 	public User getCurrentUser(){
 		return currentUser;
 	}
+	
+	public Token getToken(){
+		return t;
+	}
 
 
 }
