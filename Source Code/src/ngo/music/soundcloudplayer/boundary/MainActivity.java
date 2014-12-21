@@ -40,7 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MainActivity extends SlidingFragmentActivity implements Contants.UIContant, Contants.UserContant{
-	private static final String TAG = "DemoActivity";
+	
 	private int mTitleRes;
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
@@ -148,16 +148,8 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		mLayout.setAnchorPoint((float) 0.5);
 		RelativeLayout dragview = (RelativeLayout) findViewById(R.id.dragView);
 		
-		FrameLayout lite_player_container = (FrameLayout)findViewById(R.id.lite_player_container);
-		lite_player_container.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				mLayout.expandPanel((float) 0.5);
-				
-			}
-		});
+		
+		
 
 		
 		FrameLayout full_player_container = (FrameLayout)findViewById(R.id.full_player_container);

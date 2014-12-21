@@ -27,7 +27,10 @@ public class SongController implements Contants{
 	private static SongController instance = null;
 	private SongController() {
 		// TODO Auto-generated constructor stub
-		getSongsFromSDCard();
+		if(instance==null) {
+			instance = this;
+			instance.getSongsFromSDCard();
+		}
 	}
 
 	public boolean playSong(Song song) {

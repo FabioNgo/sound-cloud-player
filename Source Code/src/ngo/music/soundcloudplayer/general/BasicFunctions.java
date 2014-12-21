@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 /**
  *
@@ -49,7 +50,9 @@ public class BasicFunctions {
 		float density = context.getResources().getDisplayMetrics().density;
 		return (int)Math.round(px / density);
 	}
-
+	public static void makeToastTake(String text, Context context) {
+		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+	}
 //	public static void IniPullToRefresh(final Activity activity,
 //			ViewGroup viewGroup, View view, final TimerTask timerTask,
 //			final PullToRefreshLayout mPullToRefreshLayout) {
