@@ -49,7 +49,7 @@ public class FullPlayerUI extends Fragment {
 		// TODO Auto-generated method stub
 
 		View rootView = inflater.inflate(R.layout.fullplayer, container, false);
-		songController = new SongController();
+		songController = SongController.getInstance();
 		song = songController.getSongs().get(0);
 		mediaPlayer = new MediaPlayer();
 

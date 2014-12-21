@@ -73,11 +73,12 @@ public class SongController implements Contants{
 	public ArrayList<Song> getSongs() {
 		return songs;
 	}
+	
 	/**
 	 * Restricted at most 1 object is created
 	 * 
 	 */
-	public SongController getInstance(){
+	public static SongController getInstance(){
 		if (instance == null){
 			return new SongController();
 		}else{
