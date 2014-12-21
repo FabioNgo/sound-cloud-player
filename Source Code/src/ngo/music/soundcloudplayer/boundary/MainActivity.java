@@ -44,7 +44,7 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 	private int mTitleRes;
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
-	private MainActivity activity;
+	private static MainActivity activity;
 	
 	
 	/**
@@ -52,6 +52,12 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 	 */
 	public static int screenHeight;
 	public static int screenWidth;
+
+	public static MainActivity getActivity() {
+		return activity;
+	}
+
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -118,29 +124,25 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		mLayout.setPanelSlideListener(new PanelSlideListener() {
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {
-				Log.i(TAG, "onPanelSlide, offset " + slideOffset);
+				
 			}
 
 			@Override
 			public void onPanelExpanded(View panel) {
-				Log.i(TAG, "onPanelExpanded");
 
 			}
 
 			@Override
 			public void onPanelCollapsed(View panel) {
-				Log.i(TAG, "onPanelCollapsed");
 
 			}
 
 			@Override
 			public void onPanelAnchored(View panel) {
-				Log.i(TAG, "onPanelAnchored");
 			}
 
 			@Override
 			public void onPanelHidden(View panel) {
-				Log.i(TAG, "onPanelHidden");
 			}
 		});
 		mLayout.setAnchorPoint((float) 0.5);
