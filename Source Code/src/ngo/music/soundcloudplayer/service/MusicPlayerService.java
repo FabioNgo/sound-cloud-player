@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.controller.MusicPlayerController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -30,21 +31,20 @@ import android.util.Log;
 public class MusicPlayerService extends Service implements OnPreparedListener,
 		OnErrorListener, OnCompletionListener, OnSeekCompleteListener,
 		OnInfoListener, OnBufferingUpdateListener {
-	private static MusicPlayerService instance;
 	private final IBinder mBinder = new MusicPlayerServiceBinder();
-	private MediaPlayer mediaPlayer = null;
+	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
 	private Song song = null;
 	private SongController songController;
 	private long currentTime = 0;
 	private long duration;
 	private Notification notification;
-
+	private static MusicPlayerService instance;
 	public MusicPlayerService() {
 		// TODO Auto-generated constructor stub
-		if(instance == null) {
-			instance = this;
-		}
+		instance = this;
+		iniMediaPlayer();
+		
 	}
 	public static MusicPlayerService getInstance() {
 		if(instance == null) {
@@ -52,18 +52,24 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		}
 		return instance;
 	}
+	private void iniMediaPlayer() {
+		// TODO Auto-generated method stub
+		if (mediaPlayer == null) {
+			mediaPlayer = new MediaPlayer();
+			mediaPlayer.setOnPreparedListener(this);
+			mediaPlayer.setOnErrorListener(this);
+			mediaPlayer.setOnSeekCompleteListener(this);
+			mediaPlayer.setOnBufferingUpdateListener(this);
+			mediaPlayer.setOnInfoListener(this);
+			mediaPlayer.setOnCompletionListener(this);
+			mediaPlayer.reset();
+		}
+	}
 
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
-		mediaPlayer = new MediaPlayer();
-		mediaPlayer.setOnPreparedListener(this);
-		mediaPlayer.setOnErrorListener(this);
-		mediaPlayer.setOnSeekCompleteListener(this);
-		mediaPlayer.setOnBufferingUpdateListener(this);
-		mediaPlayer.setOnInfoListener(this);
-		mediaPlayer.setOnCompletionListener(this);
-		mediaPlayer.reset();
+		iniMediaPlayer();
 
 	}
 
@@ -125,13 +131,14 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
 		playMedia();
+
 	}
 
 	private void playMedia() {
 		// TODO Auto-generated method stub
-		if (!mediaPlayer.isPlaying()) {
-			mediaPlayer.start();
-		}
+
+		mediaPlayer.start();
+
 	}
 
 	@Override
@@ -207,11 +214,12 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	public void playNewSong(String songID) {
-		song = songController.getSong(songID);
+		song = SongController.getInstance().getSong(songID);
 		if (!mediaPlayer.isPlaying()) {
 			try {
 				mediaPlayer.setDataSource(song.getLink());
-				mediaPlayer.prepareAsync();
+				// mediaPlayer.prepareAsync();
+				mediaPlayer.prepare();
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -225,7 +233,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			Builder builder = new Builder(getApplicationContext());
+			Builder builder = new Builder(MainActivity.getActivity());
 			notification = builder.setContentTitle(song.getTitle())
 					.setContentText(song.getLink()).build();
 		}
@@ -250,9 +258,8 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	public boolean isPlaying() {
-		Log.i("MEDIA PLAYER", ""+Boolean.toString(mediaPlayer.isPlaying()));
+		// Log.i("MEDIA PLAYER", ""+Boolean.toString(mediaPlayer.isPlaying()));
 		return mediaPlayer.isPlaying();
 	}
-	
 
 }
