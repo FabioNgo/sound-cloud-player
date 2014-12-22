@@ -225,7 +225,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		pauseMedia();
 	}
 
-	public long getCurrentTime() {
+	public int getCurrentTime() {
 		if (mediaPlayer != null) {
 			return mediaPlayer.getCurrentPosition();
 		}
@@ -242,6 +242,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	public boolean isPlaying() {
 		Log.i("MEDIA PLAYER", ""+Boolean.toString(mediaPlayer.isPlaying()));
 		return mediaPlayer.isPlaying();
-	} 
+	}
+	
 
 }

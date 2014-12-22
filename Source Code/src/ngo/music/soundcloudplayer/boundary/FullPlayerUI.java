@@ -20,10 +20,12 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.browse.MediaBrowser;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.provider.MediaStore.Audio.Media;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,11 +43,21 @@ public class FullPlayerUI extends Fragment implements OnClickListener {
 	private MusicPlayerService musicPlayerService;
 	private boolean mBound = false;
 	private Intent intent;
+	private CountDownTimer timer;
+	private final Runnable runnable;
 
 	public FullPlayerUI() {
 		// TODO Auto-generated constructor stub
 		intent = new Intent(MainActivity.getActivity().getApplicationContext(),
 				MusicPlayerService.class);
+		runnable = new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+
+			}
+		};
 	}
 
 	@Override
@@ -73,16 +85,17 @@ public class FullPlayerUI extends Fragment implements OnClickListener {
 		musicProgressBar.setOnClickListener(this);
 		intent.putExtra("LINK", song.getLink());
 		getActivity().startService(intent);
+
 		return rootView;
 	}
 
 	private void pause() {
 		// TODO Auto-generated method stub
-		
-			musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
-			musicPlayerService.pause();
-			
-		
+
+		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
+		musicPlayerService.pause();
+		timer.cancel();
+
 		// double percentage = mediaPlayer.getCurrentPosition()
 		// / mediaPlayer.getDuration();
 		// musicProgressBar.setProgressPercentage(percentage);
@@ -90,16 +103,34 @@ public class FullPlayerUI extends Fragment implements OnClickListener {
 
 	private void play() {
 		// TODO Auto-generated method stub
-		
-			musicPlayerService.playCurrentSong();
-			
-			musicProgressBar
-					.setBackgroundResource(android.R.drawable.ic_media_pause);
-		
 
-		// double percentage = mediaPlayer.getCurrentPosition()
-		// / mediaPlayer.getDuration();
-		// musicProgressBar.setProgressPercentage(percentage);
+		musicPlayerService.playCurrentSong();
+
+		musicProgressBar
+				.setBackgroundResource(android.R.drawable.ic_media_pause);
+		timer = new CountDownTimer(musicPlayerService.getDuration()
+				- musicPlayerService.getCurrentTime(), 1000) {
+
+			@Override
+			public void onTick(long millisUntilFinished) {
+				// TODO Auto-generated method stub
+
+				musicProgressBar
+						.setProgressPercentage((double) musicPlayerService
+								.getCurrentTime()
+								/ musicPlayerService.getDuration());
+
+				Log.i("Time", musicPlayerService.getCurrentTime() + " of "
+						+ musicPlayerService.getDuration());
+			}
+
+			@Override
+			public void onFinish() {
+				// TODO Auto-generated method stub
+
+			}
+		};
+		timer.start();
 	}
 
 	@Override
