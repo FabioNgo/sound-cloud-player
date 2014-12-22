@@ -26,7 +26,7 @@ import ngo.music.soundcloudplayer.general.Constants;
 
 
 
-public class SongController implements Constants, Contants.SongConstants{
+public class SongController implements Constants, Constants.SongConstants{
 
 	private ArrayList<Song> songs;
 	private static SongController instance = null;

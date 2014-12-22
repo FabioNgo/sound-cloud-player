@@ -97,9 +97,7 @@ public class Playlist {
 	 */
 	private byte artworkData;
 	
-	public Song() {
-		// TODO Auto-generated constructor stub
-	}
+	
 	
 
 	public String getTitle() {

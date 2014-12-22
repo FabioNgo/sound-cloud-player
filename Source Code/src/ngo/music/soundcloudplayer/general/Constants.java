@@ -104,4 +104,5 @@ public interface Constants {
 		String ARTWORK_DATA  = "artwork_data";
 		
 		String TRACKS = "tracks";
+	}
 }
