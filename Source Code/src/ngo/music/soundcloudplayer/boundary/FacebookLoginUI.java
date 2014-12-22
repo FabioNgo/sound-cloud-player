@@ -7,7 +7,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.User;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -29,7 +29,7 @@ import android.widget.Toast;
  * @author LEBAO_000
  *
  */
-public class FacebookLoginUI extends Fragment implements Contants.UserContant {
+public class FacebookLoginUI extends Fragment implements Constants.UserContant {
 
 	public FacebookLoginUI() {
 		// TODO Auto-generated constructor stub

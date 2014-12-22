@@ -30,6 +30,7 @@ import android.util.Log;
 public class MusicPlayerService extends Service implements OnPreparedListener,
 		OnErrorListener, OnCompletionListener, OnSeekCompleteListener,
 		OnInfoListener, OnBufferingUpdateListener {
+	private static MusicPlayerService instance;
 	private final IBinder mBinder = new MusicPlayerServiceBinder();
 	private MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
@@ -41,6 +42,15 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 	public MusicPlayerService() {
 		// TODO Auto-generated constructor stub
+		if(instance == null) {
+			instance = this;
+		}
+	}
+	public static MusicPlayerService getInstance() {
+		if(instance == null) {
+			new MusicPlayerService();
+		}
+		return instance;
 	}
 
 	@Override

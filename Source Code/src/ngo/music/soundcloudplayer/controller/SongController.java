@@ -17,12 +17,12 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 
 
 
 
-public class SongController implements Contants{
+public class SongController implements Constants{
 	private ArrayList<Song> songs;
 	private static SongController instance = null;
 	private SongController() {

@@ -27,14 +27,14 @@ import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 
 
 /**
  * @author LEBAO_000
  *
  */
-public class SoundCloudUserController extends UserController implements Contants.UserContant {
+public class SoundCloudUserController extends UserController implements Constants.UserContant {
 
 
 
@@ -77,7 +77,7 @@ public class SoundCloudUserController extends UserController implements Contants
 	 */
 	public User validateLogin (String username , String password){
 
-		ApiWrapper wrapper = new ApiWrapper(Contants.CLIENT_ID, Contants.CLIENT_SECRET, null,null);
+		ApiWrapper wrapper = new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null,null);
 		
 		
 		try {

@@ -71,6 +71,7 @@ public class ProgressWheel extends View {
     //Other
     private String text = "";
     private String[] splitText = {};
+    
 
     /**
      * The constructor for the ProgressWheel
@@ -83,8 +84,9 @@ public class ProgressWheel extends View {
 
         parseAttributes(context.obtainStyledAttributes(attrs,
                 R.styleable.ProgressWheel));
+        
     }
-
+    
     //----------------------------------
     //Setting up stuff
     //----------------------------------

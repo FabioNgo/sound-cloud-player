@@ -3,7 +3,9 @@ package ngo.music.soundcloudplayer.boundary;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import ngo.music.soundcloudplayer.service.MusicPlayerService.MusicPlayerServiceBinder;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -13,9 +15,13 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import android.app.ActionBar;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.ListFragment;
@@ -39,14 +45,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MainActivity extends SlidingFragmentActivity implements Contants.UIContant, Contants.UserContant{
-	
+public class MainActivity extends SlidingFragmentActivity implements
+		Constants.UIContant, Constants.UserContant {
+
 	private int mTitleRes;
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private static MainActivity activity;
-	
-	
+	private MusicPlayerService musicPlayerService;
+	private Intent intent;
+	private boolean mBound = false;
+
 	/**
 	 * Screen's Size
 	 */
@@ -57,16 +66,22 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		return activity;
 	}
 
-	
+	public MainActivity() {
+		// TODO Auto-generated constructor stub
+		
+		musicPlayerService = MusicPlayerService.getInstance();
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
+
 		/**
 		 * get screen's size;
 		 */
@@ -87,27 +102,27 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		SlidingMenu sm = getSlidingMenu();
 		sm.setShadowWidthRes(R.dimen.shadow_width);
 		sm.setShadowDrawable(R.drawable.shadow);
-		
-		sm.setBehindOffset((int)(BasicFunctions.pxTodp(screenWidth, this)));
+
+		sm.setBehindOffset((int) (BasicFunctions.pxTodp(screenWidth, this)));
 		sm.setFadeDegree(0.35f);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
 		toolbar.setLogo(R.drawable.ic_action_github);
 		setSupportActionBar(toolbar);
-		
+
 		if (savedInstanceState == null) {
-			
+
 			FrameLayout frame = (FrameLayout) findViewById(R.id.menu_frame);
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
 			mFrag = new UserDisplayFragment();
-			
-			//Bundle bundle = new Bundle();
-			//bundle = getIntent().getBundleExtra(USER);
-			//bundle.putInt(LAYOUT_WIDTH, frame.getLayoutParams().width);
-			//bundle.putInt(LAYOUT_HEIGHT,screenHeight);
-			
+
+			// Bundle bundle = new Bundle();
+			// bundle = getIntent().getBundleExtra(USER);
+			// bundle.putInt(LAYOUT_WIDTH, frame.getLayoutParams().width);
+			// bundle.putInt(LAYOUT_HEIGHT,screenHeight);
+
 			t.replace(R.id.menu_frame, mFrag);
 			t.commit();
 		} else {
@@ -115,8 +130,6 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 					.findFragmentById(R.id.menu_frame);
 		}
 
-		
-		
 		/**
 		 * Sliding Up Panel
 		 */
@@ -124,7 +137,7 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		mLayout.setPanelSlideListener(new PanelSlideListener() {
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {
-				
+
 			}
 
 			@Override
@@ -147,19 +160,15 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		});
 		mLayout.setAnchorPoint((float) 0.5);
 		RelativeLayout dragview = (RelativeLayout) findViewById(R.id.dragView);
-		
-		
-		
 
-		
-		FrameLayout full_player_container = (FrameLayout)findViewById(R.id.full_player_container);
+		FrameLayout full_player_container = (FrameLayout) findViewById(R.id.full_player_container);
 		full_player_container.getLayoutParams().height = screenHeight;
-		FrameLayout play_queue_container = (FrameLayout)findViewById(R.id.play_queue_container);
+		FrameLayout play_queue_container = (FrameLayout) findViewById(R.id.play_queue_container);
 		play_queue_container.getLayoutParams().height = screenHeight;
-		
-		dragview.getLayoutParams().height = screenHeight*2
+
+		dragview.getLayoutParams().height = screenHeight * 2
 				+ BasicFunctions.dpToPx(68, this);
-		
+
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.lite_player_container, new LitePlayerUI())
 				.commit();
@@ -167,8 +176,7 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-		.replace(R.id.play_queue_container, new PlayQueueUI())
-		.commit();
+				.replace(R.id.play_queue_container, new PlayQueueUI()).commit();
 		/**
 		 * Tab Sliding
 		 */
@@ -184,7 +192,10 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		pager.setPageMargin(pageMargin);
 
 		tabs.setViewPager(pager);
-
+		/**
+		 * Music Player Service
+		 */
+		
 	}
 
 	@Override
@@ -201,7 +212,6 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 		}
 		return true;
 	}
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -245,8 +255,40 @@ public class MainActivity extends SlidingFragmentActivity implements Contants.UI
 			super.onBackPressed();
 		}
 	}
-	/**
-	 * Tab Sliding
-	 */
 
+	/** Defines callbacks for service binding, passed to bindService() */
+	private ServiceConnection mConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceConnected(ComponentName className, IBinder service) {
+			// We've bound to LocalService, cast the IBinder and get
+			// LocalService instance
+			MusicPlayerServiceBinder binder = (MusicPlayerServiceBinder) service;
+			musicPlayerService = binder.getService();
+			mBound = true;
+		}
+
+		@Override
+		public void onServiceDisconnected(ComponentName arg0) {
+			mBound = false;
+		}
+	};
+
+	@Override
+	public void onStart() {
+		super.onStart();
+		intent = new Intent(this, MusicPlayerService.class);
+		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+		startService(intent);
+	};
+
+	@Override
+	public void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		if (mBound) {
+			unbindService(mConnection);
+			mBound = false;
+		}
+	}
 }

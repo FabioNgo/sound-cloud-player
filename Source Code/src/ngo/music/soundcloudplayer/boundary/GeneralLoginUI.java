@@ -8,7 +8,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.entity.User;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.app.ProgressDialog;
@@ -31,7 +31,7 @@ import android.widget.Toast;
  * @author LEBAO_000
  *
  */
-public class GeneralLoginUI extends Fragment implements Contants.UserContant {
+public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 
 	public GeneralLoginUI() {
 		// TODO Auto-generated constructor stub
@@ -50,7 +50,7 @@ public class GeneralLoginUI extends Fragment implements Contants.UserContant {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				UserControllerFactory.createUserController(Contants.GOOGLE_PLUS_USER).login();
+				UserControllerFactory.createUserController(Constants.GOOGLE_PLUS_USER).login();
 			}
 		});
 		
@@ -70,7 +70,7 @@ public class GeneralLoginUI extends Fragment implements Contants.UserContant {
 			
 			@Override
 			public void onClick(View v) {
-				UserControllerFactory.createUserController(Contants.FACEBOOK_USER).login();
+				UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
 				// TODO Auto-generated method stub
 				
 				

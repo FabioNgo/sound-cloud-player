@@ -26,7 +26,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.api.CloudAPI;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 
 /**
  * @author LEBAO_000
@@ -45,9 +45,9 @@ public class FacebookUserController extends UserController {
 	public URI login() {
 		// TODO Auto-generated method stub
 		final ApiWrapper wrapper = new ApiWrapper(
-                Contants.CLIENT_ID,
-                Contants.CLIENT_SECRET,
-                Contants.REDIRECT_URI,
+                Constants.CLIENT_ID,
+                Constants.CLIENT_SECRET,
+                Constants.REDIRECT_URI,
                 null    /* token */);
 
 
