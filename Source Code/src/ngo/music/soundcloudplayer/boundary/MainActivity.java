@@ -18,6 +18,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -58,6 +59,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private  MusicPlayerService musicPlayerService;
 	private Intent intent;
 	private boolean mBound = false;
+	private BroadcastReceiver receiver;
 
 	/**
 	 * Screen's Size
@@ -84,7 +86,15 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
-
+		receiver = new BroadcastReceiver() {
+	        @Override
+	        public void onReceive(Context context, Intent intent) {
+	            if(intent.getStringExtra(MusicPlayerService.NEW_SONG)!= "") {
+	            	MusicPlayerController.getInstance().updateNewSong();
+	            }
+	            // do something here.
+	        }
+	    };
 		/**
 		 * get screen's size;
 		 */

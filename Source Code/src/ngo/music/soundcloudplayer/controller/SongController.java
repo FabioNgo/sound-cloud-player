@@ -50,7 +50,7 @@ public class SongController implements Constants, Constants.SongConstants{
 
 	private ArrayList<Song> songs;
 	private static SongController instance = null;
-	private Song currentSong;
+	
 	
 	private SongController() {
 		// TODO Auto-generated constructor stub

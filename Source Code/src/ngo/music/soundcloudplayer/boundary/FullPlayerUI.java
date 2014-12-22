@@ -4,6 +4,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.MusicPlayerController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
+import ngo.music.soundcloudplayer.interfaces.UiInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,50 +12,75 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
-public class FullPlayerUI extends Fragment {
+public class FullPlayerUI extends PlayerUI {
 	private Toolbar toolbar;
-	private ProgressWheel musicProgressBar;
-	private SongController songController = null;
 
-	private Intent intent;
+	private static FullPlayerUI instance = null;
+	private View rootView = null;
 
 	public FullPlayerUI() {
 		// TODO Auto-generated constructor stub
+		super();
+	}
 
+	public static FullPlayerUI getInstance() {
+		return instance;
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
+		instance = this;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-
-		View rootView = inflater.inflate(R.layout.fullplayer, container, false);
-		songController = SongController.getInstance();
+//		super.onCreateView(inflater, container, savedInstanceState);
+		rootView = inflater.inflate(R.layout.fullplayer, container, false);
 
 		BasicFunctions.ResizeImageView(MainActivity.screenWidth,
 				(ImageView) rootView.findViewById(R.id.full_player_song_image));
-		
 
 		musicProgressBar = (ProgressWheel) rootView
 				.findViewById(R.id.full_player_progress_bar);
 
 		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
-		MusicPlayerController.getInstance().addMusicProgressBar(
-				musicProgressBar);
+		musicProgressBar.setOnClickListener(new OnClickListener() {
 
-		
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				musicPlayerController.startPause();
+			}
+		});
+		MusicPlayerController.getInstance().addUiFragment(this);
 
+		// MusicPlayerController.getInstance().
 		return rootView;
+	}
+
+	@Override
+	public void updateTitle(String title) {
+		// TODO Auto-generated method stub
+		Toolbar toolbar = (Toolbar) rootView
+				.findViewById(R.id.full_player_toolbar);
+		toolbar.setTitle(title);
+	}
+
+	@Override
+	public void updateSubTitle(String subTitle) {
+		// TODO Auto-generated method stub
+		Toolbar toolbar = (Toolbar) rootView
+				.findViewById(R.id.full_player_toolbar);
+		toolbar.setSubtitle(subTitle);
 	}
 
 }

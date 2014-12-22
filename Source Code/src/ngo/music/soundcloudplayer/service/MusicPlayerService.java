@@ -26,32 +26,48 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 public class MusicPlayerService extends Service implements OnPreparedListener,
 		OnErrorListener, OnCompletionListener, OnSeekCompleteListener,
 		OnInfoListener, OnBufferingUpdateListener {
+	/**
+	 * Broadcast message TAG
+	 */
+	public static final String TAG_START = "start";
+	public static final String TAG_STOP = "stop";
+	public static final String TAG_PAUSE = "pause";
+	public static final String NEW_SONG = "new song";
 	private final IBinder mBinder = new MusicPlayerServiceBinder();
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
-	private Song song = null;
+	private Song currentSong = null;
+
+	public Song getCurrentSong() {
+		return currentSong;
+	}
+
 	private SongController songController;
-	private long currentTime = 0;
-	private long duration;
+
 	private Notification notification;
+	private LocalBroadcastManager broadcaster;
 	private static MusicPlayerService instance;
+
 	public MusicPlayerService() {
 		// TODO Auto-generated constructor stub
 		instance = this;
 		iniMediaPlayer();
-		
+
 	}
+
 	public static MusicPlayerService getInstance() {
-		if(instance == null) {
+		if (instance == null) {
 			new MusicPlayerService();
 		}
 		return instance;
 	}
+
 	private void iniMediaPlayer() {
 		// TODO Auto-generated method stub
 		if (mediaPlayer == null) {
@@ -66,10 +82,19 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		}
 	}
 
+	public void sendResult(String TAG) {
+		Intent intent = new Intent(this, MainActivity.class);
+
+		intent.putExtra(TAG, TAG);
+
+		broadcaster.sendBroadcast(intent);
+	}
+
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		iniMediaPlayer();
+		broadcaster = LocalBroadcastManager.getInstance(this);
 
 	}
 
@@ -199,14 +224,14 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	public String getSongID() {
-		return song.getId();
+		return currentSong.getId();
 	}
 
 	public void playCurrentSong() {
-		if (song == null) {
+		if (currentSong == null) {
 			songController = SongController.getInstance();
-			song = songController.getSongs().get(0);
-			playNewSong(song.getId());
+			currentSong = songController.getSongs().get(0);
+			playNewSong(currentSong.getId());
 		} else {
 			mediaPlayer.start();
 		}
@@ -214,10 +239,10 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	public void playNewSong(String songID) {
-		song = SongController.getInstance().getSong(songID);
+		currentSong = SongController.getInstance().getSong(songID);
 		if (!mediaPlayer.isPlaying()) {
 			try {
-				mediaPlayer.setDataSource(song.getLink());
+				mediaPlayer.setDataSource(currentSong.getLink());
 				// mediaPlayer.prepareAsync();
 				mediaPlayer.prepare();
 			} catch (IllegalArgumentException e) {
@@ -234,8 +259,8 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 				e.printStackTrace();
 			}
 			Builder builder = new Builder(MainActivity.getActivity());
-			notification = builder.setContentTitle(song.getTitle())
-					.setContentText(song.getLink()).build();
+			notification = builder.setContentTitle(currentSong.getTitle())
+					.setContentText(currentSong.getLink()).build();
 		}
 	}
 

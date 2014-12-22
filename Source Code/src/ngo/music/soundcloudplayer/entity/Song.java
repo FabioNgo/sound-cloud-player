@@ -10,17 +10,25 @@ public class Song {
 		setTitle(c.getString(c.getColumnIndex(Media.TITLE)));
 		setId((c.getString(c.getColumnIndex(Media._ID))));
 		setLink(c.getString(c.getColumnIndex(Media.DATA)));
+		setArtist(c.getString(c.getColumnIndex(Media.ARTIST)));
 	}
 	/**
 	 * id if get from local
 	 */
 	private String id;
 	/**
+	 * Artist
+	 */
+	private String artist;
+	/**
 	 * link if get from local 
 	 */
 	private String link;
+	/**
+	 * Title
+	 */
 	private String title;
-	
+
 	/**
 	 * integer ID
 	 */
@@ -754,6 +762,18 @@ public class Song {
 	public void setArtworkData(byte artworkData) {
 		this.artworkData = artworkData;
 	}
+
+
+	public String getArtist() {
+		return artist;
+	}
+
+
+	public void setArtist(String artist) {
+		this.artist = artist;
+	}
+
+
 	
 
 
