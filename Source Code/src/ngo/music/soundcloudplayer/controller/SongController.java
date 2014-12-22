@@ -1,22 +1,42 @@
 package ngo.music.soundcloudplayer.controller;
 
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
 
+import android.support.v4.app.NotificationCompat.Builder;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio;
 import android.provider.MediaStore.Audio.Media;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.entity.Song;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ngo.music.soundcloudplayer.api.ApiWrapper;
+import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Http;
+import ngo.music.soundcloudplayer.api.Params;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
@@ -159,8 +179,67 @@ public class SongController implements Constants, Constants.SongConstants{
 		
 	}
 	
-	public void uploadSong(){
+	/**
+	 * upload Song from memory.
+	 * @param song
+	 * @param songFile
+	 * @param artWorkFile
+	 * @throws ClassNotFoundException
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public void uploadSong(Song song, File songFile, File artWorkFile) throws ClassNotFoundException, IOException, JSONException{
 		
+		final ApiWrapper wrapper = ApiWrapper.fromFile(songFile);
+        System.out.println("Uploading " + songFile);
+        try {
+            HttpResponse resp = wrapper.post(Request.to(Endpoints.TRACKS)
+                    .add(Params.Track.TITLE,     song.getTitle())
+                    .add(Params.Track.TAG_LIST, song.getTagList())
+                    .add(Params.Track.DESCRIPTION, song.getDescription())
+                    .add(Params.Track.DOWNLOADABLE, song.isDownloadable())
+                    .add(Params.Track.SHARING, song.getSharing())
+                    .add(Params.Track.PERMALINK, song.getPermalink())
+                    .add(Params.Track.LABEL_NAME, song.getLabelName())
+                    .add(Params.Track.RELEASE, song.getRelease())
+                    
+                    .withFile(Params.Track.ASSET_DATA, songFile)
+                    // you can add more parameters here, e.g.
+                     .withFile(Params.Track.ARTWORK_DATA, artWorkFile) /* to add artwork */
+
+                    // set a progress listener (optional)
+                    .setProgressListener(new Request.TransferProgressListener() {
+                        @Override public void transferred(long amount) {
+                            System.err.print(".");
+                        }
+                    }));
+
+            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
+                System.out.println("\n201 Created "+resp.getFirstHeader("Location").getValue());
+
+                // dump the representation of the new track
+                System.out.println("\n" + Http.getJSON(resp).toString(4));
+            } else {
+                System.err.println("Invalid status received: " + resp.getStatusLine());
+            }
+        } finally {
+            // serialise wrapper state again (token might have been refreshed)
+            wrapper.toFile(songFile);
+        }
+		
+	}
+	
+	/**
+	 * download song
+	 * @param url stream link of the song
+	 * @param fileName file name of the song want to be named
+	 * @throws IOException 
+	 */
+	public void downloadSong(String streamLink,String filename) throws IOException{
+		
+		new DownloadFileFromURL(streamLink, filename).execute();
+		
+	
 	}
 	/**
 	 * add information into song entity class
@@ -213,5 +292,104 @@ public class SongController implements Constants, Constants.SongConstants{
 		song.setStreamUrl(stream.streamUrl);
 		
 		return song;
+	}
+	
+	/**
+	 * Background Async Task to download file
+	 * */
+	class DownloadFileFromURL extends AsyncTask<String, String, String> {
+	 
+		String filename;
+		String streamUrl;
+		public DownloadFileFromURL(String streamUrl, String filename) {
+			// TODO Auto-generated constructor stub
+			this.streamUrl = streamUrl;
+			this.filename = filename;
+		}
+	    /**
+	     * Before starting background thread
+	     * Show Progress Bar Dialog
+	     * */
+	    @Override
+	    protected void onPreExecute() {
+	        super.onPreExecute();
+	        //showDialog(progress_bar_type);
+	    }
+	    
+	    
+	 
+	    /**
+	     * Downloading file in background thread
+	     * */
+	    @Override
+	    protected String doInBackground(String... f_url) {
+	   
+	        int count;
+	        try {
+	            URL url = new URL(f_url[0]);
+	            URLConnection conection = url.openConnection();
+	            conection.connect();
+	            // getting file length
+	            int lenghtOfFile = conection.getContentLength();
+	 
+	            // input stream to read file - with 8k buffer
+	            InputStream input = new BufferedInputStream(url.openStream(), 8192);
+	 
+	            // Output stream to write file
+	            String outputName = "/sdcard/SoundCloudApp/"+ filename;
+	            OutputStream output = new FileOutputStream(outputName);
+	 
+	            byte data[] = new byte[1024];
+	 
+	            long total = 0;
+	 
+	            while ((count = input.read(data)) != -1) {
+	                total += count;
+	                // publishing the progress....
+	                // After this onProgressUpdate will be called
+	                //publishProgress(""+(int)((total*100)/lenghtOfFile));
+	 
+	                // writing data to file
+	                output.write(data, 0, count);
+	            }
+	 
+	            // flushing output
+	            output.flush();
+	 
+	            // closing streams
+	            output.close();
+	            input.close();
+	 
+	        } catch (Exception e) {
+	            Log.e("Error: ", e.getMessage());
+	        }
+	 
+	        return null;
+	    }
+	 
+	    /**
+	     * Updating progress bar
+	     * */
+	    protected void onProgressUpdate(String... progress) {
+	        // setting progress percentage
+	        //pDialog.setProgress(Integer.parseInt(progress[0]));
+	   }
+	 
+	    /**
+	     * After completing background task
+	     * Dismiss the progress dialog
+	     * **/
+	    @Override
+	    protected void onPostExecute(String file_url) {
+	        // dismiss the dialog after the file was downloaded
+	        //dismissDialog(progress_bar_type);
+	 
+	        // Displaying downloaded image into image view
+	        // Reading image path from sdcard
+	        //String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.jpg";
+	        // setting downloaded into image view
+	       // my_image.setImageDrawable(Drawable.createFromPath(imagePath));
+	    }
+	 
 	}
 }
