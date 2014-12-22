@@ -56,4 +56,52 @@ public interface Constants {
 		int LITE_PLAYER_PROGRESSBAR_ID = 2;
 		int IN_LIST_VIEW_PLAYER_PROGRESSBAR_ID = 3;
 	}
+	
+	interface SongConstants{
+		String ID = "id";
+		String CREATED_AT =   "created_at";
+		String USER_ID = "user_id";
+		String DURATION =   "duration";
+		String COMMENTABLE = "commentable";
+		String STATE =  "state";
+		String SHARING = "sharing";
+		String TAG_LIST = "tag_list";
+		String PERMALINK = "permalink";
+		String DESCRIPTION = "description";
+		String STREAMABLE = "streamable";
+		String DOWNLOADABLE = "downloadable";
+		String GENRE = "genre";
+		String RELEASE = "release";
+		String PURCHASE_URL = "purchase_url";
+		String LABEL_ID = "label_id";
+		String LABEL_NAME = "label_name";
+		String ISRC = "isrc";
+		String VIDEO_URL = "video_url";
+		String TRACK_TYPE = "track_type";
+		String KEY_SIGNATURE = "key_signature";
+		String BPM =   "bpm";
+		String TITLE  =  "title";
+		String RELEASE_YEAR = "release_year";
+		String RELEASE_MONTH = "release_month";
+		String RELEASE_DAY = "release_day";
+		String FORMAT = "original_format";
+		String CONTENT_SIZE = "original_content_size";
+		String LICENSE = "license";
+		String URI = "uri";
+		String PERMALINK_URL = "permalink_url";
+		String ARTWORK_URL = "artwork_url";
+		String WAVEFORM_URL = "waveform_url";
+		String USER = "user";
+		String STREAM_URL = "stream_url";
+		String DOWNLOAD_URL =   "download_url";
+		String PLAYBACK_COUNT = "playback_count";
+		String DOWNLOAD_COUNT = "download_count";
+		String FOVORITINGS_COUNT = "favoritings_count";
+		String COMMENT_COUNT = "comment_count";
+		String CREATED_WITH = "created_with";
+		String ATTACHMENTS_URI = "attachments_uri";
+		String ASSET_DATA = "asset_data";
+		String ARTWORK_DATA  = "artwork_data";
+		
+		String TRACKS = "tracks";
 }
