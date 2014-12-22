@@ -5,9 +5,9 @@ import java.io.IOException;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 
-public class PlaylistController implements Contants {
+public class PlaylistController implements Constants {
 
 	private static PlaylistController  instance = null;
 	

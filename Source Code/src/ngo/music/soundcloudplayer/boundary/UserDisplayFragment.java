@@ -4,7 +4,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.general.CircularImageView;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.imageloader.ImageLoader;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class UserDisplayFragment extends Fragment implements Contants.UserContant, Contants.UIContant {
+public class UserDisplayFragment extends Fragment implements Constants.UserContant, Constants.UIContant {
 
 	int layoutWidth;
 	int layoutHeight;

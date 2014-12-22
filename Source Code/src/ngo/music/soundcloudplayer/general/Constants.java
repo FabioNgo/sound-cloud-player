@@ -7,7 +7,7 @@ import java.net.URI;
  * @author LEBAO_000
  *
  */
-public interface Contants {
+public interface Constants {
 
 	public static final String CLIENT_ID ="2ae2cf32fdd87967a353b7e718d7f3cd";
 	public static final String CLIENT_SECRET = "acfe1a475e4d004214fed3326a01eb79";
@@ -50,5 +50,10 @@ public interface Contants {
 	interface UIContant{
 		String LAYOUT_WIDTH = "layout_width";
 		String LAYOUT_HEIGHT = "layout_height";
+	}
+	interface MusicProgressBar{
+		int FULL_PLAYER_PROGRESSBAR_ID = 1;
+		int LITE_PLAYER_PROGRESSBAR_ID = 2;
+		int IN_LIST_VIEW_PLAYER_PROGRESSBAR_ID = 3;
 	}
 }

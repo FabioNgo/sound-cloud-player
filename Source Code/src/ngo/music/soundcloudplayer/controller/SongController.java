@@ -20,19 +20,24 @@ import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 
 
 
 
-public class SongController implements Contants, Contants.SongContants{
+
+public class SongController implements Constants, Contants.SongConstants{
+
 	private ArrayList<Song> songs;
 	private static SongController instance = null;
 	private Song currentSong;
 	
 	private SongController() {
 		// TODO Auto-generated constructor stub
-		getSongsFromSDCard();
+		if(instance==null) {
+			instance = this;
+			instance.getSongsFromSDCard();
+		}
 	}
 	
 	/**

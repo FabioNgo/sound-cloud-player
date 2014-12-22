@@ -1,6 +1,6 @@
 package ngo.music.soundcloudplayer.controller;
 
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 
 public class UserControllerFactory {
 
@@ -10,11 +10,11 @@ public class UserControllerFactory {
 	
 	public static UserController createUserController(int TYPE_USER_TAG){
 		switch (TYPE_USER_TAG){
-		case Contants.FACEBOOK_USER:
+		case Constants.FACEBOOK_USER:
 			return new FacebookUserController();
-		case Contants.GOOGLE_PLUS_USER:
+		case Constants.GOOGLE_PLUS_USER:
 			return new GooglePlusUserController();
-		case Contants.SOUNDCLOUD_USER:
+		case Constants.SOUNDCLOUD_USER:
 			return  SoundCloudUserController.getInstance();
 		default:
 			return null;

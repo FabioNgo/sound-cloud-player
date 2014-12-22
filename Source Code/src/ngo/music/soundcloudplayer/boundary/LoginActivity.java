@@ -10,7 +10,7 @@ import ngo.music.soundcloudplayer.controller.UserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.User;
-import ngo.music.soundcloudplayer.general.Contants;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -26,7 +26,7 @@ import android.widget.Button;
  * @author LEBAO_000
  *
  */
-public class LoginActivity extends FragmentActivity implements Contants.UserContant {
+public class LoginActivity extends FragmentActivity implements Constants.UserContant {
 	SoundCloudLoginUI soundcloudLoginUI = null;
 	GoogleLoginUI googleLoginUI = null;
 	FacebookLoginUI facebookLoginUI = null;

@@ -26,7 +26,7 @@
     android:layout_below="@+id/full_player_song_image"
     android:layout_width="150dp"    
     android:layout_height="150dp"   
-    android:layout_centerInParent="true"   
+    android:layout_centerInParent="true"
     ProgressWheel:textColor="#222"   
     ProgressWheel:textSize="14sp"   
     ProgressWheel:rimColor="#330097D6"   

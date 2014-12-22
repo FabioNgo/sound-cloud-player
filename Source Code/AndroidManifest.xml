@@ -23,8 +23,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ngo.music.soundcloudplayer.boundary.MainActivity"></activity>
-       
+        <activity android:name="ngo.music.soundcloudplayer.boundary.MainActivity"
+                android:screenOrientation="portrait"
+            ></activity>
+       <service android:name=".service.MusicPlayerService" />
     </application>
 
 </manifest>
