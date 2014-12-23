@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.boundary;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.MusicPlayerController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
+import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -38,7 +39,7 @@ public class FullPlayerUI extends PlayerUI {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-//		super.onCreateView(inflater, container, savedInstanceState);
+		// super.onCreateView(inflater, container, savedInstanceState);
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
 
 		BasicFunctions.ResizeImageView(MainActivity.screenWidth,
@@ -57,7 +58,14 @@ public class FullPlayerUI extends PlayerUI {
 			}
 		});
 		MusicPlayerController.getInstance().addUiFragment(this);
+		try {
+			title = MusicPlayerService.getInstance().getCurrentSong()
+					.getTitle();
+			subtitle = MusicPlayerService.getInstance().getCurrentSong()
+					.getArtist();
+		} catch (Exception e) {
 
+		}
 		// MusicPlayerController.getInstance().
 		return rootView;
 	}
@@ -65,6 +73,7 @@ public class FullPlayerUI extends PlayerUI {
 	@Override
 	public void updateTitle(String title) {
 		// TODO Auto-generated method stub
+		this.title =title; 
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setTitle(title);
@@ -73,6 +82,7 @@ public class FullPlayerUI extends PlayerUI {
 	@Override
 	public void updateSubTitle(String subTitle) {
 		// TODO Auto-generated method stub
+		this.subtitle = subTitle;
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setSubtitle(subTitle);

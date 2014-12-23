@@ -73,7 +73,7 @@ public class MusicPlayerController implements Constants.MusicService {
 
 					fragment.updateMusicProgressBar(degree);
 				}
-//				Log.i("TIME", String.valueOf(degree));
+				// Log.i("TIME", String.valueOf(degree));
 			}
 
 			@Override
@@ -90,9 +90,7 @@ public class MusicPlayerController implements Constants.MusicService {
 		timer.cancel();
 	}
 
-	public String getPlayingSongID() {
-		return musicPlayerService.getSongID();
-	}
+	
 
 	// public void updateNewSong() {
 	// // TODO Auto-generated method stub
@@ -112,6 +110,7 @@ public class MusicPlayerController implements Constants.MusicService {
 
 	public void updateUI(final int TAG) {
 		// TODO Auto-generated method stub
+
 		MainActivity.getActivity().runOnUiThread(new Runnable() {
 
 			@Override

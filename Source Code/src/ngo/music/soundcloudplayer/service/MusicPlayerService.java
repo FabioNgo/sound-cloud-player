@@ -2,6 +2,8 @@ package ngo.music.soundcloudplayer.service;
 
 import java.io.IOException;
 
+import com.facebook.LoginActivity;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.MusicPlayerController;
@@ -59,7 +61,15 @@ public class MusicPlayerService extends IntentService implements
 		}
 		return instance;
 	}
-
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		// TODO Auto-generated method stub
+		if(instance == null) {
+			instance = this;
+		}
+		iniMediaPlayer();
+		return START_STICKY;
+	}
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
@@ -87,7 +97,7 @@ public class MusicPlayerService extends IntentService implements
 		NotificationManager notificationManager = (NotificationManager) getSystemService(ns);
 		notification = new Notification();
 
-		Intent notificationIntent = new Intent(this, MainActivity.class);
+		Intent notificationIntent = new Intent(this, LoginActivity.class);
 		PendingIntent contentIntent = PendingIntent.getActivity(
 				getApplicationContext(), 0, notificationIntent, 0);
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(

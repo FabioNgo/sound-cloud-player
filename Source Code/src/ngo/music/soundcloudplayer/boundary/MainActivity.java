@@ -2,6 +2,7 @@ package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
+import ngo.music.soundcloudplayer.controller.MusicPlayerController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -180,6 +181,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 		/**
 		 * Music Player Service
 		 */
+		intent = new Intent(this, MusicPlayerService.class);
+		startService(intent);
+		bindService(intent, mConnection, 0);
+		MusicPlayerController.getInstance().updateUI(MUSIC_START);
 	}
 
 	@Override
@@ -263,11 +268,29 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		intent = new Intent(this, MusicPlayerService.class);
 		
-		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 //		musicPlayerService = MusicPlayerService.getInstance();
 	}
-	
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+		
+	}
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		
+	}
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+		if (mBound) {
+            unbindService(mConnection);
+            mBound = false;
+        }
+	}
 	
 }
