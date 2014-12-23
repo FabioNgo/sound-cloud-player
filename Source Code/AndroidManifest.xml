@@ -27,6 +27,12 @@
                 android:screenOrientation="portrait"
             ></activity>
        <service android:name=".service.MusicPlayerService" />
+       <receiver android:name="MainActivity">
+      <intent-filter>
+         <action android:name="android.intent.action.BOOT_COMPLETED">
+      </action>
+      </intent-filter>
+   </receiver>
     </application>
 
 </manifest>

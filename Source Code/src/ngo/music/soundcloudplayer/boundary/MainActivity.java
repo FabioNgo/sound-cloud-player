@@ -2,55 +2,36 @@ package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
-import ngo.music.soundcloudplayer.controller.MusicPlayerController;
-import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import ngo.music.soundcloudplayer.service.MusicPlayerService.MusicPlayerServiceBinder;
-
-import com.astuetz.PagerSlidingTabStrip;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingActivity;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
-
-import android.app.ActionBar;
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.DragEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnDragListener;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import com.astuetz.PagerSlidingTabStrip;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class MainActivity extends SlidingFragmentActivity implements
-		Constants.UIContant, Constants.UserContant {
+		Constants.UIContant, Constants.UserContant, Constants.MusicService {
 
 	private int mTitleRes;
 	protected Fragment mFrag;
@@ -59,7 +40,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private  MusicPlayerService musicPlayerService;
 	private Intent intent;
 	private boolean mBound = false;
-	private BroadcastReceiver receiver;
 
 	/**
 	 * Screen's Size
@@ -86,15 +66,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
-		receiver = new BroadcastReceiver() {
-	        @Override
-	        public void onReceive(Context context, Intent intent) {
-	            if(intent.getStringExtra(MusicPlayerService.NEW_SONG)!= "") {
-	            	MusicPlayerController.getInstance().updateNewSong();
-	            }
-	            // do something here.
-	        }
-	    };
+		
 		/**
 		 * get screen's size;
 		 */
@@ -208,7 +180,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 		/**
 		 * Music Player Service
 		 */
-		musicPlayerService = MusicPlayerService.getInstance();
 	}
 
 	@Override
@@ -277,7 +248,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			// We've bound to LocalService, cast the IBinder and get
 			// LocalService instance
 			MusicPlayerServiceBinder binder = (MusicPlayerServiceBinder) service;
-			musicPlayerService = binder.getService();
+//			musicPlayerService = binder.getService();
 			mBound = true;
 		}
 
@@ -293,15 +264,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		intent = new Intent(this, MusicPlayerService.class);
+		
 		bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+//		musicPlayerService = MusicPlayerService.getInstance();
 	}
-	@Override
-	public void onStop() {
-		// TODO Auto-generated method stub
-		super.onStop();
-		if (mBound) {
-			unbindService(mConnection);
-			mBound = false;
-		}
-	}
+	
+	
 }

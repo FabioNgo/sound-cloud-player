@@ -8,11 +8,11 @@ import ngo.music.soundcloudplayer.controller.MusicPlayerController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -24,15 +24,14 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationCompat.Builder;
 import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 
-public class MusicPlayerService extends IntentService implements OnPreparedListener,
-		OnErrorListener, OnCompletionListener, OnSeekCompleteListener,
-		OnInfoListener, OnBufferingUpdateListener {
+public class MusicPlayerService extends IntentService implements
+		OnPreparedListener, OnErrorListener, OnCompletionListener,
+		OnSeekCompleteListener, OnInfoListener, OnBufferingUpdateListener,
+		Constants.MusicService {
 	public MusicPlayerService() {
 		super("MusicPlayerService");
 		// TODO Auto-generated constructor stub
@@ -40,13 +39,6 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 		iniMediaPlayer();
 	}
 
-	/**
-	 * Broadcast message TAG
-	 */
-	public static final String TAG_START = "start";
-	public static final String TAG_STOP = "stop";
-	public static final String TAG_PAUSE = "pause";
-	public static final String NEW_SONG = "new song";
 	private final IBinder mBinder = new MusicPlayerServiceBinder();
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
@@ -59,15 +51,20 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 	private SongController songController;
 
 	private Notification notification;
-	private LocalBroadcastManager broadcaster;
 	private static MusicPlayerService instance;
 
-	
 	public static MusicPlayerService getInstance() {
 		if (instance == null) {
 			new MusicPlayerService();
 		}
 		return instance;
+	}
+
+	@Override
+	public void onCreate() {
+		// TODO Auto-generated method stub
+		iniMediaPlayer();
+		iniNotification();
 	}
 
 	private void iniMediaPlayer() {
@@ -83,25 +80,6 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 			mediaPlayer.reset();
 		}
 	}
-
-	public void sendResult(String TAG) {
-		Intent intent = new Intent(this, MainActivity.class);
-
-		intent.putExtra(TAG, TAG);
-
-		broadcaster.sendBroadcast(intent);
-	}
-
-	@Override
-	public void onCreate() {
-		// TODO Auto-generated method stub
-		iniMediaPlayer();
-		iniNotification();
-		broadcaster = LocalBroadcastManager.getInstance(this);
-
-	}
-
-	
 
 	private void iniNotification() {
 		// TODO Auto-generated method stub
@@ -131,7 +109,7 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 			}
 			mediaPlayer.release();
 		}
-//		cancelNotification();
+		// cancelNotification();
 	}
 
 	private void cancelNotification() {
@@ -156,9 +134,8 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 
 	private void playMedia() {
 		// TODO Auto-generated method stub
-
+		MusicPlayerController.getInstance().updateUI(MUSIC_START);
 		mediaPlayer.start();
-
 	}
 
 	@Override
@@ -189,6 +166,7 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 		if (mediaPlayer.isPlaying()) {
 
 			mediaPlayer.pause();
+			MusicPlayerController.getInstance().updateUI(MUSIC_PAUSE);
 		}
 	}
 
@@ -226,37 +204,42 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 		if (currentSong == null) {
 			songController = SongController.getInstance();
 			currentSong = songController.getSongs().get(0);
-			playNewSong(currentSong.getId());
+			playNewSong(currentSong);
 		} else {
-			mediaPlayer.start();
+			playMedia();
 		}
-
+		// sendBroadcast(TAG_START);
 	}
 
-	public void playNewSong(String songID) {
-		currentSong = SongController.getInstance().getSong(songID);
-		if (!mediaPlayer.isPlaying()) {
-			try {
-				mediaPlayer.setDataSource(currentSong.getLink());
-				// mediaPlayer.prepareAsync();
-				mediaPlayer.prepare();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public void playNewSong(Song song) {
+		currentSong = song;
+
+		try {
+			if (mediaPlayer.isPlaying()) {
+				mediaPlayer.reset();
 			}
-			Builder builder = new Builder(MainActivity.getActivity());
-			notification = builder.setContentTitle(currentSong.getTitle())
-					.setContentText(currentSong.getLink()).build();
+			mediaPlayer.setDataSource(song.getLink());
+			// mediaPlayer.prepareAsync();
+			mediaPlayer.prepare();
+
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
+		// Builder builder = new Builder(MainActivity.getActivity());
+		// notification = builder.setContentTitle(currentSong.getTitle())
+		// .setContentText(currentSong.getLink()).build();
+
 	}
 
 	public void pause() {
@@ -278,14 +261,14 @@ public class MusicPlayerService extends IntentService implements OnPreparedListe
 	}
 
 	public boolean isPlaying() {
-		// Log.i("MEDIA PLAYER", ""+Boolean.toString(mediaPlayer.isPlaying()));
+		boolean a = mediaPlayer.isPlaying();
 		return mediaPlayer.isPlaying();
 	}
 
 	@Override
 	protected void onHandleIntent(Intent arg0) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

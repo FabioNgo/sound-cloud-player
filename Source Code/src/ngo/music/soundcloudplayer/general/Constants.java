@@ -50,6 +50,7 @@ public interface Constants {
 	interface UIContant{
 		String LAYOUT_WIDTH = "layout_width";
 		String LAYOUT_HEIGHT = "layout_height";
+		int TAB_PAGE_CONTAINER_ID = 1;
 	}
 	interface MusicProgressBar{
 		int FULL_PLAYER_PROGRESSBAR_ID = 1;
@@ -104,5 +105,11 @@ public interface Constants {
 		String ARTWORK_DATA  = "artwork_data";
 		
 		String TRACKS = "tracks";
+	}
+	interface MusicService {
+		int MUSIC_START = 0;
+		int MUSIC_STOP = 1;
+		int MUSIC_PAUSE = 2;
+		int MUSIC_NEW_SONG = 3;
 	}
 }

@@ -11,6 +11,7 @@ public class Song {
 		setId((c.getString(c.getColumnIndex(Media._ID))));
 		setLink(c.getString(c.getColumnIndex(Media.DATA)));
 		setArtist(c.getString(c.getColumnIndex(Media.ARTIST)));
+		setAlbum(c.getString(c.getColumnIndex(Media.ALBUM)));
 	}
 	/**
 	 * id if get from local
@@ -20,6 +21,10 @@ public class Song {
 	 * Artist
 	 */
 	private String artist;
+	/**
+	 * Album
+	 */
+	private String album;
 	/**
 	 * link if get from local 
 	 */
@@ -771,6 +776,16 @@ public class Song {
 
 	public void setArtist(String artist) {
 		this.artist = artist;
+	}
+
+
+	public String getAlbum() {
+		return album;
+	}
+
+
+	public void setAlbum(String album) {
+		this.album = album;
 	}
 
 

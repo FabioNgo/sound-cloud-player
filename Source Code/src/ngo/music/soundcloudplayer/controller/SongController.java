@@ -3,35 +3,13 @@ package ngo.music.soundcloudplayer.controller;
 
 import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
 import java.util.ArrayList;
-
-import android.support.v4.app.NotificationCompat.Builder;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.database.Cursor;
-import android.os.AsyncTask;
-import android.provider.MediaStore;
-import android.provider.MediaStore.Audio;
-import android.provider.MediaStore.Audio.Media;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
-import ngo.music.soundcloudplayer.entity.Song;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
@@ -40,7 +18,19 @@ import ngo.music.soundcloudplayer.api.Params;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.database.Cursor;
+import android.os.AsyncTask;
+import android.provider.MediaStore.Audio.Media;
+import android.util.Log;
 
 
 

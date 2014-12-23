@@ -1,17 +1,10 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.MusicPlayerController;
-import ngo.music.soundcloudplayer.controller.SongController;
+import android.support.v4.app.Fragment;
 
 import com.todddavies.components.progressbar.ProgressWheel;
-
-import android.R;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 
 public abstract class PlayerUI extends Fragment {
 	protected ProgressWheel musicProgressBar;

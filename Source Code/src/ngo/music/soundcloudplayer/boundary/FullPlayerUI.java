@@ -2,23 +2,18 @@ package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.MusicPlayerController;
-import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
-import ngo.music.soundcloudplayer.interfaces.UiInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
 public class FullPlayerUI extends PlayerUI {
-	private Toolbar toolbar;
 
 	private static FullPlayerUI instance = null;
 	private View rootView = null;
@@ -58,7 +53,7 @@ public class FullPlayerUI extends PlayerUI {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				musicPlayerController.startPause();
+				MusicPlayerController.getInstance().startPause();
 			}
 		});
 		MusicPlayerController.getInstance().addUiFragment(this);

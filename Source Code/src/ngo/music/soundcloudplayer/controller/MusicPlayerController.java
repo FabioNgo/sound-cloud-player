@@ -2,19 +2,15 @@ package ngo.music.soundcloudplayer.controller;
 
 import java.util.ArrayList;
 
-import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.CountDownTimer;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 
-import com.todddavies.components.progressbar.ProgressWheel;
-
-public class MusicPlayerController {
+public class MusicPlayerController implements Constants.MusicService {
 	private static MusicPlayerController instance;
 	private MusicPlayerService musicPlayerService;
 	private CountDownTimer timer;
@@ -43,9 +39,8 @@ public class MusicPlayerController {
 	}
 
 	public void pause() {
-		synchronized (musicPlayerService) {
-			musicPlayerService.pause();
-		}
+
+		MusicPlayerService.getInstance().pause();
 
 		stopTimer();
 		// TODO Auto-generated method stub
@@ -57,33 +52,28 @@ public class MusicPlayerController {
 
 	public void play() {
 		// TODO Auto-generated method stub
-		synchronized (musicPlayerService) {
-			musicPlayerService.playCurrentSong();
-		}
 
-		startTimer();
-		// TODO Auto-generated method stub
-		for (PlayerUI playerUI : uiFragments) {
-			playerUI.play();
-		}
+		MusicPlayerService.getInstance().playCurrentSong();
 
 	}
 
 	public void startTimer() {
-		timer = new CountDownTimer(musicPlayerService.getDuration()
-				- musicPlayerService.getCurrentTime(), 1000) {
+		timer = new CountDownTimer(MusicPlayerService.getInstance()
+				.getDuration()
+				- MusicPlayerService.getInstance().getCurrentTime(), 1000) {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
 				// TODO Auto-generated method stub
-				int degree = (int) Math.round(360*
-						(double) musicPlayerService.getCurrentTime()
-								/ musicPlayerService.getDuration());
+				int degree = (int) Math.round(360
+						* (double) MusicPlayerService.getInstance()
+								.getCurrentTime()
+						/ MusicPlayerService.getInstance().getDuration());
 				for (PlayerUI fragment : uiFragments) {
-					
+
 					fragment.updateMusicProgressBar(degree);
 				}
-				Log.i("TIME", String.valueOf(degree));
+//				Log.i("TIME", String.valueOf(degree));
 			}
 
 			@Override
@@ -104,22 +94,58 @@ public class MusicPlayerController {
 		return musicPlayerService.getSongID();
 	}
 
-	public Song getCurrentSong() {
-		return musicPlayerService.getCurrentSong();
-	}
-
-	public void updateNewSong() {
-		// TODO Auto-generated method stub
-		startTimer();
-	}
+	// public void updateNewSong() {
+	// // TODO Auto-generated method stub
+	// startTimer();
+	// }
 
 	public void startPause() {
 		// TODO Auto-generated method stub
-		if (!musicPlayerService.isPlaying()) {
+		boolean a = MusicPlayerService.getInstance().isPlaying();
+		if (!MusicPlayerService.getInstance().isPlaying()) {
 			play();
 		} else {
 			pause();
 		}
+
+	}
+
+	public void updateUI(final int TAG) {
+		// TODO Auto-generated method stub
+		MainActivity.getActivity().runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if (TAG == MUSIC_START) {
+					startTimer();
+					for (PlayerUI playerUI : uiFragments) {
+						playerUI.updateTitle(MusicPlayerService.getInstance()
+								.getCurrentSong().getTitle());
+						playerUI.updateSubTitle(MusicPlayerService
+								.getInstance().getCurrentSong().getArtist());
+
+						playerUI.play();
+
+					}
+				}
+				if (TAG == MUSIC_PAUSE) {
+					stopTimer();
+					for (PlayerUI playerUI : uiFragments) {
+
+						playerUI.pause();
+
+					}
+				}
+			}
+		});
+
+	}
+
+	public void play(Song song) {
+		// TODO Auto-generated method stub
+
+		MusicPlayerService.getInstance().playNewSong(song);
 
 	}
 }
