@@ -1,6 +1,8 @@
 package ngo.music.soundcloudplayer.controller;
 
 import java.util.ArrayList;
+import java.util.Currency;
+import java.util.concurrent.TimeUnit;
 
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
@@ -8,15 +10,18 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.CountDownTimer;
+import android.text.format.Time;
 import android.util.Log;
 
-public class MusicPlayerController implements Constants.MusicService {
-	private static MusicPlayerController instance;
+public class UpdateUiFromServiceController implements Constants.MusicService {
+	private static UpdateUiFromServiceController instance;
 	private MusicPlayerService musicPlayerService;
 	private CountDownTimer timer;
 	private ArrayList<PlayerUI> uiFragments;
+	
+	private Song playingSong;
 
-	private MusicPlayerController() {
+	private UpdateUiFromServiceController() {
 		// TODO Auto-generated constructor stub
 
 		instance = this;
@@ -25,9 +30,9 @@ public class MusicPlayerController implements Constants.MusicService {
 
 	}
 
-	public static MusicPlayerController getInstance() {
+	public static UpdateUiFromServiceController getInstance() {
 		if (instance == null) {
-			new MusicPlayerController();
+			new UpdateUiFromServiceController();
 		}
 		return instance;
 	}
@@ -90,8 +95,6 @@ public class MusicPlayerController implements Constants.MusicService {
 		timer.cancel();
 	}
 
-	
-
 	// public void updateNewSong() {
 	// // TODO Auto-generated method stub
 	// startTimer();
@@ -119,11 +122,14 @@ public class MusicPlayerController implements Constants.MusicService {
 				if (TAG == MUSIC_START) {
 					startTimer();
 					for (PlayerUI playerUI : uiFragments) {
-						playerUI.updateTitle(MusicPlayerService.getInstance()
-								.getCurrentSong().getTitle());
-						playerUI.updateSubTitle(MusicPlayerService
-								.getInstance().getCurrentSong().getArtist());
+						try {
+							playerUI.updateTitle(MusicPlayerService
+									.getInstance().getCurrentSong().getTitle());
+							playerUI.updateSubTitle(MusicPlayerService
+									.getInstance().getCurrentSong().getArtist());
+						} catch (Exception e) {
 
+						}
 						playerUI.play();
 
 					}
@@ -141,10 +147,31 @@ public class MusicPlayerController implements Constants.MusicService {
 
 	}
 
-	public void play(Song song) {
-		// TODO Auto-generated method stub
+//	public void play(Song song) {
+//		// TODO Auto-generated method stub
+//
+//		MusicPlayerService.getInstance().playNewSong(song);
+//
+//	}
 
-		MusicPlayerService.getInstance().playNewSong(song);
+	
 
+	public String getCurrentTime() {
+		int mTime = MusicPlayerService.getInstance().getCurrentTime();
+
+		return String.format("%02d:%02d", 
+			    TimeUnit.MILLISECONDS.toMinutes(mTime),
+			    TimeUnit.MILLISECONDS.toSeconds(mTime) - 
+			    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mTime))
+			);
+	}
+
+	public String getDuration() {
+		long mTime = MusicPlayerService.getInstance().getDuration();
+		return String.format("%02d:%02d", 
+			    TimeUnit.MILLISECONDS.toMinutes(mTime),
+			    TimeUnit.MILLISECONDS.toSeconds(mTime) - 
+			    TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mTime))
+			);
 	}
 }

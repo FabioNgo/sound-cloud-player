@@ -2,7 +2,7 @@ package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
-import ngo.music.soundcloudplayer.controller.MusicPlayerController;
+import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -184,7 +184,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 		intent = new Intent(this, MusicPlayerService.class);
 		startService(intent);
 		bindService(intent, mConnection, 0);
-		MusicPlayerController.getInstance().updateUI(MUSIC_START);
+		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
 	}
 
 	@Override

@@ -1,10 +1,12 @@
 package ngo.music.soundcloudplayer.boundary;
 
 
+import java.util.ArrayList;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SongAdapter;
-import ngo.music.soundcloudplayer.controller.MusicPlayerController;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -42,7 +44,8 @@ public class SongsFragment extends Fragment {
 					long id) {
 				// TODO Auto-generated method stub
 				Song song = (Song) songsList.getAdapter().getItem(position);
-				MusicPlayerController.getInstance().play(song);
+				ArrayList<Song> songs = (((SongAdapter) songsList.getAdapter()).getSongs());
+				MusicPlayerService.getInstance().playNewSong(position, songs);
 			}
 		});
 		return rootView;

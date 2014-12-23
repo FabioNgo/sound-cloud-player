@@ -61,4 +61,7 @@ public class SongAdapter extends ArrayAdapter<Song> {
 	public int getCount() {
 		return songs.size();
 	}
+	public ArrayList<Song> getSongs() {
+		return songs;
+	}
 }

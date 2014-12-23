@@ -8,30 +8,68 @@
         xmlns:sothree="http://schemas.android.com/apk/res-auto"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/full_player_toolbar"
-        
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
         sothree:theme="@style/AppTheme" />
+
     <ImageView
         android:id="@+id/full_player_song_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/full_player_toolbar"
         android:background="#0099cc"
-        android:layout_below="@+id/full_player_toolbar" 
-        android:src="@drawable/ic_launcher"
-        />
-    <com.todddavies.components.progressbar.ProgressWheel   
-    android:id="@+id/full_player_progress_bar"     
-    android:layout_below="@+id/full_player_song_image"
-    android:layout_width="150dp"    
-    android:layout_height="150dp"   
-    android:layout_centerInParent="true"
-    ProgressWheel:textColor="#222"   
-    ProgressWheel:textSize="14sp"   
-    ProgressWheel:rimColor="#330097D6"   
-    ProgressWheel:barLength="60dp"    
-    ProgressWheel:barColor="#0097D6"   
-    ProgressWheel:barWidth="15dp"   
-    ProgressWheel:rimWidth="15dp" /> 
+        android:src="@drawable/ic_launcher" />
+
+    <com.todddavies.components.progressbar.ProgressWheel
+        android:id="@+id/full_player_progress_bar"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@+id/full_player_song_image"
+        android:layout_centerInParent="true"
+        ProgressWheel:barColor="#0097D6"
+        ProgressWheel:barLength="60dp"
+        ProgressWheel:barWidth="15dp"
+        ProgressWheel:rimColor="#330097D6"
+        ProgressWheel:rimWidth="15dp"
+        ProgressWheel:textColor="#222"
+        ProgressWheel:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/full_player_current_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/full_player_progress_bar"
+        android:layout_marginTop="63dp"
+        android:layout_toLeftOf="@+id/full_player_progress_bar"
+        android:text="00:00"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/full_player_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/full_player_current_time"
+        android:layout_alignBottom="@+id/full_player_current_time"
+        android:layout_toRightOf="@+id/full_player_progress_bar"
+        android:text="00:00"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/full_player_ff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/full_player_duration"
+        android:layout_alignTop="@+id/full_player_progress_bar"
+        android:layout_marginTop="48dp"
+        android:src="@drawable/ic_media_ff" />
+
+    <ImageView
+        android:id="@+id/full_player_rew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/full_player_current_time"
+        android:layout_alignTop="@+id/full_player_ff"
+        android:src="@drawable/ic_media_rew" />
+
 </RelativeLayout>
