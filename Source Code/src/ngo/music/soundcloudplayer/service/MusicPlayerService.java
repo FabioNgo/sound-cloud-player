@@ -8,6 +8,7 @@ import ngo.music.soundcloudplayer.controller.MusicPlayerController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -29,9 +30,16 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
-public class MusicPlayerService extends Service implements OnPreparedListener,
+public class MusicPlayerService extends IntentService implements OnPreparedListener,
 		OnErrorListener, OnCompletionListener, OnSeekCompleteListener,
 		OnInfoListener, OnBufferingUpdateListener {
+	public MusicPlayerService() {
+		super("MusicPlayerService");
+		// TODO Auto-generated constructor stub
+		instance = this;
+		iniMediaPlayer();
+	}
+
 	/**
 	 * Broadcast message TAG
 	 */
@@ -54,13 +62,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	private LocalBroadcastManager broadcaster;
 	private static MusicPlayerService instance;
 
-	public MusicPlayerService() {
-		// TODO Auto-generated constructor stub
-		instance = this;
-		iniMediaPlayer();
-
-	}
-
+	
 	public static MusicPlayerService getInstance() {
 		if (instance == null) {
 			new MusicPlayerService();
@@ -94,18 +96,12 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		iniMediaPlayer();
+		iniNotification();
 		broadcaster = LocalBroadcastManager.getInstance(this);
 
 	}
 
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-
-		iniNotification();
-
-		return START_STICKY;
-
-	}
+	
 
 	private void iniNotification() {
 		// TODO Auto-generated method stub
@@ -121,10 +117,9 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		notification = builder.setContentIntent(contentIntent)
 				.setSmallIcon(R.drawable.ic_media_play).setTicker("playing")
 				.setWhen(System.currentTimeMillis()).setAutoCancel(true)
-
 				.build();
 		notification.flags = Notification.FLAG_ONGOING_EVENT;
-		notificationManager.notify(NOTIFICATION_ID, notification);
+		startForeground(NOTIFICATION_ID, notification);
 	}
 
 	@Override
@@ -136,7 +131,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 			}
 			mediaPlayer.release();
 		}
-		cancelNotification();
+//		cancelNotification();
 	}
 
 	private void cancelNotification() {
@@ -285,6 +280,12 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	public boolean isPlaying() {
 		// Log.i("MEDIA PLAYER", ""+Boolean.toString(mediaPlayer.isPlaying()));
 		return mediaPlayer.isPlaying();
+	}
+
+	@Override
+	protected void onHandleIntent(Intent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
