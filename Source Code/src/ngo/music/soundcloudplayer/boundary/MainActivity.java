@@ -39,8 +39,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private SlidingUpPanelLayout mLayout;
 	private static MainActivity activity;
 	private  MusicPlayerService musicPlayerService;
-	private Intent intent;
+	private Intent musicPlayerServiceIntent;
 	private boolean mBound = false;
+	
+	private int defaultTabPosition = 0;
 
 	/**
 	 * Screen's Size
@@ -57,6 +59,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated constructor stub
 		activity = this;
 	}
+	
+
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,17 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
+		
+		/*
+		 * Get data from other activity
+		 */
+		try{
+			Bundle bundle = getIntent().getExtras();
+			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
+			System.out.println ("DEFAULT POSITION " + defaultTabPosition);
+		}catch (NullPointerException e){
+			
+		}
 		
 		/**
 		 * get screen's size;
@@ -104,10 +119,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 					.beginTransaction();
 			mFrag = new UserDisplayFragment();
 
-			// Bundle bundle = new Bundle();
-			// bundle = getIntent().getBundleExtra(USER);
-			// bundle.putInt(LAYOUT_WIDTH, frame.getLayoutParams().width);
-			// bundle.putInt(LAYOUT_HEIGHT,screenHeight);
 
 			t.replace(R.id.menu_frame, mFrag);
 			t.commit();
@@ -144,6 +155,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			public void onPanelHidden(View panel) {
 			}
 		});
+		
 		mLayout.setAnchorPoint((float) 0.5);
 		RelativeLayout dragview = (RelativeLayout) findViewById(R.id.dragView);
 
@@ -170,8 +182,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		TabsAdapter adapter = new TabsAdapter(getSupportFragmentManager());
 
+		
+		
 		pager.setAdapter(adapter);
-
+		pager.setCurrentItem(defaultTabPosition, true);
 		final int pageMargin = (int) TypedValue.applyDimension(
 				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 						.getDisplayMetrics());
@@ -181,10 +195,13 @@ public class MainActivity extends SlidingFragmentActivity implements
 		/**
 		 * Music Player Service
 		 */
-		intent = new Intent(this, MusicPlayerService.class);
-		startService(intent);
-		bindService(intent, mConnection, 0);
+		musicPlayerServiceIntent = new Intent(this, MusicPlayerService.class);
+		startService(musicPlayerServiceIntent);
+		bindService(musicPlayerServiceIntent, mConnection, 0);
 		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
+		
+		
+		
 	}
 
 	@Override

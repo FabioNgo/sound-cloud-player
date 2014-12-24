@@ -27,6 +27,7 @@ import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 
 
@@ -75,11 +76,11 @@ public class SoundCloudUserController extends UserController implements Constant
 	 * @param password
 	 * @return null if cannot login. User object if can login
 	 */
+	@Override
 	public User validateLogin (String username , String password){
 
+		
 		ApiWrapper wrapper = new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null,null);
-		
-		
 		try {
 			
 			//login

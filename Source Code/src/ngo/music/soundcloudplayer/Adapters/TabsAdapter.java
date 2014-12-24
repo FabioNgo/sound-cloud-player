@@ -11,11 +11,18 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabsAdapter extends FragmentPagerAdapter {
 
+	private int position = 0;
 	private final String[] TITLES = { "Artists", "Albums", "Songs",
 			"Playlists", "Genres", "Sub Genres", "Users", "About Us" };
 
 	public TabsAdapter(FragmentManager fm) {
 		super(fm);
+	}
+	
+	public  TabsAdapter(FragmentManager fm, int defaultPosition) {
+		super (fm);
+		this.position = defaultPosition;
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -30,7 +37,9 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
+		System.out.println ("GET ITEM " + position); 
 		switch (position) {
+		
 		
 		case 2:
 			return SongsFragment.getInstance();

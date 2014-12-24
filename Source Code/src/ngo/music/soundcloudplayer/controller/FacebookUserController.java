@@ -26,6 +26,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.api.CloudAPI;
+import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
 
 /**
@@ -157,6 +158,12 @@ public class FacebookUserController extends UserController {
         }
         return params;
     }
+
+	@Override
+	public User validateLogin(String username, String password) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 		
 	
 

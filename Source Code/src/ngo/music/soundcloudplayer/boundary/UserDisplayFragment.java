@@ -3,9 +3,11 @@ package ngo.music.soundcloudplayer.boundary;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.imageloader.ImageLoader;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,7 +18,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class UserDisplayFragment extends Fragment implements Constants.UserContant, Constants.UIContant {
+public class UserDisplayFragment extends Fragment implements Constants.UserContant, Constants.UIContant, Constants.TabContant {
 
 	int layoutWidth;
 	int layoutHeight;
@@ -34,17 +36,43 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 		/*
 		 * Get info from actvity
 		 */
-		Bundle bundle  = getActivity().getIntent().getBundleExtra(USER);		
-		String avatarUrl = bundle.getString(AVATAR_URL);
-		String fullNameString = bundle.getString(FULLNAME);
-		int numFollowers = bundle.getInt(FOLLOWERS_COUNT);
-
-		configUserLayout(avatarUrl, fullNameString, numFollowers);
+		Bundle bundle  = getActivity().getIntent().getBundleExtra(USER);
 		
+		
+	
+		//int numFollowers = bundle.getInt(FOLLOWERS_COUNT);
+
+		if (bundle != null ){
+			String avatarUrl = bundle.getString(AVATAR_URL);
+			String fullNameString = bundle.getString(FULLNAME);
+			int numFollowers = bundle.getInt(FOLLOWERS_COUNT);
+			configUserLayout(avatarUrl, fullNameString, numFollowers);
+		}else{
+			configUserLayout(null,null, -1);
+		}
 		
 		
 		TextView myMusic = (TextView) rootView.findViewById(R.id.my_music_id);
+		myMusic.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				Intent i = new Intent(getActivity(), MainActivity.class);
+				i.putExtra(DEFAULT_ID, SONGS);
+				startActivity(i);
+				
+				
+			}
+		});
+		
 		TextView logOut = (TextView) rootView.findViewById(R.id.logout_id);
+		SoundCloudUserController userController = SoundCloudUserController.getInstance();
+		
+		if (!userController.isLogin()){
+			logOut.setText("Log in");
+		}
 		logOut.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -73,6 +101,8 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 	 */
 	private void configUserLayout(String avatarUrl,
 			String fullNameString, int numFollowers) {
+		
+		
 		/*
 		 * Config FrameLayout
 		 */
@@ -87,6 +117,8 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 		 * load avatar
 		 */
 		CircularImageView avatar = (CircularImageView)rootView.findViewById(R.id.avatar_image_id);
+		
+		if (avatarUrl == null) avatar.setVisibility(View.INVISIBLE);
 		//avatar.setPadding(10, frame.getLayoutParams().height * 0.2,null,null);
 		
 		//BasicFunctions.ResizeImageView(layoutWidth, height, imageView);
@@ -112,6 +144,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 		 * load follower
 		 */
 		TextView follower = (TextView) rootView.findViewById(R.id.follower);
+		if (numFollowers < 0 ) follower.setVisibility(View.INVISIBLE);
 		System.out.println ("NUMBER OF TRACKS " +avatarUrl);
 		follower.setText(String.valueOf(numFollowers)+ " followers");
 	}

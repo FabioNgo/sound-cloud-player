@@ -8,6 +8,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.entity.User;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -44,102 +45,85 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 		
 		View rootView = inflater.inflate(R.layout.login_general_layout,container,false);
 		
+		/*
+		 * Login Google Plus
+		 */
 		Button loginGooglePlus = (Button) rootView.findViewById(R.id.login_google_plus_button);
 		loginGooglePlus.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				UserControllerFactory.createUserController(Constants.GOOGLE_PLUS_USER).login();
+				if (BasicFunctions.isConnectingToInternet(getActivity())){
+					UserControllerFactory.createUserController(Constants.GOOGLE_PLUS_USER).login();
+				}else{
+					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
 			}
 		});
 		
+		/*
+		 * Login Sound Cloud
+		 */
 		Button loginSoundCloud = (Button) rootView.findViewById(R.id.login_soundcloud_button);
 		loginSoundCloud.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				SoundCloudLoginUI soundCloudLoginUI =  new SoundCloudLoginUI();
-				((LoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
+				if (BasicFunctions.isConnectingToInternet(getActivity())){
+					SoundCloudLoginUI soundCloudLoginUI =  new SoundCloudLoginUI();
+					((LoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
+				}else{
+					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
 				// TODO Auto-generated method stub
 
 			}
 		});
+		
+		/*
+		 * Login Facebook
+		 */
 		Button loginFacebook =  (Button)rootView.findViewById(R.id.login_facebook_button);
 		loginFacebook.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
+				if (BasicFunctions.isConnectingToInternet(getActivity())){
+					UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
+				}else{
+					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
 				// TODO Auto-generated method stub
 				
+				
+			}
+		});
+		
+		/*
+		 * Without login
+		 */
+		Button withoutLogin = (Button)rootView.findViewById(R.id.continue_not_login_button);
+		withoutLogin.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent mainActivity = new Intent(getActivity(), MainActivity.class);
+				startActivity(mainActivity);
+				// TODO Auto-generated method stub
 				
 			}
 		});
 		return rootView;
 	}
 	
-	private class Background extends AsyncTask<String, String, String>{
-
-		private ProgressDialog pDialog;
-		String username;
-		String password;
-		boolean isLogin = false;
-		
-		public Background(String username, String password){
-			this.username = username;
-			this.password = password;
-		}
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			pDialog = new ProgressDialog(getActivity());
-			pDialog.setMessage("Login...");
-			pDialog.setIndeterminate(false);
-			pDialog.setCancelable(false);
-			
-			pDialog.show();
-		}
-		@Override
-		protected String doInBackground(String... arg) {
-			// TODO Auto-generated method stub
-			Thread background = new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					SoundCloudUserController userController = SoundCloudUserController.getInstance();
-					User currentUser = userController.validateLogin(username, password);
-					
-					//Cannot login
-					if (currentUser == null){
-						pDialog.dismiss();
-						isLogin = false;
-					}else{
-						Bundle bundle  = getBundle(currentUser);
-						isLogin = true;
-						Intent goToMainActivity  =  new Intent(getActivity(), MainActivity.class);
-						goToMainActivity.putExtra(USER, bundle);
-						startActivity(goToMainActivity);
-					}
-				
-					
-				}
-			});
-			
-			background.start();
-			return null;
-		}
-		
-		
-		@Override
-		protected void onPostExecute(String result) {
-			// TODO Auto-generated method stub
-			
-			
-		}
-		
-	}
+	
 	
 	public Bundle getBundle (User user){
 		Bundle bundle = new Bundle();

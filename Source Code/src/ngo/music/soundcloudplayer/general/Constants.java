@@ -112,4 +112,16 @@ public interface Constants {
 		int MUSIC_PAUSE = 2;
 		int MUSIC_NEW_SONG = 3;
 	}
+	
+	interface TabContant{
+		int ARTISTS = 0;
+		int ALBUMS = 1;
+		int SONGS = 2;
+		int PLAYLISTS = 3;
+		int GENRES = 4;
+		int SUB_GENRES = 5;
+		int USERS = 6;
+		int ABOUT_US = 7;
+		String DEFAULT_ID = "deafault_id";
+	}
 }

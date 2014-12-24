@@ -10,6 +10,7 @@ import ngo.music.soundcloudplayer.controller.UserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.User;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 /**
  * @author LEBAO_000
@@ -40,20 +42,28 @@ public class LoginActivity extends FragmentActivity implements Constants.UserCon
 		
 		
 		DatabaseHandler databaseHandler = DatabaseHandler.getInstance(this);
-		System.out.println(databaseHandler.isUserLoggedIn());
-		if (databaseHandler.isUserLoggedIn()){
-			String[] userInfo = databaseHandler.getUserInfo();
-			new Background(userInfo[0], userInfo[1]).execute();
-			
-			return;
-		}else{
+		if (BasicFunctions.isConnectingToInternet(activity)){
+			if (databaseHandler.isUserLoggedIn()){
+				String[] userInfo = databaseHandler.getUserInfo();
+				new Background(userInfo[0], userInfo[1]).execute();
+				
+				return;
+			}
+		}
 			setContentView(R.layout.login_layout);
 			changeFragment(new GeneralLoginUI());
-		}
+		
+		
 		// TODO Auto-generated method stub
 	}
 
 	public void changeFragment(Fragment fragment) {
+		
+//		Not connect to internet
+//		if (!BasicFunctions.isConnectingToInternet(activity)){
+//			Toast.makeText(activity, "No internet connection", Toast.LENGTH_LONG).show();
+//			return;
+//		}
 		if (fragment instanceof SoundCloudLoginUI) {
 			if (soundcloudLoginUI == null) {
 				soundcloudLoginUI = new SoundCloudLoginUI();
