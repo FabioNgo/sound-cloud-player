@@ -2,7 +2,11 @@ package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
+import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UserController;
+import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -76,6 +80,9 @@ public class MainActivity extends SlidingFragmentActivity implements
 		 * Get data from other activity
 		 */
 		try{
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			Token token = soundCloudUserController.getToken();
+			if (token == null) defaultTabPosition = 2;
 			Bundle bundle = getIntent().getExtras();
 			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
 			System.out.println ("DEFAULT POSITION " + defaultTabPosition);

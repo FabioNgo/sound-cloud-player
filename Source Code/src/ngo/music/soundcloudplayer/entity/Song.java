@@ -16,38 +16,38 @@ public class Song {
 	/**
 	 * id if get from local
 	 */
-	private String id;
+	private String id = "";
 	/**
 	 * Artist
 	 */
-	private String artist;
+	private String artist = "";
 	/**
 	 * Album
 	 */
-	private String album;
+	private String album = "";
 	/**
 	 * link if get from local 
 	 */
-	private String link;
+	private String link = "";
 	/**
 	 * Title
 	 */
-	private String title;
+	private String title =  "";
 
 	/**
 	 * integer ID
 	 */
-	private int soundcloudId;
+	private int soundcloudId =  0;
 	
 	/**
 	 * timestamp of creation
 	 */
-	private String createdAt;
+	private String createdAt =  "";
 	
 	/**
 	 * user-id of the owner
 	 */
-	private int userId;
+	private int userId =  0;
 	/**
 	 * mini user representation of the owner
 	 */
@@ -56,25 +56,25 @@ public class Song {
 	/**
 	 * duration in milliseconds
 	 */
-	private long duration;
+	private long duration =  0;
 	private boolean commentable;
-	private String sharing;
-	private String tagList;
+	private String sharing =  "";
+	private String tagList =  "";
 	/**
 	 * permalink of the resource
 	 */
-	private String permalink;
-	private String description;
+	private String permalink =  "";
+	private String description =  "";
 	private boolean streamable;
 	private boolean downloadable;
-	private String gerne;
-	private String release;
-	private String purchaseUrl;
-	private int labelID;
-	private String labelName;
-	private String videoUrl;
-	private String trackType;
-	private String keySignature;
+	private String gerne =  "";
+	private String release =  "";
+	private String purchaseUrl =  "";
+	private int labelID =  0;
+	private String labelName =  "";
+	private String videoUrl =  "";
+	private String trackType =  "";
+	private String keySignature =  "";
 	
 	/**
 	 * beats per minute
@@ -789,6 +789,9 @@ public class Song {
 	}
 
 
+	public String getAuthor(){
+		return user.getUsername();
+	}
 	
 
 

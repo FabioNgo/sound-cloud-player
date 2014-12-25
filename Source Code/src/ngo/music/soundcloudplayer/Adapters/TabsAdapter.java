@@ -4,26 +4,22 @@ import ngo.music.soundcloudplayer.Adapters.Fragments.SingleSwipePageFragment;
 import ngo.music.soundcloudplayer.boundary.AlbumsFragment;
 import ngo.music.soundcloudplayer.boundary.ArtistsFragment;
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
-import ngo.music.soundcloudplayer.boundary.SongsFragment;
+import ngo.music.soundcloudplayer.boundary.OnlineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabsAdapter extends FragmentPagerAdapter {
 
-	private int position = 0;
-	private final String[] TITLES = { "Artists", "Albums", "Songs",
+
+	private final String[] TITLES = { "Online songs", "Albums", "My songs",
 			"Playlists", "Genres", "Sub Genres", "Users", "About Us" };
 
 	public TabsAdapter(FragmentManager fm) {
 		super(fm);
 	}
-	
-	public  TabsAdapter(FragmentManager fm, int defaultPosition) {
-		super (fm);
-		this.position = defaultPosition;
-		// TODO Auto-generated constructor stub
-	}
+
 
 	@Override
 	public CharSequence getPageTitle(int position) {
@@ -39,10 +35,11 @@ public class TabsAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		System.out.println ("GET ITEM " + position); 
 		switch (position) {
-		
+		case 0:
+			return OnlineSongsFragment.getInstance();
 		
 		case 2:
-			return SongsFragment.getInstance();
+			return OfflineSongsFragment.getInstance();
 		default: return new FullPlayerUI();
 		}
 		
