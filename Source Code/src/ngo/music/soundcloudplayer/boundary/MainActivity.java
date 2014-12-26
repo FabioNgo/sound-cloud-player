@@ -82,7 +82,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			if (token == null) defaultTabPosition = 2;
 			Bundle bundle = getIntent().getExtras();
 			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
-			System.out.println("DEFAULT POSITION " + defaultTabPosition);
+			
 		} catch (NullPointerException e) {
 
 		}

@@ -4,7 +4,7 @@ import ngo.music.soundcloudplayer.api.Stream;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
 
-public class Song {
+public class Song implements Comparable <Song>{
 	public Song(Cursor c) {
 		super();
 		setTitle(c.getString(c.getColumnIndex(Media.TITLE)));
@@ -824,15 +824,15 @@ public class Song {
 
 	public String getPlaybackCountString(){
 		String temp = "";
-		int tempInt = playbackCount;
-		while (tempInt > 1000){
-			tempInt = tempInt/1000;
-			temp = "," + String.valueOf(tempInt%1000) + temp;
+		String tempStr = String.valueOf(playbackCount);
+		int start = tempStr.length()-1;
+		
+		while (start > 3){
+			temp = "," + tempStr.substring(start-3,start ) + temp;
+			start = start -3;
 		}
-		temp = String.valueOf(tempInt) + temp;
-		
-		
-		
+		temp = tempStr.substring(0, start) + temp;
+
 		return temp;
 		
 	}
@@ -851,6 +851,12 @@ public class Song {
 	 */
 	public void setArtworkUrl(String artwork_url) {
 		this.artwork_url = artwork_url;
+	}
+	@Override
+	public int compareTo(Song arg0) {
+		// TODO Auto-generated method stub
+		
+		return id.compareTo(arg0.getId());
 	}
 
 }

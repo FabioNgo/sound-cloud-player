@@ -47,7 +47,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 			String fullNameString = bundle.getString(FULLNAME);
 			int numFollowers = bundle.getInt(FOLLOWERS_COUNT);
 			configUserLayout(avatarUrl, fullNameString, numFollowers);
-			System.out.println ("AVATAR URL = " + avatarUrl);
+			
 		}else{
 			configUserLayout(null,null, -1);
 		}
@@ -146,7 +146,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 		 */
 		TextView follower = (TextView) rootView.findViewById(R.id.follower);
 		if (numFollowers < 0 ) follower.setVisibility(View.INVISIBLE);
-		System.out.println ("NUMBER OF TRACKS " +avatarUrl);
+		
 		follower.setText(String.valueOf(numFollowers)+ " followers");
 	}
 

@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
@@ -34,11 +35,19 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.android.volley.Request.Method;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.volley.api.AppController;
+
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.provider.MediaStore.Audio.Media;
 import android.util.Log;
+import android.widget.Toast;
 
 
 
@@ -52,7 +61,8 @@ public class SongController implements Constants, Constants.SongConstants{
 	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
 	private static final String TAG_TRACKS_EXPLORE = "tracks";
 	private ArrayList<Song> offlineSong;
-	private ArrayList<Song> onlineSong;
+	private ArrayList<Song> onlineSongs = new ArrayList<Song>();
+	private ArrayList<String> idList = new ArrayList<String>();
 	public int offset = 0;
 	
 	private static SongController instance = null;
@@ -64,6 +74,7 @@ public class SongController implements Constants, Constants.SongConstants{
 			if (instance == null) {
 				instance = this;
 				instance.getSongsFromSDCard();
+				instance.getSongsFromSoundCloud(1);
 				
 			}
 		}
@@ -100,6 +111,9 @@ public class SongController implements Constants, Constants.SongConstants{
 		return null;
 	}
 
+	/**
+	 * Load song from sd card
+	 */
 	private void getSongsFromSDCard() {
 		offlineSong = new ArrayList<Song>();
 		Cursor c = MainActivity
@@ -123,11 +137,23 @@ public class SongController implements Constants, Constants.SongConstants{
 		return songIDs;
 	}
 
-	public ArrayList<Song> getSongs() {
+	/**
+	 * Get Song which store in the storage
+	 * @return
+	 */
+	public ArrayList<Song> getOfflineSongs() {
 		
 		return offlineSong;
 	}
 	
+	/**
+	 * Get songs which load from the internet
+	 * @return
+	 */
+	public ArrayList<Song> getOnlineSongs() {
+		
+		return onlineSongs;
+	}
 	
 
 	/**
@@ -271,9 +297,13 @@ public class SongController implements Constants, Constants.SongConstants{
 
 	}
 	
-	public ArrayList<Song> getAllSongsOnline(){
+	private ArrayList<Song> getSongsFromSoundCloud(int currentPage){
 		
-		ArrayList<Song> onlineSongs = new ArrayList<Song>();
+		String urlLink = EXPLORE_LINK;
+		String offset = "offset=" + String.valueOf((currentPage-1)*10);
+		
+		urlLink = urlLink.replace("offset=0", offset);
+		//ArrayList<Song> onlineSongs = new ArrayList<Song>();
 		SoundCloudUserController userController = SoundCloudUserController.getInstance();
 		Token token = userController.getToken();
 		ApiWrapper wrapper =  new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, token);
@@ -284,36 +314,31 @@ public class SongController implements Constants, Constants.SongConstants{
 			 * Get Json Object from data
 			 */
 			
-			URL oracle = new URL(EXPLORE_LINK);
+			URL oracle = new URL(urlLink);
 	        BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
 	        
 	        String inputLine = in.readLine();
 	        in.close();
-
+	      
 			JSONObject track = new JSONObject(inputLine);
 			JSONArray listSong = track.getJSONArray(TAG_TRACKS_EXPLORE);
-	
-			
-			
-			
-			for (int i = 0 ; i< listSong.length(); i++){
 
-				try{
-					JSONObject jsonObject = listSong.getJSONObject(i);
-					onlineSongs.add(addSongInformation(jsonObject, wrapper));
-					
-				}catch(JSONException e){
-					e.printStackTrace();
-					
+			for (int i = 0 ; i< listSong.length(); i++){
+				JSONObject jsonObject = listSong.getJSONObject(i);
+				int position =searchId(idList, jsonObject.getString(ID)); 
+				if (position < 0){
+					try{
+						onlineSongs.add(addSongInformation(jsonObject, wrapper));
+						idList.add(- (position + 1), jsonObject.getString(ID));
+					}catch(JSONException e){
+						e.printStackTrace();
+					}
 				}
 			}
 		}catch (Exception e){
 			
 		}
-		
-	
-		
-		
+			
 		
 		return onlineSongs;
 	}
@@ -331,12 +356,12 @@ public class SongController implements Constants, Constants.SongConstants{
 		Song song = new Song();
 		
 		
-		song.setCommentable(me.getBoolean(COMMENTABLE));
+		//song.setCommentable(me.getBoolean(COMMENTABLE));
 		//song.setCommentCount(me.getInt(COMMENT_COUNT));
-		song.setContentSize(me.getLong(CONTENT_SIZE));
+		//song.setContentSize(me.getLong(CONTENT_SIZE));
 		//song.setCreatedAt(me.getString(CREATED_AT));
 		song.setDescription(me.getString(DESCRIPTION));
-		song.setDownloadable(me.getBoolean(DOWNLOADABLE));
+		//song.setDownloadable(me.getBoolean(DOWNLOADABLE));
 		song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
 		//song.setDownloadUrl(me.getString(DOWNLOAD_URL));
 		song.setDuration(me.getLong(DURATION));
@@ -346,7 +371,7 @@ public class SongController implements Constants, Constants.SongConstants{
 		//song.setKeySignature(me.getString(KEY_SIGNATURE));
 		//song.setLabelID(me.getInt(LABEL_ID));
 		//song.setLabelName(me.getString(LABEL_NAME));
-		song.setLicense(me.getString(LICENSE));
+		//song.setLicense(me.getString(LICENSE));
 		song.setPermalink(me.getString(PERMALINK));
 		song.setPermalinkUrl(me.getString(PERMALINK_URL));
 		
@@ -363,7 +388,7 @@ public class SongController implements Constants, Constants.SongConstants{
 		//song.setStreamable(me.getBoolean(STREAMABLE));
 		
 
-		song.setStreamable(me.getBoolean(STREAMABLE));
+		//song.setStreamable(me.getBoolean(STREAMABLE));
 		song.setTagList(me.getString(TAG_LIST));
 		song.setTitle(me.getString(TITLE));
 		//song.setTrackType(me.getString(TRACK_TYPE));
@@ -497,4 +522,26 @@ public class SongController implements Constants, Constants.SongConstants{
 	    }
 	 
 	}
+
+	/**
+	 * add more song to the list
+	 * @param current_page
+	 */
+	public void loadMoreSong(int current_page) {
+		//System.out.println ("LOAD MORE SONG WITH CURRENT PAGE : " + current_page);
+		getSongsFromSoundCloud(current_page);
+		// TODO Auto-generated method stub
+		
+	}
+	/**
+	 * search the Id of song in a list
+	 * 
+	 */
+	private int searchId(ArrayList<String> songidList, String songID){
+		
+		return Collections.binarySearch(songidList,songID);
+	
+
+	}
+	
 }

@@ -72,12 +72,20 @@ public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
 		 * Set avatar for song
 		 */
 		NetworkImageView avatar = (NetworkImageView) v.findViewById(R.id.song_image);
+		
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader(); 
-		avatar.setDefaultImageResId(R.drawable.image_not_found);
+		avatar.setDefaultImageResId(R.drawable.ic_launcher);
+		
+
 		avatar.setMinimumHeight(MainActivity.screenHeight/5);
 		avatar.setMinimumWidth(MainActivity.screenHeight/5);
+		avatar.setMaxHeight(MainActivity.screenHeight/5);
+		avatar.setMaxWidth(MainActivity.screenHeight/5);
 		
-		avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		
+			
+			avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		
 		
 		/*
 		 * Set title
@@ -90,6 +98,8 @@ public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
 		 */
 		TextView subtitle = (TextView) v.findViewById(R.id.song_subtitle);
 		subtitle.setText(song.getAuthor()+" | "+ song.getPlaybackCountString());
+		
+		//notifyDataSetChanged();
 	}
 	
 	@Override
