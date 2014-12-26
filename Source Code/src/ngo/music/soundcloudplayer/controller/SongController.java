@@ -53,8 +53,6 @@ import android.widget.Toast;
 
 
 
-
-
 public class SongController implements Constants, Constants.SongConstants{
 
 	private static final String EXPLORE_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
@@ -137,13 +135,16 @@ public class SongController implements Constants, Constants.SongConstants{
 		return songIDs;
 	}
 
+
 	/**
 	 * Get Song which store in the storage
 	 * @return
 	 */
-	public ArrayList<Song> getOfflineSongs() {
 		
-		return offlineSong;
+
+	public ArrayList<Song> getSongs() {
+		return MusicPlayerService.getInstance().getSongs();
+
 	}
 	
 	/**

@@ -135,7 +135,7 @@ public class MusicPlayerService extends IntentService implements
 		}
 	}
 
-	public void playPreviousSong() {
+	public void playNextSong() {
 		try {
 			playNewSong(currentSongPosition + 1);
 		} catch (Exception e) {
@@ -143,7 +143,7 @@ public class MusicPlayerService extends IntentService implements
 		}
 	}
 
-	public void playNextSong() {
+	public void playPreviousSong() {
 		// TODO Auto-generated method stub
 		try {
 			playNewSong(currentSongPosition - 1);
@@ -231,9 +231,10 @@ public class MusicPlayerService extends IntentService implements
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		if (mp.isPlaying()) {
+		mp.reset();
+		musicState = MUSIC_STOP;
 			MusicPlayerService.getInstance().playNextSong();
-		}
+		
 	}
 
 	private void pauseMedia() {
@@ -463,5 +464,10 @@ public class MusicPlayerService extends IntentService implements
 				songsPlaying.add(new Song(c));
 			}
 		}
+	}
+
+	public ArrayList<Song> getSongs() {
+		// TODO Auto-generated method stub
+		return songsPlaying;
 	}
 }
