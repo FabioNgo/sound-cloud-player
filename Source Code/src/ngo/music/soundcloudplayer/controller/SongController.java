@@ -63,6 +63,7 @@ public class SongController implements Constants, Constants.SongConstants{
 
 			if (instance == null) {
 				instance = this;
+				instance.getSongsFromSDCard();
 				
 			}
 		}
@@ -123,7 +124,7 @@ public class SongController implements Constants, Constants.SongConstants{
 	}
 
 	public ArrayList<Song> getSongs() {
-		getSongsFromSDCard();
+		
 		return offlineSong;
 	}
 	
@@ -399,6 +400,7 @@ public class SongController implements Constants, Constants.SongConstants{
 	 * */
 	class DownloadFileFromURL extends AsyncTask<String, String, String> {
 
+		private static final String STORAGE_FOLDER = "/sdcard/SoundCloudApp/";
 		String filename;
 		String streamUrl;
 
@@ -439,7 +441,7 @@ public class SongController implements Constants, Constants.SongConstants{
 	            InputStream input = new BufferedInputStream(url.openStream(), 8192);
 	 
 	            // Output stream to write file
-	            String outputName = "/sdcard/SoundCloudApp/"+ filename;
+	            String outputName = STORAGE_FOLDER+ filename;
 	            OutputStream output = new FileOutputStream(outputName);
 	 
 	            byte data[] = new byte[1024];
