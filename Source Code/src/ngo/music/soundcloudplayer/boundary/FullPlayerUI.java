@@ -74,7 +74,7 @@ public class FullPlayerUI extends PlayerUI {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().playNextSong();
+				MusicPlayerService.getInstance().playPreviousSong();
 			}
 		});
 		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
@@ -83,7 +83,7 @@ public class FullPlayerUI extends PlayerUI {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().playPreviousSong();
+				MusicPlayerService.getInstance().playNextSong();
 			}
 		});
 		// MusicPlayerController.getInstance().

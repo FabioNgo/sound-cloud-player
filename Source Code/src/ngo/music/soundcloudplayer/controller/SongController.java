@@ -44,8 +44,6 @@ import android.util.Log;
 
 
 
-
-
 public class SongController implements Constants, Constants.SongConstants{
 
 	private static final String EXPLORE_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
@@ -124,8 +122,7 @@ public class SongController implements Constants, Constants.SongConstants{
 	}
 
 	public ArrayList<Song> getSongs() {
-		
-		return offlineSong;
+		return MusicPlayerService.getInstance().getSongs();
 	}
 	
 	
