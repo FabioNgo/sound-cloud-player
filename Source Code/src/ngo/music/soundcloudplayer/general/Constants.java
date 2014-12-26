@@ -102,6 +102,7 @@ public interface Constants {
 		String PLAYBACK_COUNT = "playback_count";
 		String DOWNLOAD_COUNT = "download_count";
 		String FOVORITINGS_COUNT = "favoritings_count";
+		String LIKES_COUNT = "likes_count";
 		String COMMENT_COUNT = "comment_count";
 		String CREATED_WITH = "created_with";
 		String ATTACHMENTS_URI = "attachments_uri";

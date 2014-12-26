@@ -47,6 +47,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 			String fullNameString = bundle.getString(FULLNAME);
 			int numFollowers = bundle.getInt(FOLLOWERS_COUNT);
 			configUserLayout(avatarUrl, fullNameString, numFollowers);
+			System.out.println ("AVATAR URL = " + avatarUrl);
 		}else{
 			configUserLayout(null,null, -1);
 		}

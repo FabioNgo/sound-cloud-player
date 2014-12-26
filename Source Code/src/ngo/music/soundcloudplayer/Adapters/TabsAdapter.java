@@ -4,7 +4,7 @@ import ngo.music.soundcloudplayer.Adapters.Fragments.SingleSwipePageFragment;
 import ngo.music.soundcloudplayer.boundary.AlbumsFragment;
 import ngo.music.soundcloudplayer.boundary.ArtistsFragment;
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
-import ngo.music.soundcloudplayer.boundary.OnlineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.SoundCloudExploreFragment;
 import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,7 +13,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class TabsAdapter extends FragmentPagerAdapter {
 
 
-	private final String[] TITLES = { "Online songs", "Albums", "My songs",
+	private final String[] TITLES = { "SoundCloud Explore", "Albums", "My songs",
 			"Playlists", "Genres", "Sub Genres", "Users", "About Us" };
 
 	public TabsAdapter(FragmentManager fm) {
@@ -36,7 +36,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		System.out.println ("GET ITEM " + position); 
 		switch (position) {
 		case 0:
-			return OnlineSongsFragment.getInstance();
+			return SoundCloudExploreFragment.getInstance();
 		
 		case 2:
 			return OfflineSongsFragment.getInstance();

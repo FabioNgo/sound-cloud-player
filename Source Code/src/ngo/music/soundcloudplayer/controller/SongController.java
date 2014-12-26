@@ -2,10 +2,12 @@ package ngo.music.soundcloudplayer.controller;
 
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
@@ -44,6 +46,9 @@ import android.util.Log;
 
 public class SongController implements Constants, Constants.SongConstants{
 
+	private static final String EXPLORE_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
+	private static final String TAG_TRACKS_EXPLORE = "tracks";
 	private ArrayList<Song> offlineSong;
 	private ArrayList<Song> onlineSong;
 	public int offset = 0;
@@ -248,26 +253,29 @@ public class SongController implements Constants, Constants.SongConstants{
 		ApiWrapper wrapper =  new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, token);
 		//String me = "";
 		try {
-			/*
-			 * get file data from website
-			 */
-			
-			HttpResponse resp = wrapper.get(Request.to("/tracks")
-												.with(Params.Track.STREAMABLE, true)
-												.with(Params.Track.TYPE, "original"));
-			String me  = Http.getString(resp);
 			
 			/*
 			 * Get Json Object from data
 			 */
-			JSONArray jsonArray = new JSONArray(me);
 			
-			for (int i = 0 ; i< jsonArray.length(); i++){
-				
+			URL oracle = new URL(EXPLORE_LINK);
+	        BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream()));
+	        
+	        String inputLine = in.readLine();
+	        in.close();
+	        
+	        
+			
+			JSONObject track = new JSONObject(inputLine);
+			JSONArray listSong = track.getJSONArray(TAG_TRACKS_EXPLORE);
+	
+			
+			
+			
+			for (int i = 0 ; i< listSong.length(); i++){
 
 				try{
-					JSONObject jsonObject = jsonArray.getJSONObject(i);
-					//System.out.println (jsonObject.getString(TITLE));
+					JSONObject jsonObject = listSong.getJSONObject(i);
 					onlineSongs.add(addSongInformation(jsonObject, wrapper));
 					
 				}catch(JSONException e){
@@ -275,16 +283,8 @@ public class SongController implements Constants, Constants.SongConstants{
 					
 				}
 			}
+		}catch (Exception e){
 			
-			return onlineSongs;
-			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 	
@@ -306,40 +306,43 @@ public class SongController implements Constants, Constants.SongConstants{
 		
 		
 		song.setCommentable(me.getBoolean(COMMENTABLE));
-		song.setCommentCount(me.getInt(COMMENT_COUNT));
+		//song.setCommentCount(me.getInt(COMMENT_COUNT));
 		song.setContentSize(me.getLong(CONTENT_SIZE));
-		song.setCreatedAt(me.getString(CREATED_AT));
+		//song.setCreatedAt(me.getString(CREATED_AT));
 		song.setDescription(me.getString(DESCRIPTION));
 		song.setDownloadable(me.getBoolean(DOWNLOADABLE));
 		song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
 		//song.setDownloadUrl(me.getString(DOWNLOAD_URL));
 		song.setDuration(me.getLong(DURATION));
-		song.setFavoriteCount(me.getInt(FOVORITINGS_COUNT));
-		song.setFormat(me.getString(FORMAT));
+		song.setLikesCount(me.getInt(LIKES_COUNT));
+		//song.setFormat(me.getString(FORMAT));
 		song.setGerne(me.getString(GENRE));
-		song.setKeySignature(me.getString(KEY_SIGNATURE));
+		//song.setKeySignature(me.getString(KEY_SIGNATURE));
 		//song.setLabelID(me.getInt(LABEL_ID));
 		//song.setLabelName(me.getString(LABEL_NAME));
 		song.setLicense(me.getString(LICENSE));
 		song.setPermalink(me.getString(PERMALINK));
 		song.setPermalinkUrl(me.getString(PERMALINK_URL));
+		
+		
 		song.setPlaybackCount(me.getInt(PLAYBACK_COUNT));
+	
 		//song.setRelease(me.getString(RELEASE));
 		//song.setReleaseDay(me.getInt(RELEASE_DAY));
 		//song.setReleaseMonth(me.getInt(RELEASE_MONTH));
 		//song.setReleaseYear(me.getInt(RELEASE_YEAR));
-		song.setSharing(me.getString(SHARING));
+		//song.setSharing(me.getString(SHARING));
 		song.setSoundcloudId(me.getInt(ID));
-		song.setStreamable(me.getBoolean(STREAMABLE));
+		//song.setStreamable(me.getBoolean(STREAMABLE));
 		
 		song.setTagList(me.getString(TAG_LIST));
 		song.setTitle(me.getString(TITLE));
-		song.setTrackType(me.getString(TRACK_TYPE));
+		//song.setTrackType(me.getString(TRACK_TYPE));
 		song.setUri(me.getString(URI));
 		song.setUserId(me.getInt(USER_ID));
-		song.setVideoUrl(me.getString(VIDEO_URL));
+		//song.setVideoUrl(me.getString(VIDEO_URL));
 		song.setWaveformUrl(me.getString(WAVEFORM_URL));
-		
+		song.setArtworkUrl(me.getString(ARTWORK_URL));
 		SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
 		song.setUser(soundCloudAccount);
 		
@@ -357,6 +360,7 @@ public class SongController implements Constants, Constants.SongConstants{
 		SoundCloudAccount soundCloudAccount = new SoundCloudAccount();
 		JSONObject jsonObjectUser = me.getJSONObject(USER);
 		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
+		soundCloudAccount.setFullName(jsonObjectUser.getString(Constants.UserContant.FULLNAME));
 		soundCloudAccount.setUsername(jsonObjectUser.getString(Constants.UserContant.USERNAME));
 		
 		return soundCloudAccount;

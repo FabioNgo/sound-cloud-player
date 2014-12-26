@@ -75,6 +75,7 @@ public class Song {
 	private String videoUrl =  "";
 	private String trackType =  "";
 	private String keySignature =  "";
+	private String artwork_url = "";
 	
 	/**
 	 * beats per minute
@@ -102,6 +103,7 @@ public class Song {
 	private int playbackCount;
 	private int downloadCount;
 	private int favoriteCount;
+	private int likesCount;
 	private int commentCount;
 	/**
 	 * binary data of the audio file
@@ -790,9 +792,60 @@ public class Song {
 
 
 	public String getAuthor(){
-		return user.getUsername();
+		if (user.getFullName() .compareTo("") != 0){
+			return user.getFullName();
+		}else{
+			return user.getUsername();	
+		}
+		
+	}
+
+
+	/**
+	 * @return the likesCount
+	 */
+	public int getLikesCount() {
+		return likesCount;
+	}
+
+
+	/**
+	 * @param likesCount the likesCount to set
+	 */
+	public void setLikesCount(int likesCount) {
+		this.likesCount = likesCount;
 	}
 	
 
+	public String getPlaybackCountString(){
+		String temp = "";
+		int tempInt = playbackCount;
+		while (tempInt > 1000){
+			tempInt = tempInt/1000;
+			temp = "," + String.valueOf(tempInt%1000) + temp;
+		}
+		temp = String.valueOf(tempInt) + temp;
+		
+		
+		
+		return temp;
+		
+	}
+
+
+	/**
+	 * @return the artwork_url
+	 */
+	public String getArtworkUrl() {
+		return artwork_url;
+	}
+
+
+	/**
+	 * @param artwork_url the artwork_url to set
+	 */
+	public void setArtworkUrl(String artwork_url) {
+		this.artwork_url = artwork_url;
+	}
 
 }
