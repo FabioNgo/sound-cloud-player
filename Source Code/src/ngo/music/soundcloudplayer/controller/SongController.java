@@ -123,6 +123,7 @@ public class SongController implements Constants, Constants.SongConstants{
 	}
 
 	public ArrayList<Song> getSongs() {
+		getSongsFromSDCard();
 		return offlineSong;
 	}
 	

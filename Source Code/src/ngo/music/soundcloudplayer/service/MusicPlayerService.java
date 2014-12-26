@@ -102,7 +102,7 @@ public class MusicPlayerService extends IntentService implements
 			getData();
 		} catch (Exception e) {
 			Log.w("getData", e.getMessage());
-			currentSongPosition = 5;
+			currentSongPosition = 0;
 
 		} finally {
 			getSongsFromSDCard();
