@@ -1,5 +1,10 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -45,34 +50,27 @@ public class FullPlayerUI extends PlayerUI {
 
 		BasicFunctions.ResizeImageView(MainActivity.screenWidth,
 				(ImageView) rootView.findViewById(R.id.full_player_song_image));
-		currentTimeText = (TextView) rootView.findViewById(R.id.full_player_current_time);
-		durationText = (TextView) rootView.findViewById(R.id.full_player_duration);
+		currentTimeText = (TextView) rootView
+				.findViewById(R.id.full_player_current_time);
+		durationText = (TextView) rootView
+				.findViewById(R.id.full_player_duration);
 		musicProgressBar = (ProgressWheel) rootView
 				.findViewById(R.id.full_player_progress_bar);
 
 		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
 		musicProgressBar.setOnClickListener(new OnClickListener() {
-		
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				UpdateUiFromServiceController.getInstance().startPause();
+				MusicPlayerService.getInstance().startPause();
 			}
 		});
 		UpdateUiFromServiceController.getInstance().addUiFragment(this);
-		try {
-			title = MusicPlayerService.getInstance().getCurrentSong()
-					.getTitle();
-			subtitle = MusicPlayerService.getInstance().getCurrentSong()
-					.getArtist();
-			currentTimeText.setText(UpdateUiFromServiceController.getInstance().getCurrentTime());
-			durationText.setText(UpdateUiFromServiceController.getInstance().getDuration());
-		} catch (Exception e) {
-			
-		}
+		
 		ImageView rew = (ImageView) rootView.findViewById(R.id.full_player_rew);
 		rew.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -81,7 +79,7 @@ public class FullPlayerUI extends PlayerUI {
 		});
 		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
 		ff.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -95,7 +93,7 @@ public class FullPlayerUI extends PlayerUI {
 	@Override
 	public void updateTitle(String title) {
 		// TODO Auto-generated method stub
-		this.title =title; 
+		this.title = title;
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setTitle(title);
@@ -110,4 +108,5 @@ public class FullPlayerUI extends PlayerUI {
 		toolbar.setSubtitle(subTitle);
 	}
 
+	
 }

@@ -13,6 +13,11 @@ public class Song {
 		setArtist(c.getString(c.getColumnIndex(Media.ARTIST)));
 		setAlbum(c.getString(c.getColumnIndex(Media.ALBUM)));
 	}
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return getTitle();
+	}
 	/**
 	 * id if get from local
 	 */
