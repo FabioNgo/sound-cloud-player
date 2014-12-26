@@ -2,11 +2,7 @@ package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
-import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
-import ngo.music.soundcloudplayer.controller.UserController;
-import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -57,25 +53,22 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public static MainActivity getActivity() {
 		return activity;
 	}
-	
 
 	public MainActivity() {
 		// TODO Auto-generated constructor stub
 		activity = this;
 	}
-	
-
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
-		
+
 		/*
 		 * Get data from other activity
 		 */
@@ -85,11 +78,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 			if (token == null) defaultTabPosition = 2;
 			Bundle bundle = getIntent().getExtras();
 			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
-			System.out.println ("DEFAULT POSITION " + defaultTabPosition);
-		}catch (NullPointerException e){
-			
+			System.out.println("DEFAULT POSITION " + defaultTabPosition);
+		} catch (NullPointerException e) {
+
 		}
-		
+
 		/**
 		 * get screen's size;
 		 */
@@ -100,6 +93,17 @@ public class MainActivity extends SlidingFragmentActivity implements
 		screenHeight = displayMetrics.heightPixels;
 		screenWidth = displayMetrics.widthPixels;
 		activity = this;
+		/**
+		 * Music Player Service
+		 */
+		if (!isMyServiceRunning()) {
+			musicPlayerServiceIntent = new Intent(this,
+					MusicPlayerService.class);
+			startService(musicPlayerServiceIntent);
+		}else {
+			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+		}
+		// bindService(musicPlayerServiceIntent, mConnection, 0);
 		/**
 		 * Sliding Menu (Left2Right)
 		 */
@@ -125,7 +129,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
 			mFrag = new UserDisplayFragment();
-
 
 			t.replace(R.id.menu_frame, mFrag);
 			t.commit();
@@ -162,7 +165,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			public void onPanelHidden(View panel) {
 			}
 		});
-		
+
 		mLayout.setAnchorPoint((float) 0.5);
 		RelativeLayout dragview = (RelativeLayout) findViewById(R.id.dragView);
 
@@ -189,8 +192,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		TabsAdapter adapter = new TabsAdapter(getSupportFragmentManager());
 
-		
-		
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
 		final int pageMargin = (int) TypedValue.applyDimension(
@@ -199,16 +200,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 		pager.setPageMargin(pageMargin);
 
 		tabs.setViewPager(pager);
-		/**
-		 * Music Player Service
-		 */
-		musicPlayerServiceIntent = new Intent(this, MusicPlayerService.class);
-		startService(musicPlayerServiceIntent);
-		bindService(musicPlayerServiceIntent, mConnection, 0);
-		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
-		
-		
-		
+
 	}
 
 	@Override
@@ -277,7 +269,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			// We've bound to LocalService, cast the IBinder and get
 			// LocalService instance
 			MusicPlayerServiceBinder binder = (MusicPlayerServiceBinder) service;
-//			musicPlayerService = binder.getService();
+			// musicPlayerService = binder.getService();
 			mBound = true;
 		}
 
@@ -287,34 +279,47 @@ public class MainActivity extends SlidingFragmentActivity implements
 		}
 	};
 
-	
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
-//		musicPlayerService = MusicPlayerService.getInstance();
+
+		// musicPlayerService = MusicPlayerService.getInstance();
 	}
+
 	@Override
 	protected void onStart() {
 		// TODO Auto-generated method stub
 		super.onStart();
-		
+
 	}
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		
+
 	}
+
 	@Override
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
 		if (mBound) {
-            unbindService(mConnection);
-            mBound = false;
-        }
+			unbindService(mConnection);
+			mBound = false;
+		}
 	}
-	
+
+	private boolean isMyServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager
+				.getRunningServices(Integer.MAX_VALUE)) {
+			if ("ngo.music.soundcloudplayer.MusicPlayerService"
+					.equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

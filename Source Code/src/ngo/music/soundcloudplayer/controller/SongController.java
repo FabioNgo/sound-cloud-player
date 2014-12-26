@@ -1,6 +1,5 @@
 package ngo.music.soundcloudplayer.controller;
 
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +22,7 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -38,6 +38,8 @@ import android.os.AsyncTask;
 import android.provider.MediaStore.Audio.Media;
 import android.util.Log;
 
+public class SongController implements Constants, Constants.SongConstants {
+
 
 
 
@@ -47,25 +49,29 @@ public class SongController implements Constants, Constants.SongConstants{
 	private ArrayList<Song> offlineSong;
 	private ArrayList<Song> onlineSong;
 	public int offset = 0;
+	
 	private static SongController instance = null;
-	
-	
+
 	private SongController() {
 		// TODO Auto-generated constructor stub
-		if(instance==null) {
-			instance = this;
-			instance.getSongsFromSDCard();
+		synchronized (this) {
+
+			if (instance == null) {
+				instance = this;
+				
+			}
 		}
 	}
-	
+
 	/**
 	 * Restricted at most 1 object is created
 	 * 
 	 */
-	public static SongController getInstance(){
-		if (instance == null){
+	public static SongController getInstance() {
+
+		if (instance == null) {
 			return new SongController();
-		}else{
+		} else {
 			return instance;
 		}
 	}
@@ -77,6 +83,7 @@ public class SongController implements Constants, Constants.SongConstants{
 	public boolean pauseSong(Song song) {
 		return true;
 	}
+
 	
 	public Song getSong(String songID) {
 		for (Song song : offlineSong) {
@@ -114,33 +121,36 @@ public class SongController implements Constants, Constants.SongConstants{
 		return offlineSong;
 	}
 	
-	
+	}
 
 	/**
 	 * Get the stream of the song by id
-	 * @param id of a song
+	 * 
+	 * @param id
+	 *            of a song
 	 * @return the link stream (.mp3) of that song
 	 */
-	public Song getSongFromID(long id){
-		
+	public Song getSongFromID(long id) {
+
 		Song currentSong = null;
 		Stream stream = null;
-		SoundCloudUserController userController = SoundCloudUserController.getInstance();
+		SoundCloudUserController userController = SoundCloudUserController
+				.getInstance();
 		Token token = userController.getToken();
-		ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, token);
-		
+		ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
+				token);
+
 		/*
 		 * API URL OF THE SONG
 		 */
 		String uri = "http://api.soundcloud.com/tracks/" + id;
-		
-		
+
 		try {
 			HttpResponse resp = wrapper.get(Request.to(uri));
-			 JSONObject me = Http.getJSON(resp);
-		     //set information of logged user
-		     currentSong  = addSongInformation(me, wrapper);
-		
+			JSONObject me = Http.getJSON(resp);
+			// set information of logged user
+			currentSong = addSongInformation(me, wrapper);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -148,21 +158,25 @@ public class SongController implements Constants, Constants.SongConstants{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return currentSong;
 	}
-	
+
 	/**
 	 * Get Stream from URL
-	 * @param url : url of the song
+	 * 
+	 * @param url
+	 *            : url of the song
 	 * @return Stream
 	 */
-	public Song getSongFromUrl(String url){
+	public Song getSongFromUrl(String url) {
 		Stream stream = null;
-		SoundCloudUserController userController = SoundCloudUserController.getInstance();
+		SoundCloudUserController userController = SoundCloudUserController
+				.getInstance();
 		Token token = userController.getToken();
-		ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, token);
-		
+		ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
+				token);
+
 		long id = -1;
 		try {
 			id = wrapper.resolve(url);
@@ -170,15 +184,16 @@ public class SongController implements Constants, Constants.SongConstants{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (id == -1){
+		if (id == -1) {
 			return null;
 		}
 		return getSongFromID(id);
-		
+
 	}
-	
+
 	/**
 	 * upload Song from memory.
+	 * 
 	 * @param song
 	 * @param songFile
 	 * @param artWorkFile
@@ -186,58 +201,67 @@ public class SongController implements Constants, Constants.SongConstants{
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public void uploadSong(Song song, File songFile, File artWorkFile) throws ClassNotFoundException, IOException, JSONException{
-		
+	public void uploadSong(Song song, File songFile, File artWorkFile)
+			throws ClassNotFoundException, IOException, JSONException {
+
 		final ApiWrapper wrapper = ApiWrapper.fromFile(songFile);
-        System.out.println("Uploading " + songFile);
-        try {
-            HttpResponse resp = wrapper.post(Request.to(Endpoints.TRACKS)
-                    .add(Params.Track.TITLE,     song.getTitle())
-                    .add(Params.Track.TAG_LIST, song.getTagList())
-                    .add(Params.Track.DESCRIPTION, song.getDescription())
-                    .add(Params.Track.DOWNLOADABLE, song.isDownloadable())
-                    .add(Params.Track.SHARING, song.getSharing())
-                    .add(Params.Track.PERMALINK, song.getPermalink())
-                    .add(Params.Track.LABEL_NAME, song.getLabelName())
-                    .add(Params.Track.RELEASE, song.getRelease())
-                    
-                    .withFile(Params.Track.ASSET_DATA, songFile)
-                    // you can add more parameters here, e.g.
-                     .withFile(Params.Track.ARTWORK_DATA, artWorkFile) /* to add artwork */
+		System.out.println("Uploading " + songFile);
+		try {
+			HttpResponse resp = wrapper.post(Request.to(Endpoints.TRACKS)
+					.add(Params.Track.TITLE, song.getTitle())
+					.add(Params.Track.TAG_LIST, song.getTagList())
+					.add(Params.Track.DESCRIPTION, song.getDescription())
+					.add(Params.Track.DOWNLOADABLE, song.isDownloadable())
+					.add(Params.Track.SHARING, song.getSharing())
+					.add(Params.Track.PERMALINK, song.getPermalink())
+					.add(Params.Track.LABEL_NAME, song.getLabelName())
+					.add(Params.Track.RELEASE, song.getRelease())
 
-                    // set a progress listener (optional)
-                    .setProgressListener(new Request.TransferProgressListener() {
-                        @Override public void transferred(long amount) {
-                            System.err.print(".");
-                        }
-                    }));
+					.withFile(Params.Track.ASSET_DATA, songFile)
+					// you can add more parameters here, e.g.
+					.withFile(Params.Track.ARTWORK_DATA, artWorkFile)
+					/* to add artwork */
 
-            if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
-                System.out.println("\n201 Created "+resp.getFirstHeader("Location").getValue());
+					// set a progress listener (optional)
+					.setProgressListener(
+							new Request.TransferProgressListener() {
+								@Override
+								public void transferred(long amount) {
+									System.err.print(".");
+								}
+							}));
 
-                // dump the representation of the new track
-                System.out.println("\n" + Http.getJSON(resp).toString(4));
-            } else {
-                System.err.println("Invalid status received: " + resp.getStatusLine());
-            }
-        } finally {
-            // serialise wrapper state again (token might have been refreshed)
-            wrapper.toFile(songFile);
-        }
-		
+			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
+				System.out.println("\n201 Created "
+						+ resp.getFirstHeader("Location").getValue());
+
+				// dump the representation of the new track
+				System.out.println("\n" + Http.getJSON(resp).toString(4));
+			} else {
+				System.err.println("Invalid status received: "
+						+ resp.getStatusLine());
+			}
+		} finally {
+			// serialise wrapper state again (token might have been refreshed)
+			wrapper.toFile(songFile);
+		}
+
 	}
-	
+
 	/**
 	 * download song
-	 * @param url stream link of the song
-	 * @param fileName file name of the song want to be named
-	 * @throws IOException 
+	 * 
+	 * @param url
+	 *            stream link of the song
+	 * @param fileName
+	 *            file name of the song want to be named
+	 * @throws IOException
 	 */
-	public void downloadSong(String streamLink,String filename) throws IOException{
-		
+	public void downloadSong(String streamLink, String filename)
+			throws IOException {
+
 		new DownloadFileFromURL(streamLink, filename).execute();
-		
-	
+
 	}
 	
 	public ArrayList<Song> getAllSongsOnline(){
@@ -295,13 +319,15 @@ public class SongController implements Constants, Constants.SongConstants{
 	}
 	/**
 	 * add information into song entity class
+	 * 
 	 * @param me
 	 * @param wrapper
 	 * @return
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	private Song addSongInformation(JSONObject me, ApiWrapper wrapper) throws JSONException, IOException{
+	private Song addSongInformation(JSONObject me, ApiWrapper wrapper)
+			throws JSONException, IOException {
 		Song song = new Song();
 		
 		
@@ -331,7 +357,7 @@ public class SongController implements Constants, Constants.SongConstants{
 		song.setSharing(me.getString(SHARING));
 		song.setSoundcloudId(me.getInt(ID));
 		song.setStreamable(me.getBoolean(STREAMABLE));
-		
+
 		song.setTagList(me.getString(TAG_LIST));
 		song.setTitle(me.getString(TITLE));
 		song.setTrackType(me.getString(TRACK_TYPE));
@@ -366,9 +392,10 @@ public class SongController implements Constants, Constants.SongConstants{
 	 * Background Async Task to download file
 	 * */
 	class DownloadFileFromURL extends AsyncTask<String, String, String> {
-	 
+
 		String filename;
 		String streamUrl;
+
 		public DownloadFileFromURL(String streamUrl, String filename) {
 			// TODO Auto-generated constructor stub
 			this.streamUrl = streamUrl;

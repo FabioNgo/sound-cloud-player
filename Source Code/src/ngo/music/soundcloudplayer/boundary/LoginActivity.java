@@ -161,7 +161,7 @@ public class LoginActivity extends FragmentActivity implements Constants.UserCon
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
-			
+			pDialog.dismiss();
 			
 		}
 		
