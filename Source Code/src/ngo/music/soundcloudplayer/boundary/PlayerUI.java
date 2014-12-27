@@ -33,7 +33,7 @@ public abstract class PlayerUI extends Fragment {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				musicProgressBar.setProgressDegree(degree);
+//				musicProgressBar.setProgressDegree(degree);
 				if (hasTextTime) {
 					currentTimeText.setText(UpdateUiFromServiceController
 							.getInstance().getCurrentTime());
@@ -71,6 +71,7 @@ public abstract class PlayerUI extends Fragment {
 	public void play() {
 		updateTitle(MusicPlayerService.getInstance().getCurrentSong());
 		updateSubtitle(MusicPlayerService.getInstance().getCurrentSong());
+		runnable.run();
 	}
 	protected void iniMusicProgressBar(){
 		musicProgressBar = (ProgressWheel) rootView

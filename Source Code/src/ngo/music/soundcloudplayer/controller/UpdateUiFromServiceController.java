@@ -81,7 +81,10 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 
 					progressbar.setProgressDegree(degree);
 				}
-				// Log.i("TIME", String.valueOf(degree));
+				for (PlayerUI ui : uiFragments) {
+					ui.updateMusicProgress();
+				}
+				
 			}
 
 			@Override

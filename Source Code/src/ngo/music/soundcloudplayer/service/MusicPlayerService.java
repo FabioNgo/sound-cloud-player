@@ -140,15 +140,20 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	public void playNextSong() {
-
-		playNewSong((currentSongPosition + 1) % songsPlaying.size());
+		currentSongPosition++;
+		int size = songsPlaying.size();
+		currentSongPosition = currentSongPosition % size;
+		playNewSong(currentSongPosition);
 
 	}
 
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
-
-		playNewSong((currentSongPosition - 1) % songsPlaying.size());
+		currentSongPosition--;
+		int size = songsPlaying.size();
+		currentSongPosition+=size;
+		currentSongPosition = currentSongPosition % size;
+		playNewSong(currentSongPosition);
 
 	}
 
@@ -225,8 +230,7 @@ public class MusicPlayerService extends IntentService implements
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
 		mp.reset();
-		musicState = MUSIC_STOP;
-		MusicPlayerService.getInstance().playNextSong();
+		playNextSong();
 		updateNotification(false, R.drawable.ic_media_play);
 	}
 
@@ -256,7 +260,8 @@ public class MusicPlayerService extends IntentService implements
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-
+		UpdateUiFromServiceController.getInstance().updateUI(
+				MUSIC_CUR_POINT_CHANGED);
 	}
 
 	public class MusicPlayerServiceBinder extends Binder {
@@ -458,6 +463,17 @@ public class MusicPlayerService extends IntentService implements
 				songsPlaying.add(new Song(c));
 			}
 		}
+		c.close();
+		c = getContentResolver().query(Media.INTERNAL_CONTENT_URI, null,
+				Media.IS_MUSIC + "!=0", null, null);
+		while (c.moveToNext()) {
+			String url = c.getString(c.getColumnIndex(Media.DATA));
+			if (url.endsWith(".mp3")) {
+				songsPlaying.add(new Song(c));
+			}
+		}
+
+		c.close();
 	}
 
 	public ArrayList<Song> getSongs() {
@@ -473,8 +489,7 @@ public class MusicPlayerService extends IntentService implements
 			int currentPosition = mediaPlayer.getCurrentPosition();
 			if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
 				mediaPlayer.seekTo(currentPosition + seekForwardTime);
-				UpdateUiFromServiceController.getInstance().updateUI(
-						MUSIC_CUR_POINT_CHANGED);
+
 			} else {
 				playNextSong();
 			}
@@ -489,8 +504,7 @@ public class MusicPlayerService extends IntentService implements
 			int currentPosition = mediaPlayer.getCurrentPosition();
 			if (currentPosition - seekBackwardTime >= 0) {
 				mediaPlayer.seekTo(currentPosition - seekBackwardTime);
-				UpdateUiFromServiceController.getInstance().updateUI(
-						MUSIC_CUR_POINT_CHANGED);
+
 			} else {
 				playPreviousSong();
 			}
