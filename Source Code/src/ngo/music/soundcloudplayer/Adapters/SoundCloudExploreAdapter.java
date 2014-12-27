@@ -99,7 +99,7 @@ public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
 		TextView subtitle = (TextView) v.findViewById(R.id.song_subtitle);
 		subtitle.setText(song.getAuthor()+" | "+ song.getPlaybackCountString());
 		
-		//notifyDataSetChanged();
+		notifyDataSetChanged();
 	}
 	
 	@Override

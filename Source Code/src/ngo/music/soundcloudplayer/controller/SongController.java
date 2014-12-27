@@ -42,6 +42,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.volley.api.AppController;
 
+import android.R.integer;
 import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -53,13 +54,19 @@ import android.widget.Toast;
 
 
 
-public class SongController implements Constants, Constants.SongConstants{
+public class SongController implements Constants, Constants.SongConstants, Constants.SoundCloudExploreConstant{
 
-	private static final String EXPLORE_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+	private static final int NUMBER_CATEGORY = 14;
+	
+	private  String[] exploreLinkList; 
 	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
 	private static final String TAG_TRACKS_EXPLORE = "tracks";
 	private ArrayList<Song> offlineSong;
-	private ArrayList<Song> onlineSongs = new ArrayList<Song>();
+	
+	private ArrayList<ArrayList<Song>> onlineSongs = new ArrayList<ArrayList<Song>>();
+	
+	
+	
 	private ArrayList<String> idList = new ArrayList<String>();
 	public int offset = 0;
 	
@@ -71,8 +78,11 @@ public class SongController implements Constants, Constants.SongConstants{
 
 			if (instance == null) {
 				instance = this;
+				instance.initialOnlineSongsList();
+				instance.initialCategoryListLink();
 				instance.getSongsFromSDCard();
-				instance.getSongsFromSoundCloud(1);
+			
+				
 				
 			}
 		}
@@ -151,9 +161,9 @@ public class SongController implements Constants, Constants.SongConstants{
 	 * Get songs which load from the internet
 	 * @return
 	 */
-	public ArrayList<Song> getOnlineSongs() {
+	public ArrayList<Song> getOnlineSongs(int category) {
 		
-		return onlineSongs;
+		return onlineSongs.get(category);
 	}
 	
 
@@ -298,12 +308,15 @@ public class SongController implements Constants, Constants.SongConstants{
 
 	}
 	
-	private ArrayList<Song> getSongsFromSoundCloud(int currentPage){
+	private ArrayList<Song> getSongsFromSoundCloud(int currentPage, int category){
 		
-		String urlLink = EXPLORE_LINK;
+		String urlLink = exploreLinkList[category];
 		String offset = "offset=" + String.valueOf((currentPage-1)*10);
+		System.out.println ("CURRENT CATEGORY = " + category);
+		if (currentPage != 1){
+			urlLink = urlLink.replace("offset=0", offset);
+		}
 		
-		urlLink = urlLink.replace("offset=0", offset);
 		//ArrayList<Song> onlineSongs = new ArrayList<Song>();
 		SoundCloudUserController userController = SoundCloudUserController.getInstance();
 		Token token = userController.getToken();
@@ -320,16 +333,17 @@ public class SongController implements Constants, Constants.SongConstants{
 	        
 	        String inputLine = in.readLine();
 	        in.close();
-	      
+			
 			JSONObject track = new JSONObject(inputLine);
 			JSONArray listSong = track.getJSONArray(TAG_TRACKS_EXPLORE);
-
+			
 			for (int i = 0 ; i< listSong.length(); i++){
 				JSONObject jsonObject = listSong.getJSONObject(i);
+
 				int position =searchId(idList, jsonObject.getString(ID)); 
 				if (position < 0){
 					try{
-						onlineSongs.add(addSongInformation(jsonObject, wrapper));
+						onlineSongs.get(category).add(addSongInformation(jsonObject, wrapper));
 						idList.add(- (position + 1), jsonObject.getString(ID));
 					}catch(JSONException e){
 						e.printStackTrace();
@@ -341,7 +355,7 @@ public class SongController implements Constants, Constants.SongConstants{
 		}
 			
 		
-		return onlineSongs;
+		return onlineSongs.get(category);
 	}
 	/**
 	 * add information into song entity class
@@ -373,8 +387,8 @@ public class SongController implements Constants, Constants.SongConstants{
 		//song.setLabelID(me.getInt(LABEL_ID));
 		//song.setLabelName(me.getString(LABEL_NAME));
 		//song.setLicense(me.getString(LICENSE));
-		song.setPermalink(me.getString(PERMALINK));
-		song.setPermalinkUrl(me.getString(PERMALINK_URL));
+		//song.setPermalink(me.getString(PERMALINK));
+		//song.setPermalinkUrl(me.getString(PERMALINK_URL));
 		
 		
 		song.setPlaybackCount(me.getInt(PLAYBACK_COUNT));
@@ -393,8 +407,8 @@ public class SongController implements Constants, Constants.SongConstants{
 		song.setTagList(me.getString(TAG_LIST));
 		song.setTitle(me.getString(TITLE));
 		//song.setTrackType(me.getString(TRACK_TYPE));
-		song.setUri(me.getString(URI));
-		song.setUserId(me.getInt(USER_ID));
+		//song.setUri(me.getString(URI));
+		//song.setUserId(me.getInt(USER_ID));
 		//song.setVideoUrl(me.getString(VIDEO_URL));
 		song.setWaveformUrl(me.getString(WAVEFORM_URL));
 		song.setArtworkUrl(me.getString(ARTWORK_URL));
@@ -512,14 +526,7 @@ public class SongController implements Constants, Constants.SongConstants{
 	     * **/
 	    @Override
 	    protected void onPostExecute(String file_url) {
-	        // dismiss the dialog after the file was downloaded
-	        //dismissDialog(progress_bar_type);
-	 
-	        // Displaying downloaded image into image view
-	        // Reading image path from sdcard
-	        //String imagePath = Environment.getExternalStorageDirectory().toString() + "/downloadedfile.jpg";
-	        // setting downloaded into image view
-	       // my_image.setImageDrawable(Drawable.createFromPath(imagePath));
+	      
 	    }
 	 
 	}
@@ -528,9 +535,9 @@ public class SongController implements Constants, Constants.SongConstants{
 	 * add more song to the list
 	 * @param current_page
 	 */
-	public void loadMoreSong(int current_page) {
+	public void loadMoreSong(int current_page, int category) {
 		//System.out.println ("LOAD MORE SONG WITH CURRENT PAGE : " + current_page);
-		getSongsFromSoundCloud(current_page);
+		getSongsFromSoundCloud(current_page, category);
 		// TODO Auto-generated method stub
 		
 	}
@@ -545,4 +552,44 @@ public class SongController implements Constants, Constants.SongConstants{
 
 	}
 	
+	/**
+	 * Initialize onlineSong list
+	 */
+	private void initialOnlineSongsList(){
+		for (int i = 0; i < NUMBER_CATEGORY;i++){
+			onlineSongs.add(new ArrayList<Song>());
+		}
+	}
+	
+	/**
+	 * Initialize link of category
+	 */
+	public void initialCategoryListLink(){
+		exploreLinkList = new String[] {TRENDING_MUSIC_LINK,
+						   TRENDING_AUDIO_LINK,
+						   ALTERNATIVE_ROCK_LINK,
+						   AMBIENT_LINK,
+						   CLASSICAL_LINK,
+						   COUNTRY_LINK,
+						   DANCE_LINK,
+						   DEEP_HOUSE_LINK,
+						   DISCO_LINK,
+						   DRUM_BASS_LINK,
+						   DUBSTEP_LINK,
+						   ELECTRO_LINK,
+						   ELECTRONIC_LINK,
+						   FOLK_LINK};
+		
+	}
+	
+	/**
+	 * Load 1st page of each category
+	 */
+	public void initialSongCategory(){
+		//System.out.println ("TEST INITIAL");
+		for (int i = 0 ; i< NUMBER_CATEGORY;i++){
+			//System.out.println ("CATEGORY  = " +i);
+			getSongsFromSoundCloud(1,i);
+		}
+	}
 }

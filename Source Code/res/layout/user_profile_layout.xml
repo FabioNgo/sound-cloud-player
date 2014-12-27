@@ -57,25 +57,62 @@
 	</RelativeLayout>
     
    <!-- LOWER PART -->
-   <TextView 
-       android:id = "@+id/my_music_id"
-        android:layout_marginLeft="10dp"
+   
+   <!-- MY MUSIC -->
+   <RelativeLayout 
+       android:id="@+id/my_music_field"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:clickable="true"
-       android:layout_width = "wrap_content"
-	   android:layout_height = "wrap_content"
-	   android:layout_alignParentLeft = "true"
-	   android:textAppearance="?android:attr/textAppearanceLarge"
-	   android:layout_below="@+id/frame_avatar"
-	   android:text="@string/my_music"/>
-   <TextView 
-       android:id = "@+id/logout_id"
-        android:layout_marginLeft="10dp"
-        android:clickable="true"
-       android:layout_width = "wrap_content"
-	   android:layout_height = "wrap_content"
-	   android:layout_alignParentLeft = "true"
-	   android:textAppearance="?android:attr/textAppearanceLarge"
-	   android:layout_below="@+id/my_music_id"
-	   android:text = "@string/logout"/>
+        android:layout_below="@+id/frame_avatar"
+        android:layout_alignParentLeft="true" >
 
+       <TextView 
+	       android:id = "@+id/my_music_id"
+	        android:layout_marginLeft="10dp"
+	       
+	       android:layout_width = "wrap_content"
+		   android:layout_height = "wrap_content"
+		   android:layout_alignParentLeft = "true"
+		   android:textAppearance="?android:attr/textAppearanceLarge"
+		   android:text="@string/my_music"/>
+   </RelativeLayout>
+   
+   <!--  SOUNDCLOUD EXPLORE -->
+   <RelativeLayout 
+       android:id="@+id/soundcloud_explore_field"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/my_music_field"
+        android:clickable="true"
+        android:layout_alignParentLeft="true" >
+
+       <TextView 
+	       android:id = "@+id/soundcloud_explore_id"
+	        android:layout_marginLeft="10dp"
+	       android:layout_width = "wrap_content"
+		   android:layout_height = "wrap_content"
+		   android:layout_alignParentLeft = "true"
+		   android:textAppearance="?android:attr/textAppearanceLarge"
+		   android:text="Soundcloud Explore"/>
+   </RelativeLayout>
+   
+   <RelativeLayout 
+       android:id="@+id/log_out_field"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/soundcloud_explore_field"
+        android:clickable="true"
+        android:layout_alignParentLeft="true">
+	   <TextView 
+	       android:id = "@+id/logout_id"
+	       android:layout_marginLeft="10dp"
+	
+	       android:layout_width = "wrap_content"
+		   android:layout_height = "wrap_content"
+		   android:layout_alignParentLeft = "true"
+		   android:textAppearance="?android:attr/textAppearanceLarge"
+		   
+		   android:text = "@string/logout"/>
+	</RelativeLayout>
 </RelativeLayout>
