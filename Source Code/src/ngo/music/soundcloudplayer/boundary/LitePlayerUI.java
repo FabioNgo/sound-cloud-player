@@ -4,6 +4,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import android.content.Context;
 import android.os.Bundle;
@@ -48,17 +49,17 @@ public class LitePlayerUI extends PlayerUI {
 		return rootView;
 	}
 	@Override
-	public void updateTitle(String title) {
+	public void updateTitle(Song song) {
 		// TODO Auto-generated method stub
-		this.title = title;
+		String title = song.getTitle();
 		TextView title_text = (TextView) rootView
 				.findViewById(R.id.lite_player_title);
 		title_text.setText(title);
 	}
 	@Override
-	public void updateSubTitle(String subtitle) {
+	public void updateSubtitle(Song song) {
 		// TODO Auto-generated method stub
-		this.subtitle = subtitle;
+		String subtitle = song.getArtist()+" | "+song.getAlbum();
 		TextView subtitle_text = (TextView) rootView
 				.findViewById(R.id.lite_player_subtitle);
 		subtitle_text.setText(subtitle);

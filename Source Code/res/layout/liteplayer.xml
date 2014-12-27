@@ -16,6 +16,10 @@
     	android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
     	android:layout_height="wrap_content"
     	android:layout_toRightOf="@+id/lite_player_image"
+    	android:textColor="#000000"
+    	android:layout_toLeftOf="@+id/lite_player_progress_bar"
+    	android:singleLine="true"
+    	android:marqueeRepeatLimit="marquee_forever"
     	android:layout_width="wrap_content" />
     <TextView
     	android:id="@+id/lite_player_subtitle"
@@ -23,7 +27,9 @@
     	android:layout_toRightOf="@+id/lite_player_image"
     	android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
     	android:layout_below="@+id/lite_player_title"
-    	
+    	android:textColor="#000000"
+    	android:singleLine="true"
+    	android:layout_toLeftOf="@+id/lite_player_progress_bar"
     	android:layout_width="wrap_content" />
     <com.todddavies.components.progressbar.ProgressWheel
         android:id="@+id/lite_player_progress_bar"

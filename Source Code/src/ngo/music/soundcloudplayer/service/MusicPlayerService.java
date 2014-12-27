@@ -98,7 +98,7 @@ public class MusicPlayerService extends IntentService implements
 			instance = this;
 		}
 		musicState = MUSIC_STOP;
-		
+
 		try {
 			getData();
 		} catch (Exception e) {
@@ -112,6 +112,7 @@ public class MusicPlayerService extends IntentService implements
 		iniMediaPlayer();
 		iniNotification();
 		updateNotification(false, R.drawable.ic_media_pause);
+		// playCurrentSong();
 		// pause();
 
 	}
@@ -181,8 +182,6 @@ public class MusicPlayerService extends IntentService implements
 		updateNotification(true, 0);
 	}
 
-	
-
 	@Override
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
@@ -192,7 +191,7 @@ public class MusicPlayerService extends IntentService implements
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		
+
 		mp.start();
 		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
 	}
@@ -236,7 +235,6 @@ public class MusicPlayerService extends IntentService implements
 		if (mediaPlayer.isPlaying()) {
 
 			mediaPlayer.pause();
-			
 
 		}
 		musicState = MUSIC_PAUSE;
@@ -273,7 +271,6 @@ public class MusicPlayerService extends IntentService implements
 
 		if (musicState == MUSIC_PAUSE) {
 			playMedia();
-			
 
 		} else {
 			musicState = MUSIC_START;
@@ -331,7 +328,6 @@ public class MusicPlayerService extends IntentService implements
 
 		pauseMedia();
 		updateNotification(false, R.drawable.ic_media_pause);
-		
 
 	}
 
@@ -350,7 +346,7 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	public boolean isPlaying() {
-		if(musicState == MUSIC_START){
+		if (musicState == MUSIC_START) {
 			return true;
 		}
 		return false;
@@ -362,14 +358,15 @@ public class MusicPlayerService extends IntentService implements
 
 	}
 
-	private void updateNotification(boolean cancel,int iconID) {
+	private void updateNotification(boolean cancel, int iconID) {
 		if (cancel) {
 			NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 			mNotificationManager.cancelAll();
 			return;
 		}
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				this).setSmallIcon(iconID).setContentTitle(getCurrentSong().getTitle())
+				this).setSmallIcon(iconID)
+				.setContentTitle(getCurrentSong().getTitle())
 				.setContentText(getCurrentSong().getArtist());
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(this,
@@ -398,7 +395,7 @@ public class MusicPlayerService extends IntentService implements
 		// TODO Auto-generated method stub
 
 		if (musicState != MUSIC_START) {
-			
+
 			playCurrentSong();
 		} else {
 			pause();
@@ -470,10 +467,14 @@ public class MusicPlayerService extends IntentService implements
 
 	public void forwardSong() {
 		if (mediaPlayer != null) {
+			if (musicState != MUSIC_START) {
+				playCurrentSong();
+			}
 			int currentPosition = mediaPlayer.getCurrentPosition();
 			if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
 				mediaPlayer.seekTo(currentPosition + seekForwardTime);
-				UpdateUiFromServiceController.getInstance().updateUI(MUSIC_CUR_POINT_CHANGED);
+				UpdateUiFromServiceController.getInstance().updateUI(
+						MUSIC_CUR_POINT_CHANGED);
 			} else {
 				playNextSong();
 			}
@@ -482,13 +483,21 @@ public class MusicPlayerService extends IntentService implements
 
 	public void rewindSong() {
 		if (mediaPlayer != null) {
+			if (musicState != MUSIC_START) {
+				playCurrentSong();
+			}
 			int currentPosition = mediaPlayer.getCurrentPosition();
 			if (currentPosition - seekBackwardTime >= 0) {
 				mediaPlayer.seekTo(currentPosition - seekBackwardTime);
-				UpdateUiFromServiceController.getInstance().updateUI(MUSIC_CUR_POINT_CHANGED);
+				UpdateUiFromServiceController.getInstance().updateUI(
+						MUSIC_CUR_POINT_CHANGED);
 			} else {
 				playPreviousSong();
 			}
 		}
+	}
+
+	public String getCurrentSongId() {
+		return getCurrentSong().getId();
 	}
 }

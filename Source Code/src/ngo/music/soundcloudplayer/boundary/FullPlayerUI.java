@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.Bundle;
@@ -105,21 +106,21 @@ public class FullPlayerUI extends PlayerUI {
 	}
 
 	@Override
-	public void updateTitle(String title) {
+	public void updateTitle(Song song) {
 		// TODO Auto-generated method stub
-		this.title = title;
+		String title = song.getTitle();
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setTitle(title);
 	}
 
 	@Override
-	public void updateSubTitle(String subTitle) {
+	public void updateSubtitle(Song song) {
 		// TODO Auto-generated method stub
-		this.subtitle = subTitle;
+		String subtitle = song.getArtist()+" | "+song.getAlbum();
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
-		toolbar.setSubtitle(subTitle);
+		toolbar.setSubtitle(subtitle);
 	}
 
 	
