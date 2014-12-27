@@ -1,6 +1,7 @@
 package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
@@ -15,10 +16,10 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.media.session.MediaSession.Token;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
@@ -46,6 +47,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 	private  MusicPlayerService musicPlayerService;
 	private Intent musicPlayerServiceIntent;
 	private boolean mBound = false;
+	/*
+	 * If true : Display Fragemnt with tab : Trending Music, Audio......
+	 * If flase: Display Fragment with tab : My music ......
+	 */
+	public static boolean isExplore = false;
 	
 	private int defaultTabPosition = 0;
 
@@ -77,74 +83,82 @@ public class MainActivity extends SlidingFragmentActivity implements
 		/*
 		 * Get data from other activity
 		 */
+		getDataFromOtherActivity();
+		/*
+		 * get Screen size
+		 */
+		getScreesize();
+		
+		activity = this;
+		/*
+		 * Music Player Service
+		 */
+		configMusicPlayerService();
+		// bindService(musicPlayerServiceIntent, mConnection, 0);
+		
+		/*
+		 * Sliding Menu 
+		 */
+		configSlidingMenu(savedInstanceState);
+		
+		/*
+		 * Sliding Up Panel
+		 */
+		configSlidingUpPanel();
+		
+		/*
+		 * Tab Sliding
+		 */
+		configTabSliding();
+
+	}
+
+	/**
+	 * Get data which transfered from other activity
+	 */
+	private void getDataFromOtherActivity() {
 		try{
 			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 			Token token = soundCloudUserController.getToken();
 			if (token == null) defaultTabPosition = 2;
+			
 			Bundle bundle = getIntent().getExtras();
 			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
 			
 		} catch (NullPointerException e) {
 
 		}
+	}
 
-		/**
-		 * get screen's size;
-		 */
-
-		// Get the width and length of the screen
-		DisplayMetrics displayMetrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-		screenHeight = displayMetrics.heightPixels;
-		screenWidth = displayMetrics.widthPixels;
-		activity = this;
-		/**
-		 * Music Player Service
-		 */
-		if (!isMyServiceRunning()) {
-			musicPlayerServiceIntent = new Intent(this,
-					MusicPlayerService.class);
-			startService(musicPlayerServiceIntent);
-		}else {
-			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+	/**
+	 * Tab Sliding
+	 */
+	private void configTabSliding() {
+		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		ViewPager pager = (ViewPager) findViewById(R.id.pager);
+		FragmentPagerAdapter adapter;
+		if (isExplore){
+			adapter = new SoundCloudExploreTabAdater(getSupportFragmentManager());
+		}else{
+			adapter = new TabsAdapter(getSupportFragmentManager());
 		}
-		// bindService(musicPlayerServiceIntent, mConnection, 0);
-		/**
-		 * Sliding Menu (Left2Right)
-		 */
-		// set the Behind View
-		setBehindContentView(R.layout.menu_frame);
+		
 
-		// customize the SlidingMenu
-		SlidingMenu sm = getSlidingMenu();
-		sm.setShadowWidthRes(R.dimen.shadow_width);
-		sm.setShadowDrawable(R.drawable.shadow);
+		pager.setAdapter(adapter);
+		pager.setCurrentItem(defaultTabPosition, true);
+		final int pageMargin = (int) TypedValue.applyDimension(
+				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
+						.getDisplayMetrics());
+		pager.setPageMargin(pageMargin);
 
-		sm.setBehindOffset((int) (BasicFunctions.pxTodp(screenWidth, this)));
-		sm.setFadeDegree(0.35f);
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		toolbar.setLogo(R.drawable.ic_action_github);
-		setSupportActionBar(toolbar);
+		tabs.setViewPager(pager);
+		isExplore = false;
+	}
 
-		if (savedInstanceState == null) {
-
-			FrameLayout frame = (FrameLayout) findViewById(R.id.menu_frame);
-			FragmentTransaction t = this.getSupportFragmentManager()
-					.beginTransaction();
-			mFrag = new UserDisplayFragment();
-
-			t.replace(R.id.menu_frame, mFrag);
-			t.commit();
-		} else {
-			mFrag = (Fragment) this.getSupportFragmentManager()
-					.findFragmentById(R.id.menu_frame);
-		}
-
-		/**
-		 * Sliding Up Panel
-		 */
+	/**
+	 * Sliding Up Panel
+	 */
+	private void configSlidingUpPanel() {
 		mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
 		mLayout.setPanelSlideListener(new PanelSlideListener() {
 			@Override
@@ -190,22 +204,65 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.commit();
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.play_queue_container, new PlayQueueUI()).commit();
-		/**
-		 * Tab Sliding
-		 */
-		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-		ViewPager pager = (ViewPager) findViewById(R.id.pager);
-		TabsAdapter adapter = new TabsAdapter(getSupportFragmentManager());
+	}
 
-		pager.setAdapter(adapter);
-		pager.setCurrentItem(defaultTabPosition, true);
-		final int pageMargin = (int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
-						.getDisplayMetrics());
-		pager.setPageMargin(pageMargin);
+	/**
+	 * Music Player Service
+	 */
+	private void configMusicPlayerService() {
+		if (!isMyServiceRunning()) {
+			musicPlayerServiceIntent = new Intent(this,
+					MusicPlayerService.class);
+			startService(musicPlayerServiceIntent);
+		}else {
+			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+		}
+	}
 
-		tabs.setViewPager(pager);
+	/**
+	 * @param savedInstanceState
+	 */
+	private void configSlidingMenu(Bundle savedInstanceState) {
+		// set the Behind View
+		setBehindContentView(R.layout.menu_frame);
 
+		// customize the SlidingMenu
+		SlidingMenu sm = getSlidingMenu();
+		sm.setShadowWidthRes(R.dimen.shadow_width);
+		sm.setShadowDrawable(R.drawable.shadow);
+
+		sm.setBehindOffset((int) (BasicFunctions.pxTodp(screenWidth, this)));
+		sm.setFadeDegree(0.35f);
+		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		toolbar.setLogo(R.drawable.ic_action_github);
+		setSupportActionBar(toolbar);
+
+		if (savedInstanceState == null) {
+
+			FrameLayout frame = (FrameLayout) findViewById(R.id.menu_frame);
+			FragmentTransaction t = this.getSupportFragmentManager()
+					.beginTransaction();
+			mFrag = new UserDisplayFragment();
+
+			t.replace(R.id.menu_frame, mFrag);
+			t.commit();
+		} else {
+			mFrag = (Fragment) this.getSupportFragmentManager()
+					.findFragmentById(R.id.menu_frame);
+		}
+	}
+
+	/**
+	 * get screen's size;
+	 */
+	private void getScreesize() {
+		// Get the width and length of the screen
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+		screenHeight = displayMetrics.heightPixels;
+		screenWidth = displayMetrics.widthPixels;
 	}
 
 	@Override

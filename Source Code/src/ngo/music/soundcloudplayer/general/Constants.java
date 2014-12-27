@@ -130,4 +130,36 @@ public interface Constants {
 		int ABOUT_US = 7;
 		String DEFAULT_ID = "deafault_id";
 	}
+	
+	interface SoundCloudExploreConstant{
+		int TRENDING_MUSIC = 0;
+		int TRENDING_AUDIO = 1;
+		int ALTERNATIVE_ROCK = 2;
+		int AMBIENT = 3;
+		int CLASSICAL = 4;
+		int COUNTRY  = 5;
+		int DANCE = 6;
+		int DEEP_HOUSE = 7;
+		int DISCO = 8;
+		int DRUM_BASS = 9;
+		int DUBSTEP = 10;
+		int ELECTRO = 11;
+		int ELECTRONIC = 12;
+		int FOLK = 13;
+		
+		String TRENDING_MUSIC_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String TRENDING_AUDIO_LINK = "https://api-v2.soundcloud.com/explore/popular%2Baudio?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String ALTERNATIVE_ROCK_LINK ="https://api-v2.soundcloud.com/explore/alternative%2Brock?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String AMBIENT_LINK = "https://api-v2.soundcloud.com/explore/ambient?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String CLASSICAL_LINK = "https://api-v2.soundcloud.com/explore/classical?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String COUNTRY_LINK  = "https://api-v2.soundcloud.com/explore/country?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String DANCE_LINK = "https://api-v2.soundcloud.com/explore/dance?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String DEEP_HOUSE_LINK = "https://api-v2.soundcloud.com/explore/deep%2Bhouse?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String DISCO_LINK = "https://api-v2.soundcloud.com/explore/disco?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String DRUM_BASS_LINK = "https://api-v2.soundcloud.com/explore/drum%2B%26%2Bbass?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String DUBSTEP_LINK = "https://api-v2.soundcloud.com/explore/dubstep?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String ELECTRO_LINK = "https://api-v2.soundcloud.com/explore/electro?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String ELECTRONIC_LINK = "https://api-v2.soundcloud.com/explore/electronic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+		String FOLK_LINK = "https://api-v2.soundcloud.com/explore/folk?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
+	}
 }
