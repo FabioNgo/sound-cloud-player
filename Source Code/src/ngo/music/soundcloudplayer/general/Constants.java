@@ -117,6 +117,7 @@ public interface Constants {
 		int MUSIC_PAUSE = 2;
 		int MUSIC_NEW_SONG = 3;
 		int APP_START = 4;
+		int MUSIC_CUR_POINT_CHANGED = 5;
 	}
 	
 	interface TabContant{

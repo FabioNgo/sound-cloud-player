@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -74,7 +75,16 @@ public class FullPlayerUI extends PlayerUI {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				MusicPlayerService.getInstance().rewindSong();
+			}
+		});
+		rew.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
 				MusicPlayerService.getInstance().playPreviousSong();
+				return true;
 			}
 		});
 		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
@@ -83,7 +93,16 @@ public class FullPlayerUI extends PlayerUI {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				MusicPlayerService.getInstance().forwardSong();;
+			}
+		});
+		ff.setOnLongClickListener(new OnLongClickListener() {
+			
+			@Override
+			public boolean onLongClick(View v) {
+				// TODO Auto-generated method stub
 				MusicPlayerService.getInstance().playNextSong();
+				return true;
 			}
 		});
 		// MusicPlayerController.getInstance().

@@ -20,13 +20,12 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 	private ArrayList<PlayerUI> uiFragments;
 
 	private Song playingSong;
-	
+
 	private UpdateUiFromServiceController() {
 		// TODO Auto-generated constructor stub
 
 		instance = this;
 		uiFragments = new ArrayList<PlayerUI>();
-		
 
 	}
 
@@ -44,7 +43,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 	}
 
 	public void startTimer() {
-		
+
 		timer = new CountDownTimer(MusicPlayerService.getInstance()
 				.getDuration()
 				- MusicPlayerService.getInstance().getCurrentTime(), 1000) {
@@ -52,7 +51,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 			@Override
 			public void onTick(long millisUntilFinished) {
 				// TODO Auto-generated method stub
-				
+
 				int degree = (int) Math.round(360
 						* (double) MusicPlayerService.getInstance()
 								.getCurrentTime()
@@ -68,8 +67,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 			public void onFinish() {
 				// TODO Auto-generated method stub
 				Log.i("", "Done");
-				
-				 
+
 			}
 		};
 		timer.start();
@@ -123,6 +121,30 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				if (MusicPlayerService.getInstance().isPlaying()) {
 					playerUI.play();
 					startTimer();
+				}
+
+			}
+		}
+		if (TAG == MUSIC_NEW_SONG) {
+			for (PlayerUI playerUI : uiFragments) {
+
+				playerUI.updateTitle(MusicPlayerService.getInstance()
+						.getCurrentSong().getTitle());
+				playerUI.updateSubTitle(MusicPlayerService.getInstance()
+						.getCurrentSong().getArtist());
+
+			}
+		}
+		if (TAG == MUSIC_CUR_POINT_CHANGED) {
+			for (PlayerUI playerUI : uiFragments) {
+
+				int degree = (int) Math.round(360
+						* (double) MusicPlayerService.getInstance()
+								.getCurrentTime()
+						/ MusicPlayerService.getInstance().getDuration());
+				for (PlayerUI fragment : uiFragments) {
+
+					fragment.updateMusicProgressBar(degree);
 				}
 
 			}
