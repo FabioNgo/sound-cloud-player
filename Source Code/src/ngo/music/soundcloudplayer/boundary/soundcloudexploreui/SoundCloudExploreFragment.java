@@ -176,7 +176,7 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 			//Loop thru the new items and add them to the adapter
 			SongController songController = SongController.getInstance();
 			ArrayList<Song> songs = songController.getOnlineSongs(category);
-			
+			adapter.setNotifyOnChange(true);
 			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs);
 			//songsList.
 			//Tell to the adapter that changes have been made, this will cause the list to refresh

@@ -24,7 +24,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 public class FullPlayerUI extends PlayerUI {
 
 	private static FullPlayerUI instance = null;
-	private View rootView = null;
+	
 
 	public FullPlayerUI() {
 		// TODO Auto-generated constructor stub
@@ -40,6 +40,8 @@ public class FullPlayerUI extends PlayerUI {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		instance = this;
+		hasTextTime = true;
+		musicProgressBar_id = R.id.full_player_progress_bar;
 	}
 
 	@Override
@@ -47,27 +49,19 @@ public class FullPlayerUI extends PlayerUI {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		// super.onCreateView(inflater, container, savedInstanceState);
+		super.onCreateView(inflater, container, savedInstanceState);
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
-
+		iniMusicProgressBar();
 		BasicFunctions.ResizeImageView(MainActivity.screenWidth,
 				(ImageView) rootView.findViewById(R.id.full_player_song_image));
 		currentTimeText = (TextView) rootView
 				.findViewById(R.id.full_player_current_time);
 		durationText = (TextView) rootView
 				.findViewById(R.id.full_player_duration);
-		musicProgressBar = (ProgressWheel) rootView
-				.findViewById(R.id.full_player_progress_bar);
+		
 
-		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
-		musicProgressBar.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().startPause();
-			}
-		});
-		UpdateUiFromServiceController.getInstance().addUiFragment(this);
+		
+		
 		
 		ImageView rew = (ImageView) rootView.findViewById(R.id.full_player_rew);
 		rew.setOnClickListener(new OnClickListener() {
@@ -106,6 +100,7 @@ public class FullPlayerUI extends PlayerUI {
 			}
 		});
 		// MusicPlayerController.getInstance().
+		UpdateUiFromServiceController.getInstance().addUiFragment(this);
 		return rootView;
 	}
 

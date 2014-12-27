@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+     xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent" >
-
+    <ImageView
+    	android:id="@+id/lite_player_image"
+    	android:layout_height="match_parent"
+    	android:layout_width="wrap_content"
+    	android:scaleType="fitXY"
+    	android:layout_alignParentLeft="true"
+    	android:src="@drawable/ic_launcher" />
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Lite Player Here" />
-
-    
-
+    	android:id="@+id/lite_player_title"
+    	android:layout_marginTop="10dp"
+    	android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+    	android:layout_height="wrap_content"
+    	android:layout_toRightOf="@+id/lite_player_image"
+    	android:layout_width="wrap_content" />
+    <TextView
+    	android:id="@+id/lite_player_subtitle"
+    	android:layout_height="wrap_content"
+    	android:layout_toRightOf="@+id/lite_player_image"
+    	android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+    	android:layout_below="@+id/lite_player_title"
+    	
+    	android:layout_width="wrap_content" />
+    <com.todddavies.components.progressbar.ProgressWheel
+        android:id="@+id/lite_player_progress_bar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        ProgressWheel:barColor="#0097D6"
+        ProgressWheel:barLength="60dp"
+        ProgressWheel:barWidth="7dp"
+        ProgressWheel:rimColor="#330097D6"
+        ProgressWheel:rimWidth="7dp"
+        ProgressWheel:textColor="#222"
+        ProgressWheel:textSize="14sp" />
 </RelativeLayout>

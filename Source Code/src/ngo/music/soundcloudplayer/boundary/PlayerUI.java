@@ -3,7 +3,12 @@ package ngo.music.soundcloudplayer.boundary;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
@@ -17,6 +22,9 @@ public abstract class PlayerUI extends Fragment {
 	TextView currentTimeText;
 	TextView durationText;
 	Runnable runnable;
+	protected int musicProgressBar_id = -1;
+	protected boolean hasTextTime = false;
+	protected View rootView = null;
 
 	public PlayerUI() {
 		// TODO Auto-generated constructor stub
@@ -27,14 +35,16 @@ public abstract class PlayerUI extends Fragment {
 			public void run() {
 				// TODO Auto-generated method stub
 				musicProgressBar.setProgressDegree(degree);
-				currentTimeText.setText(UpdateUiFromServiceController.getInstance()
-						.getCurrentTime());
-				durationText.setText(UpdateUiFromServiceController.getInstance()
-						.getDuration());
+				if (hasTextTime) {
+					currentTimeText.setText(UpdateUiFromServiceController
+							.getInstance().getCurrentTime());
+					durationText.setText(UpdateUiFromServiceController
+							.getInstance().getDuration());
+				}
 			}
 		};
 	}
-
+	
 	/**
 	 * update Title of the song
 	 */
@@ -68,6 +78,19 @@ public abstract class PlayerUI extends Fragment {
 		musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause);
 		updateTitle(title);
 		updateSubTitle(subtitle);
+	}
+	protected void iniMusicProgressBar(){
+		musicProgressBar = (ProgressWheel) rootView
+				.findViewById(musicProgressBar_id);
+		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
+		musicProgressBar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				MusicPlayerService.getInstance().startPause();
+			}
+		});
 	}
 
 }
