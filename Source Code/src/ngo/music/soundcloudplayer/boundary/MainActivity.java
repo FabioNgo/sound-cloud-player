@@ -268,15 +268,15 @@ public class MainActivity extends SlidingFragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.demo, menu);
-		MenuItem item = menu.findItem(R.id.action_toggle);
-		if (mLayout != null) {
-			if (mLayout.isPanelHidden()) {
-				item.setTitle("Action Show");
-			} else {
-				item.setTitle("Action Hide");
-			}
-		}
+//		getMenuInflater().inflate(R.menu.demo, menu);
+//		MenuItem item = menu.findItem(R.id.action_toggle);
+//		if (mLayout != null) {
+//			if (mLayout.isPanelHidden()) {
+//				item.setTitle("Action Show");
+//			} else {
+//				item.setTitle("Action Hide");
+//			}
+//		}
 		return true;
 	}
 

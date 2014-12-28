@@ -56,26 +56,34 @@
 
 	</RelativeLayout>
     
-   <!-- LOWER PART -->
+    <!-- LOWER PART -->
    
    <!-- MY MUSIC -->
-   <RelativeLayout 
-       android:id="@+id/my_music_field"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:layout_below="@+id/frame_avatar"
-        android:layout_alignParentLeft="true" >
 
-       <TextView 
-	       android:id = "@+id/my_music_id"
-	        android:layout_marginLeft="10dp"
-	       android:layout_width = "wrap_content"
-		   android:layout_height = "wrap_content"
-		   android:layout_centerVertical="true"
-		   android:layout_alignParentLeft = "true"
-		   android:textAppearance="?android:attr/textAppearanceLarge"
-		   android:text="@string/my_music"/>
+	<RelativeLayout
+	    android:id = "@+id/my_music_field"
+	    android:layout_below="@+id/frame_avatar"
+	    android:layout_width="wrap_content"
+	    android:clickable="true"
+	    android:layout_alignParentLeft="true"
+	    android:layout_height="wrap_content" >
+
+		<ImageView 
+			    android:id="@+id/my_music_icon"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		      	android:layout_marginLeft="4dp"
+		        android:layout_alignParentLeft="true"
+		        android:src = "@drawable/home_button" />
+		<TextView 
+		       android:id = "@+id/my_music_id"
+		        android:layout_marginLeft="10dp"
+		       android:layout_width = "wrap_content"
+			   android:layout_height = "wrap_content"
+			   android:layout_centerVertical="true"
+			   android:layout_toRightOf="@+id/my_music_icon"
+			   android:textAppearance="?android:attr/textAppearanceLarge"
+			   android:text="@string/my_music"/>
    </RelativeLayout>
    
    <!--  SOUNDCLOUD EXPLORE -->
@@ -87,17 +95,25 @@
         android:clickable="true"
         android:layout_alignParentLeft="true" >
 
+       <ImageView 
+		    android:id="@+id/soundcloud_explore_icon"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	      	android:layout_marginLeft="4dp"
+	        android:layout_alignParentLeft="true"
+	        android:src="@drawable/explore_button" />
        <TextView 
 	       android:id = "@+id/soundcloud_explore_id"
-	        android:layout_marginLeft="10dp"
-	        android:layout_centerVertical="true"
+	       android:layout_toRightOf="@+id/soundcloud_explore_icon"
+	       android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
 		   android:layout_height = "wrap_content"
-		   android:layout_alignParentLeft = "true"
+		   
 		   android:textAppearance="?android:attr/textAppearanceLarge"
 		   android:text="Soundcloud Explore"/>
    </RelativeLayout>
    
+   <!--  LOG OUT -->
    <RelativeLayout 
        android:id="@+id/log_out_field"
         android:layout_width="fill_parent"
@@ -105,15 +121,22 @@
         android:layout_below="@+id/soundcloud_explore_field"
         android:clickable="true"
         android:layout_alignParentLeft="true">
+       <ImageView 
+		    android:id="@+id/logout_icon"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        
+	      	android:layout_marginLeft="4dp"
+	        android:layout_alignParentLeft="true"
+	        android:src = "@drawable/logout_button" />
 	   <TextView 
 	       android:id = "@+id/logout_id"
 	       android:layout_marginLeft="10dp"
-			android:layout_centerVertical="true"
+		   android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
 		   android:layout_height = "wrap_content"
-		   android:layout_alignParentLeft = "true"
+		   android:layout_toRightOf="@+id/logout_icon"
 		   android:textAppearance="?android:attr/textAppearanceLarge"
-		   
 		   android:text = "@string/logout"/>
 	</RelativeLayout>
 </RelativeLayout>

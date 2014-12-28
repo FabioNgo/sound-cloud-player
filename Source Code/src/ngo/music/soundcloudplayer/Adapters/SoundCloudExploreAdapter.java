@@ -109,7 +109,7 @@ public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
 		TextView playBack = (TextView) v.findViewById(R.id.play_count_id);
 		playBack.setText(song.getPlaybackCountString());
 		
-		ImageView download = (ImageView) v.findViewById(R.id.download_count_img);
+		RelativeLayout download = (RelativeLayout) v.findViewById(R.id.download_field);
 		
 		download.setOnClickListener(new OnClickListener() {
 			
@@ -151,7 +151,7 @@ public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
 		 * Set gerne
 		 */
 		TextView gerne = (TextView) v.findViewById(R.id.song_gerne);
-		gerne.setText(song.getGerne());
+		gerne.setText("#"+song.getGerne());
 	}
 
 	/**

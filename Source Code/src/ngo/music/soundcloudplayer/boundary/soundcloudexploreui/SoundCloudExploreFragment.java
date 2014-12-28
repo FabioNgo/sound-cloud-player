@@ -155,7 +155,6 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 			//Set flag so we cant load new items 2 at the same time
 			loadingMore = true;
 			//Reset the array that holds the new items
-			ArrayList<Song> songs;
             SongController songController = SongController.getInstance();
             songController.loadMoreSong(current_page,category);
             current_page++;
@@ -176,7 +175,7 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 			//Loop thru the new items and add them to the adapter
 			SongController songController = SongController.getInstance();
 			ArrayList<Song> songs = songController.getOnlineSongs(category);
-			adapter.setNotifyOnChange(true);
+			//adapter.setNotifyOnChange(true);
 			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs);
 			//songsList.
 			//Tell to the adapter that changes have been made, this will cause the list to refresh
@@ -196,7 +195,7 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 	 */
 	private class BackgroundLoadOnlineMusic extends AsyncTask<String, String, ArrayList<Song>>{
 
-		private ProgressDialog pDialog;
+		
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -206,7 +205,6 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 		protected ArrayList<Song> doInBackground(String... arg) {
 			// TODO Auto-generated method stub
 		
-			
 			ArrayList<Song> songs;
 			SongController songController = SongController.getInstance();
 			 songs = songController.getOnlineSongs(category); 
@@ -215,7 +213,6 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 
 			return songs;
 		}
-		
 		
 		@Override
 		protected void onPostExecute(ArrayList<Song> result) {

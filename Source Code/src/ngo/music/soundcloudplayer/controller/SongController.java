@@ -503,9 +503,10 @@ public class SongController implements Constants, Constants.SongConstants, Const
 
 		private Song song;
 		NotificationCompat.Builder mBuilder;
-		String result;
+		
 		NotificationManager mNotifyManager;
 		int incr;
+		private String result;
 		
 		public downloadSongFromSoundCloud(Song song) {
 			// TODO Auto-generated constructor stub
@@ -520,8 +521,9 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			    .setContentText("Download in progress")
 			    .setSmallIcon(R.drawable.download);
 			mBuilder.setAutoCancel(true);
+			Toast.makeText(MainActivity.getActivity(), "Start download", Toast.LENGTH_LONG).show();
 			   //Displays the progress bar for the first time.
-        	//mNotifyManager.notify(1, mBuilder.build());
+        	mNotifyManager.notify(1, mBuilder.build());
 		}
 		@Override
 		protected String doInBackground(String... params) {
@@ -541,7 +543,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		        URLConnection conection = url.openConnection();
 		        conection.connect();
 		        // getting file length
-		        int lenghtOfFile = conection.getContentLength();
+		       // int lenghtOfFile = conection.getContentLength();
 		        
 		        // input stream to read file - with 8k buffer
 		        InputStream input = new BufferedInputStream(url.openStream());
@@ -550,36 +552,29 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		        String outputName = dir + "/" + song.getTitle() +".mp3";
 	            OutputStream output = new FileOutputStream(outputName);
 	 
-	            byte data[] = new byte[1024];
+	            byte data[] = new byte[2048];
 	 
 	            long total = 0;
 	            
 	            while ((count = input.read(data)) != -1) {
-	             //   total += count;
-	                	//System.out.println ("INCRE " + incr);
-	                	mBuilder.setProgress(0, 0, true);
-	                	mNotifyManager.notify(1, mBuilder.build());
-	                // publishing the progress....
-	            // After this onProgressUpdate will be called
-	            //publishProgress(""+(int)((total*100)/lenghtOfFile));
-	 
-	                // writing data to file
+	                mBuilder.setProgress(0, 0, true);
+	                mNotifyManager.notify(1, mBuilder.build());
 	                output.write(data, 0, count);
 	            }
-	 
+	            result = "Download sucessfully";
 	            // flushing output
 	            output.flush();
 	 
 	            // closing streams
 		        output.close();
 		        input.close();
-		        result = "Download sucessfully";
+		        
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				
 				result = "You are not allowed to download this file";
 			}
-			return null;
+			return result;
 		}
 		
 		@Override
