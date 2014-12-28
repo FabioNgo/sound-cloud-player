@@ -50,7 +50,14 @@ public interface Constants {
 		String PRIMARY_EMAIL_CONFIRMED = "primary_email_confirmed";
 		
 	}
-	
+	interface XMLConstant{
+		String XML_TAG_SONG = "song";
+		String XML_TAG_ID = "id";
+		String XML_TAG_TITLE = "title";
+		String XML_TAG_ARTIST = "artist";
+		String XML_TAG_LINK = "link";
+		String XML_TAG_ALBUM = "author";
+	}
 	interface UIContant{
 		String LAYOUT_WIDTH = "layout_width";
 		String LAYOUT_HEIGHT = "layout_height";

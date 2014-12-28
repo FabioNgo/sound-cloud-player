@@ -127,6 +127,14 @@ public class Song implements Comparable <Song>{
 	}
 	
 
+	public Song(String id, String title, String artist,String album, String link) {
+		// TODO Auto-generated constructor stub
+		setId(id);
+		setTitle(title);
+		setArtist(artist);
+		setLink(link);
+		setAlbum(album);
+	}
 	public String getTitle() {
 		return title;
 	}

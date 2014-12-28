@@ -12,9 +12,12 @@ import java.util.Calendar;
 import java.util.Random;
 import java.util.Stack;
 
+import org.xmlpull.v1.XmlPullParserException;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.controller.SongController;
+import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -40,6 +43,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.format.Time;
 import android.util.Log;
+import android.util.Xml;
 
 import com.facebook.LoginActivity;
 
@@ -113,13 +117,27 @@ public class MusicPlayerService extends IntentService implements
 			currentSongPosition = 0;
 
 		} finally {
-			getSongsFromSDCard();
+			try {
+				songsPlaying = OfflineSongController.getInstance().getSongs();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (XmlPullParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			stackSongplayed = new Stack<Integer>();
 		}
 		UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		iniMediaPlayer();
 		iniNotification();
 		updateNotification(false, R.drawable.ic_media_pause);
+		try {
+			OfflineSongController.getInstance().iniDatabase();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Log.i("inidata",e.getMessage());
+		}
 		// playCurrentSong();
 		// pause();
 
@@ -447,28 +465,28 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	private void storeData() {
-
-		ArrayList<String> data = new ArrayList<String>();
-		data.add(String.valueOf(currentSongPosition));
-		// for (Song song : songsPlaying) {
-		// data.add(song.getId());
-		// }
-		String rawData = "";
-		for (String string2 : data) {
-			rawData += string2 + ",";
-		}
-		BufferedWriter bufferedWriter;
-		try {
-			bufferedWriter = new BufferedWriter(new FileWriter(new File(
-					getApplicationContext().getExternalFilesDir(
-							ACCESSIBILITY_SERVICE), filename)));
-
-			bufferedWriter.write(rawData);
-			bufferedWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+//		ArrayList<String> data = new ArrayList<String>();
+//		data.add(String.valueOf(currentSongPosition));
+//		// for (Song song : songsPlaying) {
+//		// data.add(song.getId());
+//		// }
+//		String rawData = "";
+//		for (String string2 : data) {
+//			rawData += string2 + ",";
+//		}
+//		BufferedWriter bufferedWriter;
+//		try {
+//			bufferedWriter = new BufferedWriter(new FileWriter(new File(
+//					getApplicationContext().getExternalFilesDir(
+//							ACCESSIBILITY_SERVICE), filename)));
+//
+//			bufferedWriter.write(rawData);
+//			bufferedWriter.close();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -491,28 +509,7 @@ public class MusicPlayerService extends IntentService implements
 
 	}
 
-	private void getSongsFromSDCard() {
-		songsPlaying = new ArrayList<Song>();
-		Cursor c = getContentResolver().query(Media.EXTERNAL_CONTENT_URI, null,
-				Media.IS_MUSIC + "!=0", null, null);
-		while (c.moveToNext()) {
-			String url = c.getString(c.getColumnIndex(Media.DATA));
-			if (url.endsWith(".mp3")) {
-				songsPlaying.add(new Song(c));
-			}
-		}
-		c.close();
-		c = getContentResolver().query(Media.INTERNAL_CONTENT_URI, null,
-				Media.IS_MUSIC + "!=0", null, null);
-		while (c.moveToNext()) {
-			String url = c.getString(c.getColumnIndex(Media.DATA));
-			if (url.endsWith(".mp3")) {
-				songsPlaying.add(new Song(c));
-			}
-		}
-
-		c.close();
-	}
+	
 
 	public ArrayList<Song> getSongs() {
 		// TODO Auto-generated method stub
