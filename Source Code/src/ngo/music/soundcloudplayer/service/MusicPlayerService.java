@@ -8,6 +8,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Random;
+import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
@@ -35,6 +38,7 @@ import android.provider.MediaStore.Audio.Media;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.text.format.Time;
 import android.util.Log;
 
 import com.facebook.LoginActivity;
@@ -54,8 +58,11 @@ public class MusicPlayerService extends IntentService implements
 	// super(name);
 	// // TODO Auto-generated constructor stub
 	// }
+	private int loopState = 0;
+	private boolean isShuffle = false;
 	private int musicState;
 	private ArrayList<Song> songsPlaying;
+	private Stack<Integer> stackSongplayed;
 	private final IBinder mBinder = new MusicPlayerServiceBinder();
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
@@ -107,6 +114,7 @@ public class MusicPlayerService extends IntentService implements
 
 		} finally {
 			getSongsFromSDCard();
+			stackSongplayed = new Stack<Integer>();
 		}
 		UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		iniMediaPlayer();
@@ -140,19 +148,38 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	public void playNextSong() {
-		currentSongPosition++;
-		int size = songsPlaying.size();
-		currentSongPosition = currentSongPosition % size;
+		stackSongplayed.push(Integer.valueOf(currentSongPosition));	
+		if (isShuffle) {
+			// TODO Auto-generated method stub
+			Random random = new Random(Calendar.getInstance().getTimeInMillis());
+
+			int size = songsPlaying.size();
+			currentSongPosition = currentSongPosition
+					+ (Math.abs(random.nextInt()) % size) + 1;
+			currentSongPosition = currentSongPosition % size;
+
+		} else {
+			currentSongPosition++;
+			int size = songsPlaying.size();
+			currentSongPosition = currentSongPosition % size;
+
+		}
+		
 		playNewSong(currentSongPosition);
 
 	}
 
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
-		currentSongPosition--;
-		int size = songsPlaying.size();
-		currentSongPosition+=size;
-		currentSongPosition = currentSongPosition % size;
+		
+		if (stackSongplayed.empty()) {
+			currentSongPosition--;
+			int size = songsPlaying.size();
+			currentSongPosition = currentSongPosition % size;
+		} else {
+			
+			currentSongPosition = stackSongplayed.peek().intValue();
+		}
 		playNewSong(currentSongPosition);
 
 	}
@@ -230,7 +257,13 @@ public class MusicPlayerService extends IntentService implements
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
 		mp.reset();
-		playNextSong();
+		if(loopState == MODE_LOOP_ONE){
+			restartSong();
+		}else{
+			playNextSong();	
+		}
+		
+
 		updateNotification(false, R.drawable.ic_media_play);
 	}
 
@@ -284,7 +317,12 @@ public class MusicPlayerService extends IntentService implements
 		// sendBroadcast(TAG_START);
 	}
 
-	public void playNewSong(int position, ArrayList<Song> listSong) {
+	public void playNewSong(int position, ArrayList<Song> listSong,
+			boolean startNow) {
+		if (startNow) {
+			musicState = MUSIC_START;
+		}
+		
 		songsPlaying = listSong;
 		currentSongPosition = position;
 		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_NEW_SONG);
@@ -321,7 +359,7 @@ public class MusicPlayerService extends IntentService implements
 
 	public void playNewSong(int position) {
 
-		playNewSong(position, songsPlaying);
+		playNewSong(position, songsPlaying, false);
 
 		// Builder builder = new Builder(MainActivity.getActivity());
 		// notification = builder.setContentTitle(currentSong.getTitle())
@@ -513,5 +551,37 @@ public class MusicPlayerService extends IntentService implements
 
 	public String getCurrentSongId() {
 		return getCurrentSong().getId();
+	}
+
+	public void restartSong() {
+		mediaPlayer.reset();
+		playNewSong(currentSongPosition);
+	}
+
+	public void setShuffle() {
+		// TODO Auto-generated method stub
+		isShuffle = !isShuffle;
+		UpdateUiFromServiceController.getInstance().updateUI(-1);
+
+	}
+
+	public boolean isShuffle() {
+		return isShuffle;
+	}
+
+	/**
+	 * @return the loopState
+	 */
+	public int getLoopState() {
+		return loopState;
+	}
+
+	/**
+	 * change Loop State
+	 */
+	public void changeLoopState() {
+		loopState++;
+		loopState = loopState % 3;
+		UpdateUiFromServiceController.getInstance().updateUI(-1);
 	}
 }

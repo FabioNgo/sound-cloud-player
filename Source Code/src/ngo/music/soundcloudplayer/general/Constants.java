@@ -112,12 +112,22 @@ public interface Constants {
 		String TRACKS = "tracks";
 	}
 	interface MusicService {
+		/**
+		 * MUSIC CONSTANTS
+		 */
 		int MUSIC_START = 0;
 		int MUSIC_STOP = 1;
 		int MUSIC_PAUSE = 2;
 		int MUSIC_NEW_SONG = 3;
 		int APP_START = 4;
 		int MUSIC_CUR_POINT_CHANGED = 5;
+		/**
+		 * LOOP CONSTANTS
+		 */
+		int MODE_LOOP_NONE = 0;
+		int MODE_LOOP_ALL = 1;
+		int MODE_LOOP_ONE = 2;
+		
 	}
 	
 	interface TabContant{

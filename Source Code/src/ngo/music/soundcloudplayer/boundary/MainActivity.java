@@ -44,15 +44,15 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private static MainActivity activity;
-	private  MusicPlayerService musicPlayerService;
+	private MusicPlayerService musicPlayerService;
 	private Intent musicPlayerServiceIntent;
 	private boolean mBound = false;
 	/*
-	 * If true : Display Fragemnt with tab : Trending Music, Audio......
-	 * If flase: Display Fragment with tab : My music ......
+	 * If true : Display Fragemnt with tab : Trending Music, Audio...... If
+	 * flase: Display Fragment with tab : My music ......
 	 */
 	public static boolean isExplore = false;
-	
+
 	private int defaultTabPosition = 0;
 
 	/**
@@ -88,24 +88,24 @@ public class MainActivity extends SlidingFragmentActivity implements
 		 * get Screen size
 		 */
 		getScreesize();
-		
+
 		activity = this;
 		/*
 		 * Music Player Service
 		 */
 		configMusicPlayerService();
 		// bindService(musicPlayerServiceIntent, mConnection, 0);
-		
+
 		/*
-		 * Sliding Menu 
+		 * Sliding Menu
 		 */
 		configSlidingMenu(savedInstanceState);
-		
+
 		/*
 		 * Sliding Up Panel
 		 */
 		configSlidingUpPanel();
-		
+
 		/*
 		 * Tab Sliding
 		 */
@@ -117,14 +117,16 @@ public class MainActivity extends SlidingFragmentActivity implements
 	 * Get data which transfered from other activity
 	 */
 	private void getDataFromOtherActivity() {
-		try{
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+		try {
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController
+					.getInstance();
 			Token token = soundCloudUserController.getToken();
-			if (token == null) defaultTabPosition = 2;
-			
+			if (token == null)
+				defaultTabPosition = 2;
+
 			Bundle bundle = getIntent().getExtras();
 			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
-			
+
 		} catch (NullPointerException e) {
 
 		}
@@ -137,12 +139,12 @@ public class MainActivity extends SlidingFragmentActivity implements
 		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		FragmentPagerAdapter adapter;
-		if (isExplore){
-			adapter = new SoundCloudExploreTabAdater(getSupportFragmentManager());
-		}else{
+		if (isExplore) {
+			adapter = new SoundCloudExploreTabAdater(
+					getSupportFragmentManager());
+		} else {
 			adapter = new TabsAdapter(getSupportFragmentManager());
 		}
-		
 
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
@@ -214,7 +216,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 			musicPlayerServiceIntent = new Intent(this,
 					MusicPlayerService.class);
 			startService(musicPlayerServiceIntent);
-		}else {
+		} else {
 			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		}
 	}
@@ -268,15 +270,15 @@ public class MainActivity extends SlidingFragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-//		getMenuInflater().inflate(R.menu.demo, menu);
-//		MenuItem item = menu.findItem(R.id.action_toggle);
-//		if (mLayout != null) {
-//			if (mLayout.isPanelHidden()) {
-//				item.setTitle("Action Show");
-//			} else {
-//				item.setTitle("Action Hide");
-//			}
-//		}
+		// getMenuInflater().inflate(R.menu.demo, menu);
+		// MenuItem item = menu.findItem(R.id.action_toggle);
+		// if (mLayout != null) {
+		// if (mLayout.isPanelHidden()) {
+		// item.setTitle("Action Show");
+		// } else {
+		// item.setTitle("Action Hide");
+		// }
+		// }
 		return true;
 	}
 
@@ -345,7 +347,9 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
+		if (isMyServiceRunning()) {
+			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+		}
 		// musicPlayerService = MusicPlayerService.getInstance();
 	}
 

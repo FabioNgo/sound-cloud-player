@@ -35,7 +35,7 @@ public class PlayQueueUI extends Fragment {
 		toolbar.setSubtitle("subtitle");
 		toolbar.inflateMenu(R.menu.global);
 		ImageView full_player_song_image = (ImageView)rootView.findViewById(R.id.play_queue_image);
-		BasicFunctions.ResizeImageView(MainActivity.screenWidth, full_player_song_image);
+		BasicFunctions.ScaleImageViewW(MainActivity.screenWidth, full_player_song_image);
 		
 		return rootView;
 	}

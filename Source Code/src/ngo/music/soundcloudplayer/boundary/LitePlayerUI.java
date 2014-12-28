@@ -44,7 +44,7 @@ public class LitePlayerUI extends PlayerUI {
 		iniMusicProgressBar();
 		
 		ImageView image = (ImageView) rootView.findViewById(R.id.lite_player_image);
-		BasicFunctions.ResizeImageView(container.getLayoutParams().height, image);
+		BasicFunctions.ScaleImageViewH(container.getLayoutParams().height, image);
 		UpdateUiFromServiceController.getInstance().addUiFragment(this);
 		return rootView;
 	}
@@ -64,7 +64,11 @@ public class LitePlayerUI extends PlayerUI {
 				.findViewById(R.id.lite_player_subtitle);
 		subtitle_text.setText(subtitle);
 	}
-	
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

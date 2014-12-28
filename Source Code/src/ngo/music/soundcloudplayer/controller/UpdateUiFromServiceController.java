@@ -8,6 +8,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -37,7 +38,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 		adapters = new ArrayList<ArrayAdapter<Song>>();
 
 	}
-	
+
 	public static UpdateUiFromServiceController getInstance() {
 		if (instance == null) {
 			new UpdateUiFromServiceController();
@@ -57,6 +58,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 			musicProgressBars.add(progressbar);
 		}
 	}
+
 	public void addAdapter(ArrayAdapter<Song> adapter) {
 		if (!adapters.contains(adapter)) {
 			adapters.add(adapter);
@@ -84,7 +86,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				for (PlayerUI ui : uiFragments) {
 					ui.updateMusicProgress();
 				}
-				
+
 			}
 
 			@Override
@@ -111,9 +113,8 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 
 	public void updateUI(final int TAG) {
 		// TODO Auto-generated method stub
-
-		// TODO Auto-generated method stub
-		if (TAG == MUSIC_START) {
+		switch (TAG) {
+		case MUSIC_START:
 			for (ProgressWheel progressbar : musicProgressBars) {
 
 				progressbar.setBackgroundResource(R.drawable.ic_media_pause);
@@ -129,8 +130,8 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				playerUI.play();
 
 			}
-		}
-		if (TAG == MUSIC_PAUSE) {
+			break;
+		case MUSIC_PAUSE:
 			stopTimer();
 			for (PlayerUI playerUI : uiFragments) {
 
@@ -141,8 +142,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				}
 
 			}
-		}
-		if (TAG == APP_START) {
+		case APP_START:
 			for (PlayerUI playerUI : uiFragments) {
 
 				playerUI.updateTitle(MusicPlayerService.getInstance()
@@ -161,8 +161,8 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				}
 
 			}
-		}
-		if (TAG == MUSIC_NEW_SONG) {
+			break;
+		case MUSIC_NEW_SONG:
 			for (PlayerUI playerUI : uiFragments) {
 
 				playerUI.updateTitle(MusicPlayerService.getInstance()
@@ -174,8 +174,9 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 			for (ArrayAdapter<Song> arrayAdapter : adapters) {
 				arrayAdapter.notifyDataSetChanged();
 			}
-		}
-		if (TAG == MUSIC_CUR_POINT_CHANGED) {
+
+			break;
+		case MUSIC_CUR_POINT_CHANGED:
 			for (PlayerUI playerUI : uiFragments) {
 
 				int degree = (int) Math.round(360
@@ -191,9 +192,16 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				}
 
 			}
-		}
 
+			break;
+		default:
+			for (PlayerUI playerUI : uiFragments) {
+				playerUI.update();
+			}
+		}
 	}
+
+	// TODO Auto-generated method stub
 
 	// public void play(Song song) {
 	// // TODO Auto-generated method stub
@@ -229,11 +237,12 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 			musicProgressBars.remove(progressbar);
 		}
 	}
+
 	public void removeAdapter(ArrayAdapter<Song> adapter) {
 		// TODO Auto-generated method stub
 		if (adapters.contains(adapter)) {
 			adapters.remove(adapter);
 		}
 	}
-	
+
 }

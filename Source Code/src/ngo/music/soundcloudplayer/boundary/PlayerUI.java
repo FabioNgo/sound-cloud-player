@@ -89,4 +89,8 @@ public abstract class PlayerUI extends Fragment {
 	public ProgressWheel getProgressBar(){
 		return musicProgressBar;
 	}
+	/**
+	 * Implement other update
+	 */
+	public abstract void update();
 }
