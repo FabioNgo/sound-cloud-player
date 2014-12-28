@@ -13,6 +13,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Http;
@@ -43,18 +44,21 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.volley.api.AppController;
 
 import android.R.integer;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.provider.MediaStore.Audio.Media;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 
-
-
-
 public class SongController implements Constants, Constants.SongConstants, Constants.SoundCloudExploreConstant{
+
+	private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 
 	private static final int NUMBER_CATEGORY = 14;
 	
@@ -62,6 +66,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
 	private static final String TAG_TRACKS_EXPLORE = "tracks";
 	private ArrayList<Song> offlineSong;
+	File dir = null;
 	
 	private ArrayList<ArrayList<Song>> onlineSongs = new ArrayList<ArrayList<Song>>();
 	
@@ -81,6 +86,12 @@ public class SongController implements Constants, Constants.SongConstants, Const
 				instance.initialOnlineSongsList();
 				instance.initialCategoryListLink();
 				instance.getSongsFromSDCard();
+				
+				dir = new File(Environment.getExternalStorageDirectory() + ROOT_DIRECTORY);
+				if(!(dir.exists() && dir.isDirectory())) {
+					System.out.println ("CREATE FOLDER: " + dir.mkdir());
+					
+				}
 			
 				
 				
@@ -193,7 +204,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			HttpResponse resp = wrapper.get(Request.to(uri));
 			JSONObject me = Http.getJSON(resp);
 			// set information of logged user
-			currentSong = addSongInformation(me, wrapper);
+			currentSong = addSongInformation(me);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -292,36 +303,14 @@ public class SongController implements Constants, Constants.SongConstants, Const
 
 	}
 
-	/**
-	 * download song
-	 * 
-	 * @param url
-	 *            stream link of the song
-	 * @param fileName
-	 *            file name of the song want to be named
-	 * @throws IOException
-	 */
-	public void downloadSong(String streamLink, String filename)
-			throws IOException {
 
-		new DownloadFileFromURL(streamLink, filename).execute();
-
-	}
-	
 	private ArrayList<Song> getSongsFromSoundCloud(int currentPage, int category){
 		
 		String urlLink = exploreLinkList[category];
 		String offset = "offset=" + String.valueOf((currentPage-1)*10);
-		System.out.println ("CURRENT CATEGORY = " + category);
-		if (currentPage != 1){
-			urlLink = urlLink.replace("offset=0", offset);
-		}
 		
-		//ArrayList<Song> onlineSongs = new ArrayList<Song>();
-		SoundCloudUserController userController = SoundCloudUserController.getInstance();
-		Token token = userController.getToken();
-		ApiWrapper wrapper =  new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, token);
-		//String me = "";
+		urlLink = urlLink.replace("offset=0", offset);
+		
 		try {
 			
 			/*
@@ -336,14 +325,14 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			
 			JSONObject track = new JSONObject(inputLine);
 			JSONArray listSong = track.getJSONArray(TAG_TRACKS_EXPLORE);
-			
+			ArrayList<Song> song = onlineSongs.get(category);
 			for (int i = 0 ; i< listSong.length(); i++){
 				JSONObject jsonObject = listSong.getJSONObject(i);
 
 				int position =searchId(idList, jsonObject.getString(ID)); 
 				if (position < 0){
 					try{
-						onlineSongs.get(category).add(addSongInformation(jsonObject, wrapper));
+						song.add(addSongInformation(jsonObject));
 						idList.add(- (position + 1), jsonObject.getString(ID));
 					}catch(JSONException e){
 						e.printStackTrace();
@@ -366,7 +355,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	private Song addSongInformation(JSONObject me, ApiWrapper wrapper)
+	private Song addSongInformation(JSONObject me)
 			throws JSONException, IOException {
 		Song song = new Song();
 		
@@ -377,7 +366,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		//song.setCreatedAt(me.getString(CREATED_AT));
 		song.setDescription(me.getString(DESCRIPTION));
 		//song.setDownloadable(me.getBoolean(DOWNLOADABLE));
-		song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
+		//song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
 		//song.setDownloadUrl(me.getString(DOWNLOAD_URL));
 		song.setDuration(me.getLong(DURATION));
 		song.setLikesCount(me.getInt(LIKES_COUNT));
@@ -392,7 +381,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		
 		
 		song.setPlaybackCount(me.getInt(PLAYBACK_COUNT));
-	
+		
 		//song.setRelease(me.getString(RELEASE));
 		//song.setReleaseDay(me.getInt(RELEASE_DAY));
 		//song.setReleaseMonth(me.getInt(RELEASE_MONTH));
@@ -412,6 +401,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		//song.setVideoUrl(me.getString(VIDEO_URL));
 		song.setWaveformUrl(me.getString(WAVEFORM_URL));
 		song.setArtworkUrl(me.getString(ARTWORK_URL));
+		song.setStreamUrl(me.getString(STREAM_URL));
 		SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
 		song.setUser(soundCloudAccount);
 		
@@ -435,101 +425,6 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		return soundCloudAccount;
 	}
 	
-	/**
-	 * Background Async Task to download file
-	 * */
-	class DownloadFileFromURL extends AsyncTask<String, String, String> {
-
-		private static final String STORAGE_FOLDER = "/sdcard/SoundCloudApp/";
-		String filename;
-		String streamUrl;
-
-		public DownloadFileFromURL(String streamUrl, String filename) {
-			// TODO Auto-generated constructor stub
-			this.streamUrl = streamUrl;
-			this.filename = filename;
-		}
-	    /**
-	     * Before starting background thread
-	     * Show Progress Bar Dialog
-	     * */
-	    @Override
-	    protected void onPreExecute() {
-	        super.onPreExecute();
-	     // TODO Auto-generated method stub
-     		
-	        //showDialog(progress_bar_type);
-	    }
-	    
-	    
-	 
-	    /**
-	     * Downloading file in background thread
-	     * */
-	    @Override
-	    protected String doInBackground(String... f_url) {
-	   
-	        int count;
-	        try {
-	            URL url = new URL(f_url[0]);
-	            URLConnection conection = url.openConnection();
-	            conection.connect();
-	            // getting file length
-	            int lenghtOfFile = conection.getContentLength();
-	 
-	            // input stream to read file - with 8k buffer
-	            InputStream input = new BufferedInputStream(url.openStream(), 8192);
-	 
-	            // Output stream to write file
-	            String outputName = STORAGE_FOLDER+ filename;
-	            OutputStream output = new FileOutputStream(outputName);
-	 
-	            byte data[] = new byte[1024];
-	 
-	            long total = 0;
-	 
-	            while ((count = input.read(data)) != -1) {
-	                total += count;
-	                // publishing the progress....
-	                // After this onProgressUpdate will be called
-	                //publishProgress(""+(int)((total*100)/lenghtOfFile));
-	 
-	                // writing data to file
-	                output.write(data, 0, count);
-	            }
-	 
-	            // flushing output
-	            output.flush();
-	 
-	            // closing streams
-	            output.close();
-	            input.close();
-	 
-	        } catch (Exception e) {
-	            Log.e("Error: ", e.getMessage());
-	        }
-	 
-	        return null;
-	    }
-	 
-	    /**
-	     * Updating progress bar
-	     * */
-	    protected void onProgressUpdate(String... progress) {
-	        // setting progress percentage
-	        //pDialog.setProgress(Integer.parseInt(progress[0]));
-	   }
-	 
-	    /**
-	     * After completing background task
-	     * Dismiss the progress dialog
-	     * **/
-	    @Override
-	    protected void onPostExecute(String file_url) {
-	      
-	    }
-	 
-	}
 
 	/**
 	 * add more song to the list
@@ -591,5 +486,114 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			//System.out.println ("CATEGORY  = " +i);
 			getSongsFromSoundCloud(1,i);
 		}
+	}
+
+	/**
+	 * 
+	 * @param id id of the song
+	 * @throws IOException 
+	 */
+	public void downloadSong(Song song) throws IOException {
+		// TODO Auto-generated method stub
+
+		new downloadSongFromSoundCloud(song).execute();
+
+	}
+	private class downloadSongFromSoundCloud extends AsyncTask<String,String,String>{
+
+		private Song song;
+		NotificationCompat.Builder mBuilder;
+		String result;
+		NotificationManager mNotifyManager;
+		int incr;
+		
+		public downloadSongFromSoundCloud(Song song) {
+			// TODO Auto-generated constructor stub
+			this.song = song;
+		}
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			mNotifyManager = (NotificationManager) MainActivity.getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+			mBuilder = new NotificationCompat.Builder(MainActivity.getActivity());
+			mBuilder.setContentTitle("Music Download")
+			    .setContentText("Download in progress")
+			    .setSmallIcon(R.drawable.download);
+			mBuilder.setAutoCancel(true);
+			   //Displays the progress bar for the first time.
+        	//mNotifyManager.notify(1, mBuilder.build());
+		}
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			String streamUrl;
+			
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, soundCloudUserController.getToken());
+			
+				
+			try {
+				streamUrl = wrapper.resolveStreamUrl(song.getStreamUrl(), true).streamUrl;
+			
+		        int count;
+		        
+		        URL url = new URL(streamUrl);
+		        URLConnection conection = url.openConnection();
+		        conection.connect();
+		        // getting file length
+		        int lenghtOfFile = conection.getContentLength();
+		        
+		        // input stream to read file - with 8k buffer
+		        InputStream input = new BufferedInputStream(url.openStream());
+	
+		        // Output stream to write file
+		        String outputName = dir + "/" + song.getTitle() +".mp3";
+	            OutputStream output = new FileOutputStream(outputName);
+	 
+	            byte data[] = new byte[1024];
+	 
+	            long total = 0;
+	            
+	            while ((count = input.read(data)) != -1) {
+	             //   total += count;
+	                	//System.out.println ("INCRE " + incr);
+	                	mBuilder.setProgress(0, 0, true);
+	                	mNotifyManager.notify(1, mBuilder.build());
+	                // publishing the progress....
+	            // After this onProgressUpdate will be called
+	            //publishProgress(""+(int)((total*100)/lenghtOfFile));
+	 
+	                // writing data to file
+	                output.write(data, 0, count);
+	            }
+	 
+	            // flushing output
+	            output.flush();
+	 
+	            // closing streams
+		        output.close();
+		        input.close();
+		        result = "Download sucessfully";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				
+				result = "You are not allowed to download this file";
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// When the loop is finished, updates the notification
+            mBuilder.setContentText("Download complete")
+            // Removes the progress bar
+                    .setProgress(0,0,false);
+            mNotifyManager.notify(1, mBuilder.build());
+            Toast.makeText(MainActivity.getActivity(), result, Toast.LENGTH_LONG).show();
+            
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 }

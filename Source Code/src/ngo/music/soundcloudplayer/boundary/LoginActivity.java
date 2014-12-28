@@ -147,6 +147,7 @@ public class LoginActivity extends FragmentActivity implements Constants.UserCon
 						Intent goToMainActivity  =  new Intent(getApplicationContext(), MainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);
 						startActivity(goToMainActivity);
+						finish();
 					}
 				
 					

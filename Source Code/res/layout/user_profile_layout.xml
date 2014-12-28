@@ -70,9 +70,9 @@
        <TextView 
 	       android:id = "@+id/my_music_id"
 	        android:layout_marginLeft="10dp"
-	       
 	       android:layout_width = "wrap_content"
 		   android:layout_height = "wrap_content"
+		   android:layout_centerVertical="true"
 		   android:layout_alignParentLeft = "true"
 		   android:textAppearance="?android:attr/textAppearanceLarge"
 		   android:text="@string/my_music"/>
@@ -90,6 +90,7 @@
        <TextView 
 	       android:id = "@+id/soundcloud_explore_id"
 	        android:layout_marginLeft="10dp"
+	        android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
 		   android:layout_height = "wrap_content"
 		   android:layout_alignParentLeft = "true"
@@ -107,7 +108,7 @@
 	   <TextView 
 	       android:id = "@+id/logout_id"
 	       android:layout_marginLeft="10dp"
-	
+			android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
 		   android:layout_height = "wrap_content"
 		   android:layout_alignParentLeft = "true"

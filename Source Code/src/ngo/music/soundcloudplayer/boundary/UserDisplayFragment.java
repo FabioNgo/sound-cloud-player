@@ -74,6 +74,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 		 * My Music
 		 */
 		RelativeLayout myMusic = (RelativeLayout) rootView.findViewById(R.id.my_music_field);
+		myMusic.getLayoutParams().height = MainActivity.screenHeight/15;
 		myMusic.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -91,6 +92,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 		 * Soundcloud explore
 		 */
 		RelativeLayout soundCloudExplore = (RelativeLayout) rootView.findViewById(R.id.soundcloud_explore_field);
+		soundCloudExplore.getLayoutParams().height = MainActivity.screenHeight/15;
 		soundCloudExplore.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -109,6 +111,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 		 * Login/Logut
 		 */
 		RelativeLayout logOut = (RelativeLayout) rootView.findViewById(R.id.log_out_field);
+		logOut.getLayoutParams().height = MainActivity.screenHeight/15;
 		SoundCloudUserController userController = SoundCloudUserController.getInstance();
 		
 		if (!userController.isLogin()){

@@ -836,6 +836,21 @@ public class Song implements Comparable <Song>{
 		return temp;
 		
 	}
+	
+	public String getLikeCountString(){
+		String temp = "";
+		String tempStr = String.valueOf(likesCount);
+		int start = tempStr.length()-1;
+		
+		while (start > 3){
+			temp = "," + tempStr.substring(start-3,start ) + temp;
+			start = start -3;
+		}
+		temp = tempStr.substring(0, start) + temp;
+
+		return temp;
+		
+	}
 
 
 	/**
