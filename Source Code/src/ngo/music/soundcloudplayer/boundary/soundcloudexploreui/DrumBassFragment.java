@@ -14,7 +14,7 @@ public class DrumBassFragment extends SoundCloudExploreFragment {
 	
 	private static DrumBassFragment instance = null; 
 
-	private DrumBassFragment(){
+	public DrumBassFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.DRUM_BASS;
 		current_page = 1;

@@ -14,7 +14,7 @@ public class FolkFragment extends SoundCloudExploreFragment {
 	
 	private static FolkFragment instance = null; 
 
-	private FolkFragment(){
+	public FolkFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.FOLK;
 		current_page = 1;

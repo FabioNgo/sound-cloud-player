@@ -14,7 +14,7 @@ public class AlternativeRockFragment extends SoundCloudExploreFragment {
 	
 	private static AlternativeRockFragment instance = null; 
 
-	private AlternativeRockFragment(){
+	public AlternativeRockFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.ALTERNATIVE_ROCK;
 		current_page = 1;

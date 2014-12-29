@@ -4,6 +4,10 @@
 package ngo.music.soundcloudplayer.boundary.soundcloudexploreui;
 
 import ngo.music.soundcloudplayer.general.Constants;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.facebook.FacebookRequestError.Category;
 
@@ -17,10 +21,11 @@ public class TrendingMusicFragment extends SoundCloudExploreFragment {
 	private static TrendingMusicFragment instance = null; 
 
 	
-	private TrendingMusicFragment(){
+	public TrendingMusicFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.TRENDING_MUSIC;
 		current_page = 1;
+	
 	}
 	
 	
@@ -32,7 +37,14 @@ public class TrendingMusicFragment extends SoundCloudExploreFragment {
 			
 		
 		}
+		
 		return instance;
+	}
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 
 }

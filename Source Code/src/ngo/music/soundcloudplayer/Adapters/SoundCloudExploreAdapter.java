@@ -3,6 +3,10 @@ package ngo.music.soundcloudplayer.Adapters;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -19,13 +23,26 @@ import com.volley.api.AppController;
 
 
 
+
+
+
+
+
+
+
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.api.ApiWrapper;
+import ngo.music.soundcloudplayer.api.Http;
+import ngo.music.soundcloudplayer.api.Request;
+import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
+import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -42,18 +59,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
+public class SoundCloudExploreAdapter extends ArrayAdapter<Song> implements Constants {
 	
-	public SoundCloudExploreAdapter(Context context, int resource, ArrayList<Song> onlineSongs) {
-		super(context, resource);
-
-		songs = onlineSongs;
-
-	}
-
+	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
+	protected ApiWrapper wrapper;
+	
 	public static SoundCloudExploreAdapter instance = null;
-	private ArrayList<Song> songs;
-
+	protected ArrayList<Song> songs;
+	
+	public SoundCloudExploreAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
+		super(context, resource);
+		songs = onlineSongs;
+		this.wrapper = wrapper;
+		
+		// TODO Auto-generated constructor stub
+	}
 //	public static OnlineSongAdapter getInstance() {
 //		
 //		if (instance == null) {
@@ -96,21 +116,67 @@ public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
 	 * @param avatar avatar of song
 	 */
 	private void configSongDetail(View v, final Song song, NetworkImageView avatar) {
+
+		/*
+		 * Initial controller
+		 */
+		SoundCloudUserController userController = SoundCloudUserController
+				.getInstance();
+	
+		
 		/*
 		 * Set song detail 
 		 */
 		RelativeLayout songDetail = (RelativeLayout) v.findViewById(R.id.song_info_field);
 		songDetail.getLayoutParams().height = MainActivity.screenHeight/20;
 		
-		TextView likeCount = (TextView) v.findViewById(R.id.like_count_id);
+		/*
+		 * Like this song
+		 */
+		final TextView likeCount = (TextView) v.findViewById(R.id.like_count_id);
 		likeCount.setText(song.getLikeCountString());
+		
+		RelativeLayout likeCountLayout =  (RelativeLayout) v.findViewById(R.id.likes_count_field);
+		likeCountLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if (SoundCloudUserController.getInstance().likeSong(song)){
+					Toast.makeText(getContext(), "You liked this song", Toast.LENGTH_LONG).show();
+					new updateFavoriteCounts(song, likeCount).execute();
+				}else{
+					Toast.makeText(getContext(), "You need to log in to like this song", Toast.LENGTH_LONG).show();
+				}
+			}
+		});
+		
+		ImageView likeIcon = (ImageView) v.findViewById(R.id.likes_count_img);
+		/*
+		 * if not login and not like 
+		 */
+//		if (userController.isLogin()){
+//			//HttpResponse resp = wrapper.get(Request.to(ME_FAVORITE));
+//			//String responseString = 
+//			if (userController.isLiked(song.getSoundcloudId())){
+//				likeIcon.setImageResource(R.drawable.like_button);
+//			}else{
+//				likeIcon.setImageResource(R.drawable.love);
+//			}
+//		}else{
+//			likeIcon.setImageResource(R.drawable.like_button);
+//		}
+		
 		
 		
 		TextView playBack = (TextView) v.findViewById(R.id.play_count_id);
 		playBack.setText(song.getPlaybackCountString());
 		
-		RelativeLayout download = (RelativeLayout) v.findViewById(R.id.download_field);
 		
+		/*
+		 * Download Song 
+		 */
+		RelativeLayout download = (RelativeLayout) v.findViewById(R.id.download_field);
 		download.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -187,7 +253,63 @@ public class SoundCloudExploreAdapter extends ArrayAdapter<Song> {
 		return songs;
 	}
 	
-	
+	private class updateFavoriteCounts extends AsyncTask<String, String, String>{
+
+		
+		private Song song;
+		private TextView likeCount;
+		private JSONObject me;
+		public updateFavoriteCounts(Song song, TextView likeCount) {
+			this.song = song;
+			this.likeCount = likeCount;
+			// TODO Auto-generated constructor stub
+		}
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			/*
+			 * Update count
+			 */
+			
+//			SoundCloudUserController userController = SoundCloudUserController
+//					.getInstance();
+//			Token token = userController.getToken();
+//			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
+//					token);
+
+			/*
+			 * API URL OF THE SONG
+			 */
+			String uri = TRACK_LINK + String.valueOf(song.getSoundcloudId());
+
+			try {
+				HttpResponse resp = wrapper.get(Request.to(uri));
+				me = Http.getJSON(resp);
+				// set information of logged user
+				
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			try {
+				song.setFavoriteCount(me.getInt(SongConstants.FOVORITINGS_COUNT));
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println ("New like count = " + song.getLikeCountString());
+			likeCount.setText(song.getLikeCountString());
+			
+		}
+		
+	}
 	
 
 }

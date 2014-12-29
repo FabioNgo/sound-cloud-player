@@ -46,37 +46,38 @@ public class SoundCloudExploreTabAdater extends FragmentPagerAdapter {
 	@Override
 	public Fragment getItem(int position) {
 		
+	
 		switch (position) {
 		case 0:
-			return TrendingMusicFragment.getInstance();
+			return new TrendingMusicFragment();
 		case 1:
-			return TrendingAudioFragment.getInstance();
+			return new TrendingAudioFragment();
 		case 2:
-			return AlternativeRockFragment.getInstance();
+			return new AlternativeRockFragment();
 		case 3:
-			return AmbientFragment.getInstance();
+			return new AmbientFragment();
 		case 4:
-			return ClassicalFragment.getInstance();
+			return new ClassicalFragment();
 		case 5:
-			return CountryFragment.getInstance();
+			return new CountryFragment();
 		case 6:
-			return DanceFragment.getInstance();
+			return new DanceFragment();
 		case 7:
-			return DeepHouseFragment.getInstance();
+			return new DeepHouseFragment();
 		case 8:
-			return DiscoFragment.getInstance();
+			return new DiscoFragment();
 		case 9:
-			return DrumBassFragment.getInstance();
+			return new DrumBassFragment();
 		case 10:
-			return DubstepFragment.getInstance();
+			return new DubstepFragment();
 		case 11:
-			return ElectroFragment.getInstance();
+			return new ElectroFragment();
 		case 12:
-			return ElectronicFragment.getInstance();
+			return new ElectronicFragment();
 		case 13:
-			return FolkFragment.getInstance();
+			return new FolkFragment();
 		default: 
-			return TrendingMusicFragment.getInstance();
+			return new TrendingMusicFragment();
 		}
 		
 

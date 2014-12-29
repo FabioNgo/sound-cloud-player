@@ -14,7 +14,7 @@ public class CountryFragment extends SoundCloudExploreFragment {
 	
 	private static CountryFragment instance = null; 
 
-	private CountryFragment(){
+	public CountryFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.COUNTRY;
 		current_page = 1;

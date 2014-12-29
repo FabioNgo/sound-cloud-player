@@ -14,7 +14,7 @@ public class DiscoFragment extends SoundCloudExploreFragment {
 	
 	private static DiscoFragment instance = null; 
 
-	private DiscoFragment(){
+	public DiscoFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.DISCO;
 		current_page = 1;

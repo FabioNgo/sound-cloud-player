@@ -14,7 +14,7 @@ public class DanceFragment extends SoundCloudExploreFragment {
 	
 	private static DanceFragment instance = null; 
 
-	private DanceFragment(){
+	public DanceFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.DANCE;
 		current_page = 1;

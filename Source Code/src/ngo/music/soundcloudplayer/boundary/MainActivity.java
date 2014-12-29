@@ -6,6 +6,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
@@ -84,6 +85,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 		setContentView(R.layout.activity_main);
 
+		
 		/*
 		 * Get data from other activity
 		 */
@@ -140,6 +142,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 	 * Tab Sliding
 	 */
 	private void configTabSliding() {
+		
+		System.out.println ("CONFIG TAB SLIDING");
 		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		FragmentPagerAdapter adapter;

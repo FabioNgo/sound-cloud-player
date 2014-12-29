@@ -14,7 +14,7 @@ public class AmbientFragment extends SoundCloudExploreFragment {
 	
 	private static AmbientFragment instance = null; 
 
-	private AmbientFragment(){
+	public AmbientFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.AMBIENT;
 		current_page = 1;

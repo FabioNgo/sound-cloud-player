@@ -40,7 +40,7 @@ public abstract class User {
 	/*
 	 * first and last name	
 	 */
-	protected String fullName;
+	protected String fullName = " ";
 	
 	/*
 	 * city

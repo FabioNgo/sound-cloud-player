@@ -14,7 +14,7 @@ public class DubstepFragment extends SoundCloudExploreFragment {
 	
 	private static DubstepFragment instance = null; 
 
-	private DubstepFragment(){
+	public DubstepFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.DUBSTEP;
 		current_page = 1;

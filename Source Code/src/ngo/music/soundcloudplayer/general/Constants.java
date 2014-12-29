@@ -13,8 +13,10 @@ public interface Constants {
 	public static final String CLIENT_SECRET = "acfe1a475e4d004214fed3326a01eb79";
 	public static final URI REDIRECT_URI     = URI.create("http://localhost:8000");
 	
-	String TRACK_LINK = "api.soundcloud.com/tracks";
-	String USER_LINK = "api.soundcloud.com/users";
+	String TRACK_LINK = "https://api.soundcloud.com/tracks";
+	String USER_LINK = "http://api.soundcloud.com/users";
+	String ME_FAVORITES = "/me/favorites";
+	String ME_MY_STREAM = "/me/tracks";
 	String PLAYLISTS_LINK = "api.soundcloud.com/playlists";
 	
 	public static final int FACEBOOK_USER = 0;

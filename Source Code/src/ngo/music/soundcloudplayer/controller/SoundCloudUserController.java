@@ -5,9 +5,11 @@ package ngo.music.soundcloudplayer.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Connection.Method;
@@ -15,6 +17,7 @@ import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Debug;
 import android.util.Log;
@@ -22,9 +25,11 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Env;
 import ngo.music.soundcloudplayer.api.Http;
+import ngo.music.soundcloudplayer.api.Params;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -36,12 +41,16 @@ import ngo.music.soundcloudplayer.general.Constants;
  *
  */
 public class SoundCloudUserController extends UserController implements Constants.UserContant {
-
-
-
 	
 	private Token t = null;
 	private User currentUser = null;
+	private ApiWrapper wrapper = null;
+	/*
+	 * Response String when resolve me/favorite
+	 */
+	private String responseString = null;
+
+	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
 	/*
 	 *	Singleton Pattern
 	 *	Allow only 1 object is created 
@@ -80,7 +89,7 @@ public class SoundCloudUserController extends UserController implements Constant
 	public User validateLogin (String username , String password){
 
 		
-		ApiWrapper wrapper = new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null,null);
+		wrapper = new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null,null);
 		try {
 			
 			//login
@@ -189,5 +198,159 @@ public class SoundCloudUserController extends UserController implements Constant
 		return t;
 	}
 
+	/**
+	 * like a song 
+	 * @param song song want to be like
+	 * @return false if not login, true if sucess
+	 */
+	public boolean likeSong(Song song){
+		/*
+		 * Havent login
+		 */
+		Token t = getToken();
+		if (t == null) return false;
+		
+		try {
+			return new likeSongBackground().execute(song).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			return false;
+			
+		}
+//		ApiWrapper wrapper = new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null, t);
+//		String request =  "https://api.soundcloud.com/me/favorites/" + song.getSoundcloudId();
+//		System.out.println(request);
+//		try {
+//			wrapper.put(Request.to(request));
+//			HttpResponse resp = wrapper.put(Request.to(request));
+//			System.out.println (resp.getStatusLine());
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return false;
+//		}
+//		return true;
+	}
+	
+	private class likeSongBackground extends AsyncTask<Song, String,Boolean>{
 
+		//private Song song;
+		
+		
+		@Override
+		protected Boolean doInBackground(Song...song) {
+			// TODO Auto-generated method stub
+			ApiWrapper wrapper = getApiWrapper();
+			String request =  ME_FAVORITE + song[0].getSoundcloudId();
+			System.out.println(request);
+			try {
+				wrapper.put(Request.to(request));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		}
+		
+	}
+	
+
+	/**
+	 * check if this user like the given song or not
+	 * @param songID id of Song want to be check
+	 * @param responseString json file of me/favorites
+	 * @return true if liked before, false if not
+	 */
+	public boolean isLiked(int songID){
+		
+		
+		try {
+			return new checkLikedBackground().execute(songID).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}
+//		ApiWrapper wrapper = new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null, t);
+//		String request =  "https://api.soundcloud.com/me/favorites/";
+//		HttpResponse resp;
+//		try {
+//			resp = wrapper.get(Request.to(request));
+//			String me =  Http.getString(resp);
+//			JSONArray array =  new JSONArray(me);
+//			for (int i = 0; i < array.length(); i++) {
+//				JSONObject object  = array.getJSONObject(i);
+//				if (object.getInt(ID) == songID){
+//					return true;
+//				}
+//			}
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//			return true;
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//			return true;
+//		}
+		
+		//return false;
+		//JSONObject me = Http.getJSON(resp);
+		
+		
+		
+		
+	}
+	private class checkLikedBackground extends AsyncTask<Integer, String, Boolean>{
+
+		
+		
+		
+		@Override
+		protected Boolean doInBackground(Integer... params) {
+			// TODO Auto-generated method stub
+			//ApiWrapper wrapper = new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null, t);
+//			String request =  ME_FAVORITE;
+//			HttpResponse resp;
+			try {
+				
+				JSONArray array =  new JSONArray(responseString);
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject object  = array.getJSONObject(i);
+					if (object.getInt(ID) == params[0]){
+						return true;
+					}
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+			return false;
+			
+		}
+		
+	}
+	
+	public String getResponseString (){
+		return responseString;
+	}
+	
+	public void setResponseString(String respStr){
+		responseString = respStr;
+	}
+	
+	public ApiWrapper getApiWrapper(){
+		return new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null, t);
+	}
+	
 }
