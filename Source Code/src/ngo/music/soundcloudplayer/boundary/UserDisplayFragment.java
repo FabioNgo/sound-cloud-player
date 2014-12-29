@@ -1,6 +1,14 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import java.io.IOException;
+
+import org.apache.http.HttpResponse;
+
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.api.ApiWrapper;
+import ngo.music.soundcloudplayer.api.Http;
+import ngo.music.soundcloudplayer.api.Request;
+import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
@@ -9,6 +17,7 @@ import ngo.music.soundcloudplayer.general.CircularImageView;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.imageloader.ImageLoader;
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -21,7 +30,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class UserDisplayFragment extends Fragment implements Constants.UserContant, Constants.UIContant, Constants.TabContant {
+public class UserDisplayFragment extends Fragment implements Constants,Constants.UserContant, Constants.UIContant, Constants.TabContant {
 
 	int layoutWidth;
 	int layoutHeight;
@@ -83,6 +92,12 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 				MainActivity.isExplore = false;
 				Intent i = new Intent(getActivity(), MainActivity.class);
 				i.putExtra(DEFAULT_ID, SONGS);
+				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				SongController songController = SongController.getInstance();
+				songController.loadFavoriteSong();
+				i.putExtra(USER, bundle);
+				
 				startActivity(i);
 				
 				
@@ -192,7 +207,7 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 	private class loadSongBackground extends AsyncTask<String, String, String>{
 
 		ProgressDialog pDialog =  new ProgressDialog(getActivity().getApplicationContext());
-		
+		String stringResponse;
 		
 		@Override
 		protected void onPreExecute() {
@@ -215,6 +230,16 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 			SongController songController = SongController.getInstance();
 			songController.initialSongCategory();
 			
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, soundCloudUserController.getToken());
+			try {
+				HttpResponse resp = wrapper.get(Request.to(ME_FAVORITES));
+				stringResponse = Http.getString(resp);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			return null;
 		}
 		
@@ -224,10 +249,15 @@ public class UserDisplayFragment extends Fragment implements Constants.UserConta
 			MainActivity.isExplore = true;
 			Intent i = new Intent(getActivity(), MainActivity.class);
 			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			soundCloudUserController.setResponseString(stringResponse);
 			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
 			i.putExtra(USER, bundle);
+			i.putExtra(ME_FAVORITES,stringResponse);
+			
 			startActivity(i);
 			
+	
+			 
 			
 			pDialog.dismiss();
 		}

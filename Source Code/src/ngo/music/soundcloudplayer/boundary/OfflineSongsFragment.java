@@ -22,7 +22,7 @@ import android.widget.ListView;
 public class OfflineSongsFragment extends Fragment {
 	public static OfflineSongsFragment instance = null;
 	
-	private OfflineSongsFragment() {
+	public OfflineSongsFragment() {
 		
 	}
 	View rootView = null;

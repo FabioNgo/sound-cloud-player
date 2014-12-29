@@ -14,7 +14,7 @@ public class TrendingAudioFragment extends SoundCloudExploreFragment {
 	
 	private static TrendingAudioFragment instance = null; 
 
-	private TrendingAudioFragment(){
+	public TrendingAudioFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.TRENDING_AUDIO;
 		current_page = 1;

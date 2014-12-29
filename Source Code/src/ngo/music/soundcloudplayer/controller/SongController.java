@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -30,6 +31,11 @@ import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.cmc.music.common.ID3WriteException;
+import org.cmc.music.metadata.IMusicMetadata;
+import org.cmc.music.metadata.MusicMetadata;
+import org.cmc.music.metadata.MusicMetadataSet;
+import org.cmc.music.myid3.MyID3;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,14 +72,24 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
 	private static final String TAG_TRACKS_EXPLORE = "tracks";
 	private ArrayList<Song> offlineSong;
+	private ArrayList<Song> favoriteSong = new ArrayList<Song>();
+	private ArrayList<Song> myStream= new ArrayList<Song>();
 	File dir = null;
+	
+	private boolean isInitialSongCategory = true;
+	private boolean isLoadFavoriteSong = true;
+	public boolean isLoadStream = true;
 	
 	private ArrayList<ArrayList<Song>> onlineSongs = new ArrayList<ArrayList<Song>>();
 	
 	
 	
-	private ArrayList<String> idList = new ArrayList<String>();
+	private ArrayList<Integer> idList = new ArrayList<Integer>();
+	private ArrayList<Integer> favoriteIdList = new ArrayList<Integer>();
+	private ArrayList<Integer> myStreamIdList = new ArrayList<Integer>();
 	public int offset = 0;
+
+	
 	
 	private static SongController instance = null;
 
@@ -83,6 +99,8 @@ public class SongController implements Constants, Constants.SongConstants, Const
 
 			if (instance == null) {
 				instance = this;
+//				instance.loadFavoriteSong();
+//				instance.loadMyStream();
 				instance.initialOnlineSongsList();
 				instance.initialCategoryListLink();
 				instance.getSongsFromSDCard();
@@ -188,17 +206,12 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	public Song getSongFromID(long id) {
 
 		Song currentSong = null;
-		Stream stream = null;
-		SoundCloudUserController userController = SoundCloudUserController
-				.getInstance();
-		Token token = userController.getToken();
-		ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
-				token);
-
+		SoundCloudUserController userController = SoundCloudUserController.getInstance();
+		ApiWrapper wrapper = userController.getApiWrapper();
 		/*
 		 * API URL OF THE SONG
 		 */
-		String uri = "http://api.soundcloud.com/tracks/" + id;
+		String uri = TRACK_LINK + id;
 
 		try {
 			HttpResponse resp = wrapper.get(Request.to(uri));
@@ -228,9 +241,8 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		Stream stream = null;
 		SoundCloudUserController userController = SoundCloudUserController
 				.getInstance();
-		Token token = userController.getToken();
-		ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
-				token);
+		
+		ApiWrapper wrapper = userController.getApiWrapper();
 
 		long id = -1;
 		try {
@@ -329,11 +341,11 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			for (int i = 0 ; i< listSong.length(); i++){
 				JSONObject jsonObject = listSong.getJSONObject(i);
 
-				int position =searchId(idList, jsonObject.getString(ID)); 
+				int position =searchId(idList, jsonObject.getInt(ID)); 
 				if (position < 0){
 					try{
 						song.add(addSongInformation(jsonObject));
-						idList.add(- (position + 1), jsonObject.getString(ID));
+						idList.add(- (position + 1), jsonObject.getInt(ID));
 					}catch(JSONException e){
 						e.printStackTrace();
 					}
@@ -440,7 +452,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * search the Id of song in a list
 	 * 
 	 */
-	private int searchId(ArrayList<String> songidList, String songID){
+	private int searchId(ArrayList<Integer> songidList, int songID){
 		
 		return Collections.binarySearch(songidList,songID);
 	
@@ -481,10 +493,13 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * Load 1st page of each category
 	 */
 	public void initialSongCategory(){
+		if (isInitialSongCategory){
 		//System.out.println ("TEST INITIAL");
-		for (int i = 0 ; i< NUMBER_CATEGORY;i++){
+			for (int i = 0 ; i< NUMBER_CATEGORY;i++){
 			//System.out.println ("CATEGORY  = " +i);
-			getSongsFromSoundCloud(1,i);
+				getSongsFromSoundCloud(1,i);
+			}
+			isInitialSongCategory = false;
 		}
 	}
 
@@ -498,6 +513,22 @@ public class SongController implements Constants, Constants.SongConstants, Const
 
 		new downloadSongFromSoundCloud(song).execute();
 
+	}
+	/**
+	 * @return the favoriteSong
+	 */
+	public ArrayList<Song> getFavoriteSong() {
+		return favoriteSong;
+	}
+
+	
+	/**
+	 * 
+	 * @author LEBAO_000
+	 *
+	 */
+	public ArrayList<Song> getMyStream(){
+		return myStream;
 	}
 	private class downloadSongFromSoundCloud extends AsyncTask<String,String,String>{
 
@@ -523,7 +554,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			mBuilder.setAutoCancel(true);
 			Toast.makeText(MainActivity.getActivity(), "Start download", Toast.LENGTH_LONG).show();
 			   //Displays the progress bar for the first time.
-        	mNotifyManager.notify(1, mBuilder.build());
+        	//mNotifyManager.notify(1, mBuilder.build());
 		}
 		@Override
 		protected String doInBackground(String... params) {
@@ -531,7 +562,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			String streamUrl;
 			
 			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
-			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, soundCloudUserController.getToken());
+			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
 			
 				
 			try {
@@ -549,9 +580,9 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		        InputStream input = new BufferedInputStream(url.openStream());
 	
 		        // Output stream to write file
-		        String outputName = dir + "/" + song.getTitle() +".mp3";
+		        String outputName = dir + "/" + song.getTitle() + "_" + song.getSoundcloudId() + ".mp3";
 	            OutputStream output = new FileOutputStream(outputName);
-	 
+	            
 	            byte data[] = new byte[2048];
 	 
 	            long total = 0;
@@ -561,6 +592,8 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	                mNotifyManager.notify(1, mBuilder.build());
 	                output.write(data, 0, count);
 	            }
+	            
+	            
 	            result = "Download sucessfully";
 	            // flushing output
 	            output.flush();
@@ -568,6 +601,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	            // closing streams
 		        output.close();
 		        input.close();
+		        updateMetaData(outputName,song);
 		        
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -577,6 +611,42 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			return result;
 		}
 		
+		private void updateMetaData(String path, Song song) {
+			
+			File src = new File(path);
+		 	MusicMetadataSet src_set = null;
+            try {
+                src_set = new MyID3().read(src);
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            } // read metadata
+
+            //Perhap no metada
+            if (src_set == null) {
+                Log.i("NULL", "NULL");
+            }
+            else{
+            	File dst = new File(path);
+	            MusicMetadata meta = new MusicMetadata(song.getTitle());
+	            //meta.setAlbum("Chirag");
+	            meta.setArtist(song.getAuthor());
+	            try {
+	                new MyID3().write(src, dst, src_set, meta);
+	            } catch (UnsupportedEncodingException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            } catch (ID3WriteException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            } catch (IOException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }  // write updated metadata
+			// TODO Auto-generated method stub
+            }
+			
+		}
 		@Override
 		protected void onPostExecute(String result) {
 			// When the loop is finished, updates the notification
@@ -590,5 +660,238 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			
 		}
 		
+	}
+	public void loadFavoriteSong() {
+		if (isLoadFavoriteSong){
+			//new loadFavoriteSongBackground().execute();
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			
+			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+			HttpResponse resp;
+			try {
+				resp = wrapper.get(Request.to(ME_FAVORITES));
+				String responseString = Http.getString(resp);
+				JSONArray array =  new JSONArray(responseString);
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject jsonObject  = array.getJSONObject(i);
+					System.out.println ("FAV ID = " + jsonObject.getInt(ID));
+					int position =searchId(favoriteIdList, jsonObject.getInt(ID)); 
+					if (position < 0){
+						try{
+							favoriteSong.add(addSongInformation2(jsonObject));
+							favoriteIdList.add(- (position + 1), jsonObject.getInt(ID));
+						}catch(JSONException e){
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+		// TODO Auto-generated method stub
+		isLoadFavoriteSong = false;
+	}
+	
+	private class loadFavoriteSongBackground extends AsyncTask<String, String, String>{
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			
+			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+			HttpResponse resp;
+			try {
+				resp = wrapper.get(Request.to(ME_FAVORITES));
+				String responseString = Http.getString(resp);
+				JSONArray array =  new JSONArray(responseString);
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject jsonObject  = array.getJSONObject(i);
+					int position =searchId(favoriteIdList, jsonObject.getInt(ID)); 
+					if (position < 0){
+						try{
+							favoriteSong.add(addSongInformation(jsonObject));
+							favoriteIdList.add(- (position + 1), jsonObject.getInt(ID));
+						}catch(JSONException e){
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			isLoadFavoriteSong = false;
+		}
+	}
+	
+	public void loadMyStream() {
+		if (isLoadStream){
+			//new loadMyStreamBackground().execute();
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			
+			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+			HttpResponse resp;
+			try {
+				resp = wrapper.get(Request.to(ME_MY_STREAM));
+				String responseString = Http.getString(resp);
+				//System.out.println (responseString);
+				JSONArray array =  new JSONArray(responseString);
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject jsonObject  = array.getJSONObject(i);
+					int position =searchId(myStreamIdList, jsonObject.getInt(ID)); 
+					if (position < 0){
+						try{
+							myStream.add(addSongInformation2(jsonObject));
+							myStreamIdList.add(- (position + 1), jsonObject.getInt(ID));
+						}catch(JSONException e){
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}
+		// TODO Auto-generated method stub
+		isLoadStream = false;
+	}
+	
+	private class loadMyStreamBackground extends AsyncTask<String, String, String>{
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			
+			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+			HttpResponse resp;
+			try {
+				resp = wrapper.get(Request.to(ME_MY_STREAM));
+				String responseString = Http.getString(resp);
+				JSONArray array =  new JSONArray(responseString);
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject jsonObject  = array.getJSONObject(i);
+					int position =searchId(myStreamIdList, jsonObject.getInt(ID)); 
+					if (position < 0){
+						try{
+							myStream.add(addSongInformation(jsonObject));
+							myStreamIdList.add(- (position + 1), jsonObject.getInt(ID));
+						}catch(JSONException e){
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			isLoadStream = false;
+		}
+
+	}
+	
+	/**
+	 * add information into song entity class
+	 * 
+	 * @param me
+	 * @param wrapper
+	 * @return
+	 * @throws JSONException
+	 * @throws IOException
+	 */
+	private Song addSongInformation2(JSONObject me)
+			throws JSONException, IOException {
+		Song song = new Song();
+		
+		
+		//song.setCommentable(me.getBoolean(COMMENTABLE));
+		//song.setCommentCount(me.getInt(COMMENT_COUNT));
+		//song.setContentSize(me.getLong(CONTENT_SIZE));
+		//song.setCreatedAt(me.getString(CREATED_AT));
+		song.setDescription(me.getString(DESCRIPTION));
+		//song.setDownloadable(me.getBoolean(DOWNLOADABLE));
+		//song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
+		//song.setDownloadUrl(me.getString(DOWNLOAD_URL));
+		song.setDuration(me.getLong(DURATION));
+		song.setFavoriteCount(me.getInt(FOVORITINGS_COUNT));
+		//song.setLikesCount(me.getInt(LIKES_COUNT));
+		//song.setFormat(me.getString(FORMAT));
+		song.setGerne(me.getString(GENRE));
+		//song.setKeySignature(me.getString(KEY_SIGNATURE));
+		//song.setLabelID(me.getInt(LABEL_ID));
+		//song.setLabelName(me.getString(LABEL_NAME));
+		//song.setLicense(me.getString(LICENSE));
+		//song.setPermalink(me.getString(PERMALINK));
+		//song.setPermalinkUrl(me.getString(PERMALINK_URL));
+		
+		
+		song.setPlaybackCount(me.getInt(PLAYBACK_COUNT));
+		
+		//song.setRelease(me.getString(RELEASE));
+		//song.setReleaseDay(me.getInt(RELEASE_DAY));
+		//song.setReleaseMonth(me.getInt(RELEASE_MONTH));
+		//song.setReleaseYear(me.getInt(RELEASE_YEAR));
+		//song.setSharing(me.getString(SHARING));
+		song.setSoundcloudId(me.getInt(ID));
+
+		//song.setStreamable(me.getBoolean(STREAMABLE));
+		
+
+		//song.setStreamable(me.getBoolean(STREAMABLE));
+		song.setTagList(me.getString(TAG_LIST));
+		song.setTitle(me.getString(TITLE));
+		//song.setTrackType(me.getString(TRACK_TYPE));
+		//song.setUri(me.getString(URI));
+		//song.setUserId(me.getInt(USER_ID));
+		//song.setVideoUrl(me.getString(VIDEO_URL));
+		song.setWaveformUrl(me.getString(WAVEFORM_URL));
+		song.setArtworkUrl(me.getString(ARTWORK_URL));
+		song.setStreamUrl(me.getString(STREAM_URL));
+		//SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
+		//song.setUser(soundCloudAccount);
+		SoundCloudAccount soundCloudAccount = new SoundCloudAccount();
+		JSONObject jsonObjectUser = me.getJSONObject(USER);
+		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
+		//soundCloudAccount.setFullName(jsonObjectUser.getString(Constants.UserContant.FULLNAME));
+		soundCloudAccount.setUsername(jsonObjectUser.getString(Constants.UserContant.USERNAME));
+		song.setUser(soundCloudAccount);
+		//Stream stream = wrapper.resolveStreamUrl(me.getString(STREAM_URL), true);
+		//song.setStreamUrl(stream.streamUrl);
+		
+		return song;
 	}
 }

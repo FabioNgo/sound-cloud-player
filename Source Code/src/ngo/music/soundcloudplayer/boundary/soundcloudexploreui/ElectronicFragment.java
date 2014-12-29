@@ -14,7 +14,7 @@ public class ElectronicFragment extends SoundCloudExploreFragment {
 	
 	private static ElectronicFragment instance = null; 
 
-	private ElectronicFragment(){
+	public ElectronicFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.ELECTRONIC;
 		current_page = 1;

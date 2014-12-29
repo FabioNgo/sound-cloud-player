@@ -7,12 +7,15 @@ import java.util.concurrent.ExecutionException;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
+import ngo.music.soundcloudplayer.api.ApiWrapper;
+import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.User;
+import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -29,7 +32,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public abstract class SoundCloudExploreFragment extends Fragment {
+public class SoundCloudExploreFragment extends Fragment  implements Constants{
 	//public static SoundCloudExploreFragment instance = null;
 	
 	 // Flag for current page
@@ -51,6 +54,7 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 //	}
 	protected View rootView = null;
 
+	ApiWrapper wrapper;
 	
 //	public static SoundCloudExploreFragment getInstance() {
 //		// TODO Auto-generated method stub
@@ -66,11 +70,19 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 		
 		rootView = inflater.inflate(R.layout.tab_songs_view, container,false);
 		songsList = (ListView) rootView.findViewById(R.id.songs_list);
-		
+		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+		Token t = soundCloudUserController.getToken();
+		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);
+		//responseString = getArguments().getString(ME_FAVORITES) ;
+				
 		
 		try {
-			ArrayList<Song> songs = new BackgroundLoadOnlineMusic().execute().get();
-			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs);
+			ArrayList<Song> songs;
+			SongController songController = SongController.getInstance();
+			 songs = songController.getOnlineSongs(category); 
+			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
+			System.out.println (songs.size() + "......" + category);
+			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs,wrapper);
 			//adapter.setNotifyOnChange(true);
 			
 			//System.out.println ("CHANGED");
@@ -125,12 +137,6 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 			
 			
 			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 			// TODO: handle exception
@@ -145,9 +151,12 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
+		System.out.println ("RESUMED");
 		super.onResume();
 		adapter.notifyDataSetChanged();
 	}
+	
+	
 	   //Runnable to load the items
 	   private Runnable loadMoreListItems = new Runnable() {
 		@Override
@@ -176,7 +185,7 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 			SongController songController = SongController.getInstance();
 			ArrayList<Song> songs = songController.getOnlineSongs(category);
 			//adapter.setNotifyOnChange(true);
-			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs);
+			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs,wrapper);
 			//songsList.
 			//Tell to the adapter that changes have been made, this will cause the list to refresh
 			//System.out.println ("CHANGED");
@@ -188,39 +197,7 @@ public abstract class SoundCloudExploreFragment extends Fragment {
 	     }
 	   };
 
-	/**
-	 * load online music in backgroud
-	 * @author LEBAO_000
-	 *
-	 */
-	private class BackgroundLoadOnlineMusic extends AsyncTask<String, String, ArrayList<Song>>{
 
-		
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-		
-		}
-		@Override
-		protected ArrayList<Song> doInBackground(String... arg) {
-			// TODO Auto-generated method stub
-		
-			ArrayList<Song> songs;
-			SongController songController = SongController.getInstance();
-			 songs = songController.getOnlineSongs(category); 
-			 
-			//adapter.notifyDataSetChanged();
-
-			return songs;
-		}
-		
-		@Override
-		protected void onPostExecute(ArrayList<Song> result) {
-			// TODO Auto-generated method stub
-			
-		
-		} 
-	}
 
 	
 }

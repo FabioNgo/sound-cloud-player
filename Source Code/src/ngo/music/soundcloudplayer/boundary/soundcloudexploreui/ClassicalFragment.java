@@ -14,7 +14,7 @@ public class ClassicalFragment extends SoundCloudExploreFragment {
 	
 	private static ClassicalFragment instance = null; 
 
-	private ClassicalFragment(){
+	public ClassicalFragment(){
 		super();
 		category  = Constants.SoundCloudExploreConstant.CLASSICAL;
 		current_page = 1;
