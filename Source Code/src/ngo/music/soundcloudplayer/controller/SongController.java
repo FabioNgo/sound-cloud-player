@@ -279,18 +279,20 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			throws ClassNotFoundException, IOException, JSONException {
 
 		final ApiWrapper wrapper = ApiWrapper.fromFile(songFile);
-		System.out.println("Uploading " + songFile);
+//		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+//		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+		
 		try {
 			HttpResponse resp = wrapper.post(Request.to(Endpoints.TRACKS)
-					.add(Params.Track.TITLE, song.getTitle())
-					.add(Params.Track.GENRE, song.getGerne())
-					.add(Params.Track.DESCRIPTION, song.getDescription())
-					.add(Params.Track.SHARING, song.getSharing())
-					.add(Params.Track.PERMALINK, song.getPermalink())
-					.add(Params.Track.RELEASE, song.getRelease())
+					.add(Params.Track.TITLE, "test title")
+				//	.add(Params.Track.GENRE, "test genre")
+				//	.add(Params.Track.DESCRIPTION, "test desc")
+				//	.add(Params.Track.SHARING, "public")
+					//.add(Params.Track.PERMALINK, song.getPermalink())
+					//.add(Params.Track.RELEASE, song.getRelease())
 					.withFile(Params.Track.ASSET_DATA, songFile)
 					// you can add more parameters here, e.g.
-					.withFile(Params.Track.ARTWORK_DATA, artWorkFile)
+					//.withFile(Params.Track.ARTWORK_DATA, artWorkFile)
 					/* to add artwork */
 
 					// set a progress listener (optional)
@@ -300,7 +302,10 @@ public class SongController implements Constants, Constants.SongConstants, Const
 								public void transferred(long amount) {
 									System.err.print(".");
 								}
-							}));
+							}
+					)
+			);
+
 
 			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
 				System.out.println("\n201 Created "
