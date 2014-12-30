@@ -184,12 +184,14 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 */
 		
 
+
 	public ArrayList<Song> getOfflineSongs() {
 		//return MusicPlayerService.getInstance().getSongs();
 		return getSongsFromSDCard();
 		//return offlineSong;
 
 	}
+
 	
 	/**
 	 * Get songs which load from the internet

@@ -1,7 +1,10 @@
 package ngo.music.soundcloudplayer.Adapters;
 
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
@@ -12,6 +15,7 @@ import com.volley.api.AppController;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
+import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -35,7 +39,16 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
-		songs = SongController.getInstance().getOfflineSongs();
+
+		//songs = SongController.getInstance().getOfflineSongs();
+
+		try {
+			songs = OfflineSongController.getInstance().getSongs();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 
 	}
 
@@ -70,7 +83,8 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	 * @param v
 	 */
 	private void setLayoutInformation(int position, View v) {
-		Song song = songs.get(position);
+		Song song = null;
+		song = songs.get(position);
 		/**
 		 * Set avatar for song
 		 */

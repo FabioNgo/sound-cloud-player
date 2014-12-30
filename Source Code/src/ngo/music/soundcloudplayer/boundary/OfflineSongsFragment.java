@@ -41,10 +41,12 @@ public class OfflineSongsFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.list_view, container,false);
 		final ListView songsList = (ListView) rootView.findViewById(R.id.songs_list);
 		
+
 		final OfflineSongAdapter adapter = new OfflineSongAdapter(getActivity(), R.layout.list_view);
 		songsList.setAdapter(adapter);
 		//songsList.setAdapter(new OfflineSongAdapter());
-		UpdateUiFromServiceController.getInstance().addAdapter(adapter);
+		//UpdateUiFromServiceController.getInstance().addAdapter(adapter);
+
 		songsList.setOnItemClickListener(new  OnItemClickListener() {
 
 			@Override
@@ -53,10 +55,12 @@ public class OfflineSongsFragment extends Fragment {
 				// TODO Auto-generated method stub
 				OfflineSongAdapter.getInstance().notifyDataSetChanged();
 				
+
 				Song songSelected = (Song) songsList.getAdapter().getItem(position);
 				ArrayList<Song> songs = adapter.getSongs();
+
 				
-				MusicPlayerService.getInstance().playNewSong(position, songs,true);
+				MusicPlayerService.getInstance().playNewSong(songs.get(position).getId(),true);
 			}
 		});
 		return rootView;

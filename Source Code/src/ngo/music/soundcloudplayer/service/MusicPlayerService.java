@@ -1,33 +1,29 @@
 package ngo.music.soundcloudplayer.service;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.Stack;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
-import ngo.music.soundcloudplayer.controller.SongController;
+import ngo.music.soundcloudplayer.boundary.LoginActivity;
+import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
+import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver;
 import android.app.IntentService;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -36,16 +32,10 @@ import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.os.Binder;
-import android.os.IBinder;
-import android.provider.MediaStore.Audio.Media;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v4.app.TaskStackBuilder;
-import android.text.format.Time;
+import android.support.v4.app.NotificationCompat.Action;
+import android.text.style.BulletSpan;
 import android.util.Log;
-import android.util.Xml;
-
-import com.facebook.LoginActivity;
 
 public class MusicPlayerService extends IntentService implements
 		OnPreparedListener, OnErrorListener, OnCompletionListener,
@@ -65,21 +55,32 @@ public class MusicPlayerService extends IntentService implements
 	private int loopState = 0;
 	private boolean isShuffle = false;
 	private int musicState;
-	private ArrayList<Song> songsPlaying;
-	private Stack<Integer> stackSongplayed;
-	private final IBinder mBinder = new MusicPlayerServiceBinder();
+	private ArrayList<String> songsPlaying;
+	private Stack<String> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
-	private int currentSongPosition = -1;
+	private String currentSongId = "";
 	String filename = "lastPlayingSong";
 
 	public Song getCurrentSong() {
 
-		Song curSong = songsPlaying.get(currentSongPosition);
-		return curSong;
+		Song curSong = null;
+		if (currentSongId.equals("")) {
+			currentSongId = songsPlaying.get(0);
+		}
+		try {
+			curSong = OfflineSongController.getInstance().getSongbyId(
+					currentSongId);
+			return curSong;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+
+		}
+
 	}
 
-	private Notification notification;
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
 	private static MusicPlayerService instance;
@@ -94,17 +95,7 @@ public class MusicPlayerService extends IntentService implements
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		// TODO Auto-generated method stub
-		if (instance == null) {
-			instance = this;
-		}
 
-		return START_STICKY;
-	}
-
-	@Override
-	public void onCreate() {
-		// TODO Auto-generated method stub
 		if (instance == null) {
 			instance = this;
 		}
@@ -112,42 +103,28 @@ public class MusicPlayerService extends IntentService implements
 
 		try {
 			getData();
+
 		} catch (Exception e) {
 			Log.w("getData", e.getMessage());
-			currentSongPosition = 0;
+			// currentSongPosition = 0;
 
 		} finally {
-			try {
-				songsPlaying = OfflineSongController.getInstance().getSongs();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (XmlPullParserException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			stackSongplayed = new Stack<Integer>();
-		}
-		UpdateUiFromServiceController.getInstance().updateUI(APP_START);
-		iniMediaPlayer();
-		iniNotification();
-		updateNotification(false, R.drawable.ic_media_pause);
-		try {
-			OfflineSongController.getInstance().iniDatabase();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.i("inidata",e.getMessage());
-		}
-		// playCurrentSong();
-		// pause();
+			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+			iniMediaPlayer();
+			iniNotification();
+			updateNotification(false, R.drawable.ic_media_pause);
 
+		}
+		super.onStartCommand(intent, flags, startId);
+
+		return START_STICKY;
 	}
 
-	public ArrayList<Song> getSongsPlaying() {
+	public ArrayList<String> getSongsPlaying() {
 		return songsPlaying;
 	}
 
-	public void setSongsPlaying(ArrayList<Song> songsPlaying) {
+	public void setSongsPlaying(ArrayList<String> songsPlaying) {
 		this.songsPlaying = songsPlaying;
 	}
 
@@ -166,12 +143,14 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	public void playNextSong() {
-		stackSongplayed.push(Integer.valueOf(currentSongPosition));	
+		int currentSongPosition = getCurrentPosition(getCurrentSongId());
+		stackSongplayed.push(getCurrentSongId());
 		if (isShuffle) {
 			// TODO Auto-generated method stub
 			Random random = new Random(Calendar.getInstance().getTimeInMillis());
 
 			int size = songsPlaying.size();
+
 			currentSongPosition = currentSongPosition
 					+ (Math.abs(random.nextInt()) % size) + 1;
 			currentSongPosition = currentSongPosition % size;
@@ -182,60 +161,34 @@ public class MusicPlayerService extends IntentService implements
 			currentSongPosition = currentSongPosition % size;
 
 		}
-		
-		playNewSong(currentSongPosition);
+		playNewSong(songsPlaying.get(currentSongPosition));
 
 	}
 
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
-		
-		if (stackSongplayed.empty()) {
-			currentSongPosition--;
+		stackSongplayed.pop();
+		int currentSongPosition = getCurrentPosition(currentSongId);
+		if (stackSongplayed.isEmpty()) {
+
 			int size = songsPlaying.size();
+			currentSongPosition --;
 			currentSongPosition = currentSongPosition % size;
 		} else {
 			
-			currentSongPosition = stackSongplayed.peek().intValue();
+			currentSongPosition = getCurrentPosition(stackSongplayed.peek());
 		}
-		playNewSong(currentSongPosition);
+		playNewSong(songsPlaying.get(currentSongPosition));
 
 	}
 
-	private void iniNotification() {
+	private int getCurrentPosition(String input) {
 		// TODO Auto-generated method stub
-		notification = new Notification();
-
-		Intent notificationIntent = new Intent(getApplicationContext(),
-				LoginActivity.class);
-		PendingIntent contentIntent = PendingIntent.getActivity(
-				getApplicationContext(), 0, notificationIntent, 0);
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(
-				getApplicationContext());
-		notification = builder.setContentIntent(contentIntent)
-				.setSmallIcon(R.drawable.ic_media_play).setTicker("playing")
-				.setWhen(System.currentTimeMillis()).setAutoCancel(true)
-				.build();
-		notification.flags = Notification.FLAG_ONGOING_EVENT;
-		startForeground(NOTIFICATION_ID, notification);
-	}
-
-	@Override
-	public void onDestroy() {
-		// TODO Auto-generated method stub
-		if (mediaPlayer != null) {
-			if (mediaPlayer.isPlaying()) {
-				mediaPlayer.stop();
+		for (int i = 0; i < songsPlaying.size(); i++)
+			if (songsPlaying.get(i).equals(input)) {
+				return i;
 			}
-			mediaPlayer.release();
-		}
-		updateNotification(true, 0);
-	}
-
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return mBinder;
+		return -1;
 	}
 
 	@Override
@@ -275,12 +228,11 @@ public class MusicPlayerService extends IntentService implements
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
 		mp.reset();
-		if(loopState == MODE_LOOP_ONE){
+		if (loopState == MODE_LOOP_ONE) {
 			restartSong();
-		}else{
-			playNextSong();	
+		} else {
+			playNextSong();
 		}
-		
 
 		updateNotification(false, R.drawable.ic_media_play);
 	}
@@ -324,37 +276,36 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	public void playCurrentSong() {
-
+		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_PAUSE) {
 			playMedia();
 
 		} else {
 			musicState = MUSIC_START;
-			playNewSong(currentSongPosition);
+
+			playNewSong(stackSongplayed.peek());
 		}
 		// sendBroadcast(TAG_START);
 	}
 
-	public void playNewSong(int position, ArrayList<Song> listSong,
-			boolean startNow) {
+	public void playNewSong(String songId, boolean startNow) {
 		if (startNow) {
 			musicState = MUSIC_START;
+			stackSongplayed.push(songId);
 		}
-		
-		songsPlaying = listSong;
-		currentSongPosition = position;
+		currentSongId = songId;
 		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_NEW_SONG);
-		updateNotification(false, R.drawable.ic_media_pause);
+		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_START) {
 			try {
 				if (mediaPlayer.isPlaying()) {
 					mediaPlayer.reset();
 				}
-				mediaPlayer.setDataSource(songsPlaying.get(position).getLink());
-				// mediaPlayer.prepareAsync();
+				String link = OfflineSongController.getInstance()
+						.getSongbyId(songId).getLink();
+				mediaPlayer.setDataSource(link);
 
 				mediaPlayer.prepare();
-				storeData();
 			} catch (IllegalArgumentException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -375,13 +326,9 @@ public class MusicPlayerService extends IntentService implements
 
 	}
 
-	public void playNewSong(int position) {
+	public void playNewSong(String id) {
 
-		playNewSong(position, songsPlaying, false);
-
-		// Builder builder = new Builder(MainActivity.getActivity());
-		// notification = builder.setContentTitle(currentSong.getTitle())
-		// .setContentText(currentSong.getLink()).build();
+		playNewSong(id, false);
 
 	}
 
@@ -414,9 +361,22 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	@Override
-	protected void onHandleIntent(Intent arg0) {
+	protected void onHandleIntent(Intent intent) {
 		// TODO Auto-generated method stub
+		if ("dismiss".equals(intent.getAction())) {
+			BasicFunctions.makeToastTake("asd", this);
+			instance.dismissService();
+			stopService(intent);
 
+		}
+	}
+
+	private void dismissService() {
+		// TODO Auto-generated method stub
+		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_PAUSE);
+		mediaPlayer.release();
+		MainActivity.getActivity().finish();
+		stopSelf();
 	}
 
 	private void updateNotification(boolean cancel, int iconID) {
@@ -425,31 +385,55 @@ public class MusicPlayerService extends IntentService implements
 			mNotificationManager.cancelAll();
 			return;
 		}
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-				this).setSmallIcon(iconID)
-				.setContentTitle(getCurrentSong().getTitle())
-				.setContentText(getCurrentSong().getArtist());
-		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(this,
-				ngo.music.soundcloudplayer.boundary.LoginActivity.class);
+		Intent switchIntent = new Intent(this,
+				MusicPlayerBroadcastReceiver.class);
+		switchIntent.setAction("dismiss");
+		PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0,
+				switchIntent, 0);
 
-		// The stack builder object will contain an artificial back stack for
-		// the
-		// started Activity.
-		// This ensures that navigating backward from the Activity leads out of
-		// your application to the Home screen.
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-		// Adds the back stack for the Intent (but not the Intent itself)
-		stackBuilder
-				.addParentStack(ngo.music.soundcloudplayer.boundary.LoginActivity.class);
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
-				PendingIntent.FLAG_UPDATE_CURRENT);
-		mBuilder.setContentIntent(resultPendingIntent);
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-		// mId allows you to update the notification later on.
-		mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+		Action cancelAction = new Action(R.drawable.ic_action_github, "cancel",
+				pendingSwitchIntent);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				this);
+		builder.setContentTitle(getCurrentSong().getTitle());
+		builder.setContentText(getCurrentSong().getArtist());
+		// builder.setNumber(count);
+		builder.setSmallIcon(iconID);
+		builder.addAction(cancelAction);
+
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		// notification.setLatestEventInfo(getApplicationContext(), "hello",
+		// "hello", contentIntent);
+		mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+
+	}
+
+	private void iniNotification() {
+
+		Intent switchIntent = new Intent(this,
+				MusicPlayerBroadcastReceiver.class);
+		switchIntent.setAction("dismiss");
+		PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0,
+				switchIntent, 0);
+
+		Action cancelAction = new Action(R.drawable.ic_action_github, "cancel",
+				pendingSwitchIntent);
+		NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				getApplicationContext());
+		builder.setContentTitle(getCurrentSong().getTitle());
+		builder.setContentText(getCurrentSong().getArtist());
+		// builder.setNumber(count);
+		builder.setSmallIcon(R.drawable.ic_media_pause);
+		builder.addAction(cancelAction);
+		Intent notificationIntent = new Intent(this, LoginActivity.class);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+				notificationIntent, 0);
+		builder.setContentIntent(contentIntent);
+		NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+		// notification.setLatestEventInfo(getApplicationContext(), "hello",
+		// "hello", contentIntent);
+		mNotificationManager.notify(NOTIFICATION_ID, builder.build());
 	}
 
 	public void startPause() {
@@ -464,54 +448,26 @@ public class MusicPlayerService extends IntentService implements
 
 	}
 
-	private void storeData() {
-		
-//		ArrayList<String> data = new ArrayList<String>();
-//		data.add(String.valueOf(currentSongPosition));
-//		// for (Song song : songsPlaying) {
-//		// data.add(song.getId());
-//		// }
-//		String rawData = "";
-//		for (String string2 : data) {
-//			rawData += string2 + ",";
-//		}
-//		BufferedWriter bufferedWriter;
-//		try {
-//			bufferedWriter = new BufferedWriter(new FileWriter(new File(
-//					getApplicationContext().getExternalFilesDir(
-//							ACCESSIBILITY_SERVICE), filename)));
-//
-//			bufferedWriter.write(rawData);
-//			bufferedWriter.close();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
-	}
-
-	private void getData() throws Exception {
-		BufferedReader bufferedReader;
-
-		bufferedReader = new BufferedReader(new FileReader(new File(
-				getApplicationContext().getExternalFilesDir(
-						ACCESSIBILITY_SERVICE), filename)));
-		String read;
-		StringBuilder builder = new StringBuilder("");
-
-		while ((read = bufferedReader.readLine()) != null) {
-			builder.append(read);
+	private void getData() {
+		ArrayList<Song> songs = null;
+		try {
+			songs = OfflineSongController.getInstance().getSongs();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		bufferedReader.close();
-		String[] data = builder.toString().split(",");
+		songsPlaying = new ArrayList<String>();
+		for (Song song : songs) {
+			songsPlaying.add(song.getId());
+		}
 
-		currentSongPosition = Integer.parseInt(data[0]);
-
+		stackSongplayed = OfflineSongController.getInstance().getSongsPlayed();
+		if (stackSongplayed.isEmpty()) {
+			stackSongplayed.add(songsPlaying.get(0));
+		}
 	}
 
-	
-
-	public ArrayList<Song> getSongs() {
+	public ArrayList<String> getSongs() {
 		// TODO Auto-generated method stub
 		return songsPlaying;
 	}
@@ -552,7 +508,7 @@ public class MusicPlayerService extends IntentService implements
 
 	public void restartSong() {
 		mediaPlayer.reset();
-		playNewSong(currentSongPosition);
+		playNewSong(currentSongId);
 	}
 
 	public void setShuffle() {
@@ -581,4 +537,14 @@ public class MusicPlayerService extends IntentService implements
 		loopState = loopState % 3;
 		UpdateUiFromServiceController.getInstance().updateUI(-1);
 	}
+
+	public void cancelNoti() {
+		updateNotification(true, -1);
+	}
+
+	public Stack<String> getStackSongs() {
+		// TODO Auto-generated method stub
+		return stackSongplayed;
+	}
+
 }

@@ -39,7 +39,11 @@
       </action>
       </intent-filter>
    </receiver>
+   <receiver android:name="ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver" >
+		
+		</receiver>
        
     </application>
 
 </manifest>
+

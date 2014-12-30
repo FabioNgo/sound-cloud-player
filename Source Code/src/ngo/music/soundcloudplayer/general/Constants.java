@@ -130,6 +130,7 @@ public interface Constants {
 		int MUSIC_NEW_SONG = 3;
 		int APP_START = 4;
 		int MUSIC_CUR_POINT_CHANGED = 5;
+		int SERVICE_STOP = 6;
 		/**
 		 * LOOP CONSTANTS
 		 */
