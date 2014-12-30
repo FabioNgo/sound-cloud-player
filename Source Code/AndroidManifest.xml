@@ -32,7 +32,7 @@
                 android:screenOrientation="portrait"></activity>
         <activity android:name="ngo.music.soundcloudplayer.boundary.UploadSongActivity"
             		android:screenOrientation="portrait"></activity>
-       <service android:name=".service.MusicPlayerService" />
+       <service android:name="ngo.music.soundcloudplayer.service.MusicPlayerService" />
        <receiver android:name="MainActivity">
       <intent-filter>
          <action android:name="android.intent.action.BOOT_COMPLETED">
