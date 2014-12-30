@@ -42,7 +42,7 @@ public class OfflineSongsFragment extends Fragment {
 		final ListView songsList = (ListView) rootView.findViewById(R.id.songs_list);
 		
 		songsList.setAdapter(OfflineSongAdapter.getInstance());
-		UpdateUiFromServiceController.getInstance().addAdapter(OfflineSongAdapter.getInstance());
+//		UpdateUiFromServiceController.getInstance().addAdapter(OfflineSongAdapter.getInstance());
 		songsList.setOnItemClickListener(new  OnItemClickListener() {
 
 			@Override
@@ -51,10 +51,10 @@ public class OfflineSongsFragment extends Fragment {
 				// TODO Auto-generated method stub
 				OfflineSongAdapter.getInstance().notifyDataSetChanged();
 				
-				Song songSelected = (Song) songsList.getAdapter().getItem(position);
+//				Song songSelected = (Song) songsList.getAdapter().getItem(position);
 				ArrayList<Song> songs = (((OfflineSongAdapter) songsList.getAdapter()).getSongs());
 				
-				MusicPlayerService.getInstance().playNewSong(position, songs,true);
+				MusicPlayerService.getInstance().playNewSong(songs.get(position).getId(),true);
 			}
 		});
 		return rootView;

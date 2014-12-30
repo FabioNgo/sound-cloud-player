@@ -1,34 +1,24 @@
 package ngo.music.soundcloudplayer.boundary;
 
-import java.io.IOException;
-
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
-import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
-import ngo.music.soundcloudplayer.service.MusicPlayerService.MusicPlayerServiceBinder;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,9 +39,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private static MainActivity activity;
-	private MusicPlayerService musicPlayerService;
 	private Intent musicPlayerServiceIntent;
-	private boolean mBound = false;
 	/*
 	 * If true : Display Fragemnt with tab : Trending Music, Audio...... If
 	 * flase: Display Fragment with tab : My music ......
@@ -334,22 +322,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	}
 
 	/** Defines callbacks for service binding, passed to bindService() */
-	private ServiceConnection mConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// We've bound to LocalService, cast the IBinder and get
-			// LocalService instance
-			MusicPlayerServiceBinder binder = (MusicPlayerServiceBinder) service;
-			// musicPlayerService = binder.getService();
-			mBound = true;
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName arg0) {
-			mBound = false;
-		}
-	};
+	
 
 	@Override
 	protected void onResume() {
@@ -379,10 +352,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		if (mBound) {
-			unbindService(mConnection);
-			mBound = false;
-		}
+		
 	}
 
 	private boolean isMyServiceRunning() {

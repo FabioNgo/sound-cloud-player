@@ -181,10 +181,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 */
 		
 
-	public ArrayList<Song> getSongs() {
-		return MusicPlayerService.getInstance().getSongs();
-
-	}
+	
 	
 	/**
 	 * Get songs which load from the internet

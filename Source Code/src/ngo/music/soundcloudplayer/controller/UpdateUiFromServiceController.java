@@ -59,11 +59,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 		}
 	}
 
-	public void addAdapter(ArrayAdapter<Song> adapter) {
-		if (!adapters.contains(adapter)) {
-			adapters.add(adapter);
-		}
-	}
+	
 
 	public void startTimer() {
 
@@ -142,6 +138,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				}
 
 			}
+			break;
 		case APP_START:
 			for (PlayerUI playerUI : uiFragments) {
 
