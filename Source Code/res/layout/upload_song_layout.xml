@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/upload_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Upload Song to SoundCloud"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <RelativeLayout
+        android:id="@+id/upload_layout"
+        android:paddingTop="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upload_title"
+        android:layout_centerHorizontal="true" >
+
+        <!-- UPLOAD LINK -->
+
+        <EditText
+            android:id="@+id/upload_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+
+            <requestFocus />
+        </EditText>
+
+
+        <Button
+            android:id="@+id/upload_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/upload_link"
+            android:layout_toRightOf="@+id/upload_link"
+            android:text="Search File" />
+
+        <!-- SONG TITLE -->
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upload_link"
+            android:layout_below="@+id/upload_link"
+            android:text="*Title:" />
+        
+        <EditText
+            android:id="@+id/upload_title_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upload_link"
+            android:layout_alignRight="@+id/upload_link"
+            android:layout_below="@+id/title_text" >
+
+            <requestFocus />
+        </EditText>
+
+        <!-- DESCRIPTION -->
+
+        <TextView
+            android:id="@+id/descirption_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upload_link"
+            android:layout_below="@+id/upload_title_song"
+            android:text="*Description:" />
+
+        <EditText
+            android:id="@+id/upload_description_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upload_link"
+            android:layout_alignRight="@+id/upload_link"
+            android:layout_below="@+id/descirption_text" >
+
+            <requestFocus />
+        </EditText>
+
+        <!-- TAG -->
+
+        <TextView
+            android:layout_below="@+id/upload_description_song"
+            android:id="@+id/tag_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upload_link"
+            android:text="*Tag:" />
+
+        <EditText
+            android:id="@+id/upload_tag_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upload_link"
+            android:layout_alignRight="@+id/upload_link"
+            android:layout_below="@+id/tag_text" >
+
+            <requestFocus />
+        </EditText>
+        
+        <!-- PRIVACY -->
+        <TextView
+            android:id="@+id/privacy_text"
+            android:layout_below="@+id/upload_tag_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/upload_link"
+            android:text="*Privacy:" />
+        
+        <RadioGroup
+	        android:id="@+id/upload_privacy"
+	        android:layout_below="@+id/privacy_text"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:orientation="horizontal"
+	        android:layout_alignParentLeft="true">
+	
+	        <RadioButton
+	            android:id="@+id/private_radio_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:checked="true"
+	            
+	            android:text="private" />
+	
+	        <RadioButton
+	            android:id="@+id/public_radio_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	             
+	            android:text="public" />
+
+   	 	</RadioGroup>
+   	 	
+        <!--  AVATAR OF SONG -->
+        <RelativeLayout
+	        android:id="@+id/avatar_song_layout"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/upload_privacy" >
+	        
+	        <ImageView 
+	            android:id = "@+id/avatar_upload_image"
+	            android:layout_width="wrap_content"
+	        	android:layout_height="wrap_content"
+	        	android:src="@drawable/ic_launcher"
+	        	android:layout_alignParentLeft="true"/>
+            <Button
+	            android:id="@+id/upload_avatar_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignBaseline="@+id/avatar_upload_image"
+	            android:layout_toRightOf="@+id/avatar_upload_image"
+	            android:text="Choose your avatar" />
+	        	            "
+            </RelativeLayout>
+     	<Button
+	            android:id="@+id/upload_cancel_button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:text="Cancel"
+	            android:layout_below="@+id/avatar_song_layout"
+	            android:layout_alignParentRight="true" />
+
+     	<Button
+     	    android:id="@+id/upload_submit_button"
+     	    android:layout_width="wrap_content"
+     	    android:layout_height="wrap_content"
+     	    android:layout_alignBaseline="@+id/upload_cancel_button"
+     	    android:layout_alignBottom="@+id/upload_cancel_button"
+     	    android:layout_toLeftOf="@+id/upload_cancel_button"
+     	    android:text="Submit" />
+
+    </RelativeLayout>
+
+    
+
+</RelativeLayout>

@@ -79,11 +79,13 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 	 * Config buttons
 	 */
 	private void configButton() {
+		
+		int constantLayoutHeight = MainActivity.screenHeight/15;
 		/*
 		 * My Music
 		 */
 		RelativeLayout myMusic = (RelativeLayout) rootView.findViewById(R.id.my_music_field);
-		myMusic.getLayoutParams().height = MainActivity.screenHeight/15;
+		myMusic.getLayoutParams().height = constantLayoutHeight;
 		myMusic.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -107,7 +109,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		 * Soundcloud explore
 		 */
 		RelativeLayout soundCloudExplore = (RelativeLayout) rootView.findViewById(R.id.soundcloud_explore_field);
-		soundCloudExplore.getLayoutParams().height = MainActivity.screenHeight/15;
+		soundCloudExplore.getLayoutParams().height =constantLayoutHeight;
 		soundCloudExplore.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -126,7 +128,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		 * Login/Logut
 		 */
 		RelativeLayout logOut = (RelativeLayout) rootView.findViewById(R.id.log_out_field);
-		logOut.getLayoutParams().height = MainActivity.screenHeight/15;
+		logOut.getLayoutParams().height =constantLayoutHeight;
 		SoundCloudUserController userController = SoundCloudUserController.getInstance();
 		
 		if (!userController.isLogin()){
@@ -144,6 +146,27 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				databaseHandler.refreshDatabase();
 				Intent loginAct = new Intent(getActivity(), LoginActivity.class);
 				startActivity(loginAct);
+			}
+		});
+		
+		/*
+		 * Upload Button
+		 */
+		RelativeLayout uploadButton = (RelativeLayout) rootView.findViewById(R.id.upload_soundcloud_field);
+		uploadButton.getLayoutParams().height = constantLayoutHeight;
+		if (!userController.isLogin()){
+			uploadButton.setVisibility(View.GONE);
+		}else{
+			uploadButton.setVisibility(View.VISIBLE);
+		}
+		uploadButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				Intent uploadActivity = new Intent(getActivity(), UploadSongActivity.class);
+				startActivity(uploadActivity);
 			}
 		});
 	}

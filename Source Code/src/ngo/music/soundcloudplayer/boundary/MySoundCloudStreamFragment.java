@@ -38,7 +38,7 @@ public class MySoundCloudStreamFragment extends Fragment implements Constants{
 		/*
 		 * Initialize View
 		 */
-		rootView = inflater.inflate(R.layout.tab_songs_view, container,false);
+		rootView = inflater.inflate(R.layout.list_view, container,false);
 		songsList = (ListView) rootView.findViewById(R.id.songs_list);
 		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 		Token t = soundCloudUserController.getToken();
@@ -63,7 +63,7 @@ public class MySoundCloudStreamFragment extends Fragment implements Constants{
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
-			MyStreamAdapter adapter = new MyStreamAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, myStream ,wrapper);
+			MyStreamAdapter adapter = new MyStreamAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, myStream ,wrapper);
 			songsList.setAdapter(adapter);
 		}
 		

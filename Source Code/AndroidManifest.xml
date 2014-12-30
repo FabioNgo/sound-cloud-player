@@ -20,16 +20,18 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="ngo.music.soundcloudplayer.boundary.LoginActivity"
+            android:screenOrientation="portrait"
             android:label="@string/app_name" >
+            
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name="ngo.music.soundcloudplayer.boundary.MainActivity"
-                android:screenOrientation="portrait"
-            ></activity>
+                android:screenOrientation="portrait"></activity>
+        <activity android:name="ngo.music.soundcloudplayer.boundary.UploadSongActivity"
+            		android:screenOrientation="portrait"></activity>
        <service android:name=".service.MusicPlayerService" />
        <receiver android:name="MainActivity">
       <intent-filter>
@@ -37,6 +39,7 @@
       </action>
       </intent-filter>
    </receiver>
+       
     </application>
 
 </manifest>

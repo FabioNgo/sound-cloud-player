@@ -1,5 +1,7 @@
 package ngo.music.soundcloudplayer.entity;
 
+import java.io.File;
+
 import ngo.music.soundcloudplayer.api.Stream;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
@@ -81,7 +83,7 @@ public class Song implements Comparable <Song>{
 	private String trackType =  "";
 	private String keySignature =  "";
 	private String artwork_url = "";
-	
+	private String privacy = "";
 	/**
 	 * beats per minute
 	 */
@@ -114,13 +116,13 @@ public class Song implements Comparable <Song>{
 	 * binary data of the audio file
 	 * only for uploading
 	 */
-	private byte assetData;
+	private File assetData;
 	
 	/**
 	 * binary data of the artwork image
 	 * only for uploading
 	 */
-	private byte artworkData;
+	private File artworkData;
 	
 	public Song() {
 		// TODO Auto-generated constructor stub
@@ -755,7 +757,7 @@ public class Song implements Comparable <Song>{
 	/**
 	 * @return the assetData
 	 */
-	public byte getAssetData() {
+	public File getAssetData() {
 		return assetData;
 	}
 
@@ -763,7 +765,7 @@ public class Song implements Comparable <Song>{
 	/**
 	 * @param assetData the assetData to set
 	 */
-	public void setAssetData(byte assetData) {
+	public void setAssetData(File assetData) {
 		this.assetData = assetData;
 	}
 
@@ -771,7 +773,7 @@ public class Song implements Comparable <Song>{
 	/**
 	 * @return the artworkData
 	 */
-	public byte getArtworkData() {
+	public File getArtworkData() {
 		return artworkData;
 	}
 
@@ -779,7 +781,7 @@ public class Song implements Comparable <Song>{
 	/**
 	 * @param artworkData the artworkData to set
 	 */
-	public void setArtworkData(byte artworkData) {
+	public void setArtworkData(File artworkData) {
 		this.artworkData = artworkData;
 	}
 
@@ -880,6 +882,18 @@ public class Song implements Comparable <Song>{
 		// TODO Auto-generated method stub
 		
 		return id.compareTo(arg0.getId());
+	}
+	/**
+	 * @return the privacy
+	 */
+	public String getPrivacy() {
+		return privacy;
+	}
+	/**
+	 * @param privacy the privacy to set
+	 */
+	public void setPrivacy(String privacy) {
+		this.privacy = privacy;
 	}
 
 }

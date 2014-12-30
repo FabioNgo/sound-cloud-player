@@ -68,7 +68,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		
-		rootView = inflater.inflate(R.layout.tab_songs_view, container,false);
+		rootView = inflater.inflate(R.layout.list_view, container,false);
 		songsList = (ListView) rootView.findViewById(R.id.songs_list);
 		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 		Token t = soundCloudUserController.getToken();
@@ -82,7 +82,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			 songs = songController.getOnlineSongs(category); 
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
 			System.out.println (songs.size() + "......" + category);
-			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs,wrapper);
+			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
 			//adapter.setNotifyOnChange(true);
 			
 			//System.out.println ("CHANGED");
@@ -185,7 +185,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			SongController songController = SongController.getInstance();
 			ArrayList<Song> songs = songController.getOnlineSongs(category);
 			//adapter.setNotifyOnChange(true);
-			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, songs,wrapper);
+			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
 			//songsList.
 			//Tell to the adapter that changes have been made, this will cause the list to refresh
 			//System.out.println ("CHANGED");

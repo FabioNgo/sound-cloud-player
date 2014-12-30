@@ -113,12 +113,39 @@
 		   android:text="Soundcloud Explore"/>
    </RelativeLayout>
    
+    <!--  SOUNDCLOUD EXPLORE -->
+   <RelativeLayout 
+       android:id="@+id/upload_soundcloud_field"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/soundcloud_explore_field"
+        android:clickable="true"
+        android:layout_alignParentLeft="true" >
+
+       <ImageView 
+		    android:id="@+id/upload_soundcloud_icon"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	      	android:layout_marginLeft="4dp"
+	        android:layout_alignParentLeft="true"
+	        android:src="@drawable/upload_button" />
+       <TextView 
+	       android:id = "@+id/upload_soundcloud_id"
+	       android:layout_toRightOf="@+id/upload_soundcloud_icon"
+	       android:layout_centerVertical="true"
+	       android:layout_width = "wrap_content"
+		   android:layout_height = "wrap_content"
+		   
+		   android:textAppearance="?android:attr/textAppearanceLarge"
+		   android:text="Upload Song"/>
+   </RelativeLayout>
+   
    <!--  LOG OUT -->
    <RelativeLayout 
        android:id="@+id/log_out_field"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/soundcloud_explore_field"
+        android:layout_below="@+id/upload_soundcloud_field"
         android:clickable="true"
         android:layout_alignParentLeft="true">
        <ImageView 

@@ -1,6 +1,6 @@
 package ngo.music.soundcloudplayer.Adapters;
 
-import ngo.music.soundcloudplayer.Adapters.Fragments.SingleSwipePageFragment;
+
 import ngo.music.soundcloudplayer.boundary.AlbumsFragment;
 import ngo.music.soundcloudplayer.boundary.ArtistsFragment;
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;

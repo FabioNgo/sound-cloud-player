@@ -32,10 +32,10 @@ import android.widget.TextView;
 public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	private View v;
 
-	private OfflineSongAdapter(Context context, int resource) {
+	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
-		songs = SongController.getInstance().getSongs();
+		songs = SongController.getInstance().getOfflineSongs();
 
 	}
 
@@ -46,7 +46,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 
 		if (instance == null) {
 			instance = new OfflineSongAdapter(MainActivity.getActivity()
-					.getApplicationContext(), R.layout.tab_songs_view);
+					.getApplicationContext(), R.layout.list_view);
 		}
 		return instance;
 	}
@@ -127,6 +127,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 
 	public ArrayList<Song> getSongs() {
 		return songs;
+		
 	}
 
 }
