@@ -126,6 +126,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 					.findViewById(R.id.lite_player_progress_bar);
 			progressWheel.setVisibility(View.INVISIBLE);
 			UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
+			
 		}
 	}
 

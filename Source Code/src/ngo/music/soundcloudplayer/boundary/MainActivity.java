@@ -19,6 +19,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +40,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private static MainActivity activity;
-	private Intent musicPlayerServiceIntent;
 	/*
 	 * If true : Display Fragemnt with tab : Trending Music, Audio...... If
 	 * flase: Display Fragment with tab : My music ......
@@ -66,46 +66,47 @@ public class MainActivity extends SlidingFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
-		View decorView = getWindow().getDecorView();
-		decorView
-				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-
-		setContentView(R.layout.activity_main);
-
 		
-		/*
-		 * Get data from other activity
-		 */
-		getDataFromOtherActivity();
-		/*
-		 * get Screen size
-		 */
-		getScreesize();
 
-		activity = this;
-		/*
-		 * Music Player Service
-		 */
-		configMusicPlayerService();
-		// bindService(musicPlayerServiceIntent, mConnection, 0);
+			View decorView = getWindow().getDecorView();
+			decorView
+					.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
-		/*
-		 * Sliding Menu
-		 */
-		configSlidingMenu(savedInstanceState);
+			setContentView(R.layout.activity_main);
 
-		/*
-		 * Sliding Up Panel
-		 */
-		configSlidingUpPanel();
+			/*
+			 * Get data from other activity
+			 */
+			getDataFromOtherActivity();
+			/*
+			 * get Screen size
+			 */
+			getScreesize();
 
-		/*
-		 * Tab Sliding
-		 */
-		configTabSliding();
-		
-	}
+			activity = this;
+			/*
+			 * Music Player Service
+			 */
+			configMusicPlayerService();
+			// bindService(musicPlayerServiceIntent, mConnection, 0);
+
+			/*
+			 * Sliding Menu
+			 */
+			configSlidingMenu(savedInstanceState);
+
+			/*
+			 * Sliding Up Panel
+			 */
+			configSlidingUpPanel();
+
+			/*
+			 * Tab Sliding
+			 */
+			configTabSliding();
+		}
+
+	
 
 	/**
 	 * Get data which transfered from other activity
@@ -130,8 +131,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 	 * Tab Sliding
 	 */
 	private void configTabSliding() {
-		
-		System.out.println ("CONFIG TAB SLIDING");
+
+		System.out.println("CONFIG TAB SLIDING");
 		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		ViewPager pager = (ViewPager) findViewById(R.id.pager);
 		FragmentPagerAdapter adapter;
@@ -209,7 +210,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	 */
 	private void configMusicPlayerService() {
 		if (!isMyServiceRunning()) {
-			musicPlayerServiceIntent = new Intent(this,
+			Intent musicPlayerServiceIntent = new Intent(this,
 					MusicPlayerService.class);
 			startService(musicPlayerServiceIntent);
 		} else {
@@ -322,15 +323,14 @@ public class MainActivity extends SlidingFragmentActivity implements
 	}
 
 	/** Defines callbacks for service binding, passed to bindService() */
-	
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		if (isMyServiceRunning()) {
-			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
-		}
+//		if (isMyServiceRunning()) {
+//			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+//		}
 		// musicPlayerService = MusicPlayerService.getInstance();
 	}
 
@@ -352,7 +352,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		
+
 	}
 
 	private boolean isMyServiceRunning() {
@@ -361,9 +361,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.getRunningServices(Integer.MAX_VALUE)) {
 			if ("ngo.music.soundcloudplayer.MusicPlayerService"
 					.equals(service.service.getClassName())) {
+				Log.i("service", "Service runing");
 				return true;
 			}
 		}
+		Log.i("service", "Service not runing");
 		return false;
 	}
 }

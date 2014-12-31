@@ -157,7 +157,7 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 					for (ProgressWheel progressbar : musicProgressBars) {
 						int degree = (int) Math.round(360
 								* (double) MusicPlayerService.getInstance()
-										.getTimeLastStop()
+										.getCurrentTime()
 								/ MusicPlayerService.getInstance()
 										.getDuration());
 						progressbar.setProgressDegree(degree);

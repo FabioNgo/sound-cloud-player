@@ -137,6 +137,16 @@ public interface Constants {
 		int MODE_LOOP_NONE = 0;
 		int MODE_LOOP_ALL = 1;
 		int MODE_LOOP_ONE = 2;
+		/**
+		 * NOTIFICATION ACTION
+		 */
+		String NOTI_ACTION_CANCEL = "cancel";
+		String NOTI_ACTION_PLAY_PAUSE = "play/pause";
+		String NOTI_ACTION_PREV = "prev";
+		String NOTI_ACTION_NEXT = "next";
+		String NOTI_ACTION_REW = "rewind";
+		String NOTI_ACTION_FF = "fast forward";
+		
 		
 	}
 	

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -19,11 +20,14 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver;
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -31,19 +35,23 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
+import android.media.session.MediaSession;
+import android.media.session.MediaSessionManager;
 import android.os.Binder;
+import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
+import android.support.v4.app.NotificationCompat.InboxStyle;
+import android.support.v4.app.NotificationCompat.Style;
+import android.support.v4.app.TaskStackBuilder;
 import android.text.style.BulletSpan;
 import android.util.Log;
+import android.widget.MediaController;
 
-public class MusicPlayerService extends IntentService implements
-		OnPreparedListener, OnErrorListener, OnCompletionListener,
-		OnSeekCompleteListener, OnInfoListener, OnBufferingUpdateListener,
-		Constants.MusicService {
+public class MusicPlayerService extends Service implements OnPreparedListener,
+		OnErrorListener, OnCompletionListener, OnSeekCompleteListener,
+		OnInfoListener, OnBufferingUpdateListener, Constants.MusicService {
 	public MusicPlayerService() {
-		super("MusicPlayerService");
-		// TODO Auto-generated constructor stub
 		instance = this;
 
 	}
@@ -61,28 +69,11 @@ public class MusicPlayerService extends IntentService implements
 	private static final int NOTIFICATION_ID = 1;
 	private String currentSongId = "";
 	int timeLastStop = -1; // when the music stopped before
-
-	public Song getCurrentSong() {
-
-		Song curSong = null;
-		if (currentSongId.equals("")) {
-			currentSongId = stackSongplayed.peek();
-		}
-		try {
-			curSong = OfflineSongController.getInstance().getSongbyId(
-					currentSongId);
-			return curSong;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return null;
-
-		}
-
-	}
+	Action[] actions;
 
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
+	private android.media.session.MediaController mediaController;
 	private static MusicPlayerService instance;
 
 	public static MusicPlayerService getInstance() {
@@ -100,7 +91,6 @@ public class MusicPlayerService extends IntentService implements
 			instance = this;
 		}
 		musicState = APP_START;
-
 		try {
 			getData();
 
@@ -111,7 +101,6 @@ public class MusicPlayerService extends IntentService implements
 		} finally {
 
 			iniMediaPlayer();
-			iniNotification();
 			updateNotification(false, R.drawable.ic_media_pause);
 			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 
@@ -119,6 +108,25 @@ public class MusicPlayerService extends IntentService implements
 		super.onStartCommand(intent, flags, startId);
 
 		return START_STICKY;
+	}
+
+	public Song getCurrentSong() {
+
+		Song curSong = null;
+		if (currentSongId.equals("")) {
+			currentSongId = stackSongplayed.peek();
+		}
+		try {
+			curSong = OfflineSongController.getInstance().getSongbyId(
+					currentSongId);
+			return curSong;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Log.e("getCurrentSong", e.getMessage());
+			return null;
+
+		}
+
 	}
 
 	public ArrayList<String> getSongsPlaying() {
@@ -142,31 +150,30 @@ public class MusicPlayerService extends IntentService implements
 			mediaPlayer.reset();
 
 		}
-		
-			String link;
-			
+
+		String link;
+
+		try {
+			link = OfflineSongController.getInstance()
+					.getSongbyId(currentSongId).getLink();
+			mediaPlayer.setDataSource(link);
+			mediaPlayer.prepare();
+
+		} catch (Exception e) {
+			Log.e("iniMedia", e.toString());
 			try {
-				link = OfflineSongController.getInstance().getSongbyId(currentSongId).getLink();
-				mediaPlayer.setDataSource(link);
-				mediaPlayer.prepareAsync();    
-				
-				                             
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e("iniMedia", e.getMessage());
+			} catch (Exception e1) {
+
 			}
-			
-			// fplayNewSong(id);
-		
+		}
+
+		// mManager = (MediaSessionManager)
+		// getSystemService(Context.MEDIA_SESSION_SERVICE);
+		// mSession = mManager.crete
+		// mController = MediaController.fromToken( mSession.getSessionToken()
+		// );
+		// mSession.
 	}
 
 	public void playNextSong() {
@@ -223,10 +230,10 @@ public class MusicPlayerService extends IntentService implements
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		if (musicState != APP_START) {
-			mp.start();
-			UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
-		}
+//		if (musicState != APP_START) {
+//			mp.start();
+//			UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
+//		}
 	}
 
 	private void playMedia() {
@@ -313,11 +320,10 @@ public class MusicPlayerService extends IntentService implements
 			playMedia();
 
 		}
-		if(musicState == APP_START){
+		if (musicState == APP_START) {
 			mediaPlayer.seekTo(timeLastStop);
 			playMedia();
-		}
-		else {
+		} else {
 			musicState = MUSIC_START;
 
 			playNewSong(stackSongplayed.peek());
@@ -325,27 +331,33 @@ public class MusicPlayerService extends IntentService implements
 		// sendBroadcast(TAG_START);
 	}
 
-	public void playNewSong(String songId, boolean startNow) {
+	public void playNewSong(Song song, boolean startNow) {
 		if (startNow) {
+			
 			musicState = MUSIC_START;
-			stackSongplayed.push(songId);
 		}
-		currentSongId = songId;
+		currentSongId = song.getId();
 		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_NEW_SONG);
 		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_START) {
 			try {
-				if (mediaPlayer.isPlaying()) {
-					mediaPlayer.reset();
-				}
-				String link = OfflineSongController.getInstance()
-						.getSongbyId(songId).getLink();
-				mediaPlayer.setDataSource(link);
 
-				mediaPlayer.prepareAsync();
-			} catch ( Exception e){
-				Log.e("PlayNewSong",e.getMessage());
+				mediaPlayer.reset();
+				String link = song.getLink();
+
+				mediaPlayer.setDataSource(link);
+				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+				mediaPlayer.prepare();
+				 mediaPlayer.start();
+			} catch (Exception e) {
+				Log.e("iniMedia", e.toString());
+				try {
+					Log.e("iniMedia", e.getMessage());
+				} catch (Exception e1) {
+
+				}
 			}
+			
 		}
 		// Builder builder = new Builder(MainActivity.getActivity());
 		// notification = builder.setContentTitle(currentSong.getTitle())
@@ -355,7 +367,12 @@ public class MusicPlayerService extends IntentService implements
 
 	public void playNewSong(String id) {
 
-		playNewSong(id, false);
+		try {
+			playNewSong(OfflineSongController.getInstance().getSongbyId(id), false);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
@@ -367,6 +384,9 @@ public class MusicPlayerService extends IntentService implements
 	}
 
 	public int getCurrentTime() {
+		if (musicState == APP_START) {
+			return timeLastStop;
+		}
 		if (mediaPlayer != null) {
 			return mediaPlayer.getCurrentPosition();
 		}
@@ -388,80 +408,52 @@ public class MusicPlayerService extends IntentService implements
 		return false;
 	}
 
-	@Override
-	protected void onHandleIntent(Intent intent) {
-		// TODO Auto-generated method stub
-		if ("dismiss".equals(intent.getAction())) {
-			BasicFunctions.makeToastTake("asd", this);
-			instance.dismissService();
-			stopService(intent);
-
-		}
-	}
-
-	private void dismissService() {
-		// TODO Auto-generated method stub
-		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_PAUSE);
-		mediaPlayer.release();
-		MainActivity.getActivity().finish();
-		stopSelf();
-	}
-
 	private void updateNotification(boolean cancel, int iconID) {
-		if (cancel) {
-			NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-			mNotificationManager.cancelAll();
-			return;
-		}
-		Intent switchIntent = new Intent(this,
-				MusicPlayerBroadcastReceiver.class);
-		switchIntent.setAction("dismiss");
-		PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0,
-				switchIntent, 0);
 
-		Action cancelAction = new Action(R.drawable.ic_action_github, "cancel",
-				pendingSwitchIntent);
+		Intent intent = new Intent(getApplicationContext(),
+				MusicPlayerService.class);
+		intent.setAction(NOTI_ACTION_CANCEL);
+		PendingIntent pendingIntent = PendingIntent.getService(
+				getApplicationContext(), 1, intent, 0);
+		Style style = new Style() {
+		};
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
-				this);
-		builder.setContentTitle(getCurrentSong().getTitle());
-		builder.setContentText(getCurrentSong().getArtist());
-		// builder.setNumber(count);
-		builder.setSmallIcon(iconID);
-		builder.addAction(cancelAction);
+				this).setSmallIcon(iconID)
+				.setContentTitle(getCurrentSong().getTitle())
+				.setContentText(getCurrentSong().getArtist())
+				.setDeleteIntent(pendingIntent).setStyle(style);
 
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		// notification.setLatestEventInfo(getApplicationContext(), "hello",
-		// "hello", contentIntent);
-		mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+		builder.addAction(createAction(R.drawable.ic_media_previous,
+				NOTI_ACTION_PREV));
+		builder.addAction(createAction(R.drawable.play_button,
+				NOTI_ACTION_PLAY_PAUSE));
+		builder.addAction(createAction(R.drawable.ic_media_next,
+				NOTI_ACTION_NEXT));
 
-	}
+		// style.
+		// Creates an explicit intent for an Activity in your app
+		Intent resultIntent = new Intent(this, MainActivity.class);
 
-	private void iniNotification() {
+		// The stack builder object will contain an artificial back stack for
+		// the
+		// started Activity.
+		// This ensures that navigating backward from the Activity leads out of
+		// your application to the Home screen.
+		// TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+		// // Adds the back stack for the Intent (but not the Intent itself)
+		// stackBuilder.addParentStack(MainActivity.class);
+		// // Adds the Intent that starts the Activity to the top of the stack
+		// stackBuilder.addNextIntent(resultIntent);
+		PendingIntent resultPendingIntent = PendingIntent.getActivity(
+				getApplicationContext(), 0, resultIntent, 0);
+		builder.setContentIntent(resultPendingIntent);
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		Notification notification = builder.build();
+		notification.flags |= NotificationCompat.FLAG_ONGOING_EVENT;
+		notification.flags |= NotificationCompat.FLAG_FOREGROUND_SERVICE;
 
-		Intent switchIntent = new Intent(this,
-				MusicPlayerBroadcastReceiver.class);
-		switchIntent.setAction("dismiss");
-		PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0,
-				switchIntent, 0);
-
-		Action cancelAction = new Action(R.drawable.ic_action_github, "cancel",
-				pendingSwitchIntent);
-		NotificationCompat.Builder builder = new NotificationCompat.Builder(
-				getApplicationContext());
-		builder.setContentTitle(getCurrentSong().getTitle());
-		builder.setContentText(getCurrentSong().getArtist());
-		// builder.setNumber(count);
-		builder.setSmallIcon(R.drawable.ic_media_pause);
-		builder.addAction(cancelAction);
-		Intent notificationIntent = new Intent(this, LoginActivity.class);
-		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-		PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-				notificationIntent, 0);
-		builder.setContentIntent(contentIntent);
-		NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-		// notification.setLatestEventInfo(getApplicationContext(), "hello",
-		// "hello", contentIntent);
-		mNotificationManager.notify(NOTIFICATION_ID, builder.build());
+		notificationManager.notify(NOTIFICATION_ID, notification);
+		startForeground(NOTIFICATION_ID, notification);
 	}
 
 	public void startPause() {
@@ -470,6 +462,7 @@ public class MusicPlayerService extends IntentService implements
 		if (musicState != MUSIC_START) {
 
 			playCurrentSong();
+			// playSampleSong();
 		} else {
 			pause();
 		}
@@ -585,8 +578,39 @@ public class MusicPlayerService extends IntentService implements
 		return stackSongplayed;
 	}
 
-	public int getTimeLastStop() {
-		return timeLastStop;
+	private Action createAction(int iconID, String action) {
+		Intent switchIntent = new Intent(this,
+				MusicPlayerBroadcastReceiver.class);
+		switchIntent.setAction(action);
+		PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0,
+				switchIntent, 0);
+
+		Action result = new Action(iconID, "", pendingSwitchIntent);
+		return result;
 	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// private void playSampleSong() {
+	// String link =
+	// "http://download.f9.stream.nixcdn.com/218140e3c556cc12abe5a3dd981f5d05/54a39cd6/NhacCuaTui871/VeThoi-DaLAB-3521629.mp3";
+	//
+	// try {
+	// mediaPlayer = new MediaPlayer();
+	// mediaPlayer.setDataSource(link);
+	// mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+	// musicState = MUSIC_START;
+	// mediaPlayer.prepare();
+	//
+	// } catch (Exception e) {
+	// Log.e("PlayNewSong", e.toString());
+	// }
+	// BasicFunctions.makeToastTake(link, getApplicationContext());
+	//
+	// }
 
 }
