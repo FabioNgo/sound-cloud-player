@@ -154,21 +154,22 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		 */
 		RelativeLayout uploadButton = (RelativeLayout) rootView.findViewById(R.id.upload_soundcloud_field);
 		uploadButton.getLayoutParams().height = constantLayoutHeight;
-		if (!userController.isLogin()){
-			uploadButton.setVisibility(View.GONE);
-		}else{
-			uploadButton.setVisibility(View.VISIBLE);
-		}
-		uploadButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				Intent uploadActivity = new Intent(getActivity(), UploadSongActivity.class);
-				startActivity(uploadActivity);
-			}
-		});
+		uploadButton.setVisibility(View.GONE);
+//		if (!userController.isLogin()){
+//			uploadButton.setVisibility(View.GONE);
+//		}else{
+//			uploadButton.setVisibility(View.VISIBLE);
+//		}
+//		uploadButton.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				
+//				Intent uploadActivity = new Intent(getActivity(), UploadSongActivity.class);
+//				startActivity(uploadActivity);
+//			}
+//		});
 	}
 
 	/**

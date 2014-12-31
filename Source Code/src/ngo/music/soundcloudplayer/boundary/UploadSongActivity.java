@@ -10,8 +10,6 @@ import java.util.HashMap;
 import org.json.JSONException;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.FileAdapter;
-import ngo.music.soundcloudplayer.Adapters.ImageFileAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -58,6 +56,7 @@ public class UploadSongActivity extends Activity implements Constants {
 
 	
 	private static final int PICK_IMAGE = 1;
+	protected static final int PICK_AUDIO = 0;
 	private boolean mIsLargeLayout;
 	String audioFileDir = "";
 	String avatarFileDir = "";
@@ -67,6 +66,10 @@ public class UploadSongActivity extends Activity implements Constants {
 	EditText descEditText;
 	EditText tagEditText;
 	RadioGroup privacy;
+	
+	
+	File audioFile = null;
+	File avatarFile = null;
 	/*
 	 * 0 : LOAD AUDIO
 	 * 1: LOAD IMAGE
@@ -118,9 +121,13 @@ public class UploadSongActivity extends Activity implements Constants {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath();
+				Intent intent = new Intent();
+				intent.setType("audio/*");
+				intent.setAction(Intent.ACTION_GET_CONTENT);
+				startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_AUDIO);
 				
-				showDialog(rootDir);
-				uploadLink.setText(audioFileDir);
+				//showDialog(rootDir);
+				//uploadLink.setText(audioFileDir);
 				
 			}
 		});
@@ -235,200 +242,40 @@ public class UploadSongActivity extends Activity implements Constants {
 		});
 	}
 	
-	private class BrowserAudioFileFragment extends DialogFragment {
-	
-		String currentDir;
-		String fileSelected = "";
-		
-		public BrowserAudioFileFragment(String relativeDir) {
-			// TODO Auto-generated constructor stub
-			super();
-			this.currentDir = relativeDir;
-		}
-	    @Override
-	    public Dialog onCreateDialog(Bundle savedInstanceState) {
-	    	// The only reason you might override this method when using onCreateView() is
-	        // to modify any dialog characteristics. For example, the dialog includes a
-	        // title by default, but your custom layout might not need it. So here you can
-	        // remove the dialog title, but you must call the superclass to get the Dialog.
-	        Dialog dialog = super.onCreateDialog(savedInstanceState);
-	        dialog.setTitle("\t\t\tCHOOSE YOUR AUDIO FILE\t\t\t");
-	        
-	        //dialog.getWindow().getAttributes().width = screenWidth;
-	        getWindow().setLayout(screenWidth, screenHeight);
-	        
-	        //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-	        return dialog;
-	    }
-	    
-	    @Override
-	    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	            Bundle savedInstanceState) {
-	        // Inflate the layout to use as dialog or embedded fragment
-	    	
-	    	
-	    	final HashMap<String, Boolean>  listFiles = getListFiles(currentDir);
-	    	
-	    	
-	    
-	    	View rootView = inflater.inflate(R.layout.file_list_view, container,false);
-	    	
-	    	configDialogListView(listFiles, rootView);
-		
-			configDialogButton(rootView);
-	        return rootView;
-	    }
-		/**
-		 * @param listFiles
-		 * @param rootView
-		 */
-		private void configDialogListView(
-				final HashMap<String, Boolean> listFiles, View rootView) {
-			final FileAdapter adapter = new  FileAdapter(getApplicationContext(),R.layout.file_list_view, listFiles);
-	    	
-	    	
-			//adapter.setNotifyOnChange(true);
-			final ListView filesListView = (ListView) rootView.findViewById(R.id.file_list);
-			
-			//System.out.println ("CHANGED");
-			//adapter.notifyDataSetChanged(); 
-			filesListView.setAdapter(adapter);
-			filesListView.setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View arg1, int position,long id) {
-					// TODO Auto-generated method stub
-					
-					String folderSelected = (String) adapter.getItem(position);
-					//System.out.println (folderSelected);
-					/*
-					 * if is the file
-					 */
-					if (listFiles.get(folderSelected)){
-						
-						audioFileDir = folderSelected;
-						uploadLink.setText(folderSelected);
-						
-					}else{
-						BrowserAudioFileFragment newFragment = new BrowserAudioFileFragment(folderSelected);
-						newFragment.show(getFragmentManager(), "dialog");
-					}
-					getDialog().dismiss();
-					
-					
-					
-				}
-			});
-		}
-		/**
-		 * @param rootView
-		 */
-		private void configDialogButton(View rootView) {
-			Button cancelButton = (Button) rootView.findViewById(R.id.cancel_button);
-			cancelButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					getDialog().dismiss();
-				}
-			});
-			
-			Button backButton = (Button) rootView.findViewById(R.id.back_button);
-			backButton.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					String parrentDir = new File(currentDir).getParent();
-					BrowserAudioFileFragment newFragment;					
-					newFragment = new BrowserAudioFileFragment(parrentDir);
-					newFragment.show(getFragmentManager(), "dialog");
-					getDialog().dismiss();
-				}
-			});
-		}
-	    
-	   
-	  
-	}
-	 private HashMap<String,Boolean> getListFiles(String relativeDir) {
-		 	
-		 	HashMap<String, Boolean> listFiles = new HashMap<String,Boolean>();
-			// TODO Auto-generated method stub
-	    	/*
-	    	 * True : is file
-	    	 * false: is folder
-	    	 */
-			
-			File dir = new File(relativeDir);
-			File[] directoryListing  = dir.listFiles();
-			for (File f : directoryListing){
-			
-					if (f.isDirectory()){
-						listFiles.put(f.getAbsolutePath(), false);
-					}else{
-						if (f.getName().endsWith(".mp3") ||f.getName().endsWith(".wav")){
-							listFiles.put(f.getAbsolutePath(), true);
-						}
-					}
-				
-			
-			}
-			
-			
-			return listFiles; 
-	}
-	    	   
-	  
-	
-	public void showDialog(String rootDir) {
-	    FragmentManager fragmentManager = getFragmentManager();
-	    
-	    	BrowserAudioFileFragment newFragment = new BrowserAudioFileFragment(rootDir);
-	    
-	   // if (mIsLargeLayout) {
-	        // The device is using a large layout, so show the fragment as a dialog
-	        newFragment.show(fragmentManager, "dialog");
-
-	        
-			
-	     
-	        
-//	    } else {
-//	        // The device is smaller, so show the fragment fullscreen
-//	        FragmentTransaction transaction = fragmentManager.beginTransaction();
-//	        // For a little polish, specify a transition animation
-//	        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-//	        // To make it fullscreen, use the 'content' root view as the container
-//	        // for the fragment, which is always the root view for the activity
-//	        transaction.add(android.R.id.content, newFragment)
-//	                   .addToBackStack(null).commit();
-//	    }
-	}
 	
 	/**
 	 * To get image selected from gallery
 	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	    if(requestCode == PICK_IMAGE && data != null && data.getData() != null && resultCode == Activity.RESULT_OK) {
-	        Uri _uri = data.getData();
-
-	        InputStream stream = null;
-			try {
-				stream = getContentResolver().openInputStream(_uri);
-				   Bitmap bitmap = BitmapFactory.decodeStream(stream);
-		            stream.close();
-		            avatarImg.setImageBitmap(bitmap);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-         
+	    if(data != null && data.getData() != null && resultCode == Activity.RESULT_OK) {
+	    	if (requestCode == PICK_IMAGE) { 
+		        Uri _uri = data.getData();
+		        avatarFileDir = _uri.getPath();
+		        
+		        InputStream stream = null;
+				try {
+					stream = getContentResolver().openInputStream(_uri);
+					   Bitmap bitmap = BitmapFactory.decodeStream(stream);
+			            stream.close();
+			            avatarImg.setImageBitmap(bitmap);
+			            avatarFile = new File(avatarFileDir);
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	    	}
+	    	
+	    	if (requestCode == PICK_AUDIO){
+		        Uri _uri = data.getData();
+		        String uri = _uri.getPath();
+		    	
+				audioFile =  new File(uri);
+				audioFileDir = uri;
+	    	}
 	
 	       
 	    }
@@ -452,8 +299,7 @@ public class UploadSongActivity extends Activity implements Constants {
 		@Override
 		protected String doInBackground(File... params) {
 			// TODO Auto-generated method stub
-			String fileDir = uploadLink.getText().toString();
-			File audioFile = new File(fileDir);
+			
 			String title = titleEditText.getText().toString();
 			String desc = descEditText.getText().toString();
 			String tag = tagEditText.getText().toString();
@@ -471,7 +317,7 @@ public class UploadSongActivity extends Activity implements Constants {
 				//}
 			}
 			
-			File avatarFile = new File(avatarFileDir);
+			
 			
 			/*
 			 * Set data to song
