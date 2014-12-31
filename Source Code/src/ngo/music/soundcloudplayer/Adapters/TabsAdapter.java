@@ -16,7 +16,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 
 	private final String[] TITLES = { "My Streams", "My Favorites", "Offline Songs",
-			"Playlists", "Genres", "Sub Genres", "Users", "About Us" };
+			"Playlists", "Albunm", "My Followings", "My Followers", "About Us" };
 
 	public TabsAdapter(FragmentManager fm) {
 		super(fm);

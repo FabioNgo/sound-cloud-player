@@ -12,11 +12,14 @@ import com.todddavies.components.progressbar.ProgressWheel;
 import com.volley.api.AppController;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.UploadSongActivity;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.entity.FolderFile;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,6 +35,7 @@ public class FileAdapter extends ArrayAdapter<String> {
 
 	HashMap<String, Boolean> listFiles = new HashMap<String, Boolean>();
 	ArrayList<String> linkOfFiles = new ArrayList<String>();
+	int type;
 	/**
 	 * @param context
 	 * @param resource
@@ -42,6 +46,7 @@ public class FileAdapter extends ArrayAdapter<String> {
 		super(context, resource);
 		this.listFiles = dir;
 		linkOfFiles = new ArrayList<String>(dir.keySet());
+		
 		
 		// TODO Auto-generated constructor stub
 	}
@@ -66,12 +71,16 @@ public class FileAdapter extends ArrayAdapter<String> {
 		 * Set avatar for song
 		 */
 		ImageView fileIcon = (ImageView) v.findViewById(R.id.file_icon);
+		fileIcon.getLayoutParams().height = MainActivity.screenHeight/20;
+		fileIcon.getLayoutParams().width = MainActivity.screenHeight/20;
 
 		/*
 		 * If is file
 		 */
 		if (listFiles.get(fileDir)){
+		
 			fileIcon.setImageResource(R.drawable.file_button);
+			
 		}else{
 			fileIcon.setImageResource(R.drawable.folder_button);
 		}
@@ -80,6 +89,7 @@ public class FileAdapter extends ArrayAdapter<String> {
 		 * Set title
 		 */
 		TextView fileName = (TextView) v.findViewById(R.id.file_name);
+		fileName.setTextSize(MainActivity.screenHeight/150);
 		 String temp [] = fileDir.split("/");
 		 
 		fileName.setText(temp[temp.length-1]);
@@ -100,3 +110,4 @@ public class FileAdapter extends ArrayAdapter<String> {
 
 
 }
+
