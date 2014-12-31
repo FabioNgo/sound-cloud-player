@@ -59,8 +59,6 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 		}
 	}
 
-	
-
 	public void startTimer() {
 
 		timer = new CountDownTimer(MusicPlayerService.getInstance()
@@ -155,6 +153,17 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 						progressbar
 								.setBackgroundResource(R.drawable.ic_media_pause);
 					}
+				} else {
+					for (ProgressWheel progressbar : musicProgressBars) {
+						int degree = (int) Math.round(360
+								* (double) MusicPlayerService.getInstance()
+										.getTimeLastStop()
+								/ MusicPlayerService.getInstance()
+										.getDuration());
+						progressbar.setProgressDegree(degree);
+						progressbar
+								.setBackgroundResource(R.drawable.ic_media_play);
+					}
 				}
 
 			}
@@ -239,6 +248,12 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		if (adapters.contains(adapter)) {
 			adapters.remove(adapter);
+		}
+	}
+
+	public void addAdapter(ArrayAdapter<Song> adapter) {
+		if (!adapters.contains(adapter)) {
+			adapters.add(adapter);
 		}
 	}
 

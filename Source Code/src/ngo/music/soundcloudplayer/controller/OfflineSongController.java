@@ -22,12 +22,12 @@ import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
 import android.util.JsonReader;
 import android.util.JsonWriter;
+import android.util.Log;
 
 public class OfflineSongController implements Constants.XMLConstant {
 	private String filename1 = "songs.xml";
 	private String filename2 = "stackSong.xml";
 	private static OfflineSongController instance = null;
-
 	public static OfflineSongController getInstance() {
 		if (instance == null) {
 			instance = new OfflineSongController();
@@ -107,6 +107,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 		writePlayedSongs(songs, jsonWriter, curTime);
 		jsonWriter.close();
 	}
+
 	private void writePlayedSongs(Stack<String> stackSongplayed,
 			JsonWriter jsonWriter, int currentTIme) throws IOException {
 		// TODO Auto-generated method stub
@@ -120,6 +121,8 @@ public class OfflineSongController implements Constants.XMLConstant {
 			if (flag) {
 				jsonWriter.value(currentTIme);
 				flag = false;
+			} else {
+				jsonWriter.value(0);
 			}
 
 			jsonWriter.endObject();
@@ -127,11 +130,13 @@ public class OfflineSongController implements Constants.XMLConstant {
 
 		jsonWriter.endArray();
 	}
+
 	/**
 	 * get stack of songs played
+	 * 
 	 * @return
 	 */
-	public Stack<String> getSongsPlayed() {
+	public Stack<Object[]> getSongsPlayed() {
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename2);
@@ -143,73 +148,44 @@ public class OfflineSongController implements Constants.XMLConstant {
 				e.printStackTrace();
 			}
 		}
-		Stack<String> songs = new Stack<String>();
+		
+		Stack<Object[]> songs = new Stack<Object[]>();
+		
 		try {
 			FileInputStream fileReader = new FileInputStream(file);
 			JsonReader reader = new JsonReader(
 					new InputStreamReader(fileReader));
 
 			String id = null;
-			reader.beginObject();
-			while (reader.hasNext()) {
-				String name1 = reader.nextName();
+			reader.beginArray();
 
-				if (name1.equals("songsPlayed")) {
-					reader.beginArray();
-					while (reader.hasNext()) {
-						id = reader.nextName();
-						songs.push(id);
-					}
-					reader.endArray();
+			while (reader.hasNext()) {
+				reader.beginObject();
+
+				while (reader.hasNext()) {
+					Object[] object = new Object[2];
+					id = reader.nextName();
+					object[0] = id;
+					object[1] = Integer.valueOf(reader.nextInt());
+					songs.add(object);
 				}
+
+				reader.endObject();
 			}
 
-			reader.endObject();
+			reader.endArray();
 			reader.close();
 		} catch (Exception e) {
+			Log.e("get stacked Song", e.getMessage());
 			return songs;
 		}
 		return songs;
 	}
 
-	//
-	/**
-	 * get Current Time;
-	 * @return
-	 * @throws IOException
-	 */
-	private int getCurrentTime() throws IOException {
-		// TODO Auto-generated method stub
-		File file = new File(MusicPlayerService.getInstance()
-				.getApplicationContext()
-				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
-		if (!file.exists()) {
-			updateDatabase();
-		}
-		FileInputStream fileReader = new FileInputStream(file);
-		JsonReader reader = new JsonReader(new InputStreamReader(fileReader));
-		int time = 0;
-		// reader.beginObject();
-		// while (reader.hasNext()) {
-		// String name1 = reader.nextName();
-		//
-		// if (name1.equals("songsPlayed")) {
-		// reader.beginArray();
-		// while (reader.hasNext()) {
-		// String id = reader.nextName();
-		// time = reader.nextInt();
-		// reader.close();
-		// return time;
-		// }
-		// reader.endArray();
-		// }
-		// }
-		// reader.endObject();
-		// reader.close();
-		return time;
-	}
+	
 	/**
 	 * get all songs
+	 * 
 	 * @return
 	 * @throws IOException
 	 */
@@ -252,8 +228,10 @@ public class OfflineSongController implements Constants.XMLConstant {
 		reader.close();
 		return songs;
 	}
+
 	/**
 	 * Get song by id
+	 * 
 	 * @param input
 	 * @return
 	 * @throws IOException
@@ -319,8 +297,6 @@ public class OfflineSongController implements Constants.XMLConstant {
 		c.close();
 		return songs;
 	}
-
-	
 
 	public Stack<String> getStackSongs() throws IOException {
 		Stack<String> songs = new Stack<String>();

@@ -45,7 +45,7 @@ public class OfflineSongsFragment extends Fragment {
 		final OfflineSongAdapter adapter = new OfflineSongAdapter(getActivity(), R.layout.list_view);
 		songsList.setAdapter(adapter);
 		//songsList.setAdapter(new OfflineSongAdapter());
-		//UpdateUiFromServiceController.getInstance().addAdapter(adapter);
+		UpdateUiFromServiceController.getInstance().addAdapter(adapter);
 
 		songsList.setOnItemClickListener(new  OnItemClickListener() {
 

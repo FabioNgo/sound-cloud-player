@@ -60,13 +60,13 @@ public class MusicPlayerService extends IntentService implements
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
 	private String currentSongId = "";
-	String filename = "lastPlayingSong";
+	int timeLastStop = -1; // when the music stopped before
 
 	public Song getCurrentSong() {
 
 		Song curSong = null;
 		if (currentSongId.equals("")) {
-			currentSongId = songsPlaying.get(0);
+			currentSongId = stackSongplayed.peek();
 		}
 		try {
 			curSong = OfflineSongController.getInstance().getSongbyId(
@@ -99,7 +99,7 @@ public class MusicPlayerService extends IntentService implements
 		if (instance == null) {
 			instance = this;
 		}
-		musicState = MUSIC_STOP;
+		musicState = APP_START;
 
 		try {
 			getData();
@@ -109,10 +109,11 @@ public class MusicPlayerService extends IntentService implements
 			// currentSongPosition = 0;
 
 		} finally {
-			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+
 			iniMediaPlayer();
 			iniNotification();
 			updateNotification(false, R.drawable.ic_media_pause);
+			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 
 		}
 		super.onStartCommand(intent, flags, startId);
@@ -139,7 +140,33 @@ public class MusicPlayerService extends IntentService implements
 			mediaPlayer.setOnInfoListener(this);
 			mediaPlayer.setOnCompletionListener(this);
 			mediaPlayer.reset();
+
 		}
+		
+			String link;
+			
+			try {
+				link = OfflineSongController.getInstance().getSongbyId(currentSongId).getLink();
+				mediaPlayer.setDataSource(link);
+				mediaPlayer.prepareAsync();    
+				
+				                             
+			} catch (IllegalArgumentException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SecurityException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalStateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// fplayNewSong(id);
+		
 	}
 
 	public void playNextSong() {
@@ -167,15 +194,17 @@ public class MusicPlayerService extends IntentService implements
 
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
+		int currentSongPosition = getCurrentPosition(stackSongplayed.peek());
 		stackSongplayed.pop();
-		int currentSongPosition = getCurrentPosition(currentSongId);
+
 		if (stackSongplayed.isEmpty()) {
 
 			int size = songsPlaying.size();
-			currentSongPosition --;
+			currentSongPosition = currentSongPosition + size - 1;
 			currentSongPosition = currentSongPosition % size;
+			stackSongplayed.push(songsPlaying.get(currentSongPosition));
 		} else {
-			
+
 			currentSongPosition = getCurrentPosition(stackSongplayed.peek());
 		}
 		playNewSong(songsPlaying.get(currentSongPosition));
@@ -194,9 +223,10 @@ public class MusicPlayerService extends IntentService implements
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-
-		mp.start();
-		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
+		if (musicState != APP_START) {
+			mp.start();
+			UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
+		}
 	}
 
 	private void playMedia() {
@@ -227,14 +257,16 @@ public class MusicPlayerService extends IntentService implements
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		mp.reset();
-		if (loopState == MODE_LOOP_ONE) {
-			restartSong();
-		} else {
-			playNextSong();
-		}
+		if (musicState != APP_START) {
+			mp.reset();
+			if (loopState == MODE_LOOP_ONE) {
+				restartSong();
+			} else {
+				playNextSong();
+			}
 
-		updateNotification(false, R.drawable.ic_media_play);
+			updateNotification(false, R.drawable.ic_media_play);
+		}
 	}
 
 	private void pauseMedia() {
@@ -280,7 +312,12 @@ public class MusicPlayerService extends IntentService implements
 		if (musicState == MUSIC_PAUSE) {
 			playMedia();
 
-		} else {
+		}
+		if(musicState == APP_START){
+			mediaPlayer.seekTo(timeLastStop);
+			playMedia();
+		}
+		else {
 			musicState = MUSIC_START;
 
 			playNewSong(stackSongplayed.peek());
@@ -305,19 +342,9 @@ public class MusicPlayerService extends IntentService implements
 						.getSongbyId(songId).getLink();
 				mediaPlayer.setDataSource(link);
 
-				mediaPlayer.prepare();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalStateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mediaPlayer.prepareAsync();
+			} catch ( Exception e){
+				Log.e("PlayNewSong",e.getMessage());
 			}
 		}
 		// Builder builder = new Builder(MainActivity.getActivity());
@@ -348,7 +375,8 @@ public class MusicPlayerService extends IntentService implements
 
 	public long getDuration() {
 		if (mediaPlayer != null) {
-			return mediaPlayer.getDuration();
+			int a = mediaPlayer.getDuration();
+			return a;
 		}
 		return -1;
 	}
@@ -460,11 +488,21 @@ public class MusicPlayerService extends IntentService implements
 		for (Song song : songs) {
 			songsPlaying.add(song.getId());
 		}
-
-		stackSongplayed = OfflineSongController.getInstance().getSongsPlayed();
+		Stack<Object[]> temp = OfflineSongController.getInstance()
+				.getSongsPlayed();
+		stackSongplayed = new Stack<String>();
+		while (!temp.isEmpty()) {
+			Object[] temp1 = temp.pop();
+			stackSongplayed.push((String) temp1[0]);
+			int temp2 = ((Integer) temp1[1]).intValue();
+			if (temp2 != 0) {
+				timeLastStop = temp2;
+			}
+		}
 		if (stackSongplayed.isEmpty()) {
 			stackSongplayed.add(songsPlaying.get(0));
 		}
+		currentSongId = stackSongplayed.peek();
 	}
 
 	public ArrayList<String> getSongs() {
@@ -545,6 +583,10 @@ public class MusicPlayerService extends IntentService implements
 	public Stack<String> getStackSongs() {
 		// TODO Auto-generated method stub
 		return stackSongplayed;
+	}
+
+	public int getTimeLastStop() {
+		return timeLastStop;
 	}
 
 }
