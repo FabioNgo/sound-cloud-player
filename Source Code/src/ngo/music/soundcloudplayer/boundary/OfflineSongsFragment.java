@@ -60,10 +60,10 @@ public class OfflineSongsFragment extends Fragment {
 
 				//Song songSelected = (Song) songsList.getAdapter().getItem(position);
 
-				ArrayList<String> songs = adapter.getSongIds();
+				ArrayList<Song> songs = adapter.getSongs();
 
 				
-				MusicPlayerService.getInstance().playNewSong(songs.get(position),songs);
+				MusicPlayerService.getInstance().playNewSong(position,songs);
 			}
 		});
 		return rootView;

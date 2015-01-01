@@ -67,8 +67,8 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 				SongController songController = SongController.getInstance();
 				songs = songController.resolvedPlaylist(songs);
 				//String streamUrl = songController.getStreamUrl(songs.get(position));
-				MusicPlayerService.getInstance().setSongsPlaying(songs);
-				MusicPlayerService.getInstance().playNewSong(songs,true);
+//				MusicPlayerService.getInstance().setSongsPlaying(songs);
+				MusicPlayerService.getInstance().playNewSong(position,songs);
 				
 			}
 			

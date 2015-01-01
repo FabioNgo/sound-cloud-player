@@ -93,9 +93,9 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 */
 	public void storePlayingSong() throws IOException {
 		// TODO Auto-generated method stub
-		String song = MusicPlayerService.getInstance().getCurrentSongId();
+		Song song = MusicPlayerService.getInstance().getCurrentSong();
 		int curTime = MusicPlayerService.getInstance().getCurrentTime();
-		ArrayList<String> queue = MusicPlayerService.getInstance().getQueue();
+		ArrayList<Song> queue = MusicPlayerService.getInstance().getQueue();
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename2);
@@ -109,15 +109,15 @@ public class OfflineSongController implements Constants.XMLConstant {
 		jsonWriter.close();
 	}
 
-	private void writePlayedSongs(String songId,ArrayList<String> queue,
+	private void writePlayedSongs(Song playingSong,ArrayList<Song> queue,
 			JsonWriter jsonWriter, int currentTIme) throws IOException {
 		// TODO Auto-generated method stub
 
 		jsonWriter.beginArray();
-		for (String song : queue) {
+		for (Song song : queue) {
 			jsonWriter.beginObject();
-			jsonWriter.name(song);
-			if(songId.equals(song)){
+			jsonWriter.name(song.getId());
+			if(playingSong.getId().equals(song.getId())){
 				jsonWriter.value(currentTIme);
 			}else{
 				jsonWriter.value(0);
@@ -162,7 +162,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 				while (reader.hasNext()) {
 					Object[] object = new Object[2];
 					id = reader.nextName();
-					object[0] = id;
+					object[0] = getSongbyId(id);
 					object[1] = Integer.valueOf(reader.nextInt());
 					songs.add(object);
 				}
