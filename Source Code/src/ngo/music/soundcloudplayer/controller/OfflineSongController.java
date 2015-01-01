@@ -139,7 +139,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename2);
 		if (!file.exists()) {
 			try {
-				updateDatabase();
+				file.createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -442,6 +442,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				currentSongPosition = i;
 			}
 		}
+		if(songQueue.size()==0){
+			try {
+				songQueue.add(OfflineSongController.getInstance().getSongs().get(0));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		if (currentSongPosition == -1) {
 			currentSongPosition = 0;
 		}
