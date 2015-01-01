@@ -1,9 +1,13 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import java.io.IOException;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.controller.OfflineSongController;
+import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -68,45 +72,45 @@ public class MainActivity extends SlidingFragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		View decorView = getWindow().getDecorView();
+		decorView
+				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+
+		setContentView(R.layout.activity_main);
+
+		/*
+		 * Get data from other activity
+		 */
+		getDataFromOtherActivity();
+		/*
+		 * get Screen size
+		 */
+		getScreesize();
+
+		activity = this;
 		
-		
-			View decorView = getWindow().getDecorView();
-			decorView
-					.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+		// bindService(musicPlayerServiceIntent, mConnection, 0);
 
-			setContentView(R.layout.activity_main);
+		/*
+		 * Sliding Menu
+		 */
+		configSlidingMenu(savedInstanceState);
 
-			/*
-			 * Get data from other activity
-			 */
-			getDataFromOtherActivity();
-			/*
-			 * get Screen size
-			 */
-			getScreesize();
+		/*
+		 * Sliding Up Panel
+		 */
+		configSlidingUpPanel();
 
-			activity = this;
-			/*
-			 * Music Player Service
-			 */
-			configMusicPlayerService();
-			// bindService(musicPlayerServiceIntent, mConnection, 0);
-
-			/*
-			 * Sliding Menu
-			 */
-			configSlidingMenu(savedInstanceState);
-
-			/*
-			 * Sliding Up Panel
-			 */
-			configSlidingUpPanel();
-
-			/*
-			 * Tab Sliding
-			 */
-			configTabSliding();
-		}
+		/*
+		 * Tab Sliding
+		 */
+		configTabSliding();
+		/*
+		 * Music Player Service
+		 */
+		configMusicPlayerService();
+	}
 
 	
 
@@ -330,9 +334,9 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-//		if (isMyServiceRunning()) {
-//			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
-//		}
+		// if (isMyServiceRunning()) {
+		// UpdateUiFromServiceController.getInstance().updateUI(APP_START);
+		// }
 		// musicPlayerService = MusicPlayerService.getInstance();
 	}
 

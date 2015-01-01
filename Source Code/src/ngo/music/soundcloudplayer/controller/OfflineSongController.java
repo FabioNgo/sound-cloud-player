@@ -93,8 +93,9 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 */
 	public void storePlayingSong() throws IOException {
 		// TODO Auto-generated method stub
-		Stack<String> songs = MusicPlayerService.getInstance().getStackSongs();
+		String song = MusicPlayerService.getInstance().getCurrentSongId();
 		int curTime = MusicPlayerService.getInstance().getCurrentTime();
+		ArrayList<String> queue = MusicPlayerService.getInstance().getQueue();
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename2);
@@ -104,30 +105,26 @@ public class OfflineSongController implements Constants.XMLConstant {
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		OutputStreamWriter fileWriter = new OutputStreamWriter(fileOutputStream);
 		JsonWriter jsonWriter = new JsonWriter(fileWriter);
-		writePlayedSongs(songs, jsonWriter, curTime);
+		writePlayedSongs(song, queue,jsonWriter, curTime);
 		jsonWriter.close();
 	}
 
-	private void writePlayedSongs(Stack<String> stackSongplayed,
+	private void writePlayedSongs(String songId,ArrayList<String> queue,
 			JsonWriter jsonWriter, int currentTIme) throws IOException {
 		// TODO Auto-generated method stub
 
 		jsonWriter.beginArray();
-		boolean flag = true;
-		while (!stackSongplayed.isEmpty()) {
+		for (String song : queue) {
 			jsonWriter.beginObject();
-
-			jsonWriter.name(stackSongplayed.pop());
-			if (flag) {
+			jsonWriter.name(song);
+			if(songId.equals(song)){
 				jsonWriter.value(currentTIme);
-				flag = false;
-			} else {
+			}else{
 				jsonWriter.value(0);
 			}
-
 			jsonWriter.endObject();
-		}
 
+		}
 		jsonWriter.endArray();
 	}
 
@@ -136,7 +133,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * 
 	 * @return
 	 */
-	public Stack<Object[]> getSongsPlayed() {
+	public ArrayList<Object[]> getSongsPlayed() {
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename2);
@@ -149,7 +146,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 			}
 		}
 		
-		Stack<Object[]> songs = new Stack<Object[]>();
+		ArrayList<Object[]> songs = new ArrayList<Object[]>();
 		
 		try {
 			FileInputStream fileReader = new FileInputStream(file);
@@ -176,7 +173,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 			reader.endArray();
 			reader.close();
 		} catch (Exception e) {
-			Log.e("get stacked Song", e.getMessage());
+			Log.e("get songPlayed", e.getMessage());
 			return songs;
 		}
 		return songs;
