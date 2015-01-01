@@ -874,7 +874,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		String streamUrl;
 		try {
 			streamUrl =  new resolveStreamBackground().execute(song).get();
-			song.setResolvedStreamUrl(streamUrl);
+			song.setLink(streamUrl);
 			return song;
 			
 		} catch (InterruptedException e) {
