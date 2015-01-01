@@ -214,7 +214,7 @@ public class SoundCloudUserController extends UserController implements Constant
 	 * @return
 	 */
 	public User getUser(){
-		System.out.println("GET USER : " + guest);
+		
 		if (guest != null){
 			return guest;
 		}
@@ -442,7 +442,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		JSONArray userArray = new JSONArray(responseString);
 		for (int i = 0; i < userArray.length(); i++){
 			JSONObject object = userArray.getJSONObject(i);
-			System.out.println ("USER: " + object.get(AVATAR_URL));
+			
 			users.add(addSimpleUserInfo(object));
 		}
 		

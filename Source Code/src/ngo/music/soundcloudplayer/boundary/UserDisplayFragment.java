@@ -277,8 +277,8 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			soundCloudUserController.setResponseString(stringResponse);
 			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
 			i.putExtra(USER, bundle);
-			i.putExtra(ME_FAVORITES,stringResponse);
-			
+			//i.putExtra(ME_FAVORITES,stringResponse);
+			MainActivity.getActivity().finish();
 			startActivity(i);
 			
 	

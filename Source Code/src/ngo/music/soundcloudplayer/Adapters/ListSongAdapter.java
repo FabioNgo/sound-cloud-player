@@ -143,8 +143,9 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (SoundCloudUserController.getInstance().likeSong(song)){
+					notifyDataSetChanged();
 					Toast.makeText(getContext(), "You liked this song", Toast.LENGTH_LONG).show();
-					new updateFavoriteCounts(song, likeCount).execute();
+					//new updateFavoriteCounts(song, likeCount).execute();
 				}else{
 					Toast.makeText(getContext(), "You need to log in to like this song", Toast.LENGTH_LONG).show();
 				}
@@ -239,7 +240,11 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		avatar.setMinimumWidth(MainActivity.screenHeight/5);
 		avatar.setMaxHeight(MainActivity.screenHeight/5);
 		avatar.setMaxWidth(MainActivity.screenHeight/5);
-		avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		
+		if (song.getArtworkUrl() != null){
+			avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		}
+		notifyDataSetChanged();
 		return avatar;
 	}
 	
@@ -306,7 +311,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			System.out.println ("New like count = " + song.getLikeCountString());
+			//System.out.println ("New like count = " + song.getLikeCountString());
 			likeCount.setText(song.getLikeCountString());
 			
 		}
