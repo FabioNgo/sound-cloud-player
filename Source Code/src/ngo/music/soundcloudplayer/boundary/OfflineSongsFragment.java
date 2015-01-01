@@ -53,11 +53,11 @@ public class OfflineSongsFragment extends Fragment {
 			public void onItemClick(AdapterView<?> parent, View arg1, int position,
 					long id) {
 				// TODO Auto-generated method stub
-				System.out.println ("ONCLICK SONG");
-				OfflineSongAdapter.getInstance().notifyDataSetChanged();
 				
+				OfflineSongAdapter.getInstance().notifyDataSetChanged();
+			
 
-				Song songSelected = (Song) songsList.getAdapter().getItem(position);
+				//Song songSelected = (Song) songsList.getAdapter().getItem(position);
 				ArrayList<Song> songs = adapter.getSongs();
 
 				

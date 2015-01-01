@@ -4,14 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.FavoriteSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.MyStreamAdapter;
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +23,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -29,7 +34,7 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 	private View rootView;
 	private ListView songsList;
 	private ApiWrapper wrapper;
-
+	private FavoriteSongAdapter adapter;
 	public MyFavoriteSoundCloudFragment() {
 		// TODO Auto-generated constructor stub
 	}
@@ -48,9 +53,26 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 		new loadSongBackground().execute();
 		
 		
-//		
-//		MyStreamAdapter adapter = new MyStreamAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.tab_songs_view, favoriteSongs ,wrapper);
-//		songsList.setAdapter(adapter);
+		songsList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+					long arg3) {
+				// TODO Auto-generated method stub
+				adapter.notifyDataSetChanged();
+				
+
+				//Song songSelected = (Song) songsList.getAdapter().getItem(position);
+				ArrayList<Song> songs = adapter.getSongs();
+				SongController songController = SongController.getInstance();
+				songs = songController.resolvedPlaylist(songs);
+				//String streamUrl = songController.getStreamUrl(songs.get(position));
+				MusicPlayerService.getInstance().setSongsPlaying(songs);
+				MusicPlayerService.getInstance().playNewSong(songs,true);
+				
+			}
+			
+		});
 		
 		return rootView;
 	}
@@ -79,7 +101,7 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 				notification.setText("Do not have any song");
 				
 			}else{
-				MyStreamAdapter adapter = new MyStreamAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, favoriteSongs ,wrapper);
+				adapter = new FavoriteSongAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, favoriteSongs ,wrapper);
 				songsList.setAdapter(adapter);				
 			}
 		}

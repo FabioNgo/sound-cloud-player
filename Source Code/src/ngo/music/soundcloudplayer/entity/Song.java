@@ -106,6 +106,7 @@ public class Song implements Comparable <Song>{
 	private String permalinkUrl;
 	private String waveformUrl;
 	private String streamUrl;
+	private String resolvedStreamUrl;
 	private String downloadUrl;
 	private int playbackCount;
 	private int downloadCount;
@@ -894,6 +895,18 @@ public class Song implements Comparable <Song>{
 	 */
 	public void setPrivacy(String privacy) {
 		this.privacy = privacy;
+	}
+	/**
+	 * @return the resolvedStreamUrl
+	 */
+	public String getResolvedStreamUrl() {
+		return resolvedStreamUrl;
+	}
+	/**
+	 * @param resolvedStreamUrl the resolvedStreamUrl to set
+	 */
+	public void setResolvedStreamUrl(String resolvedStreamUrl) {
+		this.resolvedStreamUrl = resolvedStreamUrl;
 	}
 
 }

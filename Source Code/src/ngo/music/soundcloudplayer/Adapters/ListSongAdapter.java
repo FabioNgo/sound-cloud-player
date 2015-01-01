@@ -74,7 +74,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		
 		// TODO Auto-generated constructor stub
 	}
-//	public static OnlineSongAdapter getInstance() {
+//	public static ListSongAdapter getInstance() {
 //		
 //		if (instance == null) {
 //			instance = new OnlineSongAdapter(MainActivity.getActivity().getApplicationContext(),

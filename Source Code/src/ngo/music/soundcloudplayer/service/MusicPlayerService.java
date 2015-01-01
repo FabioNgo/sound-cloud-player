@@ -365,6 +365,12 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 	}
 
+	
+		// Builder builder = new Builder(MainActivity.getActivity());
+		// notification = builder.setContentTitle(currentSong.getTitle())
+		// .setContentText(currentSong.getLink()).build();
+
+	
 	public void playNewSong(String id) {
 
 		try {

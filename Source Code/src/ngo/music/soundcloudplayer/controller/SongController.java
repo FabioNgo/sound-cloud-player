@@ -11,8 +11,10 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.concurrent.ExecutionException;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
@@ -850,4 +852,61 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		
 		return song;
 	}
+	
+	/**
+	 * Resolved playist. Convert input list of song to new list with all song can play
+	 */
+	public ArrayList<Song> resolvedPlaylist(ArrayList<Song> songs){
+		ArrayList<Song> newSongList = new ArrayList<Song>();
+		for( Song song : songs){
+			newSongList.add(getCanPlaySong(song));
+		}
+		
+		return newSongList;
+		
+	}
+	/**
+	 * Resolve stream url of a song
+	 * @param song
+	 * @return
+	 */
+	public Song getCanPlaySong(Song song){
+		String streamUrl;
+		try {
+			streamUrl =  new resolveStreamBackground().execute(song).get();
+			song.setResolvedStreamUrl(streamUrl);
+			return song;
+			
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+		
+	}
+	
+	private class resolveStreamBackground extends AsyncTask<Song, String, String>{
+
+		@Override
+		protected String doInBackground(Song... songs) {
+			// TODO Auto-generated method stub
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			ApiWrapper wrapper =  soundCloudUserController.getApiWrapper();
+			Stream stream = null;
+			try {
+				stream = wrapper.resolveStreamUrl(songs[0].getStreamUrl(), true);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return stream.streamUrl;
+		}
+		
+	}
+	
+	
 }
