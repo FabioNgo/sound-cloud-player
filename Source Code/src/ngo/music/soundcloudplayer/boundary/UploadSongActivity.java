@@ -11,7 +11,7 @@ import org.json.JSONException;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
+import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -176,7 +176,7 @@ public class UploadSongActivity extends Activity implements Constants {
 				Intent i = new Intent(getApplicationContext(), MainActivity.class);
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 				
-				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
 				i.putExtra(UserContant.USER, bundle);
 				
 				startActivity(i);

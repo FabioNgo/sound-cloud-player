@@ -18,6 +18,8 @@ public interface Constants {
 	String ME_FAVORITES = "/me/favorites";
 	String ME_MY_STREAM = "/me/tracks";
 	String PLAYLISTS_LINK = "api.soundcloud.com/playlists";
+	String ME_FOLLOWERS = "/me/followers";
+	String ME_FOLLOWINGS = "/me/followings";
 	
 	public static final int FACEBOOK_USER = 0;
 	public static final int GOOGLE_PLUS_USER = 1;

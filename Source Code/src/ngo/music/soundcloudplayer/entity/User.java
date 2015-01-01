@@ -35,7 +35,7 @@ public abstract class User {
 	/*
 	 * country
 	 */
-	protected String country;
+	protected String country= "";
 	
 	/*
 	 * first and last name	
@@ -45,37 +45,37 @@ public abstract class User {
 	/*
 	 * city
 	 */
-	protected String city;
+	protected String city = "";
 	
 	/*
 	 * description
 	 */
-	protected String description;
+	protected String description = "";
 	
 	/*
 	 * Discogs name
 	 */
-	protected String discogsName;
+	protected String discogsName = "";
 	
 	/*
 	 * MySpace name
 	 */
-	protected String mySpaceName;
+	protected String mySpaceName = "";
 	
 	/*
 	 * a URL to the website
 	 */
-	protected String website;
+	protected String website = "";
 	
 	/*
 	 * a custom title for the website
 	 */
-	protected String websiteTitle;
+	protected String websiteTitle = "";
 	
 	/*
 	 * online status (boolean)
 	 */
-	protected boolean online;
+	protected boolean online ;
 	
 	/*
 	 * number of public tracks

@@ -91,14 +91,18 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MainActivity.isExplore = false;
+				//MainActivity.isExplore = false;
 				Intent i = new Intent(getActivity(), MainActivity.class);
 				i.putExtra(DEFAULT_ID, SONGS);
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
-				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				soundCloudUserController.setGuest(null);
+				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
 				SongController songController = SongController.getInstance();
-				songController.loadFavoriteSong();
+				songController.isLoadFavoriteSong = true;
+				songController.isLoadStream = true;
+				//songController.loadFavoriteSong();
 				i.putExtra(USER, bundle);
+				MainActivity.getActivity().finish();
 				
 				startActivity(i);
 				
@@ -117,10 +121,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				// TODO Auto-generated method stub
 				
 				new loadSongBackground().execute();
-				
-				
-				
-				
+
 			}
 		});
 		

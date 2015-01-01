@@ -5,7 +5,7 @@ import java.util.List;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.MyStreamAdapter;
-import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
+import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -19,8 +19,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 
@@ -68,8 +70,18 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
-			MyStreamAdapter adapter = new MyStreamAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, favoriteSongs ,wrapper);
-			songsList.setAdapter(adapter);
+			if (favoriteSongs.size() == 0) {
+				/*
+				 * Display the notice
+				 */
+				TextView notification = (TextView) rootView.findViewById(R.id.notice);
+				notification.setVisibility(View.VISIBLE);
+				notification.setText("Do not have any song");
+				
+			}else{
+				MyStreamAdapter adapter = new MyStreamAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, favoriteSongs ,wrapper);
+				songsList.setAdapter(adapter);				
+			}
 		}
 		
 	}
