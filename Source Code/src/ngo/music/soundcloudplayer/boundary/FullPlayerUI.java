@@ -201,5 +201,11 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		updateShuffle();
 		updateLoop();
 	}
+	
+	@Override
+	public void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+	}
 
 }

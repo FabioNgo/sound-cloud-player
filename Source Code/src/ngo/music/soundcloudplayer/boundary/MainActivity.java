@@ -44,6 +44,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private static MainActivity activity;
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
 	/*
 	 * If true : Display Fragemnt with tab : Trending Music, Audio...... If
 	 * flase: Display Fragment with tab : My music ......
@@ -135,10 +137,10 @@ public class MainActivity extends SlidingFragmentActivity implements
 	 * Tab Sliding
 	 */
 	private void configTabSliding() {
-
+		
 		System.out.println("CONFIG TAB SLIDING");
-		PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-		ViewPager pager = (ViewPager) findViewById(R.id.pager);
+		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		pager = (ViewPager) findViewById(R.id.pager);
 		FragmentPagerAdapter adapter;
 		if (isExplore) {
 			adapter = new SoundCloudExploreTabAdater(
@@ -371,5 +373,14 @@ public class MainActivity extends SlidingFragmentActivity implements
 		}
 		Log.i("service", "Service not runing");
 		return false;
+	}
+
+	/**
+	 * Switch tabs
+	 * @param tab
+	 */
+	public void switchTab(int tab){
+		pager.setCurrentItem(tab);
+		configTabSliding();
 	}
 }

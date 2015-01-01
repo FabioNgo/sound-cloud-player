@@ -91,14 +91,18 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MainActivity.isExplore = false;
+				//MainActivity.isExplore = false;
 				Intent i = new Intent(getActivity(), MainActivity.class);
 				i.putExtra(DEFAULT_ID, SONGS);
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
-				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				soundCloudUserController.setGuest(null);
+				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
 				SongController songController = SongController.getInstance();
-				songController.loadFavoriteSong();
+				songController.isLoadFavoriteSong = true;
+				songController.isLoadStream = true;
+				//songController.loadFavoriteSong();
 				i.putExtra(USER, bundle);
+				MainActivity.getActivity().finish();
 				
 				startActivity(i);
 				
@@ -117,10 +121,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				// TODO Auto-generated method stub
 				
 				new loadSongBackground().execute();
-				
-				
-				
-				
+
 			}
 		});
 		
@@ -154,21 +155,22 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		 */
 		RelativeLayout uploadButton = (RelativeLayout) rootView.findViewById(R.id.upload_soundcloud_field);
 		uploadButton.getLayoutParams().height = constantLayoutHeight;
-		if (!userController.isLogin()){
-			uploadButton.setVisibility(View.GONE);
-		}else{
-			uploadButton.setVisibility(View.VISIBLE);
-		}
-		uploadButton.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				Intent uploadActivity = new Intent(getActivity(), UploadSongActivity.class);
-				startActivity(uploadActivity);
-			}
-		});
+		uploadButton.setVisibility(View.GONE);
+//		if (!userController.isLogin()){
+//			uploadButton.setVisibility(View.GONE);
+//		}else{
+//			uploadButton.setVisibility(View.VISIBLE);
+//		}
+//		uploadButton.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				
+//				Intent uploadActivity = new Intent(getActivity(), UploadSongActivity.class);
+//				startActivity(uploadActivity);
+//			}
+//		});
 	}
 
 	/**
@@ -275,8 +277,8 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			soundCloudUserController.setResponseString(stringResponse);
 			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
 			i.putExtra(USER, bundle);
-			i.putExtra(ME_FAVORITES,stringResponse);
-			
+			//i.putExtra(ME_FAVORITES,stringResponse);
+			MainActivity.getActivity().finish();
 			startActivity(i);
 			
 	

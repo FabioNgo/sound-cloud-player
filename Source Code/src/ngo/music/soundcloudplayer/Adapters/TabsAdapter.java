@@ -7,6 +7,8 @@ import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.MyFavoriteSoundCloudFragment;
 import ngo.music.soundcloudplayer.boundary.MySoundCloudStreamFragment;
 import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.SoundCloudFollowerFragment;
+import ngo.music.soundcloudplayer.boundary.SoundCloudFollowingFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -16,7 +18,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 
 	private final String[] TITLES = { "My Streams", "My Favorites", "Offline Songs",
-			"Playlists", "Albunm", "My Followings", "My Followers", "About Us" };
+			"Playlists", "Album", "My Followings", "My Followers", "About Us" };
 
 	public TabsAdapter(FragmentManager fm) {
 		super(fm);
@@ -45,6 +47,12 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		
 		case 2:
 			return new OfflineSongsFragment();
+			
+		case 5:
+			return new SoundCloudFollowingFragment();
+		
+		case 6:
+			return new SoundCloudFollowerFragment();
 		default: return new FullPlayerUI();
 		}
 		

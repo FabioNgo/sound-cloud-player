@@ -5,6 +5,7 @@ package ngo.music.soundcloudplayer.controller;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.Header;
@@ -40,10 +41,11 @@ import ngo.music.soundcloudplayer.general.Constants;
  * @author LEBAO_000
  *
  */
-public class SoundCloudUserController extends UserController implements Constants.UserContant {
+public class SoundCloudUserController extends UserController implements Constants.UserContant, Constants {
 	
 	private Token t = null;
 	private User currentUser = null;
+	private User guest = null;
 	private ApiWrapper wrapper = null;
 	/*
 	 * Response String when resolve me/favorite
@@ -98,7 +100,7 @@ public class SoundCloudUserController extends UserController implements Constant
 	        HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 	        JSONObject me = Http.getJSON(resp);
 	        //set information of logged user
-	        currentUser  = addInformation(me);
+	        currentUser  = addAllInformation(me);
 	        
 	        
 
@@ -114,7 +116,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		return currentUser;
 	}
 	
-	private User addInformation(JSONObject me) throws JSONException{
+	private User addAllInformation(JSONObject me) throws JSONException{
 		SoundCloudAccount soundcloudAccount = new SoundCloudAccount();
 		soundcloudAccount.setAvatarUrl(me.getString(AVATAR_URL));
 		soundcloudAccount.setCity(me.getString(CITY));
@@ -145,6 +147,23 @@ public class SoundCloudUserController extends UserController implements Constant
 		
 		return soundcloudAccount;
 		
+	}
+	
+	private User addSimpleUserInfo (JSONObject me) throws JSONException{
+		SoundCloudAccount soundcloudAccount = new SoundCloudAccount();
+		soundcloudAccount.setAvatarUrl(me.getString(AVATAR_URL));
+		soundcloudAccount.setCountry(me.getString(COUNTRY));
+		soundcloudAccount.setFollowersCount(me.getInt(FOLLOWERS_COUNT));
+		soundcloudAccount.setFollowingCount(me.getInt(FOLLOWINGS_COUNT));
+		soundcloudAccount.setFullName(me.getString(FULLNAME));
+		soundcloudAccount.setId(me.getInt(ID));
+		soundcloudAccount.setPlaylistCount(me.getInt(PLAYLIST_COUNT));
+		soundcloudAccount.setTrackCount(me.getInt(TRACK_COUNT));
+		soundcloudAccount.setUri(me.getString(URI));
+		soundcloudAccount.setUsername(me.getString(USERNAME));
+		soundcloudAccount.setCity(me.getString(CITY));
+		
+		return soundcloudAccount;
 	}
 
 	public void logout() {
@@ -190,6 +209,22 @@ public class SoundCloudUserController extends UserController implements Constant
 		return bundle;
 	}
 	
+	/**
+	 * Get current viewing user
+	 * @return
+	 */
+	public User getUser(){
+		
+		if (guest != null){
+			return guest;
+		}
+		return currentUser;
+	}
+	
+	/**
+	 * Get current login user
+	 * @return
+	 */
 	public User getCurrentUser(){
 		return currentUser;
 	}
@@ -351,6 +386,85 @@ public class SoundCloudUserController extends UserController implements Constant
 	
 	public ApiWrapper getApiWrapper(){
 		return new ApiWrapper(Constants.CLIENT_ID, Constants.CLIENT_SECRET, null, t);
+	}
+
+	
+	/**
+	 * Get the Following of current user
+	 * @return list of following user
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public ArrayList<User> getFollowingUsers() throws IOException, JSONException {
+		
+		// TODO Auto-generated method stub
+		ApiWrapper wrapper = getApiWrapper();
+		HttpResponse response;	
+		if (guest == null){
+			response = wrapper.get(Request.to(ME_FOLLOWINGS));
+		}else {
+			
+			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followings";
+			response = wrapper.get(Request.to(request));
+		}
+		String respString = Http.getString(response);
+		
+		return getUsersJSON(respString);
+	}
+	
+	/**
+	 * Get the Followers of current user
+	 * @return List of followers
+	 * @throws IOException
+	 * @throws JSONException
+	 */
+	public ArrayList<User> getFollowerUsers() throws IOException, JSONException {
+		// TODO Auto-generated method stub
+	
+		ApiWrapper wrapper = getApiWrapper();
+		
+		HttpResponse response;
+		if (guest == null){
+			response = wrapper.get(Request.to(ME_FOLLOWERS));
+		}else{
+		
+			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followings";
+			response = wrapper.get(Request.to(request));
+		}
+		String respString = Http.getString(response);
+		
+		return getUsersJSON(respString);
+	}
+
+	
+	private ArrayList<User> getUsersJSON(String responseString) throws JSONException{
+		ArrayList<User> users = new ArrayList<User>();
+		JSONArray userArray = new JSONArray(responseString);
+		for (int i = 0; i < userArray.length(); i++){
+			JSONObject object = userArray.getJSONObject(i);
+			
+			users.add(addSimpleUserInfo(object));
+		}
+		
+		return users;
+	}
+	
+//	public boolean isFollowing (User user){
+//		ApiWrapper wrapper = getApiWrapper();
+//		
+//	}
+	/**
+	 * @return the guest
+	 */
+	public User getGuest() {
+		return guest;
+	}
+
+	/**
+	 * @param guest the guest to set
+	 */
+	public void setGuest(User guest) {
+		this.guest = guest;
 	}
 	
 }

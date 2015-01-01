@@ -6,6 +6,7 @@ import java.util.concurrent.ExecutionException;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
@@ -41,7 +42,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
      * false : not loading
      */
     boolean loadingMore = false;
-    protected SoundCloudExploreAdapter adapter;
+    protected ListSongAdapter adapter;
     protected ListView songsList;
     
     /*
