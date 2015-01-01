@@ -1,5 +1,6 @@
 package ngo.music.soundcloudplayer.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.concurrent.TimeUnit;
@@ -80,7 +81,12 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				for (PlayerUI ui : uiFragments) {
 					ui.updateMusicProgress();
 				}
-
+//				try {
+//					OfflineSongController.getInstance().storePlayingSong();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
 			}
 
 			@Override

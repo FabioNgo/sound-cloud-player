@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	private View v;
-
+	
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
@@ -72,6 +72,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = inflater.inflate(R.layout.liteplayer, null);
+			
 		}
 
 		setLayoutInformation(position, v);
@@ -88,9 +89,9 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set avatar for song
 		 */
-		ImageView avatar = (ImageView) v.findViewById(R.id.lite_player_image);
-
-		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+//		ImageView avatar = (ImageView) v.findViewById(R.id.lite_player_image);
+//
+//		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 		// avatar.setMinimumHeight(MainActivity.screenHeight/5);
 		// avatar.setMinimumWidth(MainActivity.screenHeight/5);
 
@@ -142,6 +143,14 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 
 	public ArrayList<Song> getSongs() {
 		return songs;
+		
+	}
+	public ArrayList<String> getSongIds() {
+		ArrayList<String> result = new ArrayList<String>();
+		for (Song song : songs) {
+			result.add(song.getId());
+		}
+		return result;
 		
 	}
 

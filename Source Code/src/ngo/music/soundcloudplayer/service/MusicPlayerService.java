@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
 
@@ -63,7 +64,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	private int loopState = 0;
 	private boolean isShuffle = false;
 	private int musicState;
-	private ArrayList<String> songsPlaying;
+	private ArrayList<String> songQueue;
 	private Stack<String> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
@@ -73,7 +74,6 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
-	private android.media.session.MediaController mediaController;
 	private static MusicPlayerService instance;
 
 	public static MusicPlayerService getInstance() {
@@ -99,7 +99,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 			// currentSongPosition = 0;
 
 		} finally {
-
+			stackSongplayed = new Stack<String>();
 			iniMediaPlayer();
 			updateNotification(false, R.drawable.ic_media_pause);
 			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
@@ -113,9 +113,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	public Song getCurrentSong() {
 
 		Song curSong = null;
-		if (currentSongId.equals("")) {
-			currentSongId = stackSongplayed.peek();
-		}
+		
 		try {
 			curSong = OfflineSongController.getInstance().getSongbyId(
 					currentSongId);
@@ -129,12 +127,12 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 	}
 
-	public ArrayList<String> getSongsPlaying() {
-		return songsPlaying;
+	public ArrayList<String> getQueue() {
+		return songQueue;
 	}
 
-	public void setSongsPlaying(ArrayList<String> songsPlaying) {
-		this.songsPlaying = songsPlaying;
+	public void setQueue(ArrayList<String> songQueue) {
+		this.songQueue = songQueue;
 	}
 
 	private void iniMediaPlayer() {
@@ -167,13 +165,6 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 			}
 		}
-
-		// mManager = (MediaSessionManager)
-		// getSystemService(Context.MEDIA_SESSION_SERVICE);
-		// mSession = mManager.crete
-		// mController = MediaController.fromToken( mSession.getSessionToken()
-		// );
-		// mSession.
 	}
 
 	public void playNextSong() {
@@ -183,7 +174,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 			// TODO Auto-generated method stub
 			Random random = new Random(Calendar.getInstance().getTimeInMillis());
 
-			int size = songsPlaying.size();
+			int size = songQueue.size();
 
 			currentSongPosition = currentSongPosition
 					+ (Math.abs(random.nextInt()) % size) + 1;
@@ -191,11 +182,11 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 		} else {
 			currentSongPosition++;
-			int size = songsPlaying.size();
+			int size = songQueue.size();
 			currentSongPosition = currentSongPosition % size;
 
 		}
-		playNewSong(songsPlaying.get(currentSongPosition));
+		playNewSong(songQueue.get(currentSongPosition));
 
 	}
 
@@ -206,22 +197,22 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 		if (stackSongplayed.isEmpty()) {
 
-			int size = songsPlaying.size();
+			int size = songQueue.size();
 			currentSongPosition = currentSongPosition + size - 1;
 			currentSongPosition = currentSongPosition % size;
-			stackSongplayed.push(songsPlaying.get(currentSongPosition));
+			stackSongplayed.push(songQueue.get(currentSongPosition));
 		} else {
 
 			currentSongPosition = getCurrentPosition(stackSongplayed.peek());
 		}
-		playNewSong(songsPlaying.get(currentSongPosition));
+		playNewSong(songQueue.get(currentSongPosition));
 
 	}
 
 	private int getCurrentPosition(String input) {
 		// TODO Auto-generated method stub
-		for (int i = 0; i < songsPlaying.size(); i++)
-			if (songsPlaying.get(i).equals(input)) {
+		for (int i = 0; i < songQueue.size(); i++)
+			if (songQueue.get(i).equals(input)) {
 				return i;
 			}
 		return -1;
@@ -230,10 +221,10 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-//		if (musicState != APP_START) {
-//			mp.start();
-//			UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
-//		}
+		// if (musicState != APP_START) {
+		// mp.start();
+		// UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
+		// }
 	}
 
 	private void playMedia() {
@@ -330,10 +321,19 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		}
 		// sendBroadcast(TAG_START);
 	}
-
-	public void playNewSong(Song song, boolean startNow) {
+	public void playNewSong(String songId, ArrayList<String> queue){
+		this.songQueue.clear();
+		songQueue.addAll(queue);
+		try {
+			playNewSong(OfflineSongController.getInstance().getSongbyId(songId),true);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			Log.i("playNewSong",e.getMessage());
+		}
+	}
+	private void playNewSong(Song song, boolean startNow) {
 		if (startNow) {
-			
+
 			musicState = MUSIC_START;
 		}
 		currentSongId = song.getId();
@@ -348,7 +348,8 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 				mediaPlayer.setDataSource(link);
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mediaPlayer.prepare();
-				 mediaPlayer.start();
+				playMedia();
+				
 			} catch (Exception e) {
 				Log.e("iniMedia", e.toString());
 				try {
@@ -357,7 +358,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 				}
 			}
-			
+
 		}
 		// Builder builder = new Builder(MainActivity.getActivity());
 		// notification = builder.setContentTitle(currentSong.getTitle())
@@ -365,10 +366,11 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 	}
 
-	public void playNewSong(String id) {
+	private void playNewSong(String id) {
 
 		try {
-			playNewSong(OfflineSongController.getInstance().getSongbyId(id), false);
+			playNewSong(OfflineSongController.getInstance().getSongbyId(id),
+					false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -470,37 +472,40 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	private void getData() {
-		ArrayList<Song> songs = null;
-		try {
-			songs = OfflineSongController.getInstance().getSongs();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		songsPlaying = new ArrayList<String>();
-		for (Song song : songs) {
-			songsPlaying.add(song.getId());
-		}
-		Stack<Object[]> temp = OfflineSongController.getInstance()
+		currentSongId = "";
+		songQueue = new ArrayList<String>();
+		
+		ArrayList<Object[]> songsPLayed = OfflineSongController.getInstance()
 				.getSongsPlayed();
-		stackSongplayed = new Stack<String>();
-		while (!temp.isEmpty()) {
-			Object[] temp1 = temp.pop();
-			stackSongplayed.push((String) temp1[0]);
-			int temp2 = ((Integer) temp1[1]).intValue();
-			if (temp2 != 0) {
-				timeLastStop = temp2;
+		
+		for(Object[] songPlayed : songsPLayed) {
+			
+			songQueue.add((String) songPlayed[0]);
+			int time = ((Integer) songPlayed[1]).intValue();
+			if (time != 0) {
+				timeLastStop = time;
+				currentSongId = (String) songPlayed[0];
 			}
 		}
-		if (stackSongplayed.isEmpty()) {
-			stackSongplayed.add(songsPlaying.get(0));
+		if(currentSongId.equals("")){
+			if(songQueue.isEmpty()){
+				try {
+					currentSongId = OfflineSongController.getInstance().getSongs().get(0).getId();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else{
+				currentSongId = songQueue.get(0);
+			}
 		}
-		currentSongId = stackSongplayed.peek();
+		
+		
 	}
 
 	public ArrayList<String> getSongs() {
 		// TODO Auto-generated method stub
-		return songsPlaying;
+		return songQueue;
 	}
 
 	public void forwardSong() {
@@ -595,22 +600,6 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		return null;
 	}
 
-	// private void playSampleSong() {
-	// String link =
-	// "http://download.f9.stream.nixcdn.com/218140e3c556cc12abe5a3dd981f5d05/54a39cd6/NhacCuaTui871/VeThoi-DaLAB-3521629.mp3";
-	//
-	// try {
-	// mediaPlayer = new MediaPlayer();
-	// mediaPlayer.setDataSource(link);
-	// mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-	// musicState = MUSIC_START;
-	// mediaPlayer.prepare();
-	//
-	// } catch (Exception e) {
-	// Log.e("PlayNewSong", e.toString());
-	// }
-	// BasicFunctions.makeToastTake(link, getApplicationContext());
-	//
-	// }
+	
 
 }
