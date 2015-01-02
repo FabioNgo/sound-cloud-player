@@ -40,6 +40,7 @@ import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -317,24 +318,25 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_NEW_SONG);
 		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_START) {
-			try {
-
-				mediaPlayer.reset();
-				String link = songQueue.get(currentSongPosition).getLink();
-
-				mediaPlayer.setDataSource(link);
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				mediaPlayer.prepare();
-				playMedia();
-
-			} catch (Exception e) {
-				Log.e("iniMedia", e.toString());
-				try {
-					Log.e("iniMedia", e.getMessage());
-				} catch (Exception e1) {
-
-				}
-			}
+			new playNewSongBackground().execute();
+//			try {
+//
+//				mediaPlayer.reset();
+//				String link = songQueue.get(currentSongPosition).getLink();
+//
+//				mediaPlayer.setDataSource(link);
+//				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//				mediaPlayer.prepare();
+//				playMedia();
+//
+//			} catch (Exception e) {
+//				Log.e("iniMedia", e.toString());
+//				try {
+//					Log.e("iniMedia", e.getMessage());
+//				} catch (Exception e1) {
+//
+//				}
+//			}
 
 		}
 		// Builder builder = new Builder(MainActivity.getActivity());
@@ -567,4 +569,31 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return null;
 	}
 
+	private class playNewSongBackground extends AsyncTask<String, String, String>{
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			try {
+
+				mediaPlayer.reset();
+				String link = songQueue.get(currentSongPosition).getLink();
+
+				mediaPlayer.setDataSource(link);
+				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+				mediaPlayer.prepare();
+				playMedia();
+
+			} catch (Exception e) {
+				Log.e("iniMedia", e.toString());
+				try {
+					Log.e("iniMedia", e.getMessage());
+				} catch (Exception e1) {
+
+				}
+			}
+			return null;
+		}
+		
+	}
 }
