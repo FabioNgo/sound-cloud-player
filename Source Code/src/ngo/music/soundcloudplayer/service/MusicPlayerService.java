@@ -1,18 +1,12 @@
 package ngo.music.soundcloudplayer.service;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
@@ -22,12 +16,10 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver;
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -36,20 +28,13 @@ import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
-import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
-import android.media.session.MediaSession;
-import android.media.session.MediaSessionManager;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
-import android.support.v4.app.NotificationCompat.InboxStyle;
 import android.support.v4.app.NotificationCompat.Style;
-import android.support.v4.app.TaskStackBuilder;
-import android.text.style.BulletSpan;
 import android.util.Log;
-import android.widget.MediaController;
 
 public class MusicPlayerService extends Service implements OnErrorListener,
 		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
@@ -143,8 +128,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		String link;
 
 		try {
-			link = OfflineSongController.getInstance()
-					.getSongbyId(currentSongId).getLink();
+			link = getCurrentSong().getLink();
 			mediaPlayer.setDataSource(link);
 			mediaPlayer.prepare();
 
