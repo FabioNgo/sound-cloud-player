@@ -264,15 +264,17 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_PAUSE) {
 			playMedia();
-
+			return;
 		}
 		if (musicState == APP_START) {
 			mediaPlayer.seekTo(timeLastStop);
 			playMedia();
+			return;
 		} else {
 			musicState = MUSIC_START;
-			currentSongPosition = stackSongplayed.peek();
+//			currentSongPosition = stackSongplayed.peek();
 			playNewSong(false);
+			return;
 		}
 		// sendBroadcast(TAG_START);
 	}
@@ -284,7 +286,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		playNewSong(true);
 
 	}
-	
+
 	public void playNewOnlineSong(int position, ArrayList<OnlineSong> queue) {
 		this.songQueue.clear();
 		songQueue.addAll(queue);
@@ -303,24 +305,24 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_START) {
 			new playNewSongBackground().execute();
-//			try {
-//
-//				mediaPlayer.reset();
-//				String link = songQueue.get(currentSongPosition).getLink();
-//
-//				mediaPlayer.setDataSource(link);
-//				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//				mediaPlayer.prepare();
-//				playMedia();
-//
-//			} catch (Exception e) {
-//				Log.e("iniMedia", e.toString());
-//				try {
-//					Log.e("iniMedia", e.getMessage());
-//				} catch (Exception e1) {
-//
-//				}
-//			}
+			// try {
+			//
+			// mediaPlayer.reset();
+			// String link = songQueue.get(currentSongPosition).getLink();
+			//
+			// mediaPlayer.setDataSource(link);
+			// mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			// mediaPlayer.prepare();
+			// playMedia();
+			//
+			// } catch (Exception e) {
+			// Log.e("iniMedia", e.toString());
+			// try {
+			// Log.e("iniMedia", e.getMessage());
+			// } catch (Exception e1) {
+			//
+			// }
+			// }
 
 		}
 		// Builder builder = new Builder(MainActivity.getActivity());
@@ -438,9 +440,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				currentSongPosition = i;
 			}
 		}
-		if(songQueue.size()==0){
+		if (songQueue.size() == 0) {
 			try {
-				songQueue.add(OfflineSongController.getInstance().getSongs().get(0));
+				songQueue.add(OfflineSongController.getInstance().getSongs()
+						.get(0));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -553,15 +556,30 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return null;
 	}
 
-	private class playNewSongBackground extends AsyncTask<String, String, String>{
+	private class playNewSongBackground extends
+			AsyncTask<String, String, String> {
+
+		private String link="";
 
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			try {
+				link = songQueue.get(currentSongPosition).getLink();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			try {
 
 				mediaPlayer.reset();
-				String link = songQueue.get(currentSongPosition).getLink();
+				
 
 				mediaPlayer.setDataSource(link);
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -576,10 +594,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 				}
 			}
-			return null;
 		}
 
-		
-		
 	}
 }
