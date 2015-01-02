@@ -29,6 +29,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -577,6 +578,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 			return null;
 		}
+
+		
 		
 	}
 }

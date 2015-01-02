@@ -1,6 +1,7 @@
 package ngo.music.soundcloudplayer.entity;
 
 import java.io.File;
+import java.io.IOException;
 
 import ngo.music.soundcloudplayer.api.Stream;
 import android.database.Cursor;
@@ -81,8 +82,9 @@ public abstract class Song implements Comparable <Song>{
 
 	/**
 	 * @return the link
+	 * @throws IOException 
 	 */
-	public abstract String getLink();
+	public abstract String getLink() throws IOException;
 
 
 	/**
