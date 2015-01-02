@@ -64,14 +64,14 @@ public class BasicFunctions {
 		int imageWidth = options.outWidth;
 		String imageType = options.outMimeType;
 		
-		int resId = imageView.getId();
-		Bitmap bitmap = decodeSampledBitmapFromResource(resource, resId, newWidth, newWidth);
-		//Drawable drawable = imageView.getDrawable();
-		//Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-		//double percentage = (double)newWidth / bitmap.getWidth();
-		//int newHeight = (int) (bitmap.getHeight() * percentage);
-		//Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, newWidth,newHeight, true);
-		imageView.setImageBitmap(bitmap);
+	//	int resId = imageView.getId();
+		//Bitmap bitmap = decodeSampledBitmapFromResource(resource, resId, newWidth, newWidth);
+		Drawable drawable = imageView.getDrawable();
+		Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+		double percentage = (double)newWidth / bitmap.getWidth();
+		int newHeight = (int) (bitmap.getHeight() * percentage);
+		Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, newWidth,newHeight, true);
+		imageView.setImageBitmap(scaledBitmap);
 	}
 
 	public static int calculateInSampleSize( BitmapFactory.Options options, int reqWidth, int reqHeight) {

@@ -78,6 +78,7 @@
 		<TextView 
 		       android:id = "@+id/my_music_id"
 		        android:layout_marginLeft="10dp"
+		        android:textSize="20sp"
 		       android:layout_width = "wrap_content"
 			   android:layout_height = "wrap_content"
 			   android:layout_centerVertical="true"
@@ -106,6 +107,7 @@
 	       android:id = "@+id/soundcloud_explore_id"
 	       android:layout_toRightOf="@+id/soundcloud_explore_icon"
 	       android:layout_centerVertical="true"
+	       android:textSize="20sp"
 	       android:layout_width = "wrap_content"
 		   android:layout_height = "wrap_content"
 		   
@@ -134,6 +136,7 @@
 	       android:layout_toRightOf="@+id/upload_soundcloud_icon"
 	       android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
+	       android:textSize="20sp"
 		   android:layout_height = "wrap_content"
 		   
 		   android:textAppearance="?android:attr/textAppearanceLarge"
@@ -161,6 +164,7 @@
 	       android:layout_marginLeft="10dp"
 		   android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
+	       android:textSize="20sp"
 		   android:layout_height = "wrap_content"
 		   android:layout_toRightOf="@+id/logout_icon"
 		   android:textAppearance="?android:attr/textAppearanceLarge"
