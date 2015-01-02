@@ -34,32 +34,30 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class OfflineSongAdapter extends ArrayAdapter<Song> {
+public class QueueSongAdapter extends ArrayAdapter<Song> {
 	private View v;
 	
-	public OfflineSongAdapter(Context context, int resource) {
+	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
 
 
 		//songs = SongController.getInstance().getOfflineSongs();
 
-		try {
-			songs = OfflineSongController.getInstance().getSongs();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		songs = MusicPlayerService.getInstance().getQueue();
+		if(songs == null){
+			songs = new ArrayList<Song>();
 		}
 
 
 	}
 
-	public static OfflineSongAdapter instance = null;
-	private ArrayList<OfflineSong> songs;
+	public static QueueSongAdapter instance = null;
+	private ArrayList<Song> songs;
 
-	public static OfflineSongAdapter getInstance() {
+	public static QueueSongAdapter getInstance() {
 
 		if (instance == null) {
-			instance = new OfflineSongAdapter(MainActivity.getActivity()
+			instance = new QueueSongAdapter(MainActivity.getActivity()
 					.getApplicationContext(), R.layout.list_view);
 		}
 		return instance;
@@ -122,12 +120,12 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 			}else{
 				progressWheel.setBackgroundResource(R.drawable.ic_media_play);
 			}
-//			UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
+			UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
 		}else{
 			ProgressWheel progressWheel = (ProgressWheel) v
 					.findViewById(R.id.lite_player_progress_bar);
 			progressWheel.setVisibility(View.INVISIBLE);
-//			UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
+			UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
 			
 		}
 	}
@@ -142,7 +140,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		return songs.size();
 	}
 
-	public ArrayList<OfflineSong> getSongs() {
+	public ArrayList<Song> getSongs() {
 		return songs;
 		
 	}
@@ -153,6 +151,10 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		}
 		return result;
 		
+	}
+	public void updateQueue(){
+		this.songs.clear();
+		this.songs.addAll(MusicPlayerService.getInstance().getQueue());
 	}
 
 }

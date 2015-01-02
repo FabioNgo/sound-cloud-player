@@ -9,6 +9,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
@@ -81,12 +82,12 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				for (PlayerUI ui : uiFragments) {
 					ui.updateMusicProgress();
 				}
-//				try {
-//					OfflineSongController.getInstance().storePlayingSong();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
+				// try {
+				// OfflineSongController.getInstance().storePlayingSong();
+				// } catch (IOException e) {
+				// // TODO Auto-generated catch block
+				// e.printStackTrace();
+				// }
 			}
 
 			@Override
@@ -183,7 +184,13 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 						.getCurrentSong());
 
 			}
+
 			for (ArrayAdapter<Song> arrayAdapter : adapters) {
+
+				if (arrayAdapter instanceof QueueSongAdapter) {
+					((QueueSongAdapter) arrayAdapter).updateQueue();
+				}
+
 				arrayAdapter.notifyDataSetChanged();
 			}
 

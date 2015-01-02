@@ -60,7 +60,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private int currentSongPosition;
 	int timeLastStop = -1; // when the music stopped before
 	Action[] actions;
-
+	private boolean queueChanged = true;
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
 	private static MusicPlayerService instance;
@@ -286,7 +286,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		playNewSong(true);
 
 	}
+	public void playNewSong(int position, ArrayList<Song> queue) {
+		this.songQueue.clear();
+		songQueue.addAll(queue);
+		currentSongPosition = position;
+		playNewSong(true);
 
+	}
 	public void playNewOnlineSong(int position, ArrayList<OnlineSong> queue) {
 		this.songQueue.clear();
 		songQueue.addAll(queue);
@@ -596,5 +602,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 		}
 
+	}
+
+	public boolean queueChanged() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
