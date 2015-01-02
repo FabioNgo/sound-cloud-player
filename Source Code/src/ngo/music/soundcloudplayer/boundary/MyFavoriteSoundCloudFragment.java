@@ -12,6 +12,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -63,12 +64,14 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 				
 
 				//Song songSelected = (Song) songsList.getAdapter().getItem(position);
-				ArrayList<Song> songs = adapter.getSongs();
+				ArrayList<OnlineSong> songs = adapter.getSongs();
 				SongController songController = SongController.getInstance();
-				songs = songController.resolvedPlaylist(songs);
+				//songs = songController.resolvedPlaylist(songs);
 				//String streamUrl = songController.getStreamUrl(songs.get(position));
-				//MusicPlayerService.getInstance().setSongsPlaying(songs);
-				MusicPlayerService.getInstance().playNewSong(songs,true);
+
+//				MusicPlayerService.getInstance().setSongsPlaying(songs);
+				MusicPlayerService.getInstance().playNewOnlineSong(position,songs);
+
 				
 			}
 			
@@ -79,7 +82,7 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 	
 	private class loadSongBackground extends AsyncTask<String , String, String>{
 
-		ArrayList<Song> favoriteSongs;
+		ArrayList<OnlineSong> favoriteSongs;
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub

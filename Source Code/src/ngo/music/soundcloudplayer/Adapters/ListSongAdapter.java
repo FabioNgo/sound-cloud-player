@@ -15,21 +15,6 @@ import com.volley.api.AppController;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Http;
@@ -39,6 +24,7 @@ import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
@@ -59,15 +45,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Constants {
+public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implements Constants {
 	
 	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
 	protected ApiWrapper wrapper;
 	
 	public static ListSongAdapter instance = null;
-	protected ArrayList<Song> songs;
+	protected ArrayList<OnlineSong> songs;
 	
-	protected ListSongAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
+	protected ListSongAdapter(Context context, int resource, ArrayList<OnlineSong> onlineSongs, ApiWrapper wrapper) {
 		super(context, resource);
 		songs = onlineSongs;
 		this.wrapper = wrapper;
@@ -102,7 +88,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	 * @param v rootview
 	 */
 	private void setLayoutInfomation(int position, View v) {
-		Song song = songs.get(position);
+		OnlineSong song = songs.get(position);
 		NetworkImageView avatar = configLayoutAvatar(v, song);
 		configTitleSong(v, song);
 		configSongDetail(v, song, avatar);
@@ -115,7 +101,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	 * @param song song want to get detail
 	 * @param avatar avatar of song
 	 */
-	private void configSongDetail(View v, final Song song, NetworkImageView avatar) {
+	private void configSongDetail(View v, final OnlineSong song, NetworkImageView avatar) {
 
 		/*
 		 * Initial controller
@@ -201,7 +187,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	 * @param v RootView
 	 * @param song the song want to get info
 	 */
-	private void configTitleSong(View v, Song song) {
+	private void configTitleSong(View v, OnlineSong song) {
 		/*
 		 * Set title
 		 */
@@ -212,7 +198,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		 * Set sub title
 		 */
 		TextView subtitle = (TextView) v.findViewById(R.id.song_subtitle);
-		subtitle.setText(song.getAuthor());
+		subtitle.setText(song.getArtist());
 		
 		/*
 		 * Set gerne
@@ -229,7 +215,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	 * @param song song want to get ava
 	 * @return ImageView
 	 */
-	private NetworkImageView configLayoutAvatar(View v, Song song) {
+	private NetworkImageView configLayoutAvatar(View v, OnlineSong song) {
 		/**
 		 * Set avatar for song
 		 */
@@ -249,24 +235,24 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	}
 	
 	@Override
-	public Song getItem(int position) {
+	public OnlineSong getItem(int position) {
 		return songs.get(position);
 	}
 	@Override
 	public int getCount() {
 		return songs.size();
 	}
-	public ArrayList<Song> getSongs() {
+	public ArrayList<OnlineSong> getSongs() {
 		return songs;
 	}
 	
 	private class updateFavoriteCounts extends AsyncTask<String, String, String>{
 
 		
-		private Song song;
+		private OnlineSong song;
 		private TextView likeCount;
 		private JSONObject me;
-		public updateFavoriteCounts(Song song, TextView likeCount) {
+		public updateFavoriteCounts(OnlineSong song, TextView likeCount) {
 			this.song = song;
 			this.likeCount = likeCount;
 			// TODO Auto-generated constructor stub

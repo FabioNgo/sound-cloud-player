@@ -14,6 +14,7 @@ import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -78,11 +79,11 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 				
 		
 		try {
-			ArrayList<Song> songs;
+			ArrayList<OnlineSong> songs;
 			SongController songController = SongController.getInstance();
 			 songs = songController.getOnlineSongs(category); 
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
-			System.out.println (songs.size() + "......" + category);
+			//System.out.println (songs.size() + "......" + category);
 			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
 			//adapter.setNotifyOnChange(true);
 			
@@ -184,7 +185,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 		public void run() {
 			//Loop thru the new items and add them to the adapter
 			SongController songController = SongController.getInstance();
-			ArrayList<Song> songs = songController.getOnlineSongs(category);
+			ArrayList<OnlineSong> songs = songController.getOnlineSongs(category);
 			//adapter.setNotifyOnChange(true);
 			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
 			//songsList.

@@ -14,6 +14,7 @@ import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -322,7 +323,7 @@ public class UploadSongActivity extends Activity implements Constants {
 			/*
 			 * Set data to song
 			 */
-			Song song = new Song();
+			OnlineSong song = new OnlineSong();
 			song.setTitle(title);
 			song.setDescription(desc);
 			song.setGerne(tag);

@@ -30,6 +30,7 @@ import com.volley.api.AppController;
 
 
 
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Http;
@@ -39,6 +40,7 @@ import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
@@ -67,7 +69,7 @@ public class FavoriteSongAdapter extends ListSongAdapter implements Constants {
 	public static FavoriteSongAdapter instance = null;
 	
 	
-	public FavoriteSongAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
+	public FavoriteSongAdapter(Context context, int resource, ArrayList<OnlineSong> onlineSongs, ApiWrapper wrapper) {
 		super(context, resource, onlineSongs, wrapper);
 		
 		

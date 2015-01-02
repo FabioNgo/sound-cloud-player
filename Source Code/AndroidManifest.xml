@@ -22,16 +22,16 @@
 			android:launchMode="singleTop"
 			android:name="ngo.music.soundcloudplayer.boundary.LoginActivity"
 			android:screenOrientation="portrait" >
-			
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
 		</activity>
 		<activity
 			android:launchMode="singleTop"
 			android:name="ngo.music.soundcloudplayer.boundary.MainActivity"
 			android:screenOrientation="portrait" >
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
+			
 		</activity>
 		<activity
 			

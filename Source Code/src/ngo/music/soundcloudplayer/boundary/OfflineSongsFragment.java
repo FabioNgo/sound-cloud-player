@@ -8,6 +8,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.Bundle;
@@ -60,10 +61,10 @@ public class OfflineSongsFragment extends Fragment {
 
 				//Song songSelected = (Song) songsList.getAdapter().getItem(position);
 
-				ArrayList<String> songs = adapter.getSongIds();
+				ArrayList<OfflineSong> songs = adapter.getSongs();
 
 				
-				MusicPlayerService.getInstance().playNewSong(songs.get(position),songs);
+				MusicPlayerService.getInstance().playNewOfflineSong(position,songs);
 			}
 		});
 		return rootView;

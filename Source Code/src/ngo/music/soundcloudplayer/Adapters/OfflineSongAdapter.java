@@ -18,6 +18,7 @@ import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
@@ -53,7 +54,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	}
 
 	public static OfflineSongAdapter instance = null;
-	private ArrayList<Song> songs;
+	private ArrayList<OfflineSong> songs;
 
 	public static OfflineSongAdapter getInstance() {
 
@@ -141,7 +142,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		return songs.size();
 	}
 
-	public ArrayList<Song> getSongs() {
+	public ArrayList<OfflineSong> getSongs() {
 		return songs;
 		
 	}

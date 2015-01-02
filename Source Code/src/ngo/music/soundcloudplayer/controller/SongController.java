@@ -25,6 +25,8 @@ import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.entity.OfflineSong;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
@@ -74,16 +76,16 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	private  String[] exploreLinkList; 
 	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
 	private static final String TAG_TRACKS_EXPLORE = "tracks";
-	private ArrayList<Song> offlineSong;
-	private ArrayList<Song> favoriteSong = new ArrayList<Song>();
-	private ArrayList<Song> streamList= new ArrayList<Song>();
+	private ArrayList<OfflineSong> offlineSong;
+	private ArrayList<OnlineSong> favoriteSong = new ArrayList<OnlineSong>();
+	private ArrayList<OnlineSong> streamList= new ArrayList<OnlineSong>();
 	File dir = null;
 	
 	private boolean isInitialSongCategory = true;
 	public boolean isLoadFavoriteSong = true;
 	public boolean isLoadStream = true;
 	
-	private ArrayList<ArrayList<Song>> onlineSongs = new ArrayList<ArrayList<Song>>();
+	private ArrayList<ArrayList<OnlineSong>> onlineSongs = new ArrayList<ArrayList<OnlineSong>>();
 	private int[] categoryCurrentPage = new int[NUMBER_CATEGORY];
 	
 	
@@ -107,7 +109,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 //				instance.loadMyStream();
 				instance.initialOnlineSongsList();
 				instance.initialCategoryListLink();
-				instance.getSongsFromSDCard();
+				
 				
 				dir = new File(Environment.getExternalStorageDirectory() + ROOT_DIRECTORY);
 				if(!(dir.exists() && dir.isDirectory())) {
@@ -152,25 +154,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		return null;
 	}
 
-	/**
-	 * Load song from sd card
-	 */
-	public ArrayList<Song> getSongsFromSDCard() {
-		offlineSong = new ArrayList<Song>();
-		Cursor c = MainActivity
-				.getActivity()
-				.getContentResolver()
-				.query(Media.EXTERNAL_CONTENT_URI, null,
-						Media.IS_MUSIC + "!=0", null, null);
-		while (c.moveToNext()) {
-			String url = c.getString(c.getColumnIndex(Media.DATA));
-			if (url.endsWith(".mp3") || url.endsWith(".wav")) {
-				offlineSong.add(new Song(c));
-			}
-		}
-		
-		return offlineSong;
-	}
+
 
 	public ArrayList<String> getSongIDs() {
 		ArrayList<String> songIDs = new ArrayList<String>();
@@ -181,26 +165,14 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	}
 
 
-	/**
-	 * Get Song which store in the storage
-	 * @return
-	 */
-		
-
-
-	public ArrayList<Song> getOfflineSongs() {
-		//return MusicPlayerService.getInstance().getSongs();
-		return getSongsFromSDCard();
-		//return offlineSong;
-
-	}
+	
 
 	
 	/**
 	 * Get songs which load from the internet
 	 * @return
 	 */
-	public ArrayList<Song> getOnlineSongs(int category) {
+	public ArrayList<OnlineSong> getOnlineSongs(int category) {
 		
 		return onlineSongs.get(category);
 	}
@@ -328,7 +300,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	}
 
 
-	private ArrayList<Song> getSongsFromSoundCloud(int currentPage, int category){
+	private ArrayList<OnlineSong> getSongsFromSoundCloud(int currentPage, int category){
 		
 		if (currentPage <= categoryCurrentPage[category]){
 			return onlineSongs.get(category);
@@ -356,14 +328,14 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			JSONObject track = new JSONObject(inputLine);
 			JSONArray listSong = track.getJSONArray(TAG_TRACKS_EXPLORE);
 			System.out.println ("SIZE = " + listSong.length());
-			ArrayList<Song> song = onlineSongs.get(category);
+			ArrayList<OnlineSong> song = onlineSongs.get(category);
 			for (int i = 0 ; i< listSong.length(); i++){
 				JSONObject jsonObject = listSong.getJSONObject(i);
 
 				//int position =searchId(idList, jsonObject.getInt(ID)); 
 				//if (position < 0){
 					try{
-						song.add(addSongInformation(jsonObject));
+						song.add((OnlineSong) addSongInformation(jsonObject));
 					//	idList.add(- (position + 1), jsonObject.getInt(ID));
 					}catch(JSONException e){
 						e.printStackTrace();
@@ -386,9 +358,9 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	private Song addSongInformation(JSONObject me)
+	private OnlineSong addSongInformation(JSONObject me)
 			throws JSONException, IOException {
-		Song song = new Song();
+		OnlineSong song = new OnlineSong();
 		
 		song.setTagList(me.getString(TAG_LIST));
 		song.setTitle(me.getString(TITLE));
@@ -483,7 +455,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 */
 	private void initialOnlineSongsList(){
 		for (int i = 0; i < NUMBER_CATEGORY;i++){
-			onlineSongs.add(new ArrayList<Song>());
+			onlineSongs.add(new ArrayList<OnlineSong>());
 		}
 	}
 	
@@ -528,7 +500,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * @param id id of the song
 	 * @throws IOException 
 	 */
-	public void downloadSong(Song song) throws IOException {
+	public void downloadSong(OnlineSong song) throws IOException {
 		// TODO Auto-generated method stub
 
 		new downloadSongFromSoundCloud(song).execute();
@@ -537,7 +509,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	/**
 	 * @return the favoriteSong
 	 */
-	public ArrayList<Song> getFavoriteSong() {
+	public ArrayList<OnlineSong> getFavoriteSong() {
 		return favoriteSong;
 	}
 
@@ -547,19 +519,19 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * @author LEBAO_000
 	 *
 	 */
-	public ArrayList<Song> getMyStream(){
+	public ArrayList<OnlineSong> getMyStream(){
 		return streamList;
 	}
 	private class downloadSongFromSoundCloud extends AsyncTask<String,String,String>{
 
-		private Song song;
+		private OnlineSong song;
 		NotificationCompat.Builder mBuilder;
 		
 		NotificationManager mNotifyManager;
 		int incr;
 		private String result;
 		
-		public downloadSongFromSoundCloud(Song song) {
+		public downloadSongFromSoundCloud(OnlineSong song) {
 			// TODO Auto-generated constructor stub
 			this.song = song;
 		}
@@ -586,7 +558,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			
 				
 			try {
-				streamUrl = wrapper.resolveStreamUrl(song.getStreamUrl(), true).streamUrl;
+				streamUrl = song.getLink();
 			
 		        int count;
 		        
@@ -652,8 +624,8 @@ public class SongController implements Constants, Constants.SongConstants, Const
             	File dst = new File(path);
 	            MusicMetadata meta = new MusicMetadata(song.getTitle());
 	           // meta.setAlbum("Chirag");
-	            meta.setArtist(song.getAuthor());
-	            meta.setProducerArtist(song.getAuthor());
+	            meta.setArtist(song.getArtist());
+	            meta.setProducerArtist(song.getArtist());
 	            try {
 	            	new MyID3().update(src, src_set, meta);
 	                //new MyID3().write(src, dst, src_set, meta);
@@ -689,7 +661,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	public void loadFavoriteSong() {
 		if (isLoadFavoriteSong){
 			//System.out.println ("LOAD FAVORITE");
-			favoriteSong = new ArrayList<Song>();
+			favoriteSong = new ArrayList<OnlineSong>();
 			favoriteIdList = new ArrayList<Integer>();
 			//new loadFavoriteSongBackground().execute();
 			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
@@ -736,7 +708,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		
 		//System.out.println (isLoadStream);
 		if (isLoadStream){
-			streamList = new ArrayList<Song>();
+			streamList = new ArrayList<OnlineSong>();
 			myStreamIdList = new ArrayList<Integer>();
 			//new loadMyStreamBackground().execute();
 			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
@@ -791,9 +763,9 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	private Song addSongInformation2(JSONObject me)
+	private OnlineSong addSongInformation2(JSONObject me)
 			throws JSONException, IOException {
-		Song song = new Song();
+		OnlineSong song = new OnlineSong();
 		
 		
 		//song.setCommentable(me.getBoolean(COMMENTABLE));
@@ -853,60 +825,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		return song;
 	}
 	
-	/**
-	 * Resolved playist. Convert input list of song to new list with all song can play
-	 */
-	public ArrayList<Song> resolvedPlaylist(ArrayList<Song> songs){
-		ArrayList<Song> newSongList = new ArrayList<Song>();
-		for( Song song : songs){
-			newSongList.add(getCanPlaySong(song));
-		}
-		
-		return newSongList;
-		
-	}
-	/**
-	 * Resolve stream url of a song
-	 * @param song
-	 * @return
-	 */
-	public Song getCanPlaySong(Song song){
-		String streamUrl;
-		try {
-			streamUrl =  new resolveStreamBackground().execute(song).get();
-			song.setLink(streamUrl);
-			return song;
-			
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return null;
-		
-	}
-	
-	private class resolveStreamBackground extends AsyncTask<Song, String, String>{
 
-		@Override
-		protected String doInBackground(Song... songs) {
-			// TODO Auto-generated method stub
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
-			ApiWrapper wrapper =  soundCloudUserController.getApiWrapper();
-			Stream stream = null;
-			try {
-				stream = wrapper.resolveStreamUrl(songs[0].getStreamUrl(), true);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return stream.streamUrl;
-		}
-		
-	}
 	
 	
 }

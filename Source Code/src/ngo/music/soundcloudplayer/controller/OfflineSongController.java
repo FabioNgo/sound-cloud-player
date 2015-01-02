@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
+import ngo.music.soundcloudplayer.entity.OfflineSong;
+import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -41,7 +43,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * @throws IOException
 	 */
 	public void updateDatabase() throws IOException {
-		ArrayList<Song> songs = getSongsFromSDCard();
+		ArrayList<OfflineSong> songs = getSongsFromSDCard();
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
@@ -59,18 +61,18 @@ public class OfflineSongController implements Constants.XMLConstant {
 		jsonWriter.close();
 	}
 
-	private void writeSong(ArrayList<Song> songs, JsonWriter jsonWriter)
+	private void writeSong(ArrayList<OfflineSong> songs, JsonWriter jsonWriter)
 			throws IOException {
 		// TODO Auto-generated method stub
 
-		for (Song song : songs) {
+		for (OfflineSong song : songs) {
 			addSong(song, jsonWriter);
 
 		}
 
 	}
 
-	private void addSong(Song song, JsonWriter writer) throws IOException {
+	private void addSong(OfflineSong song, JsonWriter writer) throws IOException {
 		writer.beginObject();
 		writer.name(song.getId());
 		writer.beginObject();
@@ -84,7 +86,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 	}
 
 	/**
-	 * Write stack played song for play previous Song
+	 * Write stack played song for play previous OfflineSong
 	 * 
 	 * @param stackSongplayed
 	 * @param jsonWriter
@@ -93,9 +95,9 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 */
 	public void storePlayingSong() throws IOException {
 		// TODO Auto-generated method stub
-		String song = MusicPlayerService.getInstance().getCurrentSongId();
+		OfflineSong song = (OfflineSong) MusicPlayerService.getInstance().getCurrentSong();
 		int curTime = MusicPlayerService.getInstance().getCurrentTime();
-		ArrayList<String> queue = MusicPlayerService.getInstance().getQueue();
+		ArrayList<Song> queue = MusicPlayerService.getInstance().getQueue();
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename2);
@@ -109,15 +111,15 @@ public class OfflineSongController implements Constants.XMLConstant {
 		jsonWriter.close();
 	}
 
-	private void writePlayedSongs(String songId,ArrayList<String> queue,
+	private void writePlayedSongs(Song playingSong,ArrayList<Song> queue,
 			JsonWriter jsonWriter, int currentTIme) throws IOException {
 		// TODO Auto-generated method stub
 
 		jsonWriter.beginArray();
-		for (String song : queue) {
+		for (Song song : queue) {
 			jsonWriter.beginObject();
-			jsonWriter.name(song);
-			if(songId.equals(song)){
+			jsonWriter.name(song.getId());
+			if(playingSong.getId().equals(song.getId())){
 				jsonWriter.value(currentTIme);
 			}else{
 				jsonWriter.value(0);
@@ -139,7 +141,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename2);
 		if (!file.exists()) {
 			try {
-				updateDatabase();
+				file.createNewFile();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -162,7 +164,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 				while (reader.hasNext()) {
 					Object[] object = new Object[2];
 					id = reader.nextName();
-					object[0] = id;
+					object[0] = getSongbyId(id);
 					object[1] = Integer.valueOf(reader.nextInt());
 					songs.add(object);
 				}
@@ -186,7 +188,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * @return
 	 * @throws IOException
 	 */
-	public ArrayList<Song> getSongs() throws IOException {
+	public ArrayList<OfflineSong> getSongs() throws IOException {
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
@@ -195,7 +197,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 		}
 		FileInputStream fileReader = new FileInputStream(file);
 		JsonReader reader = new JsonReader(new InputStreamReader(fileReader));
-		ArrayList<Song> songs = new ArrayList<Song>();
+		ArrayList<OfflineSong> songs = new ArrayList<OfflineSong>();
 		String id = null, title = null, album = null, artist = null, link = null;
 		reader.beginArray();
 		while (reader.hasNext()) {
@@ -217,7 +219,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 					reader.skipValue();
 				}
 			}
-			songs.add(new Song(id, title, artist, album, link));
+			songs.add(new OfflineSong(id, title, artist, album, link));
 			reader.endObject();
 			reader.endObject();
 		}
@@ -233,7 +235,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * @return
 	 * @throws IOException
 	 */
-	public Song getSongbyId(String input) throws IOException {
+	public OfflineSong getSongbyId(String input) throws IOException {
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
@@ -242,7 +244,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 		}
 		FileInputStream fileReader = new FileInputStream(file);
 		JsonReader reader = new JsonReader(new InputStreamReader(fileReader));
-		Song song = null;
+		OfflineSong song = null;
 		String id = null, title = null, album = null, artist = null, link = null;
 		reader.beginArray();
 		while (reader.hasNext()) {
@@ -264,7 +266,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 						reader.skipValue();
 					}
 				}
-				song = new Song(id, title, artist, album, link);
+				song = new OfflineSong(id, title, artist, album, link);
 				reader.close();
 				return song;
 			} else {
@@ -278,8 +280,8 @@ public class OfflineSongController implements Constants.XMLConstant {
 		return song;
 	}
 
-	private ArrayList<Song> getSongsFromSDCard() {
-		ArrayList<Song> songs = new ArrayList<Song>();
+	private ArrayList<OfflineSong> getSongsFromSDCard() {
+		ArrayList<OfflineSong> songs = new ArrayList<OfflineSong>();
 		Cursor c = MusicPlayerService
 				.getInstance()
 				.getContentResolver()
@@ -288,7 +290,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 		while (c.moveToNext()) {
 			String url = c.getString(c.getColumnIndex(Media.DATA));
 			if (url.endsWith(".mp3")) {
-				songs.add(new Song(c));
+				songs.add(new OfflineSong(c));
 			}
 		}
 		c.close();

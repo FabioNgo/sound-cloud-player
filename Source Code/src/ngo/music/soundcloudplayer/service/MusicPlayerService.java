@@ -16,6 +16,8 @@ import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.entity.OfflineSong;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -49,9 +51,9 @@ import android.text.style.BulletSpan;
 import android.util.Log;
 import android.widget.MediaController;
 
-public class MusicPlayerService extends Service implements OnPreparedListener,
-		OnErrorListener, OnCompletionListener, OnSeekCompleteListener,
-		OnInfoListener, OnBufferingUpdateListener, Constants.MusicService {
+public class MusicPlayerService extends Service implements OnErrorListener,
+		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
+		OnBufferingUpdateListener, Constants.MusicService {
 	public MusicPlayerService() {
 		instance = this;
 
@@ -64,11 +66,12 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	private int loopState = 0;
 	private boolean isShuffle = false;
 	private int musicState;
-	private ArrayList<String> songQueue;
-	private Stack<String> stackSongplayed;
+	private ArrayList<Song> songQueue;
+	private Stack<Integer> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
 	private String currentSongId = "";
+	private int currentSongPosition;
 	int timeLastStop = -1; // when the music stopped before
 	Action[] actions;
 
@@ -99,7 +102,7 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 			// currentSongPosition = 0;
 
 		} finally {
-			stackSongplayed = new Stack<String>();
+			stackSongplayed = new Stack<Integer>();
 			iniMediaPlayer();
 			updateNotification(false, R.drawable.ic_media_pause);
 			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
@@ -112,34 +115,22 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 
 	public Song getCurrentSong() {
 
-		Song curSong = null;
-		
-		try {
-			curSong = OfflineSongController.getInstance().getSongbyId(
-					currentSongId);
-			return curSong;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.e("getCurrentSong", e.getMessage());
-			return null;
-
-		}
+		return songQueue.get(currentSongPosition);
 
 	}
 
-	public ArrayList<String> getQueue() {
+	public ArrayList<Song> getQueue() {
 		return songQueue;
 	}
 
-	public void setQueue(ArrayList<String> songQueue) {
-		this.songQueue = songQueue;
+	public void addSongToQueue(Song song) {
+		songQueue.add(song);
 	}
 
 	private void iniMediaPlayer() {
 		// TODO Auto-generated method stub
 		if (mediaPlayer == null) {
 			mediaPlayer = new MediaPlayer();
-			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.setOnErrorListener(this);
 			mediaPlayer.setOnSeekCompleteListener(this);
 			mediaPlayer.setOnBufferingUpdateListener(this);
@@ -168,8 +159,8 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	public void playNextSong() {
-		int currentSongPosition = getCurrentPosition(getCurrentSongId());
-		stackSongplayed.push(getCurrentSongId());
+
+		stackSongplayed.push(currentSongPosition);
 		if (isShuffle) {
 			// TODO Auto-generated method stub
 			Random random = new Random(Calendar.getInstance().getTimeInMillis());
@@ -186,13 +177,13 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 			currentSongPosition = currentSongPosition % size;
 
 		}
-		playNewSong(songQueue.get(currentSongPosition));
+		playNewSong(false);
 
 	}
 
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
-		int currentSongPosition = getCurrentPosition(stackSongplayed.peek());
+
 		stackSongplayed.pop();
 
 		if (stackSongplayed.isEmpty()) {
@@ -200,31 +191,10 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 			int size = songQueue.size();
 			currentSongPosition = currentSongPosition + size - 1;
 			currentSongPosition = currentSongPosition % size;
-			stackSongplayed.push(songQueue.get(currentSongPosition));
-		} else {
-
-			currentSongPosition = getCurrentPosition(stackSongplayed.peek());
+			stackSongplayed.push(currentSongPosition);
 		}
-		playNewSong(songQueue.get(currentSongPosition));
+		playNewSong(false);
 
-	}
-
-	private int getCurrentPosition(String input) {
-		// TODO Auto-generated method stub
-		for (int i = 0; i < songQueue.size(); i++)
-			if (songQueue.get(i).equals(input)) {
-				return i;
-			}
-		return -1;
-	}
-
-	@Override
-	public void onPrepared(MediaPlayer mp) {
-		// TODO Auto-generated method stub
-		// if (musicState != APP_START) {
-		// mp.start();
-		// UpdateUiFromServiceController.getInstance().updateUI(MUSIC_START);
-		// }
 	}
 
 	private void playMedia() {
@@ -316,40 +286,47 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 			playMedia();
 		} else {
 			musicState = MUSIC_START;
-
-			playNewSong(stackSongplayed.peek());
+			currentSongPosition = stackSongplayed.peek();
+			playNewSong(false);
 		}
 		// sendBroadcast(TAG_START);
 	}
-	public void playNewSong(String songId, ArrayList<String> queue){
+
+	public void playNewOfflineSong(int position, ArrayList<OfflineSong> queue) {
 		this.songQueue.clear();
 		songQueue.addAll(queue);
-		try {
-			playNewSong(OfflineSongController.getInstance().getSongbyId(songId),true);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			Log.i("playNewSong",e.getMessage());
-		}
+		currentSongPosition = position;
+		playNewSong(true);
+
 	}
-	private void playNewSong(Song song, boolean startNow) {
+	
+	public void playNewOnlineSong(int position, ArrayList<OnlineSong> queue) {
+		this.songQueue.clear();
+		songQueue.addAll(queue);
+		currentSongPosition = position;
+		playNewSong(true);
+
+	}
+
+	private void playNewSong(boolean startNow) {
 		if (startNow) {
 
 			musicState = MUSIC_START;
 		}
-		currentSongId = song.getId();
+
 		UpdateUiFromServiceController.getInstance().updateUI(MUSIC_NEW_SONG);
 		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_START) {
 			try {
 
 				mediaPlayer.reset();
-				String link = song.getLink();
+				String link = songQueue.get(currentSongPosition).getLink();
 
 				mediaPlayer.setDataSource(link);
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mediaPlayer.prepare();
 				playMedia();
-				
+
 			} catch (Exception e) {
 				Log.e("iniMedia", e.toString());
 				try {
@@ -363,20 +340,6 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		// Builder builder = new Builder(MainActivity.getActivity());
 		// notification = builder.setContentTitle(currentSong.getTitle())
 		// .setContentText(currentSong.getLink()).build();
-
-	}
-
-
-	private void playNewSong(String id) {
-
-
-		try {
-			playNewSong(OfflineSongController.getInstance().getSongbyId(id),
-					false);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 
@@ -474,38 +437,36 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	private void getData() {
-		currentSongId = "";
-		songQueue = new ArrayList<String>();
-		
+		currentSongPosition = -1;
+		songQueue = new ArrayList<Song>();
+
 		ArrayList<Object[]> songsPLayed = OfflineSongController.getInstance()
 				.getSongsPlayed();
-		
-		for(Object[] songPlayed : songsPLayed) {
-			
-			songQueue.add((String) songPlayed[0]);
-			int time = ((Integer) songPlayed[1]).intValue();
+
+		for (int i = 0; i < songsPLayed.size(); i++) {
+
+			songQueue.add((Song) songsPLayed.get(i)[0]);
+			int time = ((Integer) songsPLayed.get(i)[1]).intValue();
 			if (time != 0) {
 				timeLastStop = time;
-				currentSongId = (String) songPlayed[0];
+				currentSongPosition = i;
 			}
 		}
-		if(currentSongId.equals("")){
-			if(songQueue.isEmpty()){
-				try {
-					currentSongId = OfflineSongController.getInstance().getSongs().get(0).getId();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}else{
-				currentSongId = songQueue.get(0);
+		if(songQueue.size()==0){
+			try {
+				songQueue.add(OfflineSongController.getInstance().getSongs().get(0));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
-		
-		
+		if (currentSongPosition == -1) {
+			currentSongPosition = 0;
+		}
+
 	}
 
-	public ArrayList<String> getSongs() {
+	public ArrayList<Song> getSongs() {
 		// TODO Auto-generated method stub
 		return songQueue;
 	}
@@ -541,12 +502,12 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 	}
 
 	public String getCurrentSongId() {
-		return getCurrentSong().getId();
+		return songQueue.get(currentSongPosition).getId();
 	}
 
 	public void restartSong() {
 		mediaPlayer.reset();
-		playNewSong(currentSongId);
+		playNewSong(false);
 	}
 
 	public void setShuffle() {
@@ -580,9 +541,13 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		updateNotification(true, -1);
 	}
 
-	public Stack<String> getStackSongs() {
+	public Stack<String> getStackSongIds() {
 		// TODO Auto-generated method stub
-		return stackSongplayed;
+		Stack<String> ids = new Stack<String>();
+		for (Integer position : stackSongplayed) {
+			ids.add(songQueue.get(position).getId());
+		}
+		return ids;
 	}
 
 	private Action createAction(int iconID, String action) {
@@ -601,7 +566,5 @@ public class MusicPlayerService extends Service implements OnPreparedListener,
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	
 
 }

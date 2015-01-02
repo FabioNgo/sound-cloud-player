@@ -10,6 +10,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.content.Context;
@@ -53,7 +54,7 @@ public class MySoundCloudStreamFragment extends Fragment implements Constants{
 	
 	private class loadSongBackground extends AsyncTask<String , String, String>{
 
-		ArrayList<Song> myStream;
+		ArrayList<OnlineSong> myStream;
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
