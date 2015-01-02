@@ -8,6 +8,7 @@ import ngo.music.soundcloudplayer.Adapters.MyStreamAdapter;
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -41,7 +42,7 @@ public class MySoundCloudStreamFragment extends Fragment implements Constants{
 		/*
 		 * Initialize View
 		 */
-		System.out.println ("ON STREAM FRAGMENT  ON CREATE VIEW");
+	
 		rootView = inflater.inflate(R.layout.list_view, container,false);
 		songsList = (ListView) rootView.findViewById(R.id.songs_list);
 		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
@@ -49,6 +50,7 @@ public class MySoundCloudStreamFragment extends Fragment implements Constants{
 //		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);
 		wrapper = soundCloudUserController.getApiWrapper();
 		new loadSongBackground().execute();
+		songsList.setOnItemClickListener(new ListViewOnItemClickHandler());
 		return rootView;
 	}
 	

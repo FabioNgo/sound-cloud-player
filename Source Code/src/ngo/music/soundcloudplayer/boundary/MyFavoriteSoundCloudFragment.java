@@ -10,6 +10,7 @@ import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -26,6 +27,7 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -52,30 +54,9 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 		Token t = soundCloudUserController.getToken();
 		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);
 		new loadSongBackground().execute();
+		songsList.setOnItemClickListener(new ListViewOnItemClickHandler());
 		
-		
-		songsList.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
-				// TODO Auto-generated method stub
-				adapter.notifyDataSetChanged();
-				
-
-				//Song songSelected = (Song) songsList.getAdapter().getItem(position);
-				ArrayList<OnlineSong> songs = adapter.getSongs();
-				SongController songController = SongController.getInstance();
-				//songs = songController.resolvedPlaylist(songs);
-				//String streamUrl = songController.getStreamUrl(songs.get(position));
-
-//				MusicPlayerService.getInstance().setSongsPlaying(songs);
-				MusicPlayerService.getInstance().playNewOnlineSong(position,songs);
-
-				
-			}
-			
-		});
 		
 		return rootView;
 	}

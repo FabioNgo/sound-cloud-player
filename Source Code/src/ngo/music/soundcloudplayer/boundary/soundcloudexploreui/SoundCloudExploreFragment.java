@@ -11,6 +11,7 @@ import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
@@ -85,22 +86,9 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
 			//System.out.println (songs.size() + "......" + category);
 			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
-			//adapter.setNotifyOnChange(true);
 			
-			//System.out.println ("CHANGED");
-			//adapter.notifyDataSetChanged(); 
 			songsList.setAdapter(adapter);
-			songsList.setOnItemClickListener(new  OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View arg1, int position,
-						long id) {
-					// TODO Auto-generated method stub
-//					Song song = (Song) songsList.getAdapter().getItem(position);
-//					
-//					MusicPlayerService.getInstance().playNewSong(position, songs);
-				}
-			});
+			songsList.setOnItemClickListener(new  ListViewOnItemClickHandler());
 			songsList.setOnScrollListener(new OnScrollListener() {
 				
 				@Override
