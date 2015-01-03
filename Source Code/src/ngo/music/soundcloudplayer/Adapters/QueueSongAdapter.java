@@ -155,6 +155,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	public void updateQueue(){
 		this.songs.clear();
 		this.songs.addAll(MusicPlayerService.getInstance().getQueue());
+		return;
 	}
-
+	
 }
