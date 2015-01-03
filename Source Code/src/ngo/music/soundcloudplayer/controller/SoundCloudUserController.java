@@ -169,6 +169,9 @@ public class SoundCloudUserController extends UserController implements Constant
 	public void logout() {
 		// TODO Auto-generated method stub
 		t  = null;
+		guest = null;
+		currentUser = null;
+		
 		
 	}
 

@@ -10,11 +10,13 @@ import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.boundary.SoundCloudLoginUI.Background;
 import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
@@ -27,7 +29,6 @@ import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -50,10 +51,14 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 		 */
 		rootView = inflater.inflate(R.layout.list_view, container,false);
 		songsList = (ListView) rootView.findViewById(R.id.songs_list);
-		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
-		Token t = soundCloudUserController.getToken();
-		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);
-		new loadSongBackground().execute();
+		
+		
+		
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			Token t = soundCloudUserController.getToken();
+			wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);
+			new loadSongBackground().execute();
+		
 		songsList.setOnItemClickListener(new ListViewOnItemClickHandler());
 		
 

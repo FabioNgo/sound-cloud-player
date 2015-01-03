@@ -189,9 +189,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * @throws IOException
 	 */
 	public ArrayList<OfflineSong> getSongs() throws IOException {
-		File file = new File(MusicPlayerService.getInstance()
-				.getApplicationContext()
-				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
+		File file = new File(MusicPlayerService.getInstance().getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
 		if (!file.exists()) {
 			updateDatabase();
 		}

@@ -30,6 +30,7 @@ import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
@@ -299,7 +300,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 
 	private ArrayList<OnlineSong> getSongsFromSoundCloud(int currentPage, int category){
 		
-		if (currentPage <= categoryCurrentPage[category]){
+		if (currentPage <= categoryCurrentPage[category] || !(BasicFunctions.isConnectingToInternet(MainActivity.getActivity()))){
 			return onlineSongs.get(category);
 		}
 		String urlLink = exploreLinkList[category];
@@ -550,7 +551,9 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			// TODO Auto-generated method stub
 			String streamUrl;
 			
-			
+			if (!BasicFunctions.isConnectingToInternet(MainActivity.getActivity())){
+				return "No internet connection";
+			}
 				
 			try {
 				streamUrl = song.getLink();
@@ -594,7 +597,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				result = "You are not allowed to download this file";
-			}
+			} 
 			return result;
 		}
 		
@@ -658,7 +661,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * Load list favorite of user
 	 */
 	public void loadFavoriteSong() {
-		if (isLoadFavoriteSong){
+		if (isLoadFavoriteSong && BasicFunctions.isConnectingToInternet(MainActivity.getActivity())){
 			//System.out.println ("LOAD FAVORITE");
 			favoriteSong = new ArrayList<OnlineSong>();
 			favoriteIdList = new ArrayList<Integer>();
@@ -667,6 +670,10 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			
 			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
 			User user = soundCloudUserController.getUser();
+			/*
+			 * NO user login or selected
+			 */
+			if (user == null) return;
 			HttpResponse resp;
 			try {
 				String request = USER_LINK + "/" +String.valueOf(user.getId()) + "/favorites";
@@ -706,7 +713,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	public void loadMyStream() {
 		
 		//System.out.println (isLoadStream);
-		if (isLoadStream){
+		if (isLoadStream && BasicFunctions.isConnectingToInternet(MainActivity.getActivity())){
 			streamList = new ArrayList<OnlineSong>();
 			myStreamIdList = new ArrayList<Integer>();
 			//new loadMyStreamBackground().execute();
@@ -716,6 +723,10 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			HttpResponse resp;
 			try {
 				User user = soundCloudUserController.getUser();
+				/*
+				 * NO user login or selected
+				 */
+				if (user == null) return;
 				
 				//	resp = wrapper.get(Request.to(ME_MY_STREAM));
 				
@@ -825,6 +836,15 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	}
 	
 
+	public void clear (){
+		favoriteIdList.clear();
+		streamList.clear();
+		
+		isLoadFavoriteSong = true;
+		isLoadStream = true;
+		favoriteIdList.clear();
+		myStreamIdList.clear();
+	}
 	
 	
 }
