@@ -12,6 +12,7 @@
     	android:src="@drawable/ic_launcher" />
     <TextView
     	android:id="@+id/lite_player_title"
+    	android:layout_marginLeft="4dp"
     	android:layout_marginTop="10dp"
     	android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
     	android:layout_height="wrap_content"
@@ -23,6 +24,7 @@
     	android:layout_width="wrap_content" />
     <TextView
     	android:id="@+id/lite_player_subtitle"
+    	android:layout_alignLeft="@+id/lite_player_title"
     	android:layout_height="wrap_content"
     	android:layout_toRightOf="@+id/lite_player_image"
     	android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"

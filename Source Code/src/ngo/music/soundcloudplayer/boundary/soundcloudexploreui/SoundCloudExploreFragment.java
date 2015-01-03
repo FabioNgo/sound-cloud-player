@@ -121,7 +121,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 						//loadingMore = true;
 						//new loadMoreListView(songsList, adapter).execute();
 						 // Setting new scroll position
-						//adapter.notifyDataSetChanged();
+						adapter.notifyDataSetChanged();
 //		                
 						Thread thread =  new Thread(null, loadMoreListItems);
 						thread.start();

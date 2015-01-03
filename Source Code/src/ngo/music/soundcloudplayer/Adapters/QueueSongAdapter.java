@@ -88,13 +88,12 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set avatar for song
 		 */
-//		ImageView avatar = (ImageView) v.findViewById(R.id.lite_player_image);
+		NetworkImageView avatar = (NetworkImageView) v.findViewById(R.id.lite_player_image);
 //
-//		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-		// avatar.setMinimumHeight(MainActivity.screenHeight/5);
-		// avatar.setMinimumWidth(MainActivity.screenHeight/5);
+		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+		BasicFunctions.setImageViewSize(MainActivity.screenWidth/20, MainActivity.screenWidth/20, avatar);
 
-		// avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
 
 		/*
 		 * Set title
