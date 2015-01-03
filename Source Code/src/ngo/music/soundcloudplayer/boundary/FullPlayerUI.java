@@ -22,26 +22,32 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.todddavies.components.progressbar.ProgressWheel;
+import com.volley.api.AppController;
 
 public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	private static FullPlayerUI instance = null;
 	private ImageView shuffle;
+	private NetworkImageView songImage;
 
 
-	public static FullPlayerUI getInstance() {
-		if (instance == null) {
-			instance = new FullPlayerUI();
-		}
-		return instance;
-	}
+//	public static FullPlayerUI getInstance() {
+//		if (instance == null) {
+//			instance = new FullPlayerUI();
+//		}
+//		return instance;
+//	}
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
-		instance = this;
+	//	instance = this;
 		hasTextTime = true;
 		musicProgressBar_id = R.id.full_player_progress_bar;
 	}
@@ -54,9 +60,14 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		super.onCreateView(inflater, container, savedInstanceState);
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
 		iniMusicProgressBar();
-		BasicFunctions.ScaleImageViewW(MainActivity.screenWidth,
-				(ImageView) rootView.findViewById(R.id.full_player_song_image));
-
+		
+		songImage = (NetworkImageView) rootView.findViewById(R.id.full_player_song_image);
+		BasicFunctions.setImageViewSize(MainActivity.screenWidth, MainActivity.screenWidth, songImage);
+		
+		
+		
+		
+		//mainImage.setImageUrl(currentSong.getArtworkUrl(),);
 		currentTimeText = (TextView) rootView
 				.findViewById(R.id.full_player_current_time);
 		durationText = (TextView) rootView
@@ -65,7 +76,10 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 * Rewind button
 		 */
 		ImageView rew = (ImageView) rootView.findViewById(R.id.full_player_rew);
-		BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, rew);
+		//BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, rew);
+		BasicFunctions.setImageViewSize(MainActivity.screenWidth/10, MainActivity.screenWidth/10, rew);
+		
+		
 		rew.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -91,7 +105,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 * Fast forward button
 		 */
 		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
-		BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, ff);
+		BasicFunctions.setImageViewSize(MainActivity.screenWidth/10, MainActivity.screenWidth/10, ff);
 		ff.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -114,7 +128,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 * Shuffle button
 		 */
 		shuffle = (ImageView) rootView.findViewById(R.id.full_player_shuffle);
-		BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, shuffle);
+		BasicFunctions.setImageViewSize(MainActivity.screenWidth/10, MainActivity.screenWidth/10, shuffle);
 
 		shuffle.setOnClickListener(new OnClickListener() {
 
@@ -132,7 +146,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 */
 		ImageView loop = (ImageView) rootView
 				.findViewById(R.id.full_player_loop);
-		BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, loop);
+		
+		BasicFunctions.setImageViewSize(MainActivity.screenWidth/10, MainActivity.screenWidth/10, loop);
 		updateLoop();
 		loop.setOnClickListener(new OnClickListener() {
 
@@ -206,6 +221,20 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+	}
+
+	@Override
+	public void updateSongInfo(Song currentSong) {
+		// TODO Auto-generated method stub
+		
+		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+		songImage.setDefaultImageResId(R.drawable.ic_launcher);
+		
+		System.out.println (currentSong);
+		if (currentSong != null){
+			//System.out.println (currentSong.getArtworkUrl());
+			songImage.setImageUrl(currentSong.getArtworkUrl(), mImageLoader);
+		}
 	}
 
 }

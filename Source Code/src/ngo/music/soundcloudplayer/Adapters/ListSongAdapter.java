@@ -273,7 +273,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 			/*
 			 * API URL OF THE SONG
 			 */
-			String uri = TRACK_LINK + String.valueOf(song.getSoundcloudId());
+			String uri = TRACK_LINK + String.valueOf(song.getId());
 
 			try {
 				HttpResponse resp = wrapper.get(Request.to(uri));

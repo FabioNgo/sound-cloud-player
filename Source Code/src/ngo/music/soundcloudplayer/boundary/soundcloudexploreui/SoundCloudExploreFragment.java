@@ -59,6 +59,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 
 	ApiWrapper wrapper;
 	
+	
 //	public static SoundCloudExploreFragment getInstance() {
 //		// TODO Auto-generated method stub
 //		if(instance == null) {
@@ -89,7 +90,17 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			adapter.notifyDataSetChanged();
 			songsList.setAdapter(adapter);
 			
-			songsList.setOnItemClickListener(new  ListViewOnItemClickHandler());
+			songsList.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int position, long id) {
+
+					MusicPlayerService.getInstance().playNewExploreSong(position,category);
+					// TODO Auto-generated method stub
+					
+				}
+			});
 			songsList.setOnScrollListener(new OnScrollListener() {
 				
 				@Override
@@ -110,13 +121,14 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 						//loadingMore = true;
 						//new loadMoreListView(songsList, adapter).execute();
 						 // Setting new scroll position
-						adapter.notifyDataSetChanged();
+						//adapter.notifyDataSetChanged();
 //		                
 						Thread thread =  new Thread(null, loadMoreListItems);
 						thread.start();
 						
 						songsList.setSelectionFromTop(firstVisibleItem + 1, 0);
 						 adapter.notifyDataSetChanged();
+						 MusicPlayerService.getInstance().updateQueue(category);
 						//loadingMore = false;
 					}
 					// TODO Auto-generated method stub
@@ -142,7 +154,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
-		System.out.println ("RESUMED");
+	
 		super.onResume();
 		adapter.notifyDataSetChanged();
 	}

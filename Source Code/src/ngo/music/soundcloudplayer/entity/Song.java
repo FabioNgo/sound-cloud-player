@@ -35,10 +35,21 @@ public abstract class Song implements Comparable <Song>{
 	 */
 	protected String title =  "";
 
+	
 	/**
-	 * integer ID
+	 * Artwork Url
 	 */
-	protected int soundcloudId =  0;
+	protected String artworkUrl = "";
+	
+	public void setArtworkUrl (String artworkUrl){
+		this.artworkUrl = artworkUrl;
+	}
+	
+	public String getArtworkUrl (){
+		return artworkUrl;
+	}
+	
+	
 	
 	
 	
@@ -95,20 +106,6 @@ public abstract class Song implements Comparable <Song>{
 	}
 
 
-	/**
-	 * @return the soundcloudId
-	 */
-	public int getSoundcloudId() {
-		return soundcloudId;
-	}
-
-
-	/**
-	 * @param soundcloudId the soundcloudId to set
-	 */
-	public void setSoundcloudId(int soundcloudId) {
-		this.soundcloudId = soundcloudId;
-	}
 
 
 	public String getArtist() {

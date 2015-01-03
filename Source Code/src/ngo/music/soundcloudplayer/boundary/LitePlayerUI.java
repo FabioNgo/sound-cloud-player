@@ -1,6 +1,9 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.todddavies.components.progressbar.ProgressWheel;
+import com.volley.api.AppController;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
@@ -25,6 +28,7 @@ import android.widget.TextView;
 
 public class LitePlayerUI extends PlayerUI {
 
+	NetworkImageView image;
 	public LitePlayerUI() {
 		// TODO Auto-generated constructor stub
 	}
@@ -43,8 +47,9 @@ public class LitePlayerUI extends PlayerUI {
 		rootView = inflater.inflate(R.layout.liteplayer, container, false);
 		iniMusicProgressBar();
 		
-		ImageView image = (ImageView) rootView.findViewById(R.id.lite_player_image);
-		BasicFunctions.ScaleImageViewH(container.getLayoutParams().height, image);
+		image = (NetworkImageView) rootView.findViewById(R.id.lite_player_image);
+		BasicFunctions.setImageViewSize(container.getLayoutParams().height, container.getLayoutParams().height, image);
+		
 		UpdateUiFromServiceController.getInstance().addUiFragment(this);
 		return rootView;
 	}
@@ -68,6 +73,18 @@ public class LitePlayerUI extends PlayerUI {
 	public void update() {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public void updateSongInfo(Song currentSong) {
+		// TODO Auto-generated method stub
+		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+		image.setDefaultImageResId(R.drawable.ic_launcher);
+		
+		//System.out.println (currentSong);
+		if (currentSong != null){
+			//System.out.println (currentSong.getArtworkUrl());
+			image.setImageUrl(currentSong.getArtworkUrl(), mImageLoader);
+		}
 	}
 	
 

@@ -280,7 +280,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		protected Boolean doInBackground(Song...song) {
 			// TODO Auto-generated method stub
 			ApiWrapper wrapper = getApiWrapper();
-			String request =  ME_FAVORITE + song[0].getSoundcloudId();
+			String request =  ME_FAVORITE + song[0].getId();
 			System.out.println(request);
 			try {
 				wrapper.put(Request.to(request));

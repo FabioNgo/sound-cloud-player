@@ -9,6 +9,7 @@ import java.util.Stack;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
+import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -50,9 +51,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	// // TODO Auto-generated constructor stub
 	// }
 	private int loopState = 0;
+	private int explorecategory = -1;
 	private boolean isShuffle = false;
 	private int musicState;
-	private ArrayList<Song> songQueue;
+	private ArrayList<Song> songQueue = new ArrayList<Song>();
 	private Stack<Integer> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
@@ -99,9 +101,19 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return START_STICKY;
 	}
 
+	/**
+	 * Get current song is playing
+	 * @return
+	 */
 	public Song getCurrentSong() {
 
-		return songQueue.get(currentSongPosition);
+		if (songQueue == null){
+			return null;
+		}else if (songQueue.isEmpty()){
+			return null;
+		}else{
+			return songQueue.get(currentSongPosition);
+		}
 
 	}
 
@@ -113,6 +125,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		songQueue.add(song);
 	}
 
+	/**
+	 * Initialize media player object
+	 */
 	private void iniMediaPlayer() {
 		// TODO Auto-generated method stub
 		if (mediaPlayer == null) {
@@ -143,6 +158,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 	}
 
+	/**
+	 * Play next Song when click to next button or at the end of current song 
+	 */
 	public void playNextSong() {
 
 		stackSongplayed.push(currentSongPosition);
@@ -166,6 +184,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
+	/**
+	 * Back to preivious Song when click to prev button
+	 */
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
 
@@ -182,6 +203,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
+	/**
+	 * start Media player.
+	 * 
+	 */
 	private void playMedia() {
 		// TODO Auto-generated method stub
 
@@ -222,6 +247,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 	}
 
+	/**
+	 * Pause . When click to pause button
+	 */
 	private void pauseMedia() {
 		// TODO Auto-generated method stub
 		if (mediaPlayer.isPlaying()) {
@@ -260,6 +288,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 	}
 
+	/**
+	 * Play the current song when press start button
+	 */
 	public void playCurrentSong() {
 		updateNotification(false, R.drawable.ic_media_play);
 		if (musicState == MUSIC_PAUSE) {
@@ -279,6 +310,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// sendBroadcast(TAG_START);
 	}
 
+	/**
+	 * Play a list of offline song
+	 * @param position : position of first song in the list
+	 * @param queue : list of the songs want to play
+	 */
 	public void playNewOfflineSong(int position, ArrayList<OfflineSong> queue) {
 		this.songQueue.clear();
 		songQueue.addAll(queue);
@@ -286,6 +322,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		playNewSong(true);
 
 	}
+	
+
+	/**
+	 * Play a list of online song
+	 * @param position : position of first song in the list
+	 * @param queue : list of the songs want to play
+	 */
 	public void playNewSong(int position, ArrayList<Song> queue) {
 		this.songQueue.clear();
 		songQueue.addAll(queue);
@@ -300,7 +343,28 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		playNewSong(true);
 
 	}
+	
+	public void playNewExploreSong(int position, int category) {
+		explorecategory = category;
+		playNewOnlineSong(position, SongController.getInstance().getOnlineSongs(explorecategory));
 
+	}
+	
+	public void updateQueue(int category){
+		
+		if (category == explorecategory){
+			this.songQueue.clear();
+			songQueue.addAll(SongController.getInstance().getOnlineSongs(explorecategory));
+			
+		}
+	}
+	
+	
+
+	/**
+	 * Play new song
+	 * @param startNow : true if want to play immediately, False: play when user press start
+	 */
 	private void playNewSong(boolean startNow) {
 		if (startNow) {
 
@@ -337,6 +401,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
+	/**
+	 * pause media. Update notification when pause
+	 */
 	public void pause() {
 
 		pauseMedia();
@@ -344,6 +411,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
+	/**
+	 * get current time of playing song
+	 * @return current time in milisecond
+	 */
 	public int getCurrentTime() {
 		if (musicState == APP_START) {
 			return timeLastStop;
@@ -354,6 +425,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return -1;
 	}
 
+	/**
+	 * Get Duration of playingSong
+	 * @return
+	 */
 	public long getDuration() {
 		if (mediaPlayer != null) {
 			int a = mediaPlayer.getDuration();
@@ -362,6 +437,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return -1;
 	}
 
+	/**
+	 * Check if media is playing or not
+	 * @return
+	 */
 	public boolean isPlaying() {
 		if (musicState == MUSIC_START) {
 			return true;
@@ -369,6 +448,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return false;
 	}
 
+	/**
+	 * Update notification
+	 * @param cancel
+	 * @param iconID
+	 */
 	private void updateNotification(boolean cancel, int iconID) {
 
 		Intent intent = new Intent(getApplicationContext(),
@@ -417,6 +501,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		startForeground(NOTIFICATION_ID, notification);
 	}
 
+	/**
+	 * function when click to start/pause button 
+	 */
 	public void startPause() {
 		// TODO Auto-generated method stub
 
@@ -466,6 +553,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return songQueue;
 	}
 
+	/**
+	 * Fast forward of playing song
+	 */
 	public void forwardSong() {
 		if (mediaPlayer != null) {
 			if (musicState != MUSIC_START) {
@@ -481,6 +571,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 	}
 
+	/**
+	 * rewind of playing song
+	 */
 	public void rewindSong() {
 		if (mediaPlayer != null) {
 			if (musicState != MUSIC_START) {
@@ -500,11 +593,15 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return songQueue.get(currentSongPosition).getId();
 	}
 
+	
 	public void restartSong() {
 		mediaPlayer.reset();
 		playNewSong(false);
 	}
 
+	/**
+	 * set playing suffle when play a list
+	 */
 	public void setShuffle() {
 		// TODO Auto-generated method stub
 		isShuffle = !isShuffle;
@@ -532,6 +629,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		UpdateUiFromServiceController.getInstance().updateUI(-1);
 	}
 
+	/**
+	 * Remove notification
+	 */
 	public void cancelNoti() {
 		updateNotification(true, -1);
 	}
@@ -545,6 +645,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return ids;
 	}
 
+	
 	private Action createAction(int iconID, String action) {
 		Intent switchIntent = new Intent(this,
 				MusicPlayerBroadcastReceiver.class);
@@ -562,6 +663,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return null;
 	}
 
+	
 	private class playNewSongBackground extends
 			AsyncTask<String, String, String> {
 

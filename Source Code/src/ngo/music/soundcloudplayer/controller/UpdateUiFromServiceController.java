@@ -178,10 +178,11 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 		case MUSIC_NEW_SONG:
 			for (PlayerUI playerUI : uiFragments) {
 
-				playerUI.updateTitle(MusicPlayerService.getInstance()
-						.getCurrentSong());
-				playerUI.updateSubtitle(MusicPlayerService.getInstance()
-						.getCurrentSong());
+				Song currentSong = MusicPlayerService.getInstance().getCurrentSong();
+				playerUI.updateTitle(currentSong);
+				playerUI.updateSubtitle(currentSong);
+				playerUI.updateSongInfo(currentSong);
+				
 
 			}
 

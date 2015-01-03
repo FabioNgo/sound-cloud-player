@@ -22,7 +22,7 @@ public class ListViewOnItemClickHandler implements OnItemClickListener  {
 		// TODO Auto-generated method stub
 		ListSongAdapter adapter = (ListSongAdapter) arg0.getAdapter();
 		adapter.notifyDataSetChanged();
-		System.out.println ("ON CLICK");
+		//System.out.println ("ON CLICK");
 		//Song songSelected = (Song) songsList.getAdapter().getItem(position);
 		ArrayList<OnlineSong> songs = adapter.getSongs();
 		//SongController songController = SongController.getInstance();

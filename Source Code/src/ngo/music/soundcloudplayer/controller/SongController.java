@@ -390,7 +390,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		//song.setReleaseMonth(me.getInt(RELEASE_MONTH));
 		//song.setReleaseYear(me.getInt(RELEASE_YEAR));
 		//song.setSharing(me.getString(SHARING));
-		song.setSoundcloudId(me.getInt(ID));
+		song.setId(me.getInt(ID));
 
 		//song.setStreamable(me.getBoolean(STREAMABLE));
 		
@@ -795,7 +795,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		//song.setReleaseMonth(me.getInt(RELEASE_MONTH));
 		//song.setReleaseYear(me.getInt(RELEASE_YEAR));
 		//song.setSharing(me.getString(SHARING));
-		song.setSoundcloudId(me.getInt(ID));
+		song.setId(me.getInt(ID));
 
 		//song.setStreamable(me.getBoolean(STREAMABLE));
 		

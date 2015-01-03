@@ -753,20 +753,16 @@ public class OnlineSong extends Song{
 	}
 
 
-	/**
-	 * @return the artwork_url
-	 */
-	public String getArtworkUrl() {
-		return artwork_url;
+	@Override
+	public String getId (){
+		return id;
 	}
-
-
-	/**
-	 * @param artwork_url the artwork_url to set
-	 */
-	public void setArtworkUrl(String artwork_url) {
-		this.artwork_url = artwork_url;
+	
+	public void setId (int soundcloudID){
+		id = String.valueOf(soundcloudID);
 	}
+	
+	
 	@Override
 	public int compareTo(Song arg0) {
 		// TODO Auto-generated method stub

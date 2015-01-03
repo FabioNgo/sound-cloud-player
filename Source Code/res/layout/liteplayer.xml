@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
      xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent" >
-    <ImageView
+    <com.android.volley.toolbox.NetworkImageView
     	android:id="@+id/lite_player_image"
     	android:layout_height="match_parent"
     	android:layout_width="wrap_content"

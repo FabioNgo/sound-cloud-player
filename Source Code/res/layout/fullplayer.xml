@@ -11,7 +11,7 @@
 		android:layout_height="?attr/actionBarSize"
 		android:layout_width="match_parent"
 		sothree:theme="@style/AppTheme" />
-	<ImageView
+	<com.android.volley.toolbox.NetworkImageView
 		android:background="#0099cc"
 		android:id="@+id/full_player_song_image"
 		android:layout_below="@+id/full_player_toolbar"

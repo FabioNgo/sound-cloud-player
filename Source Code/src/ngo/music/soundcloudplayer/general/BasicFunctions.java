@@ -1,5 +1,6 @@
 package ngo.music.soundcloudplayer.general;
 
+import ngo.music.soundcloudplayer.boundary.MainActivity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -16,17 +17,26 @@ import android.widget.Toast;
  * @author Fabio Ngo Class store basic functions ( most-used functions)
  */
 public class BasicFunctions {
-	/*
-	 * Resize Image View to the size
+	
+	/**
+	 * Set Image size of ImageView
+	 * @param width width of image. < 0 if not set
+	 * @param height height of image. <0 if not set
+	 * @param imageView image want to be set size
 	 */
-	public static void ResizeImageView(int width, int height,
+	public static void setImageViewSize(int width, int height,
 			ImageView imageView) {
-		Drawable drawable = imageView.getDrawable();
-		Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-
-		Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width, height,
-				true);
-		imageView.setImageBitmap(scaledBitmap);
+		if (width > 0){
+			imageView.setMinimumWidth(width);
+			imageView.setMaxWidth(width);
+		}
+		
+		if (height > 0){
+			imageView.setMinimumHeight(height);
+			imageView.setMaxHeight(height);
+		}
+		
+		
 	}
 
 	
