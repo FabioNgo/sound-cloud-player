@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutionException;
 import org.json.JSONException;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.SoundCloudFollowingAdapter;
+import ngo.music.soundcloudplayer.Adapters.SoundCloudFollowingFollowerAdapter;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.User;
@@ -53,7 +53,7 @@ public class SoundCloudFollowingFragment extends Fragment {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		final SoundCloudFollowingAdapter adapter = new SoundCloudFollowingAdapter(getActivity(), R.layout.user_list_view, users);
+		final SoundCloudFollowingFollowerAdapter adapter = new SoundCloudFollowingFollowerAdapter(getActivity(), R.layout.user_list_view, users);
 		
 		listUsers = (ListView) rootView.findViewById(R.id.users_list);
 		listUsers.setAdapter(adapter);
@@ -85,7 +85,7 @@ public class SoundCloudFollowingFragment extends Fragment {
 	 * @param adapter
 	 * @param position
 	 */
-	private void reCreateActivity(final SoundCloudFollowingAdapter adapter,
+	private void reCreateActivity(final SoundCloudFollowingFollowerAdapter adapter,
 			int position) {
 		SongController songController = SongController.getInstance();
 		songController.isLoadStream = true;

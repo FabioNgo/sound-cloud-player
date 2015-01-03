@@ -332,18 +332,18 @@ public class UploadSongActivity extends Activity implements Constants {
 			song.setArtworkData(avatarFile);
 			
 			SongController songController = SongController.getInstance();
-			try {
-				songController.uploadSong(song, audioFile, avatarFile);
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			try {
+//				songController.uploadSong(song, audioFile, avatarFile);
+//			} catch (ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			
 
 

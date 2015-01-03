@@ -86,8 +86,9 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
 			//System.out.println (songs.size() + "......" + category);
 			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
-			
+			adapter.notifyDataSetChanged();
 			songsList.setAdapter(adapter);
+			
 			songsList.setOnItemClickListener(new  ListViewOnItemClickHandler());
 			songsList.setOnScrollListener(new OnScrollListener() {
 				
@@ -103,9 +104,9 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 					
 					//what is the bottom iten that is visible
 					int lastInScreen = firstVisibleItem + visibleItemCount;
-					
+					//adapter.notifyDataSetChanged();
 					//is the bottom item visible & not loading more already ? Load more !
-					if(lastInScreen >= totalItemCount-3 && !loadingMore){
+					if(lastInScreen >= totalItemCount-1 && !loadingMore){
 						//loadingMore = true;
 						//new loadMoreListView(songsList, adapter).execute();
 						 // Setting new scroll position
@@ -115,7 +116,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 						thread.start();
 						
 						songsList.setSelectionFromTop(firstVisibleItem + 1, 0);
-						 
+						 adapter.notifyDataSetChanged();
 						//loadingMore = false;
 					}
 					// TODO Auto-generated method stub

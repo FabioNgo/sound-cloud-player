@@ -449,10 +449,31 @@ public class SoundCloudUserController extends UserController implements Constant
 		return users;
 	}
 	
-//	public boolean isFollowing (User user){
-//		ApiWrapper wrapper = getApiWrapper();
-//		
-//	}
+	public boolean isFollowing (SoundCloudAccount user){
+		ApiWrapper wrapper = getApiWrapper();
+		
+		String request = Constants.ME_FOLLOWINGS + "/"+String.valueOf(user.getId());
+	
+		
+		//System.out.println (resp.getStatusLine());
+		//String me =  Http.getString(resp);
+		//System.out.println (me);
+		JSONObject obj;
+		try {
+			HttpResponse response = wrapper.get(Request.to(request));
+			obj = Http.getJSON(response);
+			JSONArray a = obj.getJSONArray("errors");
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			return false;
+			
+		}
+		
+		//System.out.println (obj);
+		return true;
+		
+	}
 	/**
 	 * @return the guest
 	 */
@@ -465,6 +486,43 @@ public class SoundCloudUserController extends UserController implements Constant
 	 */
 	public void setGuest(User guest) {
 		this.guest = guest;
+	}
+
+	public void follow(SoundCloudAccount soundCloudAccount) {
+		// TODO Auto-generated method stub
+		ApiWrapper wrapper = getApiWrapper();
+		
+		String request = Constants.ME_FOLLOWINGS + "/"+String.valueOf(soundCloudAccount.getId());
+	
+		try {
+			 wrapper.put(Request.to(request));
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+			
+		}
+		
+		
+	}
+
+	public void unFollow(SoundCloudAccount soundCloudAccount) {
+		// TODO Auto-generated method stub
+		ApiWrapper wrapper = getApiWrapper();
+		
+		String request = Constants.ME_FOLLOWINGS + "/"+String.valueOf(soundCloudAccount.getId());
+	
+		try {
+			 wrapper.delete(Request.to(request));
+			
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			
+			
+		}
+		
 	}
 	
 }

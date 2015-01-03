@@ -138,7 +138,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	 */
 	private void configTabSliding() {
 		
-		System.out.println("CONFIG TAB SLIDING");
+		
 		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		pager = (ViewPager) findViewById(R.id.pager);
 		FragmentPagerAdapter adapter;

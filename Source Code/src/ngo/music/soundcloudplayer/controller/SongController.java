@@ -204,9 +204,6 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		return currentSong;
@@ -240,64 +237,64 @@ public class SongController implements Constants, Constants.SongConstants, Const
 
 	}
 
-	/**
-	 * upload Song from memory.
-	 * 
-	 * @param song
-	 * @param songFile
-	 * @param artWorkFile
-	 * @throws ClassNotFoundException
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-	public void uploadSong(Song song, File songFile, File artWorkFile)
-			throws ClassNotFoundException, IOException, JSONException {
-
-		final ApiWrapper wrapper = ApiWrapper.fromFile(songFile);
-//		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
-//		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
-		
-		try {
-			HttpResponse resp = wrapper.post(Request.to(Endpoints.TRACKS)
-					.add(Params.Track.TITLE, "test title")
-				//	.add(Params.Track.GENRE, "test genre")
-				//	.add(Params.Track.DESCRIPTION, "test desc")
-				//	.add(Params.Track.SHARING, "public")
-					//.add(Params.Track.PERMALINK, song.getPermalink())
-					//.add(Params.Track.RELEASE, song.getRelease())
-					.withFile(Params.Track.ASSET_DATA, songFile)
-					// you can add more parameters here, e.g.
-					//.withFile(Params.Track.ARTWORK_DATA, artWorkFile)
-					/* to add artwork */
-
-					// set a progress listener (optional)
-					.setProgressListener(
-							new Request.TransferProgressListener() {
-								@Override
-								public void transferred(long amount) {
-									System.err.print(".");
-								}
-							}
-					)
-			);
-
-
-			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
-				System.out.println("\n201 Created "
-						+ resp.getFirstHeader("Location").getValue());
-
-				// dump the representation of the new track
-				System.out.println("\n" + Http.getJSON(resp).toString(4));
-			} else {
-				System.err.println("Invalid status received: "
-						+ resp.getStatusLine());
-			}
-		} finally {
-			// serialise wrapper state again (token might have been refreshed)
-			wrapper.toFile(songFile);
-		}
-
-	}
+//	/**
+//	 * upload Song from memory.
+//	 * 
+//	 * @param song
+//	 * @param songFile
+//	 * @param artWorkFile
+//	 * @throws ClassNotFoundException
+//	 * @throws IOException
+//	 * @throws JSONException
+//	 */
+//	public void uploadSong(Song song, File songFile, File artWorkFile)
+//			throws ClassNotFoundException, IOException, JSONException {
+//
+//		final ApiWrapper wrapper = ApiWrapper.fromFile(songFile);
+////		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+////		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+//		
+//		try {
+//			HttpResponse resp = wrapper.post(Request.to(Endpoints.TRACKS)
+//					.add(Params.Track.TITLE, "test title")
+//				//	.add(Params.Track.GENRE, "test genre")
+//				//	.add(Params.Track.DESCRIPTION, "test desc")
+//				//	.add(Params.Track.SHARING, "public")
+//					//.add(Params.Track.PERMALINK, song.getPermalink())
+//					//.add(Params.Track.RELEASE, song.getRelease())
+//					.withFile(Params.Track.ASSET_DATA, songFile)
+//					// you can add more parameters here, e.g.
+//					//.withFile(Params.Track.ARTWORK_DATA, artWorkFile)
+//					/* to add artwork */
+//
+//					// set a progress listener (optional)
+//					.setProgressListener(
+//							new Request.TransferProgressListener() {
+//								@Override
+//								public void transferred(long amount) {
+//									System.err.print(".");
+//								}
+//							}
+//					)
+//			);
+//
+//
+//			if (resp.getStatusLine().getStatusCode() == HttpStatus.SC_CREATED) {
+//				System.out.println("\n201 Created "
+//						+ resp.getFirstHeader("Location").getValue());
+//
+//				// dump the representation of the new track
+//				System.out.println("\n" + Http.getJSON(resp).toString(4));
+//			} else {
+//				System.err.println("Invalid status received: "
+//						+ resp.getStatusLine());
+//			}
+//		} finally {
+//			// serialise wrapper state again (token might have been refreshed)
+//			wrapper.toFile(songFile);
+//		}
+//
+//	}
 
 
 	private ArrayList<OnlineSong> getSongsFromSoundCloud(int currentPage, int category){
@@ -327,20 +324,13 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	        
 			JSONObject track = new JSONObject(inputLine);
 			JSONArray listSong = track.getJSONArray(TAG_TRACKS_EXPLORE);
-			System.out.println ("SIZE = " + listSong.length());
+			//System.out.println ("SIZE = " + listSong.length());
 			ArrayList<OnlineSong> song = onlineSongs.get(category);
 			for (int i = 0 ; i< listSong.length(); i++){
 				JSONObject jsonObject = listSong.getJSONObject(i);
 
-				//int position =searchId(idList, jsonObject.getInt(ID)); 
-				//if (position < 0){
-					try{
-						song.add((OnlineSong) addSongInformation(jsonObject));
-					//	idList.add(- (position + 1), jsonObject.getInt(ID));
-					}catch(JSONException e){
-						e.printStackTrace();
-					}
-				//}
+				song.add((OnlineSong) addSongInformation(jsonObject));
+				//	idList.add(- (position + 1), jsonObject.getInt(ID));
 			}
 		}catch (Exception e){
 			
@@ -359,28 +349,30 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	 * @throws IOException
 	 */
 	private OnlineSong addSongInformation(JSONObject me)
-			throws JSONException, IOException {
+			throws  IOException {
 		OnlineSong song = new OnlineSong();
 		
-		song.setTagList(me.getString(TAG_LIST));
+		try {
+			song.setTagList(me.getString(TAG_LIST));
+		
 		song.setTitle(me.getString(TITLE));
 		//song.setTrackType(me.getString(TRACK_TYPE));
 		//song.setUri(me.getString(URI));
 		//song.setUserId(me.getInt(USER_ID));
 		//song.setVideoUrl(me.getString(VIDEO_URL));
-		song.setWaveformUrl(me.getString(WAVEFORM_URL));
+		//song.setWaveformUrl(me.getString(WAVEFORM_URL));
 		song.setArtworkUrl(me.getString(ARTWORK_URL));
 		song.setStreamUrl(me.getString(STREAM_URL));
 		//song.setCommentable(me.getBoolean(COMMENTABLE));
 		//song.setCommentCount(me.getInt(COMMENT_COUNT));
 		//song.setContentSize(me.getLong(CONTENT_SIZE));
 		//song.setCreatedAt(me.getString(CREATED_AT));
-		song.setDescription(me.getString(DESCRIPTION));
+		//song.setDescription(me.getString(DESCRIPTION));
 		//song.setDownloadable(me.getBoolean(DOWNLOADABLE));
 		//song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
 		//song.setDownloadUrl(me.getString(DOWNLOAD_URL));
-		song.setDuration(me.getLong(DURATION));
-		song.setLikesCount(me.getInt(LIKES_COUNT));
+		//song.setDuration(me.getLong(DURATION));
+		
 		//song.setFormat(me.getString(FORMAT));
 		song.setGerne(me.getString(GENRE));
 		//song.setKeySignature(me.getString(KEY_SIGNATURE));
@@ -391,7 +383,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		//song.setPermalinkUrl(me.getString(PERMALINK_URL));
 		
 		
-		song.setPlaybackCount(me.getInt(PLAYBACK_COUNT));
+		
 		
 		//song.setRelease(me.getString(RELEASE));
 		//song.setReleaseDay(me.getInt(RELEASE_DAY));
@@ -404,13 +396,18 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		
 
 		//song.setStreamable(me.getBoolean(STREAMABLE));
-		
+
 		SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
 		song.setUser(soundCloudAccount);
-		
+		song.setLikesCount(me.getInt(LIKES_COUNT));
+		song.setPlaybackCount(me.getInt(PLAYBACK_COUNT));
 		//Stream stream = wrapper.resolveStreamUrl(me.getString(STREAM_URL), true);
 		//song.setStreamUrl(stream.streamUrl);
-		
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			return song;
+			//e.printStackTrace();
+		}
 		return song;
 	}
 
@@ -553,8 +550,6 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			// TODO Auto-generated method stub
 			String streamUrl;
 			
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
-			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
 			
 				
 			try {
@@ -577,7 +572,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 	            
 	            byte data[] = new byte[2048];
 	 
-	            long total = 0;
+	           // long total = 0;
 	            
 	            while ((count = input.read(data)) != -1) {
 	                mBuilder.setProgress(0, 0, true);
@@ -597,7 +592,7 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		        
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				
+				e.printStackTrace();
 				result = "You are not allowed to download this file";
 			}
 			return result;
@@ -658,6 +653,10 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		}
 		
 	}
+	
+	/**
+	 * Load list favorite of user
+	 */
 	public void loadFavoriteSong() {
 		if (isLoadFavoriteSong){
 			//System.out.println ("LOAD FAVORITE");
@@ -772,12 +771,12 @@ public class SongController implements Constants, Constants.SongConstants, Const
 		//song.setCommentCount(me.getInt(COMMENT_COUNT));
 		//song.setContentSize(me.getLong(CONTENT_SIZE));
 		//song.setCreatedAt(me.getString(CREATED_AT));
-		song.setDescription(me.getString(DESCRIPTION));
+		//song.setDescription(me.getString(DESCRIPTION));
 		//song.setDownloadable(me.getBoolean(DOWNLOADABLE));
 		//song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
 		//song.setDownloadUrl(me.getString(DOWNLOAD_URL));
-		song.setDuration(me.getLong(DURATION));
-		song.setFavoriteCount(me.getInt(FOVORITINGS_COUNT));
+		//song.setDuration(me.getLong(DURATION));
+		//song.setFavoriteCount(me.getInt(FOVORITINGS_COUNT));
 		//song.setLikesCount(me.getInt(LIKES_COUNT));
 		//song.setFormat(me.getString(FORMAT));
 		song.setGerne(me.getString(GENRE));

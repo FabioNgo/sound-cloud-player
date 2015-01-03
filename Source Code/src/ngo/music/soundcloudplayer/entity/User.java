@@ -35,7 +35,7 @@ public abstract class User {
 	/*
 	 * country
 	 */
-	protected String country= "";
+	protected String country= " ";
 	
 	/*
 	 * first and last name	
@@ -45,7 +45,7 @@ public abstract class User {
 	/*
 	 * city
 	 */
-	protected String city = "";
+	protected String city = " ";
 	
 	/*
 	 * description
@@ -219,6 +219,9 @@ public abstract class User {
 	 * @return the country
 	 */
 	public String getCountry() {
+		if (country.compareTo("null") == 0 || country == null){
+			return " ";
+		}
 		return country;
 	}
 
@@ -251,6 +254,9 @@ public abstract class User {
 	 * @return the city
 	 */
 	public String getCity() {
+		if (city.compareTo("null") == 0 || city == null){
+			return " ";
+		}
 		return city;
 	}
 
@@ -483,6 +489,20 @@ public abstract class User {
 	 */
 	public void setPrimaryEmailConfirmed(boolean primaryEmailConfirmed) {
 		this.primaryEmailConfirmed = primaryEmailConfirmed;
+	}
+	
+	public String getNumFollowerString (){
+		String temp = "";
+		String tempStr = String.valueOf(followersCount);
+		int start = tempStr.length()-1;
+		
+		while (start > 3){
+			temp = "," + tempStr.substring(start-3,start ) + temp;
+			start = start -3;
+		}
+		temp = tempStr.substring(0, start) + temp;
+
+		return temp;
 	}
 
 	
