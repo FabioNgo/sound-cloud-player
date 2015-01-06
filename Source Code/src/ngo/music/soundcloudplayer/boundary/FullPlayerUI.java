@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -162,7 +162,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 */
 		updateShuffle();
 		updateLoop();
-		UpdateUiFromServiceController.getInstance().addUiFragment(this);
+		UIController.getInstance().addUiFragment(this);
 		return rootView;
 	}
 

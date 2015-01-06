@@ -17,7 +17,7 @@ import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -36,18 +36,16 @@ import android.widget.TextView;
 
 public class QueueSongAdapter extends ArrayAdapter<Song> {
 	private View v;
-	
+	private boolean isdatachanged = true;
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
 
-
-		//songs = SongController.getInstance().getOfflineSongs();
+		// songs = SongController.getInstance().getOfflineSongs();
 
 		songs = MusicPlayerService.getInstance().getQueue();
-		if(songs == null){
+		if (songs == null) {
 			songs = new ArrayList<Song>();
 		}
-
 
 	}
 
@@ -71,7 +69,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = inflater.inflate(R.layout.liteplayer, null);
-			
+
 		}
 
 		setLayoutInformation(position, v);
@@ -88,10 +86,12 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set avatar for song
 		 */
-		NetworkImageView avatar = (NetworkImageView) v.findViewById(R.id.lite_player_image);
-//
+		NetworkImageView avatar = (NetworkImageView) v
+				.findViewById(R.id.lite_player_image);
+		//
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-		BasicFunctions.setImageViewSize(MainActivity.screenWidth/20, MainActivity.screenWidth/20, avatar);
+		BasicFunctions.setImageViewSize(MainActivity.screenWidth / 20,
+				MainActivity.screenWidth / 20, avatar);
 
 		avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
 
@@ -110,23 +110,27 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set progress bar
 		 */
-		if (MusicPlayerService.getInstance().getCurrentSongId().compareTo(songs.get(position).getId())==0) {
+		String songPlayingId = MusicPlayerService.getInstance()
+				.getCurrentSongId();
+
+		if (songPlayingId.equals(songs.get(position).getId())) {
 			ProgressWheel progressWheel = (ProgressWheel) v
 					.findViewById(R.id.lite_player_progress_bar);
 			progressWheel.setVisibility(View.VISIBLE);
-			if(MusicPlayerService.getInstance().isPlaying()){
+			if (MusicPlayerService.getInstance().isPlaying()) {
 				progressWheel.setBackgroundResource(R.drawable.ic_media_pause);
-			}else{
+			} else {
 				progressWheel.setBackgroundResource(R.drawable.ic_media_play);
 			}
-			UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
-		}else{
+			UIController.getInstance().addProgressBar(progressWheel);
+		} else {
 			ProgressWheel progressWheel = (ProgressWheel) v
 					.findViewById(R.id.lite_player_progress_bar);
 			progressWheel.setVisibility(View.INVISIBLE);
-			UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
-			
+			UIController.getInstance().removeProgressBar(progressWheel);
+
 		}
+
 	}
 
 	@Override
@@ -141,20 +145,28 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 
 	public ArrayList<Song> getSongs() {
 		return songs;
-		
+
 	}
+
 	public ArrayList<String> getSongIds() {
 		ArrayList<String> result = new ArrayList<String>();
 		for (Song song : songs) {
 			result.add(song.getId());
 		}
 		return result;
-		
+
 	}
-	public void updateQueue(){
-		this.songs.clear();
-		this.songs.addAll(MusicPlayerService.getInstance().getQueue());
+
+	public void updateQueue() {
+		
+		songs = MusicPlayerService.getInstance().getQueue();
+//		updateDataChanged(true);
 		return;
 	}
-	
+	public void updateDataChanged(boolean input){
+		isdatachanged = input;
+	}
+	public boolean isDataChanged(){
+		return isdatachanged;
+	}
 }

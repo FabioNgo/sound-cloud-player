@@ -1,7 +1,7 @@
 package ngo.music.soundcloudplayer.boundary;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.Bundle;
@@ -35,9 +35,9 @@ public abstract class PlayerUI extends Fragment {
 				// TODO Auto-generated method stub
 //				musicProgressBar.setProgressDegree(degree);
 				if (hasTextTime) {
-					currentTimeText.setText(UpdateUiFromServiceController
+					currentTimeText.setText(UIController
 							.getInstance().getCurrentTime());
-					durationText.setText(UpdateUiFromServiceController
+					durationText.setText(UIController
 							.getInstance().getDuration());
 				}
 			}

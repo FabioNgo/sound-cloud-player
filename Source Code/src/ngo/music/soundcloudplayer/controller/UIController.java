@@ -11,7 +11,9 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
+import ngo.music.soundcloudplayer.boundary.ListContentFragment;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -22,28 +24,30 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class UpdateUiFromServiceController implements Constants.MusicService {
-	private static UpdateUiFromServiceController instance;
+public class UIController implements Constants.MusicService {
+	private static UIController instance;
 	private MusicPlayerService musicPlayerService;
 	private CountDownTimer timer;
 	private ArrayList<PlayerUI> uiFragments;
 	private ArrayList<ProgressWheel> musicProgressBars;
 	private ArrayList<ArrayAdapter<Song>> adapters;
 	private Song playingSong;
+	private ArrayList<ListContentFragment> listContentFragments;
 
-	private UpdateUiFromServiceController() {
+	private UIController() {
 		// TODO Auto-generated constructor stub
 
 		instance = this;
 		uiFragments = new ArrayList<PlayerUI>();
 		musicProgressBars = new ArrayList<ProgressWheel>();
 		adapters = new ArrayList<ArrayAdapter<Song>>();
+		listContentFragments = new ArrayList<ListContentFragment>();
 
 	}
 
-	public static UpdateUiFromServiceController getInstance() {
+	public static UIController getInstance() {
 		if (instance == null) {
-			new UpdateUiFromServiceController();
+			new UIController();
 		}
 		return instance;
 	}
@@ -53,6 +57,10 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 		uiFragments.add(fragment);
 		addProgressBar(fragment.getProgressBar());
 
+	}
+
+	public void addListContentFragements(ListContentFragment input) {
+		listContentFragments.add(input);
 	}
 
 	public void addProgressBar(ProgressWheel progressbar) {
@@ -131,6 +139,14 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 				playerUI.play();
 
 			}
+			for (ArrayAdapter<Song> arrayAdapter : adapters) {
+
+				if (arrayAdapter instanceof QueueSongAdapter) {
+					((QueueSongAdapter) arrayAdapter).updateQueue();
+				}
+
+				arrayAdapter.notifyDataSetChanged();
+			}
 			break;
 		case MUSIC_PAUSE:
 			stopTimer();
@@ -172,17 +188,26 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 								.setBackgroundResource(R.drawable.ic_media_play);
 					}
 				}
+				/**
+				 * Setting music progress bar on listviews
+				 */
 
+			}
+//			for (ArrayAdapter<Song> arrayAdapter : adapters) {
+//				arrayAdapter.notifyDataSetChanged();
+//			}
+			for (ListContentFragment listContentFragment : listContentFragments) {
+				listContentFragment.load();
 			}
 			break;
 		case MUSIC_NEW_SONG:
 			for (PlayerUI playerUI : uiFragments) {
 
-				Song currentSong = MusicPlayerService.getInstance().getCurrentSong();
+				Song currentSong = MusicPlayerService.getInstance()
+						.getCurrentSong();
 				playerUI.updateTitle(currentSong);
 				playerUI.updateSubtitle(currentSong);
 				playerUI.updateSongInfo(currentSong);
-				
 
 			}
 
@@ -192,7 +217,10 @@ public class UpdateUiFromServiceController implements Constants.MusicService {
 					((QueueSongAdapter) arrayAdapter).updateQueue();
 				}
 
-				arrayAdapter.notifyDataSetChanged();
+//				arrayAdapter.notifyDataSetChanged();
+			}
+			for (ListContentFragment listContentFragment : listContentFragments) {
+				listContentFragment.load();
 			}
 
 			break;

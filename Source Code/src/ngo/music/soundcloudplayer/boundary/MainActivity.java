@@ -9,18 +9,24 @@ import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import ngo.music.soundcloudplayer.service.MusicPlayerService.LocalBinder;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -53,6 +59,8 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public static boolean isExplore = false;
 
 	private int defaultTabPosition = 0;
+	protected Object mService;
+	protected boolean mBound;
 
 	/**
 	 * Screen's Size
@@ -71,8 +79,9 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
-
+		
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -107,7 +116,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 		 */
 		configTabSliding();
 		/*
-		 * Music Player Service
+		 * Music Player Service must be at last
 		 */
 		configMusicPlayerService();
 	}
@@ -148,7 +157,6 @@ public class MainActivity extends SlidingFragmentActivity implements
 		} else {
 			adapter = new TabsAdapter(getSupportFragmentManager());
 		}
-
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
 		final int pageMargin = (int) TypedValue.applyDimension(
@@ -208,20 +216,20 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, new PlayQueueUI()).commit();
+				.replace(R.id.play_queue_container, new QueueSongUI()).commit();
 	}
 
 	/**
 	 * Music Player Service
 	 */
 	private void configMusicPlayerService() {
-		if (!isMyServiceRunning()) {
-			Intent musicPlayerServiceIntent = new Intent(this,
-					MusicPlayerService.class);
+//		if (!isMyServiceRunning()) {
+		Intent musicPlayerServiceIntent = new Intent(this, MusicPlayerService.class);
+//        bindService(musicPlayerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 			startService(musicPlayerServiceIntent);
-		} else {
-			UpdateUiFromServiceController.getInstance().updateUI(APP_START);
-		}
+//		} else {
+			
+//		}
 	}
 
 	/**
@@ -334,6 +342,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
+		
 		// if (isMyServiceRunning()) {
 		// UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		// }
@@ -341,11 +350,13 @@ public class MainActivity extends SlidingFragmentActivity implements
 	}
 
 	@Override
-	protected void onStart() {
-		// TODO Auto-generated method stub
-		super.onStart();
+    protected void onStart() {
+        super.onStart();
+        
+        // Bind to LocalService
+        
+    }
 
-	}
 
 	@Override
 	protected void onDestroy() {
@@ -383,4 +394,22 @@ public class MainActivity extends SlidingFragmentActivity implements
 		pager.setCurrentItem(tab);
 		configTabSliding();
 	}
+	/** Defines callbacks for service binding, passed to bindService() */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            LocalBinder binder = (LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 }
+
