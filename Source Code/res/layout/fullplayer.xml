@@ -11,13 +11,79 @@
 		android:layout_height="?attr/actionBarSize"
 		android:layout_width="match_parent"
 		sothree:theme="@style/AppTheme" />
-	<com.android.volley.toolbox.NetworkImageView
-		android:background="#0099cc"
-		android:id="@+id/full_player_song_image"
-		android:layout_below="@+id/full_player_toolbar"
-		android:layout_height="wrap_content"
-		android:layout_width="match_parent"
-		android:src="@drawable/ic_launcher" />
+	
+	<!--  SONG INFO -->
+	<FrameLayout 
+	    android:id = "@+id/song_info_field"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/full_player_toolbar"
+	    
+		android:layout_width="match_parent">
+		
+	    
+		<!--  AVATAR OF SONG -->
+		<com.android.volley.toolbox.NetworkImageView
+			
+			
+			android:id="@+id/full_player_song_image"
+			android:layout_height="fill_parent"
+			android:layout_width="fill_parent"
+			android:src="@drawable/ic_launcher" />
+		
+		<RelativeLayout
+		    android:id = "@+id/opacity_layout"
+		    android:background="#212121"
+		    android:alpha="0.6"
+		    android:gravity="bottom"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent">
+		 </RelativeLayout>
+		<!--  ARTIST INFO -->
+		
+		<RelativeLayout
+		    android:id = "@+id/artist_info"
+		    android:gravity="bottom"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent">
+		<!--  AVATAR OF Artist -->
+		    <com.android.volley.toolbox.NetworkImageView
+		        
+		        android:id="@+id/artist_image"
+		        android:layout_width="wrap_content"
+		        android:src="@drawable/ic_launcher"
+		        android:layout_height="wrap_content" />
+		    
+		    <!--  Artist INFO -->
+			<RelativeLayout 
+			    
+		        android:layout_width="wrap_content"
+		        android:layout_toRightOf="@+id/artist_image"
+		        android:layout_marginLeft="4dp"
+		        android:layout_marginTop="10dp"
+		        android:layout_height="wrap_content">
+			    <TextView
+			        android:id="@+id/artist_fullname"
+			        android:layout_marginLeft="4dp"
+			        android:layout_width="match_parent"
+			        android:textColor="#EFEFEF"
+			        android:layout_height="wrap_content"
+			        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
+		
+			    <TextView
+			        android:layout_alignLeft="@+id/artist_fullname"
+			        android:layout_below="@+id/artist_fullname"
+			        android:id="@+id/artist_country"
+			        android:textColor="#EFEFEF"
+			        android:layout_width="match_parent"
+			        android:layout_height="wrap_content"
+			        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+			        android:layout_marginBottom="10dp" />
+			    
+			</RelativeLayout>
+		</RelativeLayout>
+		
+
+	</FrameLayout>
 	<com.todddavies.components.progressbar.ProgressWheel
 		ProgressWheel:barColor="#0097D6"
 		ProgressWheel:barLength="60dp"
@@ -27,7 +93,7 @@
 		ProgressWheel:textColor="#222"
 		ProgressWheel:textSize="14sp"
 		android:id="@+id/full_player_progress_bar"
-		android:layout_below="@+id/full_player_song_image"
+		android:layout_below="@+id/song_info_field"
 		android:layout_centerInParent="true"
 		android:layout_height="150dp"
 		android:layout_width="150dp" />

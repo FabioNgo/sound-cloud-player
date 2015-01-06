@@ -50,8 +50,9 @@ public class LoginActivity extends FragmentActivity implements Constants.UserCon
 				return;
 			}
 		}
-			setContentView(R.layout.login_layout);
-			changeFragment(new GeneralLoginUI());
+		setContentView(R.layout.login_layout);
+		
+		changeFragment(new GeneralLoginUI());
 		
 		
 		// TODO Auto-generated method stub

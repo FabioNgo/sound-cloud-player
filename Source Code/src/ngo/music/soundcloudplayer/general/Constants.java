@@ -11,7 +11,7 @@ public interface Constants {
 
 	public static final String CLIENT_ID ="2ae2cf32fdd87967a353b7e718d7f3cd";
 	public static final String CLIENT_SECRET = "acfe1a475e4d004214fed3326a01eb79";
-	public static final URI REDIRECT_URI     = URI.create("http://localhost:8000");
+	public static final URI REDIRECT_URI     = URI.create("callback.html");
 	
 	String TRACK_LINK = "https://api.soundcloud.com/tracks";
 	String USER_LINK = "http://api.soundcloud.com/users";

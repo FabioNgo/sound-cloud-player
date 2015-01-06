@@ -16,6 +16,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.app.DownloadManager.Request;
 import android.net.Uri;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -51,8 +52,9 @@ public class FacebookUserController extends UserController {
                 Constants.REDIRECT_URI,
                 null    /* token */);
 
-
+		System.out.println ("LOGIN FACEBOOK");
         // generate the URL the user needs to open in the browser
+		//wrapper.resolve(Request.)
         URI url = wrapper.authorizationCodeUrl(Endpoints.FACEBOOK_CONNECT, Token.SCOPE_NON_EXPIRING);
        
         return url;
@@ -85,50 +87,7 @@ public class FacebookUserController extends UserController {
         
     }
 
-    static void startServer(ApiWrapper wrapper) throws IOException {
-        ServerSocket socket = new ServerSocket(8000);
-        for (;;) {
-            final Socket client = socket.accept();
-            try {
-                InputStream is = client.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(is), 8192);
-                PrintStream out = new PrintStream(client.getOutputStream());
-                String line = reader.readLine();
-                if (line == null) throw new IOException("client closed connection without a request.");
 
-                final String[] request = line.split(" ", 3);
-                if (request.length != 3) throw new IOException("invalid request:" + line);
-                if (!"GET".equals(request[0])) throw new IOException("invalid method:" + line);
-
-                Map<String, String> params = parseParameters(request[1]);
-
-                if (params.containsKey("error")) {
-                    // error logging in, redirect mismatch etc.
-
-                    reply(out, "Error: " + params.get("error_description"));
-                } else if (params.containsKey("code")) {
-                    // we got a code back, try to exchange it for a token
-                    try {
-                        Token token = wrapper.authorizationCode(params.get("code"));
-                        reply(out, "Got token: " + token);
-                    } catch (CloudAPI.InvalidTokenException e) {
-                        reply(out, e.getMessage());
-                    }
-                } else {
-                    // unexpected redirect
-                    reply(out, "invalid request:"+request[1]);
-                }
-               break;
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    client.close();
-                } catch (IOException ignored) {
-                }
-            }
-        }
-    }
 
     static void reply(PrintStream out, String text) {
         System.out.println(text);

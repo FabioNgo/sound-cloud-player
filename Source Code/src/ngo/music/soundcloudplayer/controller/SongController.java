@@ -328,10 +328,14 @@ public class SongController implements Constants, Constants.SongConstants, Const
 			//System.out.println ("SIZE = " + listSong.length());
 			ArrayList<OnlineSong> song = onlineSongs.get(category);
 			for (int i = 0 ; i< listSong.length(); i++){
+				
 				JSONObject jsonObject = listSong.getJSONObject(i);
-
-				song.add((OnlineSong) addSongInformation(jsonObject));
-				//	idList.add(- (position + 1), jsonObject.getInt(ID));
+				int position = searchId(idList, jsonObject.getInt(ID));
+				if (position < 0){
+					song.add((OnlineSong) addSongInformation(jsonObject));
+					idList.add(- (position + 1), jsonObject.getInt(ID));
+				}
+				
 			}
 		}catch (Exception e){
 			

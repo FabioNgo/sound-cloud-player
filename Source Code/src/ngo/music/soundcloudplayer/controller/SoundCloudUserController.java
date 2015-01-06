@@ -6,6 +6,7 @@ package ngo.music.soundcloudplayer.controller;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.Header;
@@ -47,10 +48,17 @@ public class SoundCloudUserController extends UserController implements Constant
 	private User currentUser = null;
 	private User guest = null;
 	private ApiWrapper wrapper = null;
+	
+	
 	/*
 	 * Response String when resolve me/favorite
 	 */
 	private String responseString = null;
+	
+	private ArrayList<User> followings = new ArrayList<User>();
+	private ArrayList<User> followers = new ArrayList<User>();
+	private ArrayList<Integer> followingIdList = new ArrayList<Integer>();
+	private ArrayList<Integer> followerIdList = new ArrayList<Integer>();
 
 	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
 	/*
@@ -398,21 +406,27 @@ public class SoundCloudUserController extends UserController implements Constant
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public ArrayList<User> getFollowingUsers() throws IOException, JSONException {
+	public ArrayList<User> getFollowingUsers(int offset) throws IOException, JSONException {
 		
 		// TODO Auto-generated method stub
 		ApiWrapper wrapper = getApiWrapper();
 		HttpResponse response;	
+		
+		if (offset > getUser().getFollowingCount()){
+			offset = offset-getUser().getFollowingCount();
+		}
+		
 		if (guest == null){
-			response = wrapper.get(Request.to(ME_FOLLOWINGS));
+			response = wrapper.get(Request.to(ME_FOLLOWINGS + "/?offset=" + String.valueOf(offset)));
 		}else {
 			
-			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followings";
+			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followings/?offset=" + String.valueOf(offset);
+
 			response = wrapper.get(Request.to(request));
 		}
 		String respString = Http.getString(response);
 		
-		return getUsersJSON(respString);
+		return getFollowingsJSON(respString);
 	}
 	
 	/**
@@ -421,37 +435,67 @@ public class SoundCloudUserController extends UserController implements Constant
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public ArrayList<User> getFollowerUsers() throws IOException, JSONException {
+	public ArrayList<User> getFollowerUsers(int offset) throws IOException, JSONException {
 		// TODO Auto-generated method stub
 	
+		
 		ApiWrapper wrapper = getApiWrapper();
 		
 		HttpResponse response;
 		if (guest == null){
-			response = wrapper.get(Request.to(ME_FOLLOWERS));
+			
+			response = wrapper.get(Request.to(ME_FOLLOWERS + "/?offset=" + String.valueOf(offset)));
 		}else{
 		
-			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followings";
+			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followers/?offset=" + String.valueOf(offset);
 			response = wrapper.get(Request.to(request));
 		}
 		String respString = Http.getString(response);
 		
-		return getUsersJSON(respString);
+		return getFollowersJSON(respString);
 	}
 
 	
-	private ArrayList<User> getUsersJSON(String responseString) throws JSONException{
-		ArrayList<User> users = new ArrayList<User>();
+	private ArrayList<User> getFollowingsJSON(String responseString) throws JSONException{
+		//ArrayList<User> users = new ArrayList<User>();
 		JSONArray userArray = new JSONArray(responseString);
 		for (int i = 0; i < userArray.length(); i++){
 			JSONObject object = userArray.getJSONObject(i);
+			int position = searchId(followingIdList, object.getInt(ID));
 			
-			users.add(addSimpleUserInfo(object));
+			if (position < 0){
+				followings.add(addSimpleUserInfo(object));
+				followingIdList.add(- (position + 1), object.getInt(ID));
+			}
+			
 		}
 		
-		return users;
+		return followings;
 	}
 	
+	private ArrayList<User> getFollowersJSON(String responseString) throws JSONException{
+		//ArrayList<User> users = new ArrayList<User>();
+		JSONArray userArray = new JSONArray(responseString);
+		for (int i = 0; i < userArray.length(); i++){
+			JSONObject object = userArray.getJSONObject(i);
+			int position = searchId(followerIdList, object.getInt(ID));
+			
+			if (position < 0){
+				followers.add(addSimpleUserInfo(object));
+				followerIdList.add(- (position + 1), object.getInt(ID));
+			}
+				
+		}
+		
+		return followers;
+	}
+	
+	
+	/**
+	 * Check a user if current user is follow or not
+	 * @param user
+	 * @return
+	 */
 	public boolean isFollowing (SoundCloudAccount user){
 		ApiWrapper wrapper = getApiWrapper();
 		
@@ -491,6 +535,10 @@ public class SoundCloudUserController extends UserController implements Constant
 		this.guest = guest;
 	}
 
+	/**
+	 * Follow an user in soundcloud
+	 * @param soundCloudAccount
+	 */
 	public void follow(SoundCloudAccount soundCloudAccount) {
 		// TODO Auto-generated method stub
 		ApiWrapper wrapper = getApiWrapper();
@@ -510,6 +558,10 @@ public class SoundCloudUserController extends UserController implements Constant
 		
 	}
 
+	/**
+	 * Unfollow an user on soundcloud
+	 * @param soundCloudAccount
+	 */
 	public void unFollow(SoundCloudAccount soundCloudAccount) {
 		// TODO Auto-generated method stub
 		ApiWrapper wrapper = getApiWrapper();
@@ -526,6 +578,65 @@ public class SoundCloudUserController extends UserController implements Constant
 			
 		}
 		
+	}
+	
+	/**
+	 * Get info of soundclouduser by id
+	 * @param params
+	 * @return
+	 */
+	public SoundCloudAccount getUserbyId(String params){
+		SoundCloudAccount soundCloudAccount = null;
+		wrapper = getApiWrapper();
+		try {
+			HttpResponse resp  = wrapper.get(Request.to(Constants.USER_LINK + "/" + String.valueOf(params)));
+			String respString = Http.getString(resp);
+			JSONObject me = new JSONObject(respString);
+			soundCloudAccount = (SoundCloudAccount) addSimpleUserInfo(me);
+			return soundCloudAccount;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return soundCloudAccount;
+		
+	}
+
+	
+	/**
+	 * Reset data of controller
+	 */
+	public void clearUserData(){
+		followers.clear();
+		followings.clear();
+		followerIdList.clear();
+		followingIdList.clear();
+	}
+	
+	
+	public ArrayList<User> getFollowings(){
+		return followings;
+	}
+	
+	public ArrayList<User> getFollowers(){
+		return followers;
+		
+	}
+	
+	/**
+	 * search the Id of user in a list
+	 * 
+	 */
+	private int searchId(ArrayList<Integer> songidList, int songID){
+		
+		return Collections.binarySearch(songidList,songID);
+	
+
 	}
 	
 }
