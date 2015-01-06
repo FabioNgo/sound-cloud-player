@@ -12,6 +12,7 @@ import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -28,92 +29,99 @@ import android.widget.Toast;
  * @author LEBAO_000
  *
  */
-public class LoginActivity extends FragmentActivity implements Constants.UserContant {
+public class LoginActivity extends FragmentActivity implements
+		Constants.UserContant {
 	SoundCloudLoginUI soundcloudLoginUI = null;
 	GoogleLoginUI googleLoginUI = null;
 	FacebookLoginUI facebookLoginUI = null;
 	GeneralLoginUI generalLoginUI = null;
 	public LoginActivity activity = this;
-	
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
+
+		MusicPlayerService.getInstance();
 		DatabaseHandler databaseHandler = DatabaseHandler.getInstance(this);
-		if (BasicFunctions.isConnectingToInternet(activity)){
-			if (databaseHandler.isUserLoggedIn()){
+		if (BasicFunctions.isConnectingToInternet(activity)) {
+			if (databaseHandler.isUserLoggedIn()) {
 				String[] userInfo = databaseHandler.getUserInfo();
 				new Background(userInfo[0], userInfo[1]).execute();
-				
+
 				return;
 			}
 		}
 		setContentView(R.layout.login_layout);
-		
+
 		changeFragment(new GeneralLoginUI());
-		
-		
+
+
 		// TODO Auto-generated method stub
 	}
 
 	public void changeFragment(Fragment fragment) {
-		
-//		Not connect to internet
-//		if (!BasicFunctions.isConnectingToInternet(activity)){
-//			Toast.makeText(activity, "No internet connection", Toast.LENGTH_LONG).show();
-//			return;
-//		}
+
+		// Not connect to internet
+		// if (!BasicFunctions.isConnectingToInternet(activity)){
+		// Toast.makeText(activity, "No internet connection",
+		// Toast.LENGTH_LONG).show();
+		// return;
+		// }
 		if (fragment instanceof SoundCloudLoginUI) {
 			if (soundcloudLoginUI == null) {
 				soundcloudLoginUI = new SoundCloudLoginUI();
-				
+
 			}
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.login_layout, soundcloudLoginUI).addToBackStack("soundcloudLogin").commit();
+					.replace(R.id.login_layout, soundcloudLoginUI)
+					.addToBackStack("soundcloudLogin").commit();
 		}
 		if (fragment instanceof GoogleLoginUI) {
 			if (googleLoginUI == null) {
 				googleLoginUI = new GoogleLoginUI();
-				
+
 			}
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.login_layout, googleLoginUI).addToBackStack("googleLogin").commit();
+					.replace(R.id.login_layout, googleLoginUI)
+					.addToBackStack("googleLogin").commit();
 		}
 		if (fragment instanceof FacebookLoginUI) {
 			if (facebookLoginUI == null) {
 				facebookLoginUI = new FacebookLoginUI();
-				
+
 			}
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.login_layout, facebookLoginUI).addToBackStack("facebookLogin").commit();
+					.replace(R.id.login_layout, facebookLoginUI)
+					.addToBackStack("facebookLogin").commit();
 		}
 		if (fragment instanceof GeneralLoginUI) {
 			if (generalLoginUI == null) {
 				generalLoginUI = new GeneralLoginUI();
-				
+
 			}
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.login_layout, generalLoginUI).addToBackStack("generalLogin").commit();
+					.replace(R.id.login_layout, generalLoginUI)
+					.addToBackStack("generalLogin").commit();
 		}
 
 	}
-	
-	private class Background extends AsyncTask<String, String, String>{
+
+	private class Background extends AsyncTask<String, String, String> {
 
 		private static final String USERNAME_LOGIN = "baoloc1403@gmail.com";
 		private static final String PASSWORD_LOGIN = "ngolebaoloc";
-		
+
 		private ProgressDialog pDialog;
 		String username;
 		String password;
 		boolean isLogin = false;
-		
-		public Background(String username, String password){
+
+		public Background(String username, String password) {
 			this.username = username;
 			this.password = password;
 		}
+
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -121,53 +129,55 @@ public class LoginActivity extends FragmentActivity implements Constants.UserCon
 			pDialog.setMessage("Login...");
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
-			
+
 			pDialog.show();
 		}
+
 		@Override
 		protected String doInBackground(String... arg) {
 			// TODO Auto-generated method stub
 			Thread background = new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					SoundCloudUserController userController = SoundCloudUserController.getInstance();
+					SoundCloudUserController userController = SoundCloudUserController
+							.getInstance();
 					username = USERNAME_LOGIN;
 					password = PASSWORD_LOGIN;
-					User currentUser = userController.validateLogin(username, password);
-					
-					//Cannot login
-					if (currentUser == null){
+					User currentUser = userController.validateLogin(username,
+							password);
+
+					// Cannot login
+					if (currentUser == null) {
 						pDialog.dismiss();
 						isLogin = false;
-					}else{
-						DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getApplicationContext());
+					} else {
+						DatabaseHandler databaseHandler = DatabaseHandler
+								.getInstance(getApplicationContext());
 						databaseHandler.addLoginInfo(username, password);
-						Bundle bundle  = userController.getBundle(currentUser);
-						Intent goToMainActivity  =  new Intent(getApplicationContext(), MainActivity.class);
+						Bundle bundle = userController.getBundle(currentUser);
+						Intent goToMainActivity = new Intent(
+								getApplicationContext(), MainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);
 						startActivity(goToMainActivity);
 						finish();
 					}
-				
-					
+
 				}
 			});
-			
+
 			background.start();
 			return null;
 		}
-		
-		
+
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			pDialog.dismiss();
-			
+
 		}
-		
+
 	}
-	
 
 }

@@ -19,6 +19,7 @@ package com.facebook;
 
 import ngo.music.soundcloudplayer.R;
 import android.app.Activity;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,7 +42,7 @@ import android.view.View;
  */
 public class LoginActivity extends Activity {
 	static final String RESULT_KEY = "com.facebook.LoginActivity:Result";
-
+	private static Activity activity = null;
 	private static final String TAG = LoginActivity.class.getName();
 	private static final String NULL_CALLING_PKG_ERROR_MSG = "Cannot call LoginActivity with a null calling package. "
 			+ "This can occur if the launchMode of the caller is singleInstance.";
@@ -52,9 +53,14 @@ public class LoginActivity extends Activity {
 	private String callingPackage;
 	private AuthorizationClient authorizationClient;
 	private AuthorizationClient.AuthorizationRequest request;
-
+	public LoginActivity() {
+		// TODO Auto-generated constructor stub
+		super();
+		activity = this;
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.com_facebook_login_activity_layout);
 
@@ -158,5 +164,10 @@ public class LoginActivity extends Activity {
 		Bundle extras = new Bundle();
 		extras.putSerializable(EXTRA_REQUEST, request);
 		return extras;
+	}
+
+	public static Activity getActivity() {
+		// TODO Auto-generated method stub
+		return activity;
 	}
 }

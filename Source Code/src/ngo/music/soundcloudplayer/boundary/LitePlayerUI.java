@@ -6,7 +6,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 import com.volley.api.AppController;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import android.content.Context;
@@ -50,7 +50,7 @@ public class LitePlayerUI extends PlayerUI {
 		image = (NetworkImageView) rootView.findViewById(R.id.lite_player_image);
 		BasicFunctions.setImageViewSize(container.getLayoutParams().height, container.getLayoutParams().height, image);
 		
-		UpdateUiFromServiceController.getInstance().addUiFragment(this);
+		UIController.getInstance().addUiFragment(this);
 		return rootView;
 	}
 	@Override

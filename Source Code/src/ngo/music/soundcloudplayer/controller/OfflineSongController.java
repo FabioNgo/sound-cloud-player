@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;
 
+import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -19,7 +20,10 @@ import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import com.facebook.LoginActivity;
+
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
 import android.util.JsonReader;
@@ -29,12 +33,18 @@ import android.util.Log;
 public class OfflineSongController implements Constants.XMLConstant {
 	private String filename1 = "songs.xml";
 	private String filename2 = "stackSong.xml";
+	private ArrayList<OfflineSong> offlineSongs = null;
 	private static OfflineSongController instance = null;
+
 	public static OfflineSongController getInstance() {
 		if (instance == null) {
 			instance = new OfflineSongController();
 		}
 		return instance;
+	}
+	public OfflineSongController() {
+		// TODO Auto-generated constructor stub
+		offlineSongs = getSongsFromSDCard();
 	}
 
 	/**
@@ -42,48 +52,50 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * 
 	 * @throws IOException
 	 */
-	public void updateDatabase() throws IOException {
-		ArrayList<OfflineSong> songs = getSongsFromSDCard();
-		File file = new File(MusicPlayerService.getInstance()
-				.getApplicationContext()
-				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
+	// public void updateDatabase() throws IOException {
+	// ArrayList<OfflineSong> songs = getSongsFromSDCard();
+	// File file = new File(MusicPlayerService.getInstance()
+	// .getApplicationContext()
+	// .getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
+	//
+	// file.createNewFile();
+	//
+	// FileOutputStream fileOutputStream = new FileOutputStream(file);
+	// OutputStreamWriter fileWriter = new OutputStreamWriter(fileOutputStream);
+	// JsonWriter jsonWriter = new JsonWriter(fileWriter);
+	//
+	// jsonWriter.setIndent("    ");
+	// jsonWriter.beginArray();
+	// writeSong(songs, jsonWriter);
+	// jsonWriter.endArray();
+	// jsonWriter.close();
+	// }
 
-		file.createNewFile();
+	// private void writeSong(ArrayList<OfflineSong> songs, JsonWriter
+	// jsonWriter)
+	// throws IOException {
+	// // TODO Auto-generated method stub
+	//
+	// for (OfflineSong song : songs) {
+	// addSong(song, jsonWriter);
+	//
+	// }
+	//
+	// }
 
-		FileOutputStream fileOutputStream = new FileOutputStream(file);
-		OutputStreamWriter fileWriter = new OutputStreamWriter(fileOutputStream);
-		JsonWriter jsonWriter = new JsonWriter(fileWriter);
-
-		jsonWriter.setIndent("    ");
-		jsonWriter.beginArray();
-		writeSong(songs, jsonWriter);
-		jsonWriter.endArray();
-		jsonWriter.close();
-	}
-
-	private void writeSong(ArrayList<OfflineSong> songs, JsonWriter jsonWriter)
-			throws IOException {
-		// TODO Auto-generated method stub
-
-		for (OfflineSong song : songs) {
-			addSong(song, jsonWriter);
-
-		}
-
-	}
-
-	private void addSong(OfflineSong song, JsonWriter writer) throws IOException {
-		writer.beginObject();
-		writer.name(song.getId());
-		writer.beginObject();
-
-		writer.name(XML_TAG_TITLE).value(song.getTitle());
-		writer.name(XML_TAG_ARTIST).value(song.getArtist());
-		writer.name(XML_TAG_ALBUM).value(song.getAlbum());
-		writer.name(XML_TAG_LINK).value(song.getLink());
-		writer.endObject();
-		writer.endObject();
-	}
+	// private void addSong(OfflineSong song, JsonWriter writer) throws
+	// IOException {
+	// writer.beginObject();
+	// writer.name(song.getId());
+	// writer.beginObject();
+	//
+	// writer.name(XML_TAG_TITLE).value(song.getTitle());
+	// writer.name(XML_TAG_ARTIST).value(song.getArtist());
+	// writer.name(XML_TAG_ALBUM).value(song.getAlbum());
+	// writer.name(XML_TAG_LINK).value(song.getLink());
+	// writer.endObject();
+	// writer.endObject();
+	// }
 
 	/**
 	 * Write stack played song for play previous OfflineSong
@@ -95,7 +107,8 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 */
 	public void storePlayingSong() throws IOException {
 		// TODO Auto-generated method stub
-		OfflineSong song = (OfflineSong) MusicPlayerService.getInstance().getCurrentSong();
+		OfflineSong song = (OfflineSong) MusicPlayerService.getInstance()
+				.getCurrentSong();
 		int curTime = MusicPlayerService.getInstance().getCurrentTime();
 		ArrayList<Song> queue = MusicPlayerService.getInstance().getQueue();
 		File file = new File(MusicPlayerService.getInstance()
@@ -107,11 +120,11 @@ public class OfflineSongController implements Constants.XMLConstant {
 		FileOutputStream fileOutputStream = new FileOutputStream(file);
 		OutputStreamWriter fileWriter = new OutputStreamWriter(fileOutputStream);
 		JsonWriter jsonWriter = new JsonWriter(fileWriter);
-		writePlayedSongs(song, queue,jsonWriter, curTime);
+		writePlayedSongs(song, queue, jsonWriter, curTime);
 		jsonWriter.close();
 	}
 
-	private void writePlayedSongs(Song playingSong,ArrayList<Song> queue,
+	private void writePlayedSongs(Song playingSong, ArrayList<Song> queue,
 			JsonWriter jsonWriter, int currentTIme) throws IOException {
 		// TODO Auto-generated method stub
 
@@ -119,9 +132,9 @@ public class OfflineSongController implements Constants.XMLConstant {
 		for (Song song : queue) {
 			jsonWriter.beginObject();
 			jsonWriter.name(song.getId());
-			if(playingSong.getId().equals(song.getId())){
+			if (playingSong.getId().equals(song.getId())) {
 				jsonWriter.value(currentTIme);
-			}else{
+			} else {
 				jsonWriter.value(0);
 			}
 			jsonWriter.endObject();
@@ -147,9 +160,9 @@ public class OfflineSongController implements Constants.XMLConstant {
 				e.printStackTrace();
 			}
 		}
-		
+
 		ArrayList<Object[]> songs = new ArrayList<Object[]>();
-		
+
 		try {
 			FileInputStream fileReader = new FileInputStream(file);
 			JsonReader reader = new JsonReader(
@@ -175,55 +188,21 @@ public class OfflineSongController implements Constants.XMLConstant {
 			reader.endArray();
 			reader.close();
 		} catch (Exception e) {
-			Log.e("get songPlayed", e.getMessage());
+			Log.e("get songPlayed", e.toString());
 			return songs;
 		}
 		return songs;
 	}
 
-	
 	/**
 	 * get all songs
 	 * 
 	 * @return
 	 * @throws IOException
 	 */
-	public ArrayList<OfflineSong> getSongs() throws IOException {
-		File file = new File(MusicPlayerService.getInstance().getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
-		if (!file.exists()) {
-			updateDatabase();
-		}
-		FileInputStream fileReader = new FileInputStream(file);
-		JsonReader reader = new JsonReader(new InputStreamReader(fileReader));
-		ArrayList<OfflineSong> songs = new ArrayList<OfflineSong>();
-		String id = null, title = null, album = null, artist = null, link = null;
-		reader.beginArray();
-		while (reader.hasNext()) {
-			reader.beginObject();
-			id = reader.nextName();
-
-			reader.beginObject();
-			while (reader.hasNext()) {
-				String name = reader.nextName();
-				if (name.equals(XML_TAG_TITLE)) {
-					title = reader.nextString();
-				} else if (name.equals(XML_TAG_ALBUM)) {
-					album = reader.nextString();
-				} else if (name.equals(XML_TAG_ARTIST)) {
-					artist = reader.nextString();
-				} else if (name.equals(XML_TAG_LINK)) {
-					link = reader.nextString();
-				} else {
-					reader.skipValue();
-				}
-			}
-			songs.add(new OfflineSong(id, title, artist, album, link));
-			reader.endObject();
-			reader.endObject();
-		}
-		reader.endArray();
-		reader.close();
-		return songs;
+	public ArrayList<OfflineSong> getSongs() {
+		
+		return offlineSongs;
 	}
 
 	/**
@@ -234,54 +213,17 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * @throws IOException
 	 */
 	public OfflineSong getSongbyId(String input) throws IOException {
-		File file = new File(MusicPlayerService.getInstance()
-				.getApplicationContext()
-				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
-		if (!file.exists()) {
-			updateDatabase();
+		for (OfflineSong offlineSong : offlineSongs) {
+			if (offlineSong.getId().equals("input"))
+				;
+			return offlineSong;
 		}
-		FileInputStream fileReader = new FileInputStream(file);
-		JsonReader reader = new JsonReader(new InputStreamReader(fileReader));
-		OfflineSong song = null;
-		String id = null, title = null, album = null, artist = null, link = null;
-		reader.beginArray();
-		while (reader.hasNext()) {
-			reader.beginObject();
-			id = reader.nextName();
-			if (id.equals(input)) {
-				reader.beginObject();
-				while (reader.hasNext()) {
-					String name = reader.nextName();
-					if (name.equals(XML_TAG_TITLE)) {
-						title = reader.nextString();
-					} else if (name.equals(XML_TAG_ALBUM)) {
-						album = reader.nextString();
-					} else if (name.equals(XML_TAG_ARTIST)) {
-						artist = reader.nextString();
-					} else if (name.equals(XML_TAG_LINK)) {
-						link = reader.nextString();
-					} else {
-						reader.skipValue();
-					}
-				}
-				song = new OfflineSong(id, title, artist, album, link);
-				reader.close();
-				return song;
-			} else {
-				reader.skipValue();
-				reader.endObject();
-			}
-
-		}
-		reader.endArray();
-		reader.close();
-		return song;
+		return null;
 	}
 
 	private ArrayList<OfflineSong> getSongsFromSDCard() {
 		ArrayList<OfflineSong> songs = new ArrayList<OfflineSong>();
-		Cursor c = MusicPlayerService
-				.getInstance()
+		Cursor c = MusicPlayerService.getInstance()
 				.getContentResolver()
 				.query(Media.EXTERNAL_CONTENT_URI, null,
 						Media.IS_MUSIC + "!=0", null, null);
@@ -295,32 +237,5 @@ public class OfflineSongController implements Constants.XMLConstant {
 		return songs;
 	}
 
-	public Stack<String> getStackSongs() throws IOException {
-		Stack<String> songs = new Stack<String>();
-		File file = new File(MusicPlayerService.getInstance()
-				.getApplicationContext()
-				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename1);
-		if (!file.exists()) {
-			storePlayingSong();
-		}
-		FileInputStream fileReader = new FileInputStream(file);
-		JsonReader reader = new JsonReader(new InputStreamReader(fileReader));
-
-		String id = null;
-
-		// list songs
-		reader.beginArray();
-		while (reader.hasNext()) {
-			reader.beginObject();
-			id = reader.nextName();
-			reader.endObject();
-			songs.push(id);
-		}
-		reader.endArray();
-		reader.close();
-		Collections.reverse(songs);
-		return songs;
-	}
-
-	//
+	
 }

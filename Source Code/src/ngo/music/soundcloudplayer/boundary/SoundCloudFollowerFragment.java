@@ -57,7 +57,7 @@ public class SoundCloudFollowerFragment extends Fragment {
 		} 
 //	
 		adapter = new SoundCloudFollowingFollowerAdapter(getActivity(), R.layout.user_list_view, users);
-		adapter.notifyDataSetChanged();
+		//adapter.notifyDataSetChanged();
 		listUsers = (ListView) rootView.findViewById(R.id.users_list);
 		listUsers.setAdapter(adapter);
 		listUsers.setOnItemClickListener(new OnItemClickListener() {

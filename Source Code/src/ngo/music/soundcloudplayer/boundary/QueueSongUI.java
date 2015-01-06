@@ -6,7 +6,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -23,10 +23,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 
-public class PlayQueueUI extends Fragment {
+public class QueueSongUI extends ListContentFragment {
 	Toolbar toolbar;
-
-	public PlayQueueUI() {
+	View rootView;
+	public QueueSongUI() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -41,17 +41,31 @@ public class PlayQueueUI extends Fragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 
-		View rootView = inflater.inflate(R.layout.play_queue, container, false);
+		rootView = inflater.inflate(R.layout.play_queue, container, false);
 		toolbar = (Toolbar) rootView.findViewById(R.id.queue_toolbar);
+		toolbar.inflateMenu(R.menu.global);
+		UIController.getInstance().addListContentFragements(this);
+		return rootView;
+	}
+	/**
+	 * Load view items on Fragment
+	 */
+	@Override
+	public void load() {
+		// TODO Auto-generated method stub
+		
 
 		toolbar.setTitle("Title");
 		toolbar.setSubtitle("subtitle");
-		toolbar.inflateMenu(R.menu.global);
+		
 		ListView queueView = (ListView) rootView
 				.findViewById(R.id.queue_list_view);
-		final QueueSongAdapter adapter = QueueSongAdapter.getInstance().instance;
-		UpdateUiFromServiceController.getInstance().addAdapter(adapter);
-		queueView.setAdapter(adapter);
+		final QueueSongAdapter adapter = QueueSongAdapter.getInstance();
+		if (adapter.isDataChanged()) {
+			UIController.getInstance().addAdapter(adapter);
+			queueView.setAdapter(adapter);
+			adapter.updateDataChanged(false);
+		}
 		queueView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -66,12 +80,11 @@ public class PlayQueueUI extends Fragment {
 
 				ArrayList<Song> songs = adapter.getSongs();
 
-				MusicPlayerService.getInstance().playNewSong(position, songs);
+				MusicPlayerService.getInstance().playSongInQueue(position);
 
 			}
 
 		});
-		return rootView;
-	}
 
+	}
 }

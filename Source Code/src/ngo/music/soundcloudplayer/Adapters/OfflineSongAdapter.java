@@ -9,6 +9,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.facebook.LoginActivity;
 import com.todddavies.components.progressbar.ProgressWheel;
 import com.volley.api.AppController;
 
@@ -17,7 +18,7 @@ import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -36,20 +37,11 @@ import android.widget.TextView;
 
 public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	private View v;
-	
+	private boolean isdatachanged = true;
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
-
-		//songs = SongController.getInstance().getOfflineSongs();
-
-		try {
-			songs = OfflineSongController.getInstance().getSongs();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		songs = OfflineSongController.getInstance().getSongs();
 
 	}
 
@@ -73,7 +65,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = inflater.inflate(R.layout.liteplayer, null);
-			
+
 		}
 
 		setLayoutInformation(position, v);
@@ -90,9 +82,11 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set avatar for song
 		 */
-//		ImageView avatar = (ImageView) v.findViewById(R.id.lite_player_image);
-//
-//		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+		// ImageView avatar = (ImageView)
+		// v.findViewById(R.id.lite_player_image);
+		//
+		// ImageLoader mImageLoader =
+		// AppController.getInstance().getImageLoader();
 		// avatar.setMinimumHeight(MainActivity.screenHeight/5);
 		// avatar.setMinimumWidth(MainActivity.screenHeight/5);
 
@@ -113,22 +107,23 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set progress bar
 		 */
-		if (MusicPlayerService.getInstance().getCurrentSongId().compareTo(songs.get(position).getId())==0) {
+		if (MusicPlayerService.getInstance().getCurrentSongId()
+				.compareTo(songs.get(position).getId()) == 0) {
 			ProgressWheel progressWheel = (ProgressWheel) v
 					.findViewById(R.id.lite_player_progress_bar);
 			progressWheel.setVisibility(View.VISIBLE);
-			if(MusicPlayerService.getInstance().isPlaying()){
+			if (MusicPlayerService.getInstance().isPlaying()) {
 				progressWheel.setBackgroundResource(R.drawable.ic_media_pause);
-			}else{
+			} else {
 				progressWheel.setBackgroundResource(R.drawable.ic_media_play);
 			}
-//			UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
-		}else{
+			// UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
+		} else {
 			ProgressWheel progressWheel = (ProgressWheel) v
 					.findViewById(R.id.lite_player_progress_bar);
 			progressWheel.setVisibility(View.INVISIBLE);
-//			UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
-			
+			// UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
+
 		}
 	}
 
@@ -144,15 +139,22 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 
 	public ArrayList<OfflineSong> getSongs() {
 		return songs;
-		
+
 	}
+
 	public ArrayList<String> getSongIds() {
 		ArrayList<String> result = new ArrayList<String>();
 		for (Song song : songs) {
 			result.add(song.getId());
 		}
 		return result;
-		
+
+	}
+	public void updateDataChanged(boolean input ){
+		isdatachanged = input;
+	}
+	public boolean isDataChanged(){
+		return isdatachanged;
 	}
 
 }

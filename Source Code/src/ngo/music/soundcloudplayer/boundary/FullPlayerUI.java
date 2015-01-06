@@ -11,12 +11,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ngo.music.soundcloudplayer.R;
+
 import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
-import ngo.music.soundcloudplayer.controller.UpdateUiFromServiceController;
+
 import ngo.music.soundcloudplayer.entity.OnlineSong;
+
+import ngo.music.soundcloudplayer.controller.UIController;
+
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -105,8 +109,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 */
 		updateShuffle();
 		updateLoop();
-		UpdateUiFromServiceController.getInstance().addUiFragment(this);
+		UIController.getInstance().addUiFragment(this);
 		return rootView;
+
 	}
 
 	/**
@@ -227,6 +232,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			}
 		});
 	}
+
+		
 
 	@Override
 	public void updateTitle(Song song) {
