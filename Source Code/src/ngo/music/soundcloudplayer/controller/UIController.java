@@ -33,7 +33,7 @@ public class UIController implements Constants.MusicService {
 	private ArrayList<ArrayAdapter<Song>> adapters;
 	private Song playingSong;
 	private ArrayList<ListContentFragment> listContentFragments;
-
+	private boolean loaded = false;
 	private UIController() {
 		// TODO Auto-generated constructor stub
 
@@ -61,6 +61,13 @@ public class UIController implements Constants.MusicService {
 
 	public void addListContentFragements(ListContentFragment input) {
 		listContentFragments.add(input);
+		Log.i("UIController.addListCOntentFragments", input.toString());
+		/**
+		 * Try to load Fragment
+		 */
+		if(loaded){
+			input.load();
+		}
 	}
 
 	public void addProgressBar(ProgressWheel progressbar) {
@@ -122,6 +129,7 @@ public class UIController implements Constants.MusicService {
 
 	public void updateUI(final int TAG) {
 		// TODO Auto-generated method stub
+		// Log.i("updateUI",String.valueOf(TAG));
 		switch (TAG) {
 		case MUSIC_START:
 			for (ProgressWheel progressbar : musicProgressBars) {
@@ -161,6 +169,7 @@ public class UIController implements Constants.MusicService {
 			}
 			break;
 		case APP_START:
+			Log.i("Update UI", "APP START");
 			for (PlayerUI playerUI : uiFragments) {
 
 				playerUI.updateTitle(MusicPlayerService.getInstance()
@@ -193,9 +202,9 @@ public class UIController implements Constants.MusicService {
 				 */
 
 			}
-//			for (ArrayAdapter<Song> arrayAdapter : adapters) {
-//				arrayAdapter.notifyDataSetChanged();
-//			}
+			// for (ArrayAdapter<Song> arrayAdapter : adapters) {
+			// arrayAdapter.notifyDataSetChanged();
+			// }
 			for (ListContentFragment listContentFragment : listContentFragments) {
 				listContentFragment.load();
 			}
@@ -217,12 +226,12 @@ public class UIController implements Constants.MusicService {
 					((QueueSongAdapter) arrayAdapter).updateQueue();
 				}
 
-//				arrayAdapter.notifyDataSetChanged();
+				// arrayAdapter.notifyDataSetChanged();
 			}
 			for (ListContentFragment listContentFragment : listContentFragments) {
 				listContentFragment.load();
 			}
-
+			loaded = true;
 			break;
 		case MUSIC_CUR_POINT_CHANGED:
 			for (PlayerUI playerUI : uiFragments) {

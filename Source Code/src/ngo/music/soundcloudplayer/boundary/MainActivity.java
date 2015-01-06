@@ -159,6 +159,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 		}
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
+		pager.setOffscreenPageLimit(10000);
 		final int pageMargin = (int) TypedValue.applyDimension(
 				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 						.getDisplayMetrics());

@@ -57,9 +57,6 @@ public class OfflineSongsFragment extends ListContentFragment {
 			songsList.setAdapter(adapter);
 			adapter.updateDataChanged(false);
 		}
-		
-
-		
 
 		songsList.setOnItemClickListener(new OnItemClickListener() {
 
