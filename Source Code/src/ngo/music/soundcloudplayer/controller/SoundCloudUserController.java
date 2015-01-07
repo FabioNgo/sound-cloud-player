@@ -411,10 +411,10 @@ public class SoundCloudUserController extends UserController implements Constant
 		// TODO Auto-generated method stub
 		ApiWrapper wrapper = getApiWrapper();
 		HttpResponse response;	
-		
-		if (offset > getUser().getFollowingCount()){
-			offset = offset-getUser().getFollowingCount();
-		}
+//		
+//		if (offset > getUser().getFollowingCount()){
+//			offset = offset-getUser().getFollowingCount();
+//		}
 		
 		if (guest == null){
 			response = wrapper.get(Request.to(ME_FOLLOWINGS + "/?offset=" + String.valueOf(offset)));

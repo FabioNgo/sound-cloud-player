@@ -94,7 +94,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		} finally {
 			stackSongplayed = new Stack<Integer>();
 			iniMediaPlayer();
-			updateNotification(false, R.drawable.ic_media_pause);
+			try{
+				updateNotification(false, R.drawable.ic_media_pause);
+			}catch (Exception e){
+				
+			}
+			
 //			UIController.getInstance().updateUI(APP_START);
 
 		}
@@ -463,7 +468,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @param cancel
 	 * @param iconID
 	 */
-	private void updateNotification(boolean cancel, int iconID) {
+	private void updateNotification(boolean cancel, int iconID) throws NullPointerException {
 
 //		Intent intent = new Intent(getApplicationContext(),
 //				MusicPlayerService.class);

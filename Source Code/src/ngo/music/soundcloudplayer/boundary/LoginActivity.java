@@ -52,6 +52,19 @@ public class LoginActivity extends FragmentActivity implements
 				return;
 			}
 		}
+		
+		/**
+		 * Music Player Service
+		 */
+	//	private void configMusicPlayerService() {
+//			if (!isMyServiceRunning()) {
+			//Intent musicPlayerServiceIntent = new Intent(this, MusicPlayerService.class);
+//	        bindService(musicPlayerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+			//	startService(musicPlayerServiceIntent);
+//			} else {
+				
+//			}
+		//}
 		setContentView(R.layout.login_layout);
 
 		changeFragment(new GeneralLoginUI());

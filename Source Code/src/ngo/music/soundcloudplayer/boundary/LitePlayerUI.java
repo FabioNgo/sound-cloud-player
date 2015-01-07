@@ -56,6 +56,7 @@ public class LitePlayerUI extends PlayerUI {
 	@Override
 	public void updateTitle(Song song) {
 		// TODO Auto-generated method stub
+		if (song == null) return;
 		String title = song.getTitle();
 		TextView title_text = (TextView) rootView
 				.findViewById(R.id.lite_player_title);
@@ -63,6 +64,7 @@ public class LitePlayerUI extends PlayerUI {
 	}
 	@Override
 	public void updateSubtitle(Song song) {
+		if (song == null) return;
 		// TODO Auto-generated method stub
 		String subtitle = song.getArtist()+" | "+song.getAlbum();
 		TextView subtitle_text = (TextView) rootView
@@ -77,6 +79,7 @@ public class LitePlayerUI extends PlayerUI {
 	@Override
 	public void updateSongInfo(Song currentSong) {
 		// TODO Auto-generated method stub
+		
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 		image.setDefaultImageResId(R.drawable.ic_launcher);
 		
