@@ -147,23 +147,23 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.reset();
 
 		}
-		/**
-		 * get song played last time
-		 */
-		String link = "";
-		try {
-			link = getCurrentSong().getLink();
-			mediaPlayer.setDataSource(link);
-			mediaPlayer.prepare();
-
-		} catch (Exception e) {
-			Log.e("iniMedia", e.toString());
-			try {
-				Log.e("iniMedia", e.getMessage());
-			} catch (Exception e1) {
-
-			}
-		}
+		// /**
+		// * get song played last time
+		// */
+		// String link = "";
+		// try {
+		// link = getCurrentSong().getLink();
+		// mediaPlayer.setDataSource(link);
+		// mediaPlayer.prepare();
+		//
+		// } catch (Exception e) {
+		// Log.e("iniMedia", e.toString());
+		// try {
+		// Log.e("iniMedia", e.getMessage());
+		// } catch (Exception e1) {
+		//
+		// }
+		// }
 	}
 
 	/**
@@ -299,20 +299,20 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play the current song when press start button
 	 */
 	public void playCurrentSong() {
-		
+
 		if (States.musicPlayerState == MUSIC_PAUSE) {
 			playMedia();
-			
+
 		}
 		if (States.musicPlayerState == MUSIC_STOPPED) {
 			mediaPlayer.seekTo(timeLastStop);
 			playMedia();
-		
+
 		} else {
 			States.musicPlayerState = MUSIC_PLAYING;
 			// currentSongPosition = stackSongplayed.peek();
 			playNewSong(false);
-			
+
 		}
 		updateNotification(false, R.drawable.ic_media_play);
 		return;
@@ -346,9 +346,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
-
-
-	public void playNewExploreSong(int position, int category, ArrayList<Song> listSongs) {
+	public void playNewExploreSong(int position, int category,
+			ArrayList<Song> listSongs) {
 		explorecategory = category;
 		playNewSong(position, listSongs);
 
@@ -377,7 +376,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			States.musicPlayerState = MUSIC_PLAYING;
 		}
 
-		
 		UIController.getInstance().updateUI(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			Song song = getCurrentSong();
@@ -572,14 +570,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	public String getCurrentSongId() {
-		if (songQueue == null) {
-			while (songQueue != null) {
-				return songQueue.get(currentSongPosition).getId();
-			}
-		} else {
+		try {
 			return songQueue.get(currentSongPosition).getId();
+		} catch (Exception e) {
+			return "";
 		}
-		return currentSongId;
 
 	}
 
