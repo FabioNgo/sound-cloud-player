@@ -10,6 +10,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
+import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -85,16 +86,15 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			stackSongplayed = new Stack<Integer>();
 			iniMediaPlayer();
 
-			try{
+			try {
 				updateNotification(false, R.drawable.ic_media_pause);
-			}catch (Exception e){
-				
+			} catch (Exception e) {
+
 			}
-			
-//			UIController.getInstance().updateUI(APP_START);
 
-			//updateNotification(false, R.drawable.ic_media_pause);
+			// UIController.getInstance().updateUI(APP_START);
 
+			// updateNotification(false, R.drawable.ic_media_pause);
 
 		}
 	}
@@ -317,9 +317,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// sendBroadcast(TAG_START);
 	}
 
-	
-
-
 	/**
 	 * Play song from queue
 	 * 
@@ -347,12 +344,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
-
-
 	public void playNewExploreSong(int position, int category) {
 		explorecategory = category;
-		playNewSong(position, SongController.getInstance()
-				.getOnlineSongs(explorecategory));
+		playNewSong(position,
+				SongController.getInstance().getOnlineSongs(explorecategory));
 
 	}
 
@@ -378,15 +373,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 			States.musicPlayerState = MUSIC_PLAYING;
 		}
-
-		updateNotification(false, R.drawable.ic_media_play);
 		UIController.getInstance().updateUI(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			Song song = getCurrentSong();
 			new playNewSongBackground().execute(song);
 
 		}
-
+		updateNotification(false, R.drawable.ic_media_play);
+		
 	}
 
 	/**
@@ -447,7 +441,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @param iconID
 	 *            : the id of icon
 	 */
-	private void updateNotification(boolean cancel, int iconID) throws NullPointerException {
+	private void updateNotification(boolean cancel, int iconID)
+			throws NullPointerException {
 
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
 				this).setSmallIcon(iconID)
@@ -522,11 +517,15 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		 * queue
 		 */
 		if (songQueue.size() == 0) {
-			songQueue
-					.add(SongController.getInstance().getOfflineSongs(true).get(0));
-		}
-		if (currentSongPosition == -1) {
-			currentSongPosition = 0;
+			ArrayList<Song> songs = SongController.getInstance()
+					.getOfflineSongs(true);
+			if (songs.size() != 0) {
+				songQueue.add(songs.get(0));
+
+				currentSongPosition = 0;
+
+			}
+
 		}
 
 	}
@@ -649,22 +648,26 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	private class playNewSongBackground extends AsyncTask<Song, String, String> {
 
-		private String link = "";
+		Song song;
 
 		@Override
 		protected String doInBackground(Song... params) {
 			// TODO Auto-generated method stub
+			String link = "";
+			song = params[0];
 			try {
-				link = params[0].getLink();
+
+				link = song.getLink();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				Log.e("getLink", e.toString());
 			}
-			return null;
+
+			return link;
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(String link) {
 			// TODO Auto-generated method stub
 			try {
 
@@ -674,15 +677,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mediaPlayer.prepare();
 				playMedia();
-				SongController.getInstance().storePlayingSong();
+				if (song instanceof OfflineSong) {
+					SongController.getInstance().storePlayingSong();
+				}
 
 			} catch (Exception e) {
-				Log.e("iniMedia", e.toString());
-				try {
-					Log.e("iniMedia", e.getMessage());
-				} catch (Exception e1) {
+				Log.e("playsong", e.toString());
 
-				}
 			}
 		}
 
