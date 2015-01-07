@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
-import ngo.music.soundcloudplayer.controller.OfflineSongController;
+import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -25,7 +25,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
-		songs = OfflineSongController.getInstance().getSongs(false);
+		songs = SongController.getInstance().getOfflineSongs(false);
 		this.context = context;
 		this.resource = resource;
 		

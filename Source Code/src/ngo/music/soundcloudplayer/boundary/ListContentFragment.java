@@ -1,21 +1,14 @@
 package ngo.music.soundcloudplayer.boundary;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.MyStreamAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.AsyncTask.UpdtateNewSongBackgroundTask;
-import ngo.music.soundcloudplayer.controller.OfflineSongController;
-import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.entity.OfflineSong;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;

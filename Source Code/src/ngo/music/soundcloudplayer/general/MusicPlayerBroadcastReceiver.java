@@ -3,7 +3,7 @@ package ngo.music.soundcloudplayer.general;
 import java.io.IOException;
 
 import ngo.music.soundcloudplayer.boundary.MainActivity;
-import ngo.music.soundcloudplayer.controller.OfflineSongController;
+import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,7 +21,7 @@ public class MusicPlayerBroadcastReceiver extends BroadcastReceiver {
 			MusicPlayerService.getInstance().pause();
 			MusicPlayerService.getInstance().cancelNoti();
 			try {
-				OfflineSongController.getInstance().storePlayingSong();
+				SongController.getInstance().storePlayingSong();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				Log.e("store",e.getMessage());

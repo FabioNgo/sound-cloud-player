@@ -8,11 +8,8 @@ import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
-import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
-import ngo.music.soundcloudplayer.entity.OfflineSong;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -498,7 +495,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		currentSongPosition = -1;
 		songQueue = new ArrayList<Song>();
 
-		ArrayList<Object[]> songsPLayed = OfflineSongController.getInstance()
+		ArrayList<Object[]> songsPLayed = SongController.getInstance()
 				.getSongsPlayed();
 
 		for (int i = 0; i < songsPLayed.size(); i++) {
@@ -516,7 +513,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		 */
 		if (songQueue.size() == 0) {
 			songQueue
-					.add(OfflineSongController.getInstance().getSongs(true).get(0));
+					.add(SongController.getInstance().getOfflineSongs(true).get(0));
 		}
 		if (currentSongPosition == -1) {
 			currentSongPosition = 0;
@@ -667,7 +664,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mediaPlayer.prepare();
 				playMedia();
-				OfflineSongController.getInstance().storePlayingSong();
+				SongController.getInstance().storePlayingSong();
 
 			} catch (Exception e) {
 				Log.e("iniMedia", e.toString());

@@ -1,16 +1,10 @@
 package ngo.music.soundcloudplayer.boundary;
 
-import java.util.ArrayList;
-
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
-import ngo.music.soundcloudplayer.controller.OfflineSongController;
 import ngo.music.soundcloudplayer.controller.UIController;
-import ngo.music.soundcloudplayer.entity.OfflineSong;
-import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
