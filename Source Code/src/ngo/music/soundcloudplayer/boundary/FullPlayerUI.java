@@ -219,6 +219,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		toolbar.setSubtitle(subtitle);
 	}
 
+	/**
+	 * Display different icon of shuffle
+	 */
 	public void updateShuffle() {
 		// TODO Auto-generated method stub
 		if (MusicPlayerService.getInstance().isShuffle()) {
@@ -368,7 +371,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				// TODO Auto-generated method stub
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController
 						.getInstance();
-				System.out.println("ARTIST " + soundCloudAccount);
+				
 				soundCloudUserController.setGuest(soundCloudAccount);
 				Intent i = new Intent(getActivity(), MainActivity.class);
 				Bundle bundle = soundCloudUserController

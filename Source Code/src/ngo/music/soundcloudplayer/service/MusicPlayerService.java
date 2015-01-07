@@ -299,21 +299,23 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play the current song when press start button
 	 */
 	public void playCurrentSong() {
-		updateNotification(false, R.drawable.ic_media_play);
+		
 		if (States.musicPlayerState == MUSIC_PAUSE) {
 			playMedia();
-			return;
+			
 		}
 		if (States.musicPlayerState == MUSIC_STOPPED) {
 			mediaPlayer.seekTo(timeLastStop);
 			playMedia();
-			return;
+		
 		} else {
 			States.musicPlayerState = MUSIC_PLAYING;
 			// currentSongPosition = stackSongplayed.peek();
 			playNewSong(false);
-			return;
+			
 		}
+		updateNotification(false, R.drawable.ic_media_play);
+		return;
 		// sendBroadcast(TAG_START);
 	}
 
@@ -349,10 +351,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 
 
-	public void playNewExploreSong(int position, int category) {
+	public void playNewExploreSong(int position, int category, ArrayList<Song> listSongs) {
 		explorecategory = category;
-		playNewSong(position, SongController.getInstance()
-				.getOnlineSongs(explorecategory));
+		playNewSong(position, listSongs);
 
 	}
 
@@ -379,13 +380,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			States.musicPlayerState = MUSIC_PLAYING;
 		}
 
-		updateNotification(false, R.drawable.ic_media_play);
+		
 		UIController.getInstance().updateUI(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			Song song = getCurrentSong();
 			new playNewSongBackground().execute(song);
 
 		}
+		updateNotification(false, R.drawable.ic_media_play);
 
 	}
 

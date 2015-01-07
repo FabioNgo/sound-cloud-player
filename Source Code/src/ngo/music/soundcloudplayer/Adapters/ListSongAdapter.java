@@ -138,7 +138,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			}
 		});
 		
-		ImageView likeIcon = (ImageView) v.findViewById(R.id.likes_count_img);
+		//ImageView likeIcon = (ImageView) v.findViewById(R.id.likes_count_img);
 		/*
 		 * if not login and not like 
 		 */
@@ -246,63 +246,63 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		return songs;
 	}
 	
-	private class updateFavoriteCounts extends AsyncTask<String, String, String>{
-
-		
-		private Song song;
-		private TextView likeCount;
-		private JSONObject me;
-		public updateFavoriteCounts(Song song, TextView likeCount) {
-			this.song = song;
-			this.likeCount = likeCount;
-			// TODO Auto-generated constructor stub
-		}
-		@Override
-		protected String doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			/*
-			 * Update count
-			 */
-			
-//			SoundCloudUserController userController = SoundCloudUserController
-//					.getInstance();
-//			Token token = userController.getToken();
-//			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
-//					token);
-
-			/*
-			 * API URL OF THE SONG
-			 */
-			String uri = TRACK_LINK + String.valueOf(song.getId());
-
-			try {
-				HttpResponse resp = wrapper.get(Request.to(uri));
-				me = Http.getJSON(resp);
-				// set information of logged user
-				
-
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
-		}
-		
-		@Override
-		protected void onPostExecute(String result) {
-			// TODO Auto-generated method stub
-			try {
-				((OnlineSong) song).setFavoriteCount(me.getInt(SongConstants.FOVORITINGS_COUNT));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//System.out.println ("New like count = " + song.getLikeCountString());
-			likeCount.setText(((OnlineSong) song).getLikeCountString());
-			
-		}
-		
-	}
+//	private class updateFavoriteCounts extends AsyncTask<String, String, String>{
+//
+//		
+//		private Song song;
+//		private TextView likeCount;
+//		private JSONObject me;
+//		public updateFavoriteCounts(Song song, TextView likeCount) {
+//			this.song = song;
+//			this.likeCount = likeCount;
+//			// TODO Auto-generated constructor stub
+//		}
+//		@Override
+//		protected String doInBackground(String... params) {
+//			// TODO Auto-generated method stub
+//			/*
+//			 * Update count
+//			 */
+//			
+////			SoundCloudUserController userController = SoundCloudUserController
+////					.getInstance();
+////			Token token = userController.getToken();
+////			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
+////					token);
+//
+//			/*
+//			 * API URL OF THE SONG
+//			 */
+//			String uri = TRACK_LINK + String.valueOf(song.getId());
+//
+//			try {
+//				HttpResponse resp = wrapper.get(Request.to(uri));
+//				me = Http.getJSON(resp);
+//				// set information of logged user
+//				
+//
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			return null;
+//		}
+//		
+//		@Override
+//		protected void onPostExecute(String result) {
+//			// TODO Auto-generated method stub
+//			try {
+//				((OnlineSong) song).setFavoriteCount(me.getInt(SongConstants.FOVORITINGS_COUNT));
+//			} catch (JSONException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			//System.out.println ("New like count = " + song.getLikeCountString());
+//			likeCount.setText(((OnlineSong) song).getLikeCountString());
+//			
+//		}
+//		
+//	}
 	
 
 }
