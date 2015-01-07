@@ -126,11 +126,11 @@ public interface Constants {
 		/**
 		 * MUSIC CONSTANTS
 		 */
-		int MUSIC_START = 0;
-		int MUSIC_STOP = 1;
+		int MUSIC_PLAYING = 0;
+		int MUSIC_STOPPED = 1;
 		int MUSIC_PAUSE = 2;
 		int MUSIC_NEW_SONG = 3;
-		int APP_START = 4;
+		
 		int MUSIC_CUR_POINT_CHANGED = 5;
 		int SERVICE_STOP = 6;
 		/**
@@ -150,6 +150,10 @@ public interface Constants {
 		String NOTI_ACTION_FF = "fast forward";
 		
 		
+	}
+	interface Appplication{
+		int APP_RUNNING =9;
+		int APP_STOPPED = 10;
 	}
 	
 	interface TabContant{

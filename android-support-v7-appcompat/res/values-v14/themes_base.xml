@@ -26,7 +26,6 @@
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
         <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
     <style name="Base.Theme.AppCompat.Light" parent="Base.V14.Theme.AppCompat.Light">
@@ -34,7 +33,6 @@
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
         <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
     <style name="Base.Theme.AppCompat.Dialog" parent="Base.V14.Theme.AppCompat.Dialog">
@@ -42,7 +40,6 @@
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
         <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
     <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V14.Theme.AppCompat.Light.Dialog">
@@ -50,7 +47,6 @@
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
         <item name="android:actionModeSelectAllDrawable">?actionModeSelectAllDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
 </resources>

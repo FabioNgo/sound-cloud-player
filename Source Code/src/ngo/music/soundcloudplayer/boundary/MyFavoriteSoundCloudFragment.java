@@ -68,7 +68,7 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 	
 	private class loadSongBackground extends AsyncTask<String , String, String>{
 
-		ArrayList<OnlineSong> favoriteSongs;
+		ArrayList<Song> favoriteSongs;
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub

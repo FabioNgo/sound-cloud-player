@@ -1,35 +1,23 @@
 package ngo.music.soundcloudplayer.boundary;
 
-import java.io.IOException;
-
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.controller.OfflineSongController;
-import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
-import ngo.music.soundcloudplayer.service.MusicPlayerService.LocalBinder;
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningServiceInfo;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,9 +32,9 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class MainActivity extends SlidingFragmentActivity implements
-		Constants.UIContant, Constants.UserContant, Constants.MusicService {
+		Constants.UIContant, Constants.UserContant, Constants.MusicService, Constants.Appplication {
 
-	private int mTitleRes;
+	
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private static MainActivity activity;
@@ -75,11 +63,12 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public MainActivity() {
 		// TODO Auto-generated constructor stub
 		activity = this;
+		
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
+		States.appState = APP_STOPPED;
 		super.onCreate(savedInstanceState);
 		
 		View decorView = getWindow().getDecorView();
@@ -87,7 +76,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
-
+		Intent intent = getIntent();
+		if("CallFromNoti".equals(intent.getAction())){
+			BasicFunctions.makeToastTake("call from noti", this);
+			UIController.getInstance().updateUI(APP_RUNNING);
+		}
 		/*
 		 * Get data from other activity
 		 */
@@ -217,7 +210,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, new QueueSongUI()).commit();
+				.replace(R.id.play_queue_container, QueueSongUI.getInstance()).commit();
 	}
 
 	/**
@@ -255,7 +248,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 		if (savedInstanceState == null) {
 
-			FrameLayout frame = (FrameLayout) findViewById(R.id.menu_frame);
+			
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
 			mFrag = new UserDisplayFragment();
@@ -373,20 +366,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 	}
 
-	private boolean isMyServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager
-				.getRunningServices(Integer.MAX_VALUE)) {
-			if ("ngo.music.soundcloudplayer.MusicPlayerService"
-					.equals(service.service.getClassName())) {
-				Log.i("service", "Service runing");
-				return true;
-			}
-		}
-		Log.i("service", "Service not runing");
-		return false;
-	}
-
+	
 	/**
 	 * Switch tabs
 	 * @param tab
@@ -395,22 +375,5 @@ public class MainActivity extends SlidingFragmentActivity implements
 		pager.setCurrentItem(tab);
 		configTabSliding();
 	}
-	/** Defines callbacks for service binding, passed to bindService() */
-    private ServiceConnection mConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName className,
-                IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
-            LocalBinder binder = (LocalBinder) service;
-            mService = binder.getService();
-            mBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            mBound = false;
-        }
-    };
 }
 

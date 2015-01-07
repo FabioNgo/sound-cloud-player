@@ -1,15 +1,12 @@
 package ngo.music.soundcloudplayer.Adapters;
 
 
-import ngo.music.soundcloudplayer.boundary.AlbumsFragment;
-import ngo.music.soundcloudplayer.boundary.ArtistsFragment;
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.MyFavoriteSoundCloudFragment;
 import ngo.music.soundcloudplayer.boundary.MySoundCloudStreamFragment;
 import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.boundary.SoundCloudFollowerFragment;
 import ngo.music.soundcloudplayer.boundary.SoundCloudFollowingFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -22,6 +19,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 	public TabsAdapter(FragmentManager fm) {
 		super(fm);
+		
 	}
 
 

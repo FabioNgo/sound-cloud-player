@@ -31,7 +31,6 @@ public class OnlineSong extends Song{
 	private long duration =  0;
 	private boolean commentable;
 	private String sharing =  "";
-	private String tagList =  "";
 	/**
 	 * permalink of the resource
 	 */
@@ -39,7 +38,6 @@ public class OnlineSong extends Song{
 	private String description =  "";
 	private boolean streamable;
 	private boolean downloadable;
-	private String gerne =  "";
 	private String release =  "";
 	private String purchaseUrl =  "";
 	private int labelID =  0;
@@ -200,20 +198,7 @@ public class OnlineSong extends Song{
 	}
 
 
-	/**
-	 * @return the tagList
-	 */
-	public String getTagList() {
-		return tagList;
-	}
-
-
-	/**
-	 * @param tagList the tagList to set
-	 */
-	public void setTagList(String tagList) {
-		this.tagList = tagList;
-	}
+	
 
 
 	/**
@@ -280,20 +265,7 @@ public class OnlineSong extends Song{
 	}
 
 
-	/**
-	 * @return the gerne
-	 */
-	public String getGerne() {
-		return gerne;
-	}
-
-
-	/**
-	 * @param gerne the gerne to set
-	 */
-	public void setGerne(String gerne) {
-		this.gerne = gerne;
-	}
+	
 
 
 	/**

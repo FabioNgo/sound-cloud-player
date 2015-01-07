@@ -69,7 +69,7 @@ public class MyStreamAdapter extends ListSongAdapter implements Constants {
 	public static MyStreamAdapter instance = null;
 	
 	
-	public MyStreamAdapter(Context context, int resource, ArrayList<OnlineSong> onlineSongs, ApiWrapper wrapper) {
+	public MyStreamAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
 		super(context, resource, onlineSongs, wrapper);
 		
 		

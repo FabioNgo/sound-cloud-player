@@ -12,7 +12,7 @@ public class SoundCloudExploreAdapter extends ListSongAdapter {
 	public static SoundCloudExploreAdapter instance = null;
 	
 	
-	public SoundCloudExploreAdapter(Context context, int resource, ArrayList<OnlineSong> onlineSongs, ApiWrapper wrapper) {
+	public SoundCloudExploreAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
 		super(context, resource, onlineSongs, wrapper);
 		
 		

@@ -335,28 +335,24 @@
         <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
     <style name="Base.Theme.AppCompat.Light" parent="Base.V11.Theme.AppCompat.Light">
         <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
     <style name="Base.Theme.AppCompat.Dialog" parent="Base.V11.Theme.AppCompat.Dialog">
         <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
     <style name="Base.Theme.AppCompat.Light.Dialog" parent="Base.V11.Theme.AppCompat.Light.Dialog">
         <item name="android:actionModeCutDrawable">?actionModeCutDrawable</item>
         <item name="android:actionModeCopyDrawable">?actionModeCopyDrawable</item>
         <item name="android:actionModePasteDrawable">?actionModePasteDrawable</item>
-        <item name="android:actionModeShareDrawable">?actionModeShareDrawable</item>
     </style>
 
 </resources>
