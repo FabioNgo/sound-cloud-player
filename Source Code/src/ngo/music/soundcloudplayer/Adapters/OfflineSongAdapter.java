@@ -32,7 +32,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	}
 
 	public static OfflineSongAdapter instance = null;
-	private ArrayList<OfflineSong> songs;
+	private ArrayList<Song> songs;
 
 	public static OfflineSongAdapter getInstance() {
 
@@ -122,7 +122,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		return songs.size();
 	}
 
-	public ArrayList<OfflineSong> getSongs() {
+	public ArrayList<Song> getSongs() {
 		return songs;
 
 	}

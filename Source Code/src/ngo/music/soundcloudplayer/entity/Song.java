@@ -35,11 +35,18 @@ public abstract class Song implements Comparable <Song>{
 	 */
 	protected String title =  "";
 
-	
+	/**
+	 * Gerne
+	 */
+	protected String genre =  "";
 	/**
 	 * Artwork Url
 	 */
 	protected String artworkUrl = "";
+	/**
+	 * TagList
+	 */
+	protected String tagList;
 	
 	public void setArtworkUrl (String artworkUrl){
 		this.artworkUrl = artworkUrl;
@@ -127,4 +134,28 @@ public abstract class Song implements Comparable <Song>{
 		this.album = album;
 	}
 
+	public String getGenre() {
+		return genre;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+	
+
+	
+	/**
+	 * @return the tagList
+	 */
+	public String getTagList() {
+		return tagList;
+	}
+
+
+	/**
+	 * @param tagList the tagList to set
+	 */
+	public void setTagList(String tagList) {
+		this.tagList = tagList;
+	}
 }

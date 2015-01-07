@@ -54,16 +54,16 @@ public abstract class ListContentFragment extends Fragment implements
 			long id) {
 		Adapter adapter = parent.getAdapter();
 		if (adapter instanceof OfflineSongAdapter) {
-			ArrayList<OfflineSong> songs = ((OfflineSongAdapter) adapter)
+			ArrayList<Song> songs = ((OfflineSongAdapter) adapter)
 					.getSongs();
 			MusicPlayerService.getInstance()
-					.playNewOfflineSong(position, songs);
+					.playNewSong(position, songs);
 		}
 		if (adapter instanceof ListSongAdapter) {
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
-			ArrayList<OnlineSong> songs = ((ListSongAdapter) adapter)
+			ArrayList<Song> songs = ((ListSongAdapter) adapter)
 					.getSongs();
-			MusicPlayerService.getInstance().playNewOnlineSong(position, songs);
+			MusicPlayerService.getInstance().playNewSong(position, songs);
 		}
 
 	}

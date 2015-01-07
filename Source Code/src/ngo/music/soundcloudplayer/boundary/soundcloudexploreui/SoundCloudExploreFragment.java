@@ -83,7 +83,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 				
 		
 		try {
-			ArrayList<OnlineSong> songs;
+			ArrayList<Song> songs;
 			SongController songController = SongController.getInstance();
 			 songs = songController.getOnlineSongs(category); 
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();

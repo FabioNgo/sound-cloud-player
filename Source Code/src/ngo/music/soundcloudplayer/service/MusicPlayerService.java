@@ -112,7 +112,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		} else if (songQueue.isEmpty()) {
 			return null;
 		} else {
-			return songQueue.get(currentSongPosition);
+			return (Song) songQueue.get(currentSongPosition);
 		}
 
 	}
@@ -310,25 +310,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// sendBroadcast(TAG_START);
 	}
 
-	/**
-	 * Play a list of offline song
-	 * 
-	 * @param position
-	 *            : position of song needed to play in the list
-	 * @param queue
-	 *            : list of the songs want to play
-	 */
-	public void playNewOfflineSong(int position, ArrayList<OfflineSong> queue) {
-		/**
-		 * update queue
-		 */
-		this.songQueue.clear();
-		for (OfflineSong offlineSong : queue) {
-			songQueue.add(offlineSong);
-		}
-		playSongInQueue(position);
+	
 
-	}
 
 	/**
 	 * Play song from queue
@@ -357,17 +340,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
-	public void playNewOnlineSong(int position, ArrayList<OnlineSong> queue) {
-		this.songQueue.clear();
-		songQueue.addAll(queue);
-		currentSongPosition = position;
-		playNewSong(true);
 
-	}
 
 	public void playNewExploreSong(int position, int category) {
 		explorecategory = category;
-		playNewOnlineSong(position, SongController.getInstance()
+		playNewSong(position, SongController.getInstance()
 				.getOnlineSongs(explorecategory));
 
 	}

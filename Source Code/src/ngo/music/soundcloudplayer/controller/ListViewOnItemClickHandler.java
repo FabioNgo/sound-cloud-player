@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.view.View;
-
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -24,13 +24,13 @@ public class ListViewOnItemClickHandler implements OnItemClickListener  {
 		adapter.notifyDataSetChanged();
 		//System.out.println ("ON CLICK");
 		//Song songSelected = (Song) songsList.getAdapter().getItem(position);
-		ArrayList<OnlineSong> songs = adapter.getSongs();
+		ArrayList<Song> songs = adapter.getSongs();
 		//SongController songController = SongController.getInstance();
 		//songs = songController.resolvedPlaylist(songs);
 		//String streamUrl = songController.getStreamUrl(songs.get(position));
 
 //		MusicPlayerService.getInstance().setSongsPlaying(songs);
-		MusicPlayerService.getInstance().playNewOnlineSong(position,songs);
+		MusicPlayerService.getInstance().playNewSong(position,songs);
 
 		
 	}

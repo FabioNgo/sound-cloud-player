@@ -45,15 +45,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implements Constants {
+public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Constants {
 	
 	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
 	protected ApiWrapper wrapper;
 	
 	public static ListSongAdapter instance = null;
-	protected ArrayList<OnlineSong> songs;
+	protected ArrayList<Song> songs;
 	
-	protected ListSongAdapter(Context context, int resource, ArrayList<OnlineSong> onlineSongs, ApiWrapper wrapper) {
+	protected ListSongAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
 		super(context, resource);
 		songs = onlineSongs;
 		this.wrapper = wrapper;
@@ -88,7 +88,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 	 * @param v rootview
 	 */
 	private void setLayoutInfomation(int position, View v) {
-		OnlineSong song = songs.get(position);
+		Song song = songs.get(position);
 		NetworkImageView avatar = configLayoutAvatar(v, song);
 		configTitleSong(v, song);
 		configSongDetail(v, song, avatar);
@@ -101,7 +101,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 	 * @param song song want to get detail
 	 * @param avatar avatar of song
 	 */
-	private void configSongDetail(View v, final OnlineSong song, NetworkImageView avatar) {
+	private void configSongDetail(View v, final Song song, NetworkImageView avatar) {
 
 		/*
 		 * Initial controller
@@ -120,7 +120,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 		 * Like this song
 		 */
 		final TextView likeCount = (TextView) v.findViewById(R.id.like_count_id);
-		likeCount.setText(song.getLikeCountString());
+		likeCount.setText(((OnlineSong) song).getLikeCountString());
 		
 		RelativeLayout likeCountLayout =  (RelativeLayout) v.findViewById(R.id.likes_count_field);
 		likeCountLayout.setOnClickListener(new OnClickListener() {
@@ -157,7 +157,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 		
 		
 		TextView playBack = (TextView) v.findViewById(R.id.play_count_id);
-		playBack.setText(song.getPlaybackCountString());
+		playBack.setText(((OnlineSong) song).getPlaybackCountString());
 		
 		
 		/*
@@ -187,7 +187,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 	 * @param v RootView
 	 * @param song the song want to get info
 	 */
-	private void configTitleSong(View v, OnlineSong song) {
+	private void configTitleSong(View v, Song song) {
 		/*
 		 * Set title
 		 */
@@ -204,8 +204,8 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 		 * Set gerne
 		 */
 		TextView gerne = (TextView) v.findViewById(R.id.song_gerne);
-		if (song.getGerne() !=null){
-			gerne.setText("#"+song.getGerne());
+		if (song.getGenre() !=null){
+			gerne.setText("#"+song.getGenre());
 		}
 	}
 
@@ -215,7 +215,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 	 * @param song song want to get ava
 	 * @return ImageView
 	 */
-	private NetworkImageView configLayoutAvatar(View v, OnlineSong song) {
+	private NetworkImageView configLayoutAvatar(View v, Song song) {
 		/**
 		 * Set avatar for song
 		 */
@@ -235,24 +235,24 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 	}
 	
 	@Override
-	public OnlineSong getItem(int position) {
+	public Song getItem(int position) {
 		return songs.get(position);
 	}
 	@Override
 	public int getCount() {
 		return songs.size();
 	}
-	public ArrayList<OnlineSong> getSongs() {
+	public ArrayList<Song> getSongs() {
 		return songs;
 	}
 	
 	private class updateFavoriteCounts extends AsyncTask<String, String, String>{
 
 		
-		private OnlineSong song;
+		private Song song;
 		private TextView likeCount;
 		private JSONObject me;
-		public updateFavoriteCounts(OnlineSong song, TextView likeCount) {
+		public updateFavoriteCounts(Song song, TextView likeCount) {
 			this.song = song;
 			this.likeCount = likeCount;
 			// TODO Auto-generated constructor stub
@@ -292,13 +292,13 @@ public abstract class ListSongAdapter extends ArrayAdapter<OnlineSong> implement
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			try {
-				song.setFavoriteCount(me.getInt(SongConstants.FOVORITINGS_COUNT));
+				((OnlineSong) song).setFavoriteCount(me.getInt(SongConstants.FOVORITINGS_COUNT));
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			//System.out.println ("New like count = " + song.getLikeCountString());
-			likeCount.setText(song.getLikeCountString());
+			likeCount.setText(((OnlineSong) song).getLikeCountString());
 			
 		}
 		

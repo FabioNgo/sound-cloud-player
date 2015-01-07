@@ -69,7 +69,7 @@ public class FavoriteSongAdapter extends ListSongAdapter implements Constants {
 	public static FavoriteSongAdapter instance = null;
 	
 	
-	public FavoriteSongAdapter(Context context, int resource, ArrayList<OnlineSong> onlineSongs, ApiWrapper wrapper) {
+	public FavoriteSongAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
 		super(context, resource, onlineSongs, wrapper);
 		
 		

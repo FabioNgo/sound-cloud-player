@@ -31,9 +31,9 @@ import android.util.JsonWriter;
 import android.util.Log;
 
 public class OfflineSongController implements Constants.XMLConstant {
-	
+
 	private String filename = "stackSong.xml";
-	private ArrayList<OfflineSong> offlineSongs = null;
+	private ArrayList<Song> offlineSongs = null;
 	private static OfflineSongController instance = null;
 
 	public static OfflineSongController getInstance() {
@@ -42,6 +42,7 @@ public class OfflineSongController implements Constants.XMLConstant {
 		}
 		return instance;
 	}
+
 	public OfflineSongController() {
 		// TODO Auto-generated constructor stub
 		offlineSongs = getSongsFromSDCard();
@@ -150,11 +151,11 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * @return
 	 * @throws IOException
 	 */
-	public ArrayList<OfflineSong> getSongs(boolean checkUpdate) {
-		if(checkUpdate){
+	public ArrayList<Song> getSongs(boolean checkUpdate) {
+		if (checkUpdate) {
 			offlineSongs = getSongsFromSDCard();
 		}
-		
+
 		return offlineSongs;
 	}
 
@@ -165,18 +166,20 @@ public class OfflineSongController implements Constants.XMLConstant {
 	 * @return
 	 * @throws IOException
 	 */
-	public OfflineSong getSongbyId(String input) throws IOException {
-		for (OfflineSong offlineSong : offlineSongs) {
-			if (offlineSong.getId().equals("input"))
-				;
-			return offlineSong;
+	public Song getSongbyId(String input) throws IOException {
+		for (Song offlineSong : offlineSongs) {
+			if (offlineSong.getId().equals(input)) {
+
+				return offlineSong;
+			}
 		}
 		return null;
 	}
 
-	private ArrayList<OfflineSong> getSongsFromSDCard() {
-		ArrayList<OfflineSong> songs = new ArrayList<OfflineSong>();
-		Cursor c = MusicPlayerService.getInstance()
+	private ArrayList<Song> getSongsFromSDCard() {
+		ArrayList<Song> songs = new ArrayList<Song>();
+		Cursor c = MusicPlayerService
+				.getInstance()
 				.getContentResolver()
 				.query(Media.EXTERNAL_CONTENT_URI, null,
 						Media.IS_MUSIC + "!=0", null, null);
@@ -190,5 +193,4 @@ public class OfflineSongController implements Constants.XMLConstant {
 		return songs;
 	}
 
-	
 }
