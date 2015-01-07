@@ -36,21 +36,17 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
-import android.support.v4.app.NotificationCompat.Style;
 import android.util.Log;
 
 public class MusicPlayerService extends Service implements OnErrorListener,
 		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
-		OnBufferingUpdateListener, Constants.MusicService, Constants.Appplication {
+		OnBufferingUpdateListener, Constants.MusicService,
+		Constants.Appplication {
 	public MusicPlayerService() {
 		instance = this;
 
 	}
 
-	// public MusicPlayerService(String name) {
-	// super(name);
-	// // TODO Auto-generated constructor stub
-	// }
 	private int loopState = 0;
 	private int explorecategory = -1;
 	private boolean isShuffle = false;
@@ -62,7 +58,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private int currentSongPosition;
 	int timeLastStop = -1; // when the music stopped before
 	Action[] actions;
-	private boolean queueChanged = true;
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
 	private static MusicPlayerService instance;
@@ -74,35 +69,32 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		return instance;
 	}
+
 	@Override
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		if (instance == null) {
 			instance = this;
 		}
-		
+
 		super.onCreate();
 		States.musicPlayerState = MUSIC_STOPPED;
 		try {
-
+			// get song queue, last song play
 			getData();
-
 		} catch (Exception e) {
 			Log.w("getData", e.toString());
-			// currentSongPosition = 0;
-
 		} finally {
 			stackSongplayed = new Stack<Integer>();
 			iniMediaPlayer();
 			updateNotification(false, R.drawable.ic_media_pause);
-//			UIController.getInstance().updateUI(APP_START);
 
 		}
 	}
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		
 		super.onStartCommand(intent, flags, startId);
 		UIController.getInstance().updateUI(APP_RUNNING);
 		return START_STICKY;
@@ -148,9 +140,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.reset();
 
 		}
-
-		String link;
-
+		/**
+		 * get song played last time
+		 */
+		String link = "";
 		try {
 			link = getCurrentSong().getLink();
 			mediaPlayer.setDataSource(link);
@@ -284,8 +277,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		UIController.getInstance().updateUI(
-				MUSIC_CUR_POINT_CHANGED);
+		UIController.getInstance().updateUI(MUSIC_CUR_POINT_CHANGED);
 	}
 
 	public class MusicPlayerServiceBinder extends Binder {
@@ -322,7 +314,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play a list of offline song
 	 * 
 	 * @param position
-	 *            : position of first song in the list
+	 *            : position of song needed to play in the list
 	 * @param queue
 	 *            : list of the songs want to play
 	 */
@@ -337,7 +329,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		playSongInQueue(position);
 
 	}
-	public void playSongInQueue(int position){
+
+	/**
+	 * Play song from queue
+	 * 
+	 * @param position
+	 *            : position in queue
+	 */
+	public void playSongInQueue(int position) {
 		currentSongPosition = position;
 		playNewSong(true);
 	}
@@ -396,7 +395,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			States.musicPlayerState = MUSIC_PLAYING;
 		}
 
-		
 		updateNotification(false, R.drawable.ic_media_play);
 		UIController.getInstance().updateUI(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
@@ -404,7 +402,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			new playNewSongBackground().execute(song);
 
 		}
-		
+
 	}
 
 	/**
@@ -461,21 +459,16 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Update notification
 	 * 
 	 * @param cancel
+	 *            : singal to cancel notification or not
 	 * @param iconID
+	 *            : the id of icon
 	 */
 	private void updateNotification(boolean cancel, int iconID) {
 
-//		Intent intent = new Intent(getApplicationContext(),
-//				MusicPlayerService.class);
-//		intent.setAction(NOTI_ACTION_CANCEL);
-//		PendingIntent pendingIntent = PendingIntent.getService(
-//				getApplicationContext(), 1, intent, 0);
-		
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
 				this).setSmallIcon(iconID)
 				.setContentTitle(getCurrentSong().getTitle())
 				.setContentText(getCurrentSong().getArtist());
-//				.setDeleteIntent(pendingIntent).setStyle(style);
 
 		builder.addAction(createAction(R.drawable.ic_media_previous,
 				NOTI_ACTION_PREV));
@@ -484,7 +477,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		builder.addAction(createAction(R.drawable.ic_media_next,
 				NOTI_ACTION_NEXT));
 
-		// style.
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(this, MainActivity.class);
 		resultIntent.setAction("CallFromNoti");
@@ -518,9 +510,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 
 		if (States.musicPlayerState != MUSIC_PLAYING) {
-
 			playCurrentSong();
-			// playSampleSong();
 		} else {
 			pause();
 		}
@@ -543,19 +533,18 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				currentSongPosition = i;
 			}
 		}
+		/**
+		 * If there is no song in queue, add the first song in the device to the
+		 * queue
+		 */
 		if (songQueue.size() == 0) {
 			songQueue
-					.add(OfflineSongController.getInstance().getSongs().get(0));
+					.add(OfflineSongController.getInstance().getSongs(true).get(0));
 		}
 		if (currentSongPosition == -1) {
 			currentSongPosition = 0;
 		}
 
-	}
-
-	public ArrayList<Song> getSongs() {
-		// TODO Auto-generated method stub
-		return songQueue;
 	}
 
 	/**
@@ -599,11 +588,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			while (songQueue != null) {
 				return songQueue.get(currentSongPosition).getId();
 			}
-		}else{
-			return songQueue.get(currentSongPosition).getId();	
+		} else {
+			return songQueue.get(currentSongPosition).getId();
 		}
 		return currentSongId;
-		
 
 	}
 
@@ -675,8 +663,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return null;
 	}
 
-	private class playNewSongBackground extends
-			AsyncTask<Song, String, String> {
+	private class playNewSongBackground extends AsyncTask<Song, String, String> {
 
 		private String link = "";
 
@@ -703,7 +690,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 				mediaPlayer.prepare();
 				playMedia();
-				// OfflineSongController.getInstance().s
+				OfflineSongController.getInstance().storePlayingSong();
 
 			} catch (Exception e) {
 				Log.e("iniMedia", e.toString());
@@ -714,8 +701,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				}
 			}
 		}
-
-		
 
 	}
 

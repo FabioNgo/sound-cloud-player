@@ -19,7 +19,6 @@ package com.facebook;
 
 import ngo.music.soundcloudplayer.R;
 import android.app.Activity;
-import android.content.ContextWrapper;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;

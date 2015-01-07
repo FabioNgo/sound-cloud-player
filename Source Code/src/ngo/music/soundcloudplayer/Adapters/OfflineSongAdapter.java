@@ -1,39 +1,21 @@
 package ngo.music.soundcloudplayer.Adapters;
 
-import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-
-import org.xmlpull.v1.XmlPullParserException;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
-import com.android.volley.toolbox.NetworkImageView;
-import com.facebook.LoginActivity;
-import com.todddavies.components.progressbar.ProgressWheel;
-import com.volley.api.AppController;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MainActivity;
-import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.controller.OfflineSongController;
-import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
-import ngo.music.soundcloudplayer.general.BasicFunctions;
-import ngo.music.soundcloudplayer.general.CircularImageView;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.todddavies.components.progressbar.ProgressWheel;
 
 public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	private View v;
@@ -43,7 +25,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
-		songs = OfflineSongController.getInstance().getSongs();
+		songs = OfflineSongController.getInstance().getSongs(false);
 		this.context = context;
 		this.resource = resource;
 		
@@ -161,5 +143,19 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 				.getApplicationContext(), R.layout.list_view);
 		return instance;
 	}
-
+	@Override
+	public void add(Song song) {
+		// TODO Auto-generated method stub
+		if(!(song instanceof OfflineSong)){
+			
+		}else{
+			songs.add((OfflineSong) song);	
+		}
+		
+	}
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+		songs.clear();
+	}
 }

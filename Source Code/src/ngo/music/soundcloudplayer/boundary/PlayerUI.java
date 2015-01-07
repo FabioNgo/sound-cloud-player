@@ -4,12 +4,9 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
@@ -17,7 +14,6 @@ import com.todddavies.components.progressbar.ProgressWheel;
 public abstract class PlayerUI extends Fragment {
 	protected ProgressWheel musicProgressBar;
 
-	private int degree = 0;
 	TextView currentTimeText;
 	TextView durationText;
 	Runnable runnable;
@@ -27,13 +23,14 @@ public abstract class PlayerUI extends Fragment {
 
 	public PlayerUI() {
 		// TODO Auto-generated constructor stub
-
+		/**
+		 * Runnable for timer
+		 */
 		runnable = new Runnable() {
 
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-//				musicProgressBar.setProgressDegree(degree);
 				if (hasTextTime) {
 					currentTimeText.setText(UIController
 							.getInstance().getCurrentTime());
