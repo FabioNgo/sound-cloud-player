@@ -74,16 +74,17 @@ public class LitePlayerUI extends PlayerUI {
 		// TODO Auto-generated method stub
 		
 	}
+	
 	@Override
-	public void updateSongInfo(Song currentSong) {
+	public void updateImage(Song song) {
 		// TODO Auto-generated method stub
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 		image.setDefaultImageResId(R.drawable.ic_launcher);
 		
 		//System.out.println (currentSong);
-		if (currentSong != null){
+		if (song != null){
 			//System.out.println (currentSong.getArtworkUrl());
-			image.setImageUrl(currentSong.getArtworkUrl(), mImageLoader);
+			image.setImageUrl(song.getArtworkUrl(), mImageLoader);
 		}
 	}
 	

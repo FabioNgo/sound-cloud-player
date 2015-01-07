@@ -17,6 +17,7 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver;
+import ngo.music.soundcloudplayer.general.States;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -40,7 +41,7 @@ import android.util.Log;
 
 public class MusicPlayerService extends Service implements OnErrorListener,
 		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
-		OnBufferingUpdateListener, Constants.MusicService {
+		OnBufferingUpdateListener, Constants.MusicService, Constants.Appplication {
 	public MusicPlayerService() {
 		instance = this;
 
@@ -53,7 +54,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private int loopState = 0;
 	private int explorecategory = -1;
 	private boolean isShuffle = false;
-	private int musicState;
 	private ArrayList<Song> songQueue = new ArrayList<Song>();
 	private Stack<Integer> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
@@ -82,7 +82,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 		
 		super.onCreate();
-		musicState = APP_START;
+		States.musicPlayerState = MUSIC_STOPPED;
 		try {
 
 			getData();
@@ -104,7 +104,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		
 		super.onStartCommand(intent, flags, startId);
-		UIController.getInstance().updateUI(APP_START);
+		UIController.getInstance().updateUI(APP_RUNNING);
 		return START_STICKY;
 	}
 
@@ -219,8 +219,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 
 		mediaPlayer.start();
-		musicState = MUSIC_START;
-		UIController.getInstance().updateUI(MUSIC_START);
+		States.musicPlayerState = MUSIC_PLAYING;
+		UIController.getInstance().updateUI(MUSIC_PLAYING);
 	}
 
 	@Override
@@ -243,7 +243,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		if (musicState != APP_START) {
+		if (States.musicPlayerState != MUSIC_STOPPED) {
 			mp.reset();
 			if (loopState == MODE_LOOP_ONE) {
 				restartSong();
@@ -265,7 +265,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.pause();
 
 		}
-		musicState = MUSIC_PAUSE;
+		States.musicPlayerState = MUSIC_PAUSE;
 		UIController.getInstance().updateUI(MUSIC_PAUSE);
 	}
 
@@ -301,16 +301,16 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playCurrentSong() {
 		updateNotification(false, R.drawable.ic_media_play);
-		if (musicState == MUSIC_PAUSE) {
+		if (States.musicPlayerState == MUSIC_PAUSE) {
 			playMedia();
 			return;
 		}
-		if (musicState == APP_START) {
+		if (States.musicPlayerState == MUSIC_STOPPED) {
 			mediaPlayer.seekTo(timeLastStop);
 			playMedia();
 			return;
 		} else {
-			musicState = MUSIC_START;
+			States.musicPlayerState = MUSIC_PLAYING;
 			// currentSongPosition = stackSongplayed.peek();
 			playNewSong(false);
 			return;
@@ -393,13 +393,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private void playNewSong(boolean startNow) {
 		if (startNow) {
 
-			musicState = MUSIC_START;
+			States.musicPlayerState = MUSIC_PLAYING;
 		}
 
 		
 		updateNotification(false, R.drawable.ic_media_play);
 		UIController.getInstance().updateUI(MUSIC_NEW_SONG);
-		if (musicState == MUSIC_START) {
+		if (States.musicPlayerState == MUSIC_PLAYING) {
 			Song song = getCurrentSong();
 			new playNewSongBackground().execute(song);
 
@@ -423,7 +423,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @return current time in milisecond
 	 */
 	public int getCurrentTime() {
-		if (musicState == APP_START) {
+		if (States.musicPlayerState == MUSIC_STOPPED) {
 			return timeLastStop;
 		}
 		if (mediaPlayer != null) {
@@ -451,7 +451,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @return
 	 */
 	public boolean isPlaying() {
-		if (musicState == MUSIC_START) {
+		if (States.musicPlayerState == MUSIC_PLAYING) {
 			return true;
 		}
 		return false;
@@ -487,6 +487,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// style.
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(this, MainActivity.class);
+		resultIntent.setAction("CallFromNoti");
 
 		// The stack builder object will contain an artificial back stack for
 		// the
@@ -516,7 +517,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void startPause() {
 		// TODO Auto-generated method stub
 
-		if (musicState != MUSIC_START) {
+		if (States.musicPlayerState != MUSIC_PLAYING) {
 
 			playCurrentSong();
 			// playSampleSong();
@@ -562,7 +563,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void forwardSong() {
 		if (mediaPlayer != null) {
-			if (musicState != MUSIC_START) {
+			if (States.musicPlayerState != MUSIC_PLAYING) {
 				playCurrentSong();
 			}
 			int currentPosition = mediaPlayer.getCurrentPosition();
@@ -580,7 +581,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void rewindSong() {
 		if (mediaPlayer != null) {
-			if (musicState != MUSIC_START) {
+			if (States.musicPlayerState != MUSIC_PLAYING) {
 				playCurrentSong();
 			}
 			int currentPosition = mediaPlayer.getCurrentPosition();

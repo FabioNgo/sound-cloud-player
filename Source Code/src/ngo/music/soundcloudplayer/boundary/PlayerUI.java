@@ -58,7 +58,11 @@ public abstract class PlayerUI extends Fragment {
 	 * update info of song: Artist, Image, Description....
 	 * @param song
 	 */
-	public abstract void updateSongInfo(Song song);
+	public void updateSongInfo(Song song){
+		updateTitle(song);
+		updateSubtitle(song);
+		updateImage(song);
+	}
 	
 	/**
 	 * update music progress Bar and Displayed Time
@@ -99,4 +103,9 @@ public abstract class PlayerUI extends Fragment {
 	 * Implement other update
 	 */
 	public abstract void update();
+	/**
+	 * Update Image
+	 * @param currentSong
+	 */
+	public abstract void updateImage(Song song);
 }

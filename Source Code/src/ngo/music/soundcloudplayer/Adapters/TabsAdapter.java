@@ -22,6 +22,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 	public TabsAdapter(FragmentManager fm) {
 		super(fm);
+		
 	}
 
 

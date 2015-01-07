@@ -37,12 +37,16 @@ import android.widget.TextView;
 
 public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	private View v;
-	private boolean isdatachanged = true;
+	
+	Context context;
+	int resource;
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
 		songs = OfflineSongController.getInstance().getSongs();
-
+		this.context = context;
+		this.resource = resource;
+		
 	}
 
 	public static OfflineSongAdapter instance = null;
@@ -51,8 +55,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	public static OfflineSongAdapter getInstance() {
 
 		if (instance == null) {
-			instance = new OfflineSongAdapter(MainActivity.getActivity()
-					.getApplicationContext(), R.layout.list_view);
+			instance = createNewInstance();
 		}
 		return instance;
 	}
@@ -150,11 +153,13 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		return result;
 
 	}
-	public void updateDataChanged(boolean input ){
-		isdatachanged = input;
-	}
-	public boolean isDataChanged(){
-		return isdatachanged;
+	
+
+	public static OfflineSongAdapter createNewInstance() {
+		// TODO Auto-generated method stub
+		instance = new OfflineSongAdapter(MainActivity.getActivity()
+				.getApplicationContext(), R.layout.list_view);
+		return instance;
 	}
 
 }

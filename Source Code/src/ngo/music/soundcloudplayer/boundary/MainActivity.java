@@ -12,6 +12,7 @@ import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import ngo.music.soundcloudplayer.service.MusicPlayerService.LocalBinder;
 import android.app.ActivityManager;
@@ -44,7 +45,7 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class MainActivity extends SlidingFragmentActivity implements
-		Constants.UIContant, Constants.UserContant, Constants.MusicService {
+		Constants.UIContant, Constants.UserContant, Constants.MusicService, Constants.Appplication {
 
 	private int mTitleRes;
 	protected Fragment mFrag;
@@ -75,11 +76,12 @@ public class MainActivity extends SlidingFragmentActivity implements
 	public MainActivity() {
 		// TODO Auto-generated constructor stub
 		activity = this;
+		
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
+		States.appState = APP_STOPPED;
 		super.onCreate(savedInstanceState);
 		
 		View decorView = getWindow().getDecorView();
@@ -87,7 +89,11 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
-
+		Intent intent = getIntent();
+		if("CallFromNoti".equals(intent.getAction())){
+			BasicFunctions.makeToastTake("call from noti", this);
+			UIController.getInstance().updateUI(APP_RUNNING);
+		}
 		/*
 		 * Get data from other activity
 		 */
@@ -217,7 +223,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, new QueueSongUI()).commit();
+				.replace(R.id.play_queue_container, QueueSongUI.getInstance()).commit();
 	}
 
 	/**
@@ -373,20 +379,7 @@ public class MainActivity extends SlidingFragmentActivity implements
 
 	}
 
-	private boolean isMyServiceRunning() {
-		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-		for (RunningServiceInfo service : manager
-				.getRunningServices(Integer.MAX_VALUE)) {
-			if ("ngo.music.soundcloudplayer.MusicPlayerService"
-					.equals(service.service.getClassName())) {
-				Log.i("service", "Service runing");
-				return true;
-			}
-		}
-		Log.i("service", "Service not runing");
-		return false;
-	}
-
+	
 	/**
 	 * Switch tabs
 	 * @param tab

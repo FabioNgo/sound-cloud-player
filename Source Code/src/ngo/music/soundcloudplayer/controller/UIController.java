@@ -17,6 +17,7 @@ import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.CountDownTimer;
 import android.text.format.Time;
@@ -24,7 +25,8 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-public class UIController implements Constants.MusicService {
+public class UIController implements Constants.MusicService,
+		Constants.Appplication {
 	private static UIController instance;
 	private MusicPlayerService musicPlayerService;
 	private CountDownTimer timer;
@@ -34,14 +36,12 @@ public class UIController implements Constants.MusicService {
 	private Song playingSong;
 	private ArrayList<ListContentFragment> listContentFragments;
 	private boolean loaded = false;
+
 	private UIController() {
 		// TODO Auto-generated constructor stub
 
 		instance = this;
-		uiFragments = new ArrayList<PlayerUI>();
-		musicProgressBars = new ArrayList<ProgressWheel>();
-		adapters = new ArrayList<ArrayAdapter<Song>>();
-		listContentFragments = new ArrayList<ListContentFragment>();
+		reset();
 
 	}
 
@@ -60,14 +60,26 @@ public class UIController implements Constants.MusicService {
 	}
 
 	public void addListContentFragements(ListContentFragment input) {
+		for (int i = 0; i < listContentFragments.size(); i++) {
+			if (listContentFragments.get(i).equals(input)) {
+				listContentFragments.remove(i);
+				i--;
+			}
+		}
+		// if (!listContentFragments.contains(input)) {
 		listContentFragments.add(input);
-		Log.i("UIController.addListCOntentFragments", input.toString());
+		if (loaded) {
+			Log.i("UIController.addListCOntentFragments", input.toString());
+			input.load(true);
+		}
+		// }
+
+		// listContentFragments.add(input);
+
 		/**
 		 * Try to load Fragment
 		 */
-		if(loaded){
-			input.load();
-		}
+
 	}
 
 	public void addProgressBar(ProgressWheel progressbar) {
@@ -131,7 +143,7 @@ public class UIController implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		// Log.i("updateUI",String.valueOf(TAG));
 		switch (TAG) {
-		case MUSIC_START:
+		case MUSIC_PLAYING:
 			for (ProgressWheel progressbar : musicProgressBars) {
 
 				progressbar.setBackgroundResource(R.drawable.ic_media_pause);
@@ -168,14 +180,13 @@ public class UIController implements Constants.MusicService {
 
 			}
 			break;
-		case APP_START:
+		case APP_RUNNING:
 			Log.i("Update UI", "APP START");
 			for (PlayerUI playerUI : uiFragments) {
 
-				playerUI.updateTitle(MusicPlayerService.getInstance()
+				playerUI.updateSongInfo(MusicPlayerService.getInstance()
 						.getCurrentSong());
-				playerUI.updateSubtitle(MusicPlayerService.getInstance()
-						.getCurrentSong());
+				
 
 				if (MusicPlayerService.getInstance().isPlaying()) {
 					playerUI.play();
@@ -205,9 +216,13 @@ public class UIController implements Constants.MusicService {
 			// for (ArrayAdapter<Song> arrayAdapter : adapters) {
 			// arrayAdapter.notifyDataSetChanged();
 			// }
+
+			Log.i("listFragments", listContentFragments.toString());
 			for (ListContentFragment listContentFragment : listContentFragments) {
-				listContentFragment.load();
+				listContentFragment.load(true);
 			}
+			loaded = true;
+			States.appState = APP_RUNNING;
 			break;
 		case MUSIC_NEW_SONG:
 			for (PlayerUI playerUI : uiFragments) {
@@ -229,9 +244,9 @@ public class UIController implements Constants.MusicService {
 				// arrayAdapter.notifyDataSetChanged();
 			}
 			for (ListContentFragment listContentFragment : listContentFragments) {
-				listContentFragment.load();
+				listContentFragment.load(false);
 			}
-			loaded = true;
+
 			break;
 		case MUSIC_CUR_POINT_CHANGED:
 			for (PlayerUI playerUI : uiFragments) {
@@ -306,6 +321,14 @@ public class UIController implements Constants.MusicService {
 		if (!adapters.contains(adapter)) {
 			adapters.add(adapter);
 		}
+	}
+
+	public void reset() {
+		// TODO Auto-generated method stub
+		uiFragments = new ArrayList<PlayerUI>();
+		musicProgressBars = new ArrayList<ProgressWheel>();
+		adapters = new ArrayList<ArrayAdapter<Song>>();
+		listContentFragments = new ArrayList<ListContentFragment>();
 	}
 
 }

@@ -223,17 +223,19 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		super.onDestroy();
 	}
 
+	
+
 	@Override
-	public void updateSongInfo(Song currentSong) {
+	public void updateImage(Song currentSong) {
 		// TODO Auto-generated method stub
-		
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 		songImage.setDefaultImageResId(R.drawable.ic_launcher);
 		
-		System.out.println (currentSong);
+		
 		if (currentSong != null){
 			//System.out.println (currentSong.getArtworkUrl());
 			songImage.setImageUrl(currentSong.getArtworkUrl(), mImageLoader);
+			
 		}
 	}
 

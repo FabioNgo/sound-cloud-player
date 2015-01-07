@@ -41,12 +41,7 @@
 		<service
 			android:launchMode="singleTop"
 			android:name="ngo.music.soundcloudplayer.service.MusicPlayerService" />
-		<receiver android:name="MainActivity" >
-			<intent-filter>
-				<action android:name="android.intent.action.BOOT_COMPLETED" >
-				</action>
-			</intent-filter>
-		</receiver>
+		
 		<receiver android:name="ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver" >
 		</receiver>
 	</application>
