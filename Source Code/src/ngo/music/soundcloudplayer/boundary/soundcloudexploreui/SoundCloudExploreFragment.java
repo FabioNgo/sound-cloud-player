@@ -97,8 +97,8 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long id) {
-
-					MusicPlayerService.getInstance().playNewExploreSong(position,category);
+					ArrayList<Song> listSong =  adapter.getSongs();
+					MusicPlayerService.getInstance().playNewExploreSong(position,category, listSong);
 					// TODO Auto-generated method stub
 					
 				}
