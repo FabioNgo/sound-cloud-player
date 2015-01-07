@@ -27,11 +27,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
@@ -101,6 +103,23 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 					
 				}
 			});
+			
+			
+			 
+			// Creating a button - Load More
+			Button btnLoadMore = new Button(getActivity());
+			btnLoadMore.setText("Load More");
+			 
+			// Adding button to listview at footer
+			//songsList.addFooterView(btnLoadMore);
+			btnLoadMore.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					new loadMoreButtonBackground().execute();
+				}
+			});
 			songsList.setOnScrollListener(new OnScrollListener() {
 				
 				@Override
@@ -108,7 +127,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 					// TODO Auto-generated method stub
 					
 				}
-				
+//				
 				@Override
 				public void onScroll(AbsListView view, int firstVisibleItem,
 						int visibleItemCount, int totalItemCount) {
@@ -118,18 +137,10 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 					//adapter.notifyDataSetChanged();
 					//is the bottom item visible & not loading more already ? Load more !
 					if(lastInScreen >= totalItemCount-1 && !loadingMore){
-						//loadingMore = true;
-						//new loadMoreListView(songsList, adapter).execute();
-						 // Setting new scroll position
-						adapter.notifyDataSetChanged();
-//		                
-						Thread thread =  new Thread(null, loadMoreListItems);
-						thread.start();
-						
-						songsList.setSelectionFromTop(firstVisibleItem + 1, 0);
-						 adapter.notifyDataSetChanged();
-						 MusicPlayerService.getInstance().updateQueue(category);
-						//loadingMore = false;
+						loadingMore = true;
+
+						new loadMoreButtonBackground().execute();
+
 					}
 					// TODO Auto-generated method stub
 					
@@ -159,46 +170,35 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 		adapter.notifyDataSetChanged();
 	}
 	
-	
-	   //Runnable to load the items
-	   private Runnable loadMoreListItems = new Runnable() {
-		@Override
-		public void run() {
-			//Set flag so we cant load new items 2 at the same time
-			loadingMore = true;
-			//Reset the array that holds the new items
-            SongController songController = SongController.getInstance();
-            songController.loadMoreSong(current_page,category);
-            current_page++;
-			//Done! now continue on the UI thread
-	       	MainActivity.getActivity().runOnUiThread(new Thread(returnRes));
-					
-					
-		}
 
+	private class loadMoreButtonBackground extends AsyncTask<String, String, String>{
 		
-	};
-	
-	
-	//Since we cant update our UI from a thread this Runnable takes care of that!
-	private Runnable returnRes = new Runnable() {
+		SongController songController = SongController.getInstance();
+		
 		@Override
-		public void run() {
-			//Loop thru the new items and add them to the adapter
-			SongController songController = SongController.getInstance();
-			ArrayList<OnlineSong> songs = songController.getOnlineSongs(category);
-			//adapter.setNotifyOnChange(true);
-			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
-			//songsList.
-			//Tell to the adapter that changes have been made, this will cause the list to refresh
-			//System.out.println ("CHANGED");
-	         adapter.notifyDataSetChanged();
-			//Done loading more.
-	        loadingMore = false;
-	         
-	      
-	     }
-	   };
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+				songController = SongController.getInstance();
+	           songController.loadMoreSong(current_page,category);
+	           current_page++;
+	           return null;
+		}
+		
+		
+		@Override
+		protected void onPostExecute(String result) {
+		// TODO Auto-generated method stub
+			 int currentPosition = songsList.getFirstVisiblePosition();
+			 
+             // Appending new data to menuItems ArrayList
+             adapter = new SoundCloudExploreAdapter(getActivity(),R.layout.list_view, songController.getOnlineSongs(category), wrapper);
+
+             // Setting new scroll position
+             songsList.setSelectionFromTop(currentPosition + 1, 0);
+             MusicPlayerService.getInstance().updateQueue(category);
+             loadingMore = false;
+		}
+	}
 
 
 

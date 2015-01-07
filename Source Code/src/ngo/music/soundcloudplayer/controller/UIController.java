@@ -151,10 +151,9 @@ public class UIController implements Constants.MusicService,
 			startTimer();
 			for (PlayerUI playerUI : uiFragments) {
 
-				playerUI.updateTitle(MusicPlayerService.getInstance()
+				playerUI.updateSongInfo(MusicPlayerService.getInstance()
 						.getCurrentSong());
-				playerUI.updateSubtitle(MusicPlayerService.getInstance()
-						.getCurrentSong());
+				
 
 				playerUI.play();
 
@@ -229,8 +228,7 @@ public class UIController implements Constants.MusicService,
 
 				Song currentSong = MusicPlayerService.getInstance()
 						.getCurrentSong();
-				playerUI.updateTitle(currentSong);
-				playerUI.updateSubtitle(currentSong);
+				
 				playerUI.updateSongInfo(currentSong);
 
 			}

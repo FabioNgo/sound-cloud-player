@@ -53,7 +53,9 @@ public class LoginActivity extends FragmentActivity implements
 			}
 		}
 		setContentView(R.layout.login_layout);
+
 		changeFragment(new GeneralLoginUI());
+
 
 		// TODO Auto-generated method stub
 	}

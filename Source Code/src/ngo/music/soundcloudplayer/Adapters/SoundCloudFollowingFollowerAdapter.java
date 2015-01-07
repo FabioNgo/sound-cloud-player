@@ -13,6 +13,7 @@ import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.provider.DocumentsContract.Root;
@@ -34,6 +35,7 @@ public class SoundCloudFollowingFollowerAdapter  extends ArrayAdapter<User>{
 	boolean isFollowing = false;
 	View v;
 	public SoundCloudFollowingFollowerAdapter(Context context, int resource,ArrayList<User> users) {
+		
 		super(context, resource);
 		this.users = users; 
 		
@@ -59,18 +61,17 @@ public class SoundCloudFollowingFollowerAdapter  extends ArrayAdapter<User>{
 		NetworkImageView avatar = (NetworkImageView) v.findViewById(R.id.user_image);
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader(); 
 		avatar.setDefaultImageResId(R.drawable.ic_launcher);
-		avatar.setMinimumHeight(MainActivity.screenHeight/5);
-		avatar.setMinimumWidth(MainActivity.screenHeight/5);
-		avatar.setMaxHeight(MainActivity.screenHeight/5);
-		avatar.setMaxWidth(MainActivity.screenHeight/5);
-		avatar.setImageUrl(soundCloudAccount.getAvatarUrl(), mImageLoader);
 		
+		BasicFunctions.setImageViewSize(MainActivity.screenHeight/5, MainActivity.screenHeight/5, avatar);
+
+		avatar.setImageUrl(soundCloudAccount.getAvatarUrl(), mImageLoader);
+		notifyDataSetChanged();
 		/*
 		 * Set User Full Name
 		 */
 		TextView userFullName = (TextView) v.findViewById(R.id.user_fullname);
 		userFullName.setText(soundCloudAccount.getFullName());
-		
+		notifyDataSetChanged();
 		/*
 		 * Set Country of user
 		 */
@@ -78,7 +79,7 @@ public class SoundCloudFollowingFollowerAdapter  extends ArrayAdapter<User>{
 		//userCountry.setText(soundCloudAccount.getCountry() + " / " + soundCloudAccount.getCity());
 		
 		userCountry.setText(String.valueOf(soundCloudAccount.getCity() +  "  " + soundCloudAccount.getCountry()));
-		
+		notifyDataSetChanged();
 		
 		
 		/*
@@ -87,7 +88,7 @@ public class SoundCloudFollowingFollowerAdapter  extends ArrayAdapter<User>{
 		 */
 		TextView userFollower = (TextView) v.findViewById(R.id.follwer_count_id);
 		userFollower.setText(String.valueOf(soundCloudAccount.getNumFollowerString()) + " followers");
-		
+		notifyDataSetChanged();
 		
 		/*
 		 * Follow/Unfollow

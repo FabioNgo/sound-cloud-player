@@ -87,6 +87,11 @@ public class LitePlayerUI extends PlayerUI {
 			image.setImageUrl(song.getArtworkUrl(), mImageLoader);
 		}
 	}
+	@Override
+	protected void updateOtherInfo(Song song) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

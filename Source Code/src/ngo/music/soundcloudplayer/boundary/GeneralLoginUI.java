@@ -94,7 +94,8 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 			@Override
 			public void onClick(View v) {
 				if (BasicFunctions.isConnectingToInternet(getActivity())){
-					UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
+					//UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
+					((LoginActivity) getActivity()).changeFragment(new FacebookLoginUI());
 				}else{
 					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
 					return;
