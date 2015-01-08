@@ -35,7 +35,7 @@ public class OfflineSongsFragment extends ListContentFragment implements OnRefre
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		rootView = inflater.inflate(R.layout.refresh_list_view, container, false);
+		rootView = inflater.inflate(R.layout.list_view, container, false);
 		swipeRefreshLayoutId = R.id.songs_swipe_refresh;
 		iniSwipeRefreshLayout();
 		songsList = (ListView) rootView.findViewById(R.id.songs_list);

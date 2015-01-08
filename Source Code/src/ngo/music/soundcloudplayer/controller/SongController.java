@@ -40,21 +40,13 @@ import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.cmc.music.common.ID3WriteException;
-import org.cmc.music.metadata.IMusicMetadata;
 import org.cmc.music.metadata.MusicMetadata;
 import org.cmc.music.metadata.MusicMetadataSet;
 import org.cmc.music.myid3.MyID3;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
-import com.android.volley.Request.Method;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.volley.api.AppController;
 
 import android.R.integer;

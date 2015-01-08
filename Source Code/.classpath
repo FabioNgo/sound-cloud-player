@@ -6,5 +6,11 @@
 	<classpathentry kind="lib" path="/android-support-v7-appcompat/libs/android-support-v4.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	
+	<classpathentry kind="src" path="/FacebookSDK"/>
+	<classpathentry kind="src" path="/librarySlidingUp"/>
+	<classpathentry kind="src" path="/librarySlidingTab"/>
+	<classpathentry kind="src" path="/librarySlidingMenu"/>
+	<classpathentry kind="src" path="/circular ProgressBar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

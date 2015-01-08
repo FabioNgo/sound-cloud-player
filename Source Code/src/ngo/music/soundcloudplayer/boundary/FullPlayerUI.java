@@ -1,7 +1,6 @@
 package ngo.music.soundcloudplayer.boundary;
 
 import java.util.concurrent.ExecutionException;
-
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
@@ -11,11 +10,11 @@ import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,11 +24,12 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
+import android.widget.Toolbar;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
+@SuppressLint("NewApi")
 public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	private ImageView shuffle;
@@ -199,6 +199,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		});
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public void updateTitle(Song song) {
 		// TODO Auto-generated method stub
