@@ -12,6 +12,7 @@ import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
+import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -23,6 +24,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -30,12 +34,15 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
 import android.util.Log;
+import android.widget.RemoteViews;
 
 public class MusicPlayerService extends Service implements OnErrorListener,
 		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
@@ -53,7 +60,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private Stack<Integer> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
-	private String currentSongId = "";
 	private int currentSongPosition;
 	int timeLastStop = -1; // when the music stopped before
 	Action[] actions;
@@ -148,23 +154,18 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.reset();
 
 		}
-		// /**
-		// * get song played last time
-		// */
-		// String link = "";
-		// try {
-		// link = getCurrentSong().getLink();
-		// mediaPlayer.setDataSource(link);
-		// mediaPlayer.prepare();
-		//
-		// } catch (Exception e) {
-		// Log.e("iniMedia", e.toString());
-		// try {
-		// Log.e("iniMedia", e.getMessage());
-		// } catch (Exception e1) {
-		//
-		// }
-		// }
+		/**
+		 * get song played last time
+		 */
+		String link = "";
+		try {
+			link = getCurrentSong().getLink();
+			mediaPlayer.setDataSource(link);
+			mediaPlayer.prepare();
+
+		} catch (Exception e) {
+
+		}
 	}
 
 	/**
@@ -447,20 +448,37 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	private void updateNotification(boolean cancel, int iconID)
 			throws NullPointerException {
-
+		/**
+		 * Big view
+		 */
+		RemoteViews bigView = new RemoteViews(getPackageName(),
+				R.layout.big_noti_layout);
+		Song song = getCurrentSong();
+		bigView.setTextViewText(R.id.noti_title, song.getTitle());
+		bigView.setTextViewText(R.id.noti_content, song.getArtist());
+		if (song instanceof OfflineSong) {
+			bigView.setImageViewResource(R.id.noti_icon, R.drawable.ic_launcher);
+		}
+		if(song instanceof OnlineSong){
+			bigView.setImageViewUri(R.id.noti_icon, Uri.parse(song.getArtworkUrl()));
+		}
+		/**
+		 * Small View
+		 */
+		RemoteViews smallView = new RemoteViews(getPackageName(),R.layout.small_noti_layout);
+		smallView.setTextViewText(R.id.noti_title, song.getTitle());
+		smallView.setTextViewText(R.id.noti_content, song.getArtist());
+		if (song instanceof OfflineSong) {
+			smallView.setImageViewResource(R.id.noti_icon, R.drawable.ic_launcher);
+		}
+		if(song instanceof OnlineSong){
+			smallView.setImageViewUri(R.id.noti_icon, Uri.parse(song.getArtworkUrl()));
+		}
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
 				this).setSmallIcon(iconID)
-				.setContentTitle(getCurrentSong().getTitle())
-				.setContentText(getCurrentSong().getArtist());
-
-		builder.addAction(createAction(R.drawable.ic_media_previous,
-				NOTI_ACTION_PREV));
-		builder.addAction(createAction(R.drawable.play_button,
-				NOTI_ACTION_PLAY_PAUSE));
-		builder.addAction(createAction(R.drawable.ic_media_next,
-				NOTI_ACTION_NEXT));
-
-		// Creates an explicit intent for an Activity in your app
+				.setLargeIcon(null)
+				.setContent(smallView);
+				// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(this, MusicPlayerMainActivity.class);
 		resultIntent.setAction("CallFromNoti");
 
@@ -481,7 +499,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		Notification notification = builder.build();
 		notification.flags |= NotificationCompat.FLAG_ONGOING_EVENT;
 		notification.flags |= NotificationCompat.FLAG_FOREGROUND_SERVICE;
-
+		 notification.bigContentView = bigView;
 		notificationManager.notify(NOTIFICATION_ID, notification);
 		startForeground(NOTIFICATION_ID, notification);
 	}
