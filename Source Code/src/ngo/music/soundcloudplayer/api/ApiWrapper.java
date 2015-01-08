@@ -715,7 +715,7 @@ public class ApiWrapper implements CloudAPI, Serializable {
 
     protected HttpUriRequest addEncodingHeader(HttpUriRequest req) {
         if (getDefaultAcceptEncoding() != null) {
-            req.addHeader("Accept-Encoding", getDefaultAcceptEncoding());
+            req.addHeader("Accept-Encoding", mDefaultAcceptEncoding);
         }
         return req;
     }

@@ -12,7 +12,7 @@ public abstract class Song implements Comparable <Song>{
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return getTitle();
+		return title;
 	}
 	/**
 	 * id if get from local

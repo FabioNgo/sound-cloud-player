@@ -53,7 +53,7 @@
 				android:src="@drawable/ic_media_next" />
 			<ImageView
 				android:id="@+id/noti_cancel"
-				android:scaleType="fitCenter"
+				android:layout_gravity="center_vertical"
 				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
 				android:src="@drawable/ic_close" />

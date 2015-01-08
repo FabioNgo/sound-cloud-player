@@ -111,8 +111,8 @@ public class ProgressWheel extends View {
         int size = 0;
         int width = getMeasuredWidth();
         int height = getMeasuredHeight();
-        int widthWithoutPadding = width - getPaddingLeft() - getPaddingRight();
-        int heigthWithoutPadding = height - getPaddingTop() - getPaddingBottom();
+        int widthWithoutPadding = width - paddingLeft - paddingRight;
+        int heigthWithoutPadding = height - paddingTop - paddingBottom;
         
         // Finally we have some simple logic that calculates the size of the view 
         // and calls setMeasuredDimension() to set that size.
@@ -135,7 +135,7 @@ public class ProgressWheel extends View {
         // of that. However, the purpose with overriding onMeasure() was to 
         // change the default behaviour and to do that we need to call 
         // setMeasuredDimension() with our own values.
-        setMeasuredDimension(size + getPaddingLeft() + getPaddingRight(), size + getPaddingTop() + getPaddingBottom());
+        setMeasuredDimension(size + paddingLeft + paddingRight, size + paddingTop + paddingBottom);
     }
 
     /**
@@ -198,10 +198,10 @@ public class ProgressWheel extends View {
         int yOffset = layout_height - minValue;
 
         // Add the offset
-        paddingTop = this.getPaddingTop() + (yOffset / 2);
-        paddingBottom = this.getPaddingBottom() + (yOffset / 2);
-        paddingLeft = this.getPaddingLeft() + (xOffset / 2);
-        paddingRight = this.getPaddingRight() + (xOffset / 2);
+        paddingTop = paddingTop + (yOffset / 2);
+        paddingBottom = paddingBottom + (yOffset / 2);
+        paddingLeft = paddingLeft + (xOffset / 2);
+        paddingRight = paddingRight + (xOffset / 2);
 
         int width = getWidth(); //this.getLayoutParams().width;
         int height = getHeight(); //this.getLayoutParams().height;

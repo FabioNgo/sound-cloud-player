@@ -1,6 +1,5 @@
 package ngo.music.soundcloudplayer.service;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -94,7 +93,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			iniMediaPlayer();
 
 			try {
-				updateNotification(false, R.drawable.ic_media_pause);
+				updateNotification(false);
 			} catch (Exception e) {
 
 			}
@@ -253,7 +252,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				playNextSong();
 			}
 
-			updateNotification(false, R.drawable.ic_media_play);
+			updateNotification(false);
 		}
 	}
 
@@ -316,7 +315,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			playNewSong(false);
 
 		}
-		updateNotification(false, R.drawable.ic_media_play);
+		updateNotification(false);
 		return;
 		// sendBroadcast(TAG_START);
 	}
@@ -384,7 +383,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			new playNewSongBackground().execute(song);
 
 		}
-		updateNotification(false, R.drawable.ic_media_play);
+		updateNotification(false);
 
 	}
 
@@ -394,7 +393,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void pause() {
 
 		pauseMedia();
-		updateNotification(false, R.drawable.ic_media_pause);
+		updateNotification(false);
 
 	}
 
@@ -446,39 +445,58 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @param iconID
 	 *            : the id of icon
 	 */
-	private void updateNotification(boolean cancel, int iconID)
-			throws NullPointerException {
+	private void updateNotification(boolean cancel) throws NullPointerException {
+		Song song = getCurrentSong();
 		/**
 		 * Big view
 		 */
 		RemoteViews bigView = new RemoteViews(getPackageName(),
 				R.layout.big_noti_layout);
-		Song song = getCurrentSong();
+		
+		bigView.setOnClickPendingIntent(R.id.noti_play_pause, createPendingIntent(NOTI_ACTION_PLAY_PAUSE));
+		bigView.setOnClickPendingIntent(R.id.noti_prev, createPendingIntent(NOTI_ACTION_PREV));
+		bigView.setOnClickPendingIntent(R.id.noti_next, createPendingIntent(NOTI_ACTION_NEXT));
+		bigView.setOnClickPendingIntent(R.id.noti_cancel, createPendingIntent(NOTI_ACTION_CANCEL));
 		bigView.setTextViewText(R.id.noti_title, song.getTitle());
 		bigView.setTextViewText(R.id.noti_content, song.getArtist());
+		if(States.musicPlayerState == MUSIC_PLAYING){
+			bigView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_pause);
+		}else{
+			bigView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_play);
+		}
 		if (song instanceof OfflineSong) {
 			bigView.setImageViewResource(R.id.noti_icon, R.drawable.ic_launcher);
 		}
-		if(song instanceof OnlineSong){
-			bigView.setImageViewUri(R.id.noti_icon, Uri.parse(song.getArtworkUrl()));
+		if (song instanceof OnlineSong) {
+			bigView.setImageViewUri(R.id.noti_icon,
+					Uri.parse(song.getArtworkUrl()));
 		}
 		/**
 		 * Small View
 		 */
-		RemoteViews smallView = new RemoteViews(getPackageName(),R.layout.small_noti_layout);
+		RemoteViews smallView = new RemoteViews(getPackageName(),
+				R.layout.small_noti_layout);
+		smallView.setOnClickPendingIntent(R.id.noti_play_pause, createPendingIntent(NOTI_ACTION_PLAY_PAUSE));
+		smallView.setOnClickPendingIntent(R.id.noti_cancel, createPendingIntent(NOTI_ACTION_CANCEL));
 		smallView.setTextViewText(R.id.noti_title, song.getTitle());
 		smallView.setTextViewText(R.id.noti_content, song.getArtist());
-		if (song instanceof OfflineSong) {
-			smallView.setImageViewResource(R.id.noti_icon, R.drawable.ic_launcher);
+		if(States.musicPlayerState == MUSIC_PLAYING){
+			smallView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_pause);
+		}else{
+			smallView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_play);
 		}
-		if(song instanceof OnlineSong){
-			smallView.setImageViewUri(R.id.noti_icon, Uri.parse(song.getArtworkUrl()));
+		if (song instanceof OfflineSong) {
+			smallView.setImageViewResource(R.id.noti_icon,
+					R.drawable.ic_launcher);
+		}
+		if (song instanceof OnlineSong) {
+			smallView.setImageViewUri(R.id.noti_icon,
+					Uri.parse(song.getArtworkUrl()));
 		}
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(
-				this).setSmallIcon(iconID)
-				.setLargeIcon(null)
+				this).setSmallIcon(R.drawable.ic_launcher)
 				.setContent(smallView);
-				// Creates an explicit intent for an Activity in your app
+		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(this, MusicPlayerMainActivity.class);
 		resultIntent.setAction("CallFromNoti");
 
@@ -499,9 +517,17 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		Notification notification = builder.build();
 		notification.flags |= NotificationCompat.FLAG_ONGOING_EVENT;
 		notification.flags |= NotificationCompat.FLAG_FOREGROUND_SERVICE;
-		 notification.bigContentView = bigView;
+		notification.bigContentView = bigView;
 		notificationManager.notify(NOTIFICATION_ID, notification);
 		startForeground(NOTIFICATION_ID, notification);
+	}
+
+	private PendingIntent createPendingIntent(String action) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this,MusicPlayerBroadcastReceiver.class);
+		intent.setAction(action);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+		return pendingIntent;
 	}
 
 	/**
@@ -636,7 +662,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Remove notification
 	 */
 	public void cancelNoti() {
-		updateNotification(true, -1);
+		updateNotification(true);
 	}
 
 	public Stack<String> getStackSongIds() {
@@ -648,16 +674,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return ids;
 	}
 
-	private Action createAction(int iconID, String action) {
-		Intent switchIntent = new Intent(this,
-				MusicPlayerBroadcastReceiver.class);
-		switchIntent.setAction(action);
-		PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(this, 0,
-				switchIntent, 0);
-
-		Action result = new Action(iconID, "", pendingSwitchIntent);
-		return result;
-	}
+	
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -719,5 +736,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			// methods
 			return MusicPlayerService.this;
 		}
+	}
+
+	public void release() {
+		// TODO Auto-generated method stub
+		mediaPlayer.stop();
+		mediaPlayer.release();
+		cancelNoti();
 	}
 }

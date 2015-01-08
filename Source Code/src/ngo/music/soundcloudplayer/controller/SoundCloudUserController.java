@@ -249,7 +249,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		/*
 		 * Havent login
 		 */
-		Token t = getToken();
+		Token t = this.t;
 		if (t == null) return false;
 		
 		try {

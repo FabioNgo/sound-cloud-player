@@ -78,7 +78,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
 		if("CallFromNoti".equals(intent.getAction())){
-			BasicFunctions.makeToastTake("call from noti", this);
+			
 			UIController.getInstance().updateUI(APP_RUNNING);
 		}
 		/*

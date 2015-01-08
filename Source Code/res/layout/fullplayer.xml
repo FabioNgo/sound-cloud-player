@@ -57,21 +57,22 @@
 			<RelativeLayout 
 			    
 		        android:layout_width="wrap_content"
-		        android:layout_toRightOf="@+id/artist_image"
-		        android:layout_marginLeft="4dp"
+		        android:layout_toEndOf="@+id/artist_image"
+		        android:layout_marginStart="4dp"
 		        android:layout_marginTop="10dp"
 		        android:layout_height="wrap_content">
 			    <TextView
 			        android:id="@+id/artist_fullname"
-			        android:layout_marginLeft="4dp"
+			        android:layout_marginStart="4dp"
 			        android:layout_width="match_parent"
 			        android:textColor="#EFEFEF"
 			        android:layout_height="wrap_content"
 			        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
 		
 			    <TextView
-			        android:layout_alignLeft="@+id/artist_fullname"
+			        android:layout_alignStart="@+id/artist_fullname"
 			        android:layout_below="@+id/artist_fullname"
+			        android:textIsSelectable="false"
 			        android:id="@+id/artist_country"
 			        android:textColor="#EFEFEF"
 			        android:layout_width="match_parent"
@@ -102,7 +103,7 @@
 		android:layout_alignTop="@+id/full_player_progress_bar"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="63dp"
-		android:layout_toLeftOf="@+id/full_player_progress_bar"
+		android:layout_toStartOf="@+id/full_player_progress_bar"
 		android:layout_width="wrap_content"
 		android:text="00:00"
 		android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -111,7 +112,7 @@
 		android:layout_alignBaseline="@+id/full_player_current_time"
 		android:layout_alignBottom="@+id/full_player_current_time"
 		android:layout_height="wrap_content"
-		android:layout_toRightOf="@+id/full_player_progress_bar"
+		android:layout_toEndOf="@+id/full_player_progress_bar"
 		android:layout_width="wrap_content"
 		android:text="00:00"
 		android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -120,14 +121,14 @@
 		android:layout_alignTop="@+id/full_player_progress_bar"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="48dp"
-		android:layout_toRightOf="@+id/full_player_duration"
+		android:layout_toEndOf="@+id/full_player_duration"
 		android:layout_width="wrap_content"
 		android:src="@drawable/ic_media_ff" />
 	<ImageView
 		android:id="@+id/full_player_rew"
 		android:layout_alignTop="@+id/full_player_ff"
 		android:layout_height="wrap_content"
-		android:layout_toLeftOf="@+id/full_player_current_time"
+		android:layout_toStartOf="@+id/full_player_current_time"
 		android:layout_width="wrap_content"
 		android:src="@drawable/ic_media_rew" />
 	<ImageView
@@ -135,7 +136,7 @@
 		android:layout_alignTop="@+id/full_player_current_time"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="20dp"
-		android:layout_toLeftOf="@+id/full_player_progress_bar"
+		android:layout_toStartOf="@+id/full_player_progress_bar"
 		android:src="@drawable/shuffle_button"
 		android:layout_width="wrap_content" />
 	<ImageView
@@ -143,7 +144,7 @@
 		android:layout_alignBaseline="@+id/full_player_shuffle"
 		android:layout_alignBottom="@+id/full_player_shuffle"
 		android:layout_height="wrap_content"
-		android:layout_toRightOf="@+id/full_player_progress_bar"
+		android:layout_toEndOf="@+id/full_player_progress_bar"
 		android:src="@drawable/replay_button"
 		android:layout_width="wrap_content" />
 </RelativeLayout>

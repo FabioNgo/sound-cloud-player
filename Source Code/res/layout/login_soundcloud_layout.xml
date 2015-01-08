@@ -8,7 +8,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="Username: " />
 
@@ -16,7 +16,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView1"
+        android:layout_alignStart="@+id/textView1"
         android:layout_below="@+id/textView1"
         android:layout_marginTop="27dp"
         android:text="Password: " />
@@ -26,8 +26,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="19dp"
-        android:layout_toRightOf="@+id/textView1"
+        android:layout_marginStart="19dp"
+        android:layout_toEndOf="@+id/textView1"
         android:ems="10" >
 
         <requestFocus />
@@ -37,7 +37,7 @@
         android:id="@+id/password_soundcloud"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/username_soundcloud"
+        android:layout_alignStart="@+id/username_soundcloud"
         android:layout_below="@+id/username_soundcloud"
         android:ems="10"
         android:inputType="textPassword" />

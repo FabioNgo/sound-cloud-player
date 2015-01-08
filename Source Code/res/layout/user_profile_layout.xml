@@ -9,20 +9,20 @@
         android:id="@+id/frame_avatar"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/background" >
             
           <!-- AVATAR, NAME , NUMBER OF FOLLOWER -->
           <RelativeLayout 
               android:layout_width="fill_parent"
-              android:layout_marginLeft="10dp"
+              android:layout_marginStart="10dp"
               android:layout_height="fill_parent">
               
             <!-- AVATAR -->  
            	<ngo.music.soundcloudplayer.general.CircularImageView
              
-	           	android:layout_alignParentLeft="true"
+	           	android:layout_alignParentStart="true"
 				android:layout_above="@+id/fullname"
 	            app:border="true"
 				app:border_color="#FFFFFF"
@@ -38,7 +38,7 @@
 	    	    android:id ="@+id/fullname"
 	    	    android:layout_width = "wrap_content"
 	    	    android:layout_height = "wrap_content"
-	    	    android:layout_alignParentLeft = "true"
+	    	    android:layout_alignParentStart = "true"
 	    	    android:textColor="#FFFFFF"
 	    	    android:textAppearance="?android:attr/textAppearanceLarge"
 	    	    android:layout_above="@+id/follower"/>
@@ -48,7 +48,7 @@
 	    	    android:id ="@+id/follower"
 	    	    android:layout_width = "wrap_content"
 	    	    android:layout_height = "wrap_content"
-	    	    android:layout_alignParentLeft = "true"
+	    	    android:layout_alignParentStart = "true"
 	    	    android:layout_alignParentBottom="true"
 	    	    android:textColor="#FFFFFF"
 	    	    android:textAppearance="?android:attr/textAppearanceLarge"/>
@@ -65,24 +65,24 @@
 	    android:layout_below="@+id/frame_avatar"
 	    android:layout_width="wrap_content"
 	    android:clickable="true"
-	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentStart="true"
 	    android:layout_height="wrap_content" >
 
 		<ImageView 
 			    android:id="@+id/my_music_icon"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		      	android:layout_marginLeft="4dp"
-		        android:layout_alignParentLeft="true"
+		      	android:layout_marginStart="4dp"
+		        android:layout_alignParentStart="true"
 		        android:src = "@drawable/home_button" />
 		<TextView 
 		       android:id = "@+id/my_music_id"
-		        android:layout_marginLeft="10dp"
+		        android:layout_marginStart="10dp"
 		        android:textSize="20sp"
 		       android:layout_width = "wrap_content"
 			   android:layout_height = "wrap_content"
 			   android:layout_centerVertical="true"
-			   android:layout_toRightOf="@+id/my_music_icon"
+			   android:layout_toEndOf="@+id/my_music_icon"
 			   android:textAppearance="?android:attr/textAppearanceLarge"
 			   android:text="@string/my_music"/>
    </RelativeLayout>
@@ -94,18 +94,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/my_music_field"
         android:clickable="true"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentStart="true" >
 
        <ImageView 
 		    android:id="@+id/soundcloud_explore_icon"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	      	android:layout_marginLeft="4dp"
-	        android:layout_alignParentLeft="true"
+	      	android:layout_marginStart="4dp"
+	        android:layout_alignParentStart="true"
 	        android:src="@drawable/explore_button" />
        <TextView 
 	       android:id = "@+id/soundcloud_explore_id"
-	       android:layout_toRightOf="@+id/soundcloud_explore_icon"
+	       android:layout_toEndOf="@+id/soundcloud_explore_icon"
 	       android:layout_centerVertical="true"
 	       android:textSize="20sp"
 	       android:layout_width = "wrap_content"
@@ -122,18 +122,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/soundcloud_explore_field"
         android:clickable="true"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentStart="true" >
 
        <ImageView 
 		    android:id="@+id/upload_soundcloud_icon"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
-	      	android:layout_marginLeft="4dp"
-	        android:layout_alignParentLeft="true"
+	      	android:layout_marginStart="4dp"
+	        android:layout_alignParentStart="true"
 	        android:src="@drawable/upload_button" />
        <TextView 
 	       android:id = "@+id/upload_soundcloud_id"
-	       android:layout_toRightOf="@+id/upload_soundcloud_icon"
+	       android:layout_toEndOf="@+id/upload_soundcloud_icon"
 	       android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
 	       android:textSize="20sp"
@@ -150,23 +150,23 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/upload_soundcloud_field"
         android:clickable="true"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentStart="true">
        <ImageView 
 		    android:id="@+id/logout_icon"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        
-	      	android:layout_marginLeft="4dp"
-	        android:layout_alignParentLeft="true"
+	      	android:layout_marginStart="4dp"
+	        android:layout_alignParentStart="true"
 	        android:src = "@drawable/logout_button" />
 	   <TextView 
 	       android:id = "@+id/logout_id"
-	       android:layout_marginLeft="10dp"
+	       android:layout_marginStart="10dp"
 		   android:layout_centerVertical="true"
 	       android:layout_width = "wrap_content"
 	       android:textSize="20sp"
 		   android:layout_height = "wrap_content"
-		   android:layout_toRightOf="@+id/logout_icon"
+		   android:layout_toEndOf="@+id/logout_icon"
 		   android:textAppearance="?android:attr/textAppearanceLarge"
 		   android:text = "@string/logout"/>
 	</RelativeLayout>

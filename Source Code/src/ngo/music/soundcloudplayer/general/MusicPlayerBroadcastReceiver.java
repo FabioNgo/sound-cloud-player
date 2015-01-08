@@ -1,32 +1,32 @@
 package ngo.music.soundcloudplayer.general;
 
-import java.io.IOException;
-
-import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
-public class MusicPlayerBroadcastReceiver extends BroadcastReceiver {
+public class MusicPlayerBroadcastReceiver extends BroadcastReceiver implements Constants.MusicService {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		Log.i("intent action = ", action);
 		// long id = intent.getLongExtra("id", -1);
-		if ("dismiss".equals(action)) {
-			MusicPlayerService.getInstance().pause();
-			MusicPlayerService.getInstance().cancelNoti();
-			try {
-				SongController.getInstance().storePlayingSong();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Log.e("store",e.getMessage());
-			}
+		if (NOTI_ACTION_PLAY_PAUSE.equals(action)) {
+			MusicPlayerService.getInstance().startPause();
+			return;
 		}
+		if (NOTI_ACTION_NEXT.equals(action)) {
+			MusicPlayerService.getInstance().playNextSong();
+			return;
+		}
+		if (NOTI_ACTION_PREV.equals(action)) {
+			MusicPlayerService.getInstance().playPreviousSong();
+			return;
+		}
+		if (NOTI_ACTION_CANCEL.equals(action)) {
+			MusicPlayerService.getInstance().release();
+			return;
+		}
+		
 		
 		
 	}
