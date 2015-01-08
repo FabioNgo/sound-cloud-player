@@ -3,6 +3,10 @@ package ngo.music.soundcloudplayer.Adapters;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
+
+
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
