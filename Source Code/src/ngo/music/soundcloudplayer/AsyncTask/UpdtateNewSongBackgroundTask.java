@@ -18,45 +18,43 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class UpdtateNewSongBackgroundTask extends
-		AsyncTask<ListView, Void, ArrayList<?>> {
+		AsyncTask<ListView, Void, ArrayList<Song>> {
 
 	static final int TASK_DURATION = 3 * 1000; // 3 seconds
 	private Adapter adapter;
-	private ListContentFragment listFragment;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-	public UpdtateNewSongBackgroundTask(SwipeRefreshLayout mSwipeRefreshLayout,ListContentFragment listFragment) {
+	public UpdtateNewSongBackgroundTask(SwipeRefreshLayout mSwipeRefreshLayout) {
 		// TODO Auto-generated constructor stub
 		this.mSwipeRefreshLayout = mSwipeRefreshLayout;
-		this.listFragment = listFragment;
 	}
 	@Override
-	protected ArrayList<?> doInBackground(ListView... params) {
+	protected ArrayList<Song> doInBackground(ListView... params) {
 		// Sleep for a small amount of time to simulate a background-task
 		try {
 			Thread.sleep(TASK_DURATION);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		ArrayList<?> result = null;
+		ArrayList<Song> result = null;
 		// Return a new song list
-		adapter = listFragment.getAdapter();
+		adapter = params[0].getAdapter();
 		if (adapter instanceof OfflineSongAdapter) {
 			result = SongController.getInstance()
 					.getOfflineSongs(true);
 
 			
 		}
-		if (adapter instanceof MyStreamAdapter) {
-			result = SongController.getInstance()
-					.getMyStream();
-
-			
-		}
+//		if (adapter instanceof MyStreamAdapter) {
+//			result = SongController.getInstance()
+//					.getMyStream();
+//
+//			
+//		}
 		return result;
 	}
 
 	@Override
-	protected void onPostExecute(ArrayList<?> result) {
+	protected void onPostExecute(ArrayList<Song> result) {
 		super.onPostExecute(result);
 
 		// Tell the Fragment that the refresh has completed
@@ -64,10 +62,10 @@ public class UpdtateNewSongBackgroundTask extends
 	}
 
 	
-	private void onRefreshComplete(ArrayList<?> result) {
+	private void onRefreshComplete(ArrayList<Song> result) {
 		// TODO Auto-generated method stub
 		if (adapter instanceof OfflineSongAdapter) {
-			ArrayList<OfflineSong> songs = (ArrayList<OfflineSong>) result;
+			ArrayList<Song> songs = (ArrayList<Song>) result;
 			((OfflineSongAdapter) adapter).clear();
 			for (Song song : songs) {
 				((OfflineSongAdapter) adapter).add(song);

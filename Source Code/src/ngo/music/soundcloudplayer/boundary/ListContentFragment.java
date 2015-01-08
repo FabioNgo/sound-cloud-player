@@ -26,13 +26,12 @@ import android.widget.ListAdapter;
  *
  */
 public abstract class ListContentFragment extends Fragment implements
-		Constants.MusicService, Constants.Appplication, OnItemClickListener,
-		OnRefreshListener {
+		Constants.MusicService, Constants.Appplication, OnItemClickListener {
 
 	protected SwipeRefreshLayout mSwipeRefreshLayout;
 	protected int swipeRefreshLayoutId = -1;
 	protected View rootView;
-	protected ArrayAdapter<?> adapter;
+	protected ArrayAdapter<Song> adapter;
 
 	/**
 	 * Load fragment activity, often list view fragment
@@ -61,36 +60,6 @@ public abstract class ListContentFragment extends Fragment implements
 
 	}
 
-	@Override
-	public void onRefresh() {
-		// TODO Auto-generated method stub
-		initiateRefresh();
-	}
-
-	protected void initiateRefresh() {
-		// TODO Auto-generated method stub
-		if (mSwipeRefreshLayout != null) {
-			new UpdtateNewSongBackgroundTask(mSwipeRefreshLayout,this).execute();
-		}
-	}
-
-	protected void iniSwipeRefreshLayout() {
-		mSwipeRefreshLayout = (SwipeRefreshLayout) rootView
-				.findViewById(swipeRefreshLayoutId);
-		if (mSwipeRefreshLayout != null) {
-			mSwipeRefreshLayout.setOnRefreshListener(this);
-			mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE);
-		}
-	}
-
-	protected void onRefreshComplete(ArrayList<Song> result) {
-		// TODO Auto-generated method stub
-
-	}
-
-	public ListAdapter getAdapter() {
-		// TODO Auto-generated method stub
-		return adapter;
-	}
+	
 
 }
