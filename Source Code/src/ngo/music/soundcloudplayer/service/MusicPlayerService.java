@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -464,7 +464,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				NOTI_ACTION_NEXT));
 
 		// Creates an explicit intent for an Activity in your app
-		Intent resultIntent = new Intent(this, MainActivity.class);
+		Intent resultIntent = new Intent(this, MusicPlayerMainActivity.class);
 		resultIntent.setAction("CallFromNoti");
 
 		// The stack builder object will contain an artificial back stack for

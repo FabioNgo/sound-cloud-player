@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tabs"
                 android:layout_weight="1"
-                tools:context=".MainActivity" />
+                tools:context=".MusicPlayerMainActivity" />
         </RelativeLayout>
 
         <!-- SLIDING LAYOUT -->

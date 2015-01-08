@@ -3,6 +3,16 @@ package ngo.music.soundcloudplayer.boundary;
 import java.io.IOException;
 import java.util.zip.Inflater;
 
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.Session.StatusCallback;
+import com.facebook.SessionState;
+import com.facebook.SharedPreferencesTokenCachingStrategy;
+import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
+import com.facebook.widget.ProfilePictureView;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
@@ -24,6 +34,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -33,6 +44,16 @@ import android.widget.Toast;
  *
  */
 public class GeneralLoginUI extends Fragment implements Constants.UserContant {
+
+	
+	private LoginButton loginFacebookButton;
+	private ProfilePictureView profilePictureView;
+	private TextView userNameView;
+	private GraphUser pendingUpdateForUser;
+	private StatusCallback sessionStatusCallback;
+	private Session currentSession;
+
+
 
 	public GeneralLoginUI() {
 		// TODO Auto-generated constructor stub
@@ -88,24 +109,31 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 		/*
 		 * Login Facebook
 		 */
-		Button loginFacebook =  (Button)rootView.findViewById(R.id.login_facebook_button);
-		loginFacebook.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (BasicFunctions.isConnectingToInternet(getActivity())){
-					//UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
-					((LoginActivity) getActivity()).changeFragment(new FacebookLoginUI());
-				}else{
-					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-					return;
-				}
-				
-				// TODO Auto-generated method stub
-				
-				
-			}
-		});
+		loginFacebookButton = (LoginButton) rootView.findViewById(R.id.login_facebook_button);
+        loginFacebookButton.setReadPermissions("user_friends");
+       handleLoginFacebook();
+//        if (pendingUpdateForUser != null) {
+//            updateViewForUser(pendingUpdateForUser);
+//            pendingUpdateForUser = null;
+//        }
+//		loginFacebookButton.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if (BasicFunctions.isConnectingToInternet(getActivity())){
+//					//UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
+//					
+//					((LoginActivity) getActivity()).changeFragment(new FacebookLoginUI());
+//				}else{
+//					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+//					return;
+//				}
+//				
+//				// TODO Auto-generated method stub
+//				
+//				
+//			}
+//		});
 		
 		/*
 		 * Without login
@@ -115,7 +143,7 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 			
 			@Override
 			public void onClick(View v) {
-				Intent mainActivity = new Intent(getActivity(), MainActivity.class);
+				Intent mainActivity = new Intent(getActivity(), MusicPlayerMainActivity.class);
 				startActivity(mainActivity);
 				// TODO Auto-generated method stub
 				
@@ -152,6 +180,78 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 		
 		return bundle;
 	}
+	
+	 public void updateViewForUser(GraphUser user) {
+	        if (userNameView == null || profilePictureView == null || !isAdded()) {
+	            // Fragment not yet added to the view. So let's store which user was intended
+	            // for display.
+	            pendingUpdateForUser = user;
+	            return;
+	        }
+
+	        if (user == null) {
+	            profilePictureView.setProfileId(null);
+	            userNameView.setText("No user");
+	        } else {
+	            profilePictureView.setProfileId(user.getId());
+	            System.out.println(user.getFirstName());
+	        }
+	  }
+	 
+	  private void fetchUserInfo() {
+	        if (currentSession != null && currentSession.isOpened()) {
+	            Request request = Request.newMeRequest(currentSession, new Request.GraphUserCallback() {
+	                @Override
+	                public void onCompleted(GraphUser me, Response response) {
+	                	System.out.println (me.getFirstName());
+	                    if (response.getRequest().getSession() == currentSession) {
+	                       // updateFragments(me);
+	                    }
+	                }
+	            });
+	            request.executeAsync();
+	        }
+	    }
+	  
+	  
+	  private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+	        if (session != currentSession) {
+	            return;
+	        }
+
+	        if (state.isOpened()) {
+	            // Log in just happened.
+	            fetchUserInfo();
+	          //  showProfile();
+	        } else if (state.isClosed()) {
+	            // Log out just happened. Update the UI.
+	           // updateFragments(null);
+	        }
+	    }
+	  
+	  
+	  private void handleLoginFacebook(){
+		  sessionStatusCallback = new Session.StatusCallback() {
+	          @Override
+	          public void call(Session session, SessionState state, Exception exception) {
+	              onSessionStateChange(session, state, exception);
+	          }
+	      };
+
+	          
+//
+//	          SharedPreferencesTokenCachingStrategy restoredCache = new SharedPreferencesTokenCachingStrategy(
+//	                  this,
+//	                  savedInstanceState.getString(TOKEN_CACHE_NAME_KEY));
+//	          			currentSession = Session.restoreSession(
+//	                  this,
+//	                  restoredCache,
+//	                  sessionStatusCallback,
+//	                  savedInstanceState);
+//	      
+//		  
+	  }
+	  
 	
 	
 }

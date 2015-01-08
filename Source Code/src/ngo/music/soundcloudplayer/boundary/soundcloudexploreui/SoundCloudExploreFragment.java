@@ -10,7 +10,7 @@ import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
@@ -88,7 +88,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			 songs = songController.getOnlineSongs(category); 
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
 			//System.out.println (songs.size() + "......" + category);
-			adapter = new SoundCloudExploreAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
+			adapter = new SoundCloudExploreAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
 			adapter.notifyDataSetChanged();
 			songsList.setAdapter(adapter);
 			

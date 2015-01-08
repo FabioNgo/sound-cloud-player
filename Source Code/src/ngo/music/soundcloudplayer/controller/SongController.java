@@ -26,7 +26,7 @@ import ngo.music.soundcloudplayer.api.Params;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -303,7 +303,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	private ArrayList<Song> getSongsFromSoundCloud(int currentPage, int category) {
 
 		if (currentPage <= categoryCurrentPage[category]
-				|| !(BasicFunctions.isConnectingToInternet(MainActivity
+				|| !(BasicFunctions.isConnectingToInternet(MusicPlayerMainActivity
 						.getActivity()))) {
 			return onlineSongs.get(category);
 		}
@@ -539,15 +539,15 @@ public class SongController implements Constants, Constants.SongConstants,
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			mNotifyManager = (NotificationManager) MainActivity.getActivity()
+			mNotifyManager = (NotificationManager) MusicPlayerMainActivity.getActivity()
 					.getSystemService(Context.NOTIFICATION_SERVICE);
 			mBuilder = new NotificationCompat.Builder(
-					MainActivity.getActivity());
+					MusicPlayerMainActivity.getActivity());
 			mBuilder.setContentTitle("Music Download")
 					.setContentText("Download in progress")
 					.setSmallIcon(R.drawable.download);
 			mBuilder.setAutoCancel(true);
-			Toast.makeText(MainActivity.getActivity(), "Start download",
+			Toast.makeText(MusicPlayerMainActivity.getActivity(), "Start download",
 					Toast.LENGTH_LONG).show();
 			// Displays the progress bar for the first time.
 			// mNotifyManager.notify(1, mBuilder.build());
@@ -558,7 +558,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			// TODO Auto-generated method stub
 			String streamUrl;
 
-			if (!BasicFunctions.isConnectingToInternet(MainActivity
+			if (!BasicFunctions.isConnectingToInternet(MusicPlayerMainActivity
 					.getActivity())) {
 				return "No internet connection";
 			}
@@ -656,7 +656,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			// Removes the progress bar
 					.setProgress(0, 0, false);
 			mNotifyManager.notify(1, mBuilder.build());
-			Toast.makeText(MainActivity.getActivity(), result,
+			Toast.makeText(MusicPlayerMainActivity.getActivity(), result,
 					Toast.LENGTH_LONG).show();
 
 			// TODO Auto-generated method stub
@@ -670,7 +670,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	 */
 	public void loadFavoriteSong() {
 		if (isLoadFavoriteSong
-				&& BasicFunctions.isConnectingToInternet(MainActivity
+				&& BasicFunctions.isConnectingToInternet(MusicPlayerMainActivity
 						.getActivity())) {
 			// System.out.println ("LOAD FAVORITE");
 			favoriteSong = new ArrayList<Song>();
@@ -729,7 +729,7 @@ public class SongController implements Constants, Constants.SongConstants,
 
 		// System.out.println (isLoadStream);
 		if (isLoadStream
-				&& BasicFunctions.isConnectingToInternet(MainActivity
+				&& BasicFunctions.isConnectingToInternet(MusicPlayerMainActivity
 						.getActivity())) {
 			streamList = new ArrayList<Song>();
 			myStreamIdList = new ArrayList<Integer>();

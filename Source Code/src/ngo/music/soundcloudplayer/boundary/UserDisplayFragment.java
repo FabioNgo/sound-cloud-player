@@ -41,8 +41,8 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 	private static int numFollowers;
 	public UserDisplayFragment(){
 		super();
-		layoutWidth = MainActivity.screenWidth;
-		layoutHeight = MainActivity.screenHeight;
+		layoutWidth = MusicPlayerMainActivity.screenWidth;
+		layoutHeight = MusicPlayerMainActivity.screenHeight;
 	}
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 	 */
 	private void configButton() {
 		
-		int constantLayoutHeight = MainActivity.screenHeight/15;
+		int constantLayoutHeight = MusicPlayerMainActivity.screenHeight/15;
 		/*
 		 * My Music
 		 */
@@ -92,7 +92,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				//MainActivity.isExplore = false;
-				Intent i = new Intent(getActivity(), MainActivity.class);
+				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 				i.putExtra(DEFAULT_ID, SONGS);
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 				soundCloudUserController.setGuest(null);
@@ -102,7 +102,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				songController.isLoadStream = true;
 				//songController.loadFavoriteSong();
 				i.putExtra(USER, bundle);
-				MainActivity.getActivity().finish();
+				MusicPlayerMainActivity.getActivity().finish();
 				
 				startActivity(i);
 				
@@ -271,14 +271,14 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
-			MainActivity.isExplore = true;
-			Intent i = new Intent(getActivity(), MainActivity.class);
+			MusicPlayerMainActivity.isExplore = true;
+			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 			soundCloudUserController.setResponseString(stringResponse);
 			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
 			i.putExtra(USER, bundle);
 			//i.putExtra(ME_FAVORITES,stringResponse);
-			MainActivity.getActivity().finish();
+			MusicPlayerMainActivity.getActivity().finish();
 			startActivity(i);
 			
 	

@@ -20,18 +20,18 @@
         android:text="Login with Google Plus" />
 
     <Button
-        android:id="@+id/login_facebook_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_google_plus_button"
-        android:text="Login with Facebook" />
-
-    <Button
         android:id="@+id/continue_not_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_facebook_button"
         android:text="Continue without login" />
-    
+
+    <com.facebook.widget.LoginButton
+        android:id="@+id/login_facebook_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/login_google_plus_button"
+        android:layout_marginTop="14dp" />
 
 </RelativeLayout>

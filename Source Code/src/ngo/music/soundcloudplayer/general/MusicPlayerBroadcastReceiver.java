@@ -2,7 +2,7 @@ package ngo.music.soundcloudplayer.general;
 
 import java.io.IOException;
 
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.BroadcastReceiver;

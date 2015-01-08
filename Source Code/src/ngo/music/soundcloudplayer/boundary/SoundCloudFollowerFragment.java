@@ -117,11 +117,11 @@ public class SoundCloudFollowerFragment extends Fragment {
 		User guest = adapter.getUsers().get(position);
 		userController.setGuest(guest);
 		userController.clearUserData();
-		Intent i = new Intent(getActivity(), MainActivity.class);
+		Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 		
 		Bundle bundle = userController.getBundle(userController.getCurrentUser());
 		i.putExtra(Constants.UserContant.USER, bundle);
-		MainActivity.getActivity().finish();
+		MusicPlayerMainActivity.getActivity().finish();
 		startActivity(i);
 	}
 	

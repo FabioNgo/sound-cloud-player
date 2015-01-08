@@ -3,7 +3,7 @@ package ngo.music.soundcloudplayer.Adapters;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -38,7 +38,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	public static QueueSongAdapter getInstance() {
 
 		if (instance == null) {
-			instance = new QueueSongAdapter(MainActivity.getActivity()
+			instance = new QueueSongAdapter(MusicPlayerMainActivity.getActivity()
 					.getApplicationContext(), R.layout.list_view);
 		}
 		return instance;
@@ -73,8 +73,8 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 				.findViewById(R.id.lite_player_image);
 		//
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-		BasicFunctions.setImageViewSize(MainActivity.screenWidth / 20,
-				MainActivity.screenWidth / 20, avatar);
+		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 20,
+				MusicPlayerMainActivity.screenWidth / 20, avatar);
 
 		avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
 

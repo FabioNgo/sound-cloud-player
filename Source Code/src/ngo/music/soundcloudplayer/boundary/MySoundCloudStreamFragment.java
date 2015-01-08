@@ -79,7 +79,7 @@ public class MySoundCloudStreamFragment extends Fragment implements Constants{
 				notification.setText("Do not have any song");
 				
 			}else{
-				MyStreamAdapter adapter = new MyStreamAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, myStream ,wrapper);
+				MyStreamAdapter adapter = new MyStreamAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(),R.layout.list_view, myStream ,wrapper);
 				songsList.setAdapter(adapter);				
 			}
 			

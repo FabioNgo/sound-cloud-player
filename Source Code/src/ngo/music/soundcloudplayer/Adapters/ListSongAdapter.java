@@ -21,7 +21,7 @@ import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.LoginActivity;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -114,7 +114,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		 * Set song detail 
 		 */
 		RelativeLayout songDetail = (RelativeLayout) v.findViewById(R.id.song_info_field);
-		songDetail.getLayoutParams().height = MainActivity.screenHeight/20;
+		songDetail.getLayoutParams().height = MusicPlayerMainActivity.screenHeight/20;
 		
 		/*
 		 * Like this song
@@ -222,10 +222,10 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		NetworkImageView avatar = (NetworkImageView) v.findViewById(R.id.song_image);
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader(); 
 		avatar.setDefaultImageResId(R.drawable.ic_launcher);
-		avatar.setMinimumHeight(MainActivity.screenHeight/5);
-		avatar.setMinimumWidth(MainActivity.screenHeight/5);
-		avatar.setMaxHeight(MainActivity.screenHeight/5);
-		avatar.setMaxWidth(MainActivity.screenHeight/5);
+		avatar.setMinimumHeight(MusicPlayerMainActivity.screenHeight/5);
+		avatar.setMinimumWidth(MusicPlayerMainActivity.screenHeight/5);
+		avatar.setMaxHeight(MusicPlayerMainActivity.screenHeight/5);
+		avatar.setMaxWidth(MusicPlayerMainActivity.screenHeight/5);
 		
 		if (song.getArtworkUrl() != null){
 			avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);

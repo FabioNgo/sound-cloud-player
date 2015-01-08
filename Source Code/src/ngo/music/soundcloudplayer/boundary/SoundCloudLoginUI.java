@@ -119,7 +119,7 @@ public class SoundCloudLoginUI extends Fragment implements Constants.UserContant
 						DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
 						databaseHandler.addLoginInfo(username, password);
 						Bundle bundle  = userController.getBundle(currentUser);
-						Intent goToMainActivity  =  new Intent(getActivity(), MainActivity.class);
+						Intent goToMainActivity  =  new Intent(getActivity(), MusicPlayerMainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);
 						startActivity(goToMainActivity);
 					}

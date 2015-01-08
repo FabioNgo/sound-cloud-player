@@ -55,8 +55,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
 				.findViewById(R.id.full_player_song_image);
-		BasicFunctions.setImageViewSize(MainActivity.screenWidth,
-				MainActivity.screenWidth, songImage);
+		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth,
+				MusicPlayerMainActivity.screenWidth, songImage);
 
 		currentTimeText = (TextView) rootView
 				.findViewById(R.id.full_player_current_time);
@@ -107,8 +107,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		ImageView loop = (ImageView) rootView
 				.findViewById(R.id.full_player_loop);
 
-		BasicFunctions.setImageViewSize(MainActivity.screenWidth / 10,
-				MainActivity.screenWidth / 10, loop);
+		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+				MusicPlayerMainActivity.screenWidth / 10, loop);
 		updateLoop();
 		loop.setOnClickListener(new OnClickListener() {
 
@@ -125,8 +125,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	private void configShuffleButton() {
 		shuffle = (ImageView) rootView.findViewById(R.id.full_player_shuffle);
-		BasicFunctions.setImageViewSize(MainActivity.screenWidth / 10,
-				MainActivity.screenWidth / 10, shuffle);
+		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+				MusicPlayerMainActivity.screenWidth / 10, shuffle);
 
 		shuffle.setOnClickListener(new OnClickListener() {
 
@@ -145,8 +145,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	private void configFastForwardButton() {
 		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
-		BasicFunctions.setImageViewSize(MainActivity.screenWidth / 10,
-				MainActivity.screenWidth / 10, ff);
+		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+				MusicPlayerMainActivity.screenWidth / 10, ff);
 		ff.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -173,8 +173,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private void configRewindButton() {
 		ImageView rew = (ImageView) rootView.findViewById(R.id.full_player_rew);
 		// BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, rew);
-		BasicFunctions.setImageViewSize(MainActivity.screenWidth / 10,
-				MainActivity.screenWidth / 10, rew);
+		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+				MusicPlayerMainActivity.screenWidth / 10, rew);
 
 		rew.setOnClickListener(new OnClickListener() {
 
@@ -311,8 +311,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			artistFullname.setText(soundCloudAccount.getFullName());
 			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
 					AppController.getInstance().getImageLoader());
-			BasicFunctions.setImageViewSize(MainActivity.screenHeight / 10,
-					MainActivity.screenHeight / 10, artistAvatar);
+			BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenHeight / 10,
+					MusicPlayerMainActivity.screenHeight / 10, artistAvatar);
 
 			artistAvatar.setDefaultImageResId(R.drawable.ic_launcher);
 
@@ -333,7 +333,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		FrameLayout songInfo = (FrameLayout) rootView
 				.findViewById(R.id.song_info_field);
 
-		songInfo.getLayoutParams().width = MainActivity.screenWidth;
+		songInfo.getLayoutParams().width = MusicPlayerMainActivity.screenWidth;
 		songInfo.getLayoutParams().height = songInfo.getLayoutParams().width;
 
 		artistInfo = (RelativeLayout) rootView.findViewById(R.id.artist_info);
@@ -373,11 +373,11 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 						.getInstance();
 				
 				soundCloudUserController.setGuest(soundCloudAccount);
-				Intent i = new Intent(getActivity(), MainActivity.class);
+				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 				Bundle bundle = soundCloudUserController
 						.getBundle(soundCloudUserController.getCurrentUser());
 				i.putExtra(Constants.UserContant.USER, bundle);
-				MainActivity.getActivity().finish();
+				MusicPlayerMainActivity.getActivity().finish();
 				startActivity(i);
 			}
 		});

@@ -106,7 +106,7 @@ public class GoogleLoginUI extends Fragment implements Constants.UserContant {
 					}else{
 						Bundle bundle  = getBundle(currentUser);
 						isLogin = true;
-						Intent goToMainActivity  =  new Intent(getActivity(), MainActivity.class);
+						Intent goToMainActivity  =  new Intent(getActivity(), MusicPlayerMainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);
 						startActivity(goToMainActivity);
 					}

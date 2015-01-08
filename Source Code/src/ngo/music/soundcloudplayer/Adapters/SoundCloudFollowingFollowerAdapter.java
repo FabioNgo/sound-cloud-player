@@ -8,7 +8,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
@@ -62,7 +62,7 @@ public class SoundCloudFollowingFollowerAdapter  extends ArrayAdapter<User>{
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader(); 
 		avatar.setDefaultImageResId(R.drawable.ic_launcher);
 		
-		BasicFunctions.setImageViewSize(MainActivity.screenHeight/5, MainActivity.screenHeight/5, avatar);
+		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenHeight/5, MusicPlayerMainActivity.screenHeight/5, avatar);
 
 		avatar.setImageUrl(soundCloudAccount.getAvatarUrl(), mImageLoader);
 		notifyDataSetChanged();

@@ -3,6 +3,8 @@
  */
 package ngo.music.soundcloudplayer.boundary;
 
+import com.volley.api.AppController;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.SoundCloudLoginUI.Background;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
@@ -41,7 +43,7 @@ public class LoginActivity extends FragmentActivity implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		//AppController.printKeyHash(this);
 		MusicPlayerService.getInstance();
 		DatabaseHandler databaseHandler = DatabaseHandler.getInstance(this);
 		if (BasicFunctions.isConnectingToInternet(activity)) {
@@ -171,7 +173,7 @@ public class LoginActivity extends FragmentActivity implements
 						databaseHandler.addLoginInfo(username, password);
 						Bundle bundle = userController.getBundle(currentUser);
 						Intent goToMainActivity = new Intent(
-								getApplicationContext(), MainActivity.class);
+								getApplicationContext(), MusicPlayerMainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);
 						startActivity(goToMainActivity);
 						finish();

@@ -1,6 +1,6 @@
 package ngo.music.soundcloudplayer.general;
 
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;

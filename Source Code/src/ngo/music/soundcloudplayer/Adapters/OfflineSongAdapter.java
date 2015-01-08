@@ -3,7 +3,7 @@ package ngo.music.soundcloudplayer.Adapters;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.boundary.MainActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -139,7 +139,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 
 	public static OfflineSongAdapter createNewInstance() {
 		// TODO Auto-generated method stub
-		instance = new OfflineSongAdapter(MainActivity.getActivity()
+		instance = new OfflineSongAdapter(MusicPlayerMainActivity.getActivity()
 				.getApplicationContext(), R.layout.list_view);
 		return instance;
 	}

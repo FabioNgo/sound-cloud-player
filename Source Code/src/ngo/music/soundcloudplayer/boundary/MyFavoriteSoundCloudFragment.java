@@ -90,7 +90,7 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 				notification.setText("Do not have any song");
 				
 			}else{
-				adapter = new FavoriteSongAdapter(MainActivity.getActivity().getApplicationContext(),R.layout.list_view, favoriteSongs ,wrapper);
+				adapter = new FavoriteSongAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(),R.layout.list_view, favoriteSongs ,wrapper);
 				songsList.setAdapter(adapter);				
 			}
 		}

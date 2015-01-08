@@ -114,7 +114,7 @@ public class UploadSongActivity extends Activity implements Constants {
 		 * UPLOAD LINK
 		 */
 		uploadLink = (EditText) findViewById(R.id.upload_link);
-		uploadLink.getLayoutParams().width = MainActivity.screenWidth/2;
+		uploadLink.getLayoutParams().width = MusicPlayerMainActivity.screenWidth/2;
 		Button uploadSongButton = (Button) findViewById(R.id.upload_button);
 		uploadSongButton.setOnClickListener(new OnClickListener() {
 			
@@ -173,8 +173,8 @@ public class UploadSongActivity extends Activity implements Constants {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MainActivity.isExplore = false;
-				Intent i = new Intent(getApplicationContext(), MainActivity.class);
+				MusicPlayerMainActivity.isExplore = false;
+				Intent i = new Intent(getApplicationContext(), MusicPlayerMainActivity.class);
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 				
 				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
