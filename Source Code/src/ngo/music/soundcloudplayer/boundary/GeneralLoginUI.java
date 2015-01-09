@@ -95,7 +95,7 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 			public void onClick(View v) {
 				if (BasicFunctions.isConnectingToInternet(getActivity())){
 					SoundCloudLoginUI soundCloudLoginUI =  new SoundCloudLoginUI();
-					((LoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
+					((UserLoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
 				}else{
 					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
 					return;
@@ -110,30 +110,30 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 		 * Login Facebook
 		 */
 		loginFacebookButton = (LoginButton) rootView.findViewById(R.id.login_facebook_button);
-        loginFacebookButton.setReadPermissions("user_friends");
-       handleLoginFacebook();
+      //  loginFacebookButton.setReadPermissions("user_friends");
+      // handleLoginFacebook();
 //        if (pendingUpdateForUser != null) {
 //            updateViewForUser(pendingUpdateForUser);
 //            pendingUpdateForUser = null;
 //        }
-//		loginFacebookButton.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				if (BasicFunctions.isConnectingToInternet(getActivity())){
-//					//UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
-//					
-//					((LoginActivity) getActivity()).changeFragment(new FacebookLoginUI());
-//				}else{
-//					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-//					return;
-//				}
-//				
-//				// TODO Auto-generated method stub
-//				
-//				
-//			}
-//		});
+		loginFacebookButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				if (BasicFunctions.isConnectingToInternet(getActivity())){
+					//UserControllerFactory.createUserController(Constants.FACEBOOK_USER).login();
+					
+					((UserLoginActivity) getActivity()).changeFragment(new FacebookLoginUI());
+				}else{
+					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+					return;
+				}
+				
+				// TODO Auto-generated method stub
+				
+				
+			}
+		});
 		
 		/*
 		 * Without login
