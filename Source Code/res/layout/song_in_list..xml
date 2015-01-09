@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<com.android.volley.toolbox.NetworkImageView
+		android:id="@+id/lite_player_image"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_alignParentStart="true"
+		android:scaleType="fitXY"
+		android:src="@drawable/ic_launcher"/>
+
+	<TextView
+		android:id="@+id/lite_player_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="4dp"
+		android:layout_marginTop="10dp"
+		android:layout_toEndOf="@+id/lite_player_image"
+		android:layout_toStartOf="@+id/lite_player_play_stt"
+		
+		android:singleLine="true"
+		
+		android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+		android:textColor="#000000">
+
+	</TextView>
+
+	<TextView
+		android:id="@+id/lite_player_subtitle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignStart="@+id/lite_player_title"
+		android:layout_below="@+id/lite_player_title"
+		android:layout_toEndOf="@+id/lite_player_image"
+		android:layout_toStartOf="@+id/lite_player_play_stt"
+		android:singleLine="true"
+		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+		android:textColor="#000000"
+		android:textIsSelectable="false"/>
+
+	<ImageView
+		android:id="@+id/lite_player_play_stt"
+		android:src="@android:drawable/ic_media_play"
+		android:layout_width="30dp"
+		android:layout_height="30dp"
+		android:layout_toStartOf="@+id/song_menu"
+		android:layout_centerVertical="true"
+		
+		/>
+	<ImageView
+        android:id="@+id/song_menu"  
+        android:layout_width="30dp" 
+        android:layout_height="30dp"
+        android:scaleType="fitCenter"  
+        android:layout_alignParentEnd="true"
+		android:layout_centerVertical="true"
+		android:focusable="false"
+        android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"  
+         />
+
+</RelativeLayout>

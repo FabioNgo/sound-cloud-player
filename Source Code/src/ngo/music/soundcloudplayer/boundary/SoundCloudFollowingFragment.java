@@ -11,6 +11,7 @@ import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudFollowingFollowerAdapter;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.UserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -56,7 +57,7 @@ public class SoundCloudFollowingFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.user_list_view, container, false);
 		listUsers = (ListView) rootView.findViewById(R.id.users_list);
 		
-		if (States.loginState == Constants.UserContant.LOGGED_IN) {
+		if (SoundCloudUserController.getInstance().isLogin()) {
 			try {
 				users = new LoadFollowingUserBackground().execute().get();
 			} catch (InterruptedException e) {

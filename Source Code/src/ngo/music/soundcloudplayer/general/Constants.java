@@ -151,12 +151,15 @@ public interface Constants {
 		String NOTI_ACTION_NEXT = "next";
 		String NOTI_ACTION_REW = "rewind";
 		String NOTI_ACTION_FF = "fast forward";
-		
+		/**
+		 * DATA CHANGE
+		 */
+		int QUEUE_CHANGED = 9;
 		
 	}
 	interface Appplication{
-		int APP_RUNNING =9;
-		int APP_STOPPED = 10;
+		int APP_RUNNING =7;
+		int APP_STOPPED = 8;
 	}
 	
 	interface TabContant{

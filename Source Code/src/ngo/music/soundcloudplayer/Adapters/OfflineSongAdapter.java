@@ -9,26 +9,34 @@ import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
 public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	private View v;
-	
+
 	Context context;
 	int resource;
+
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
 		songs = SongController.getInstance().getOfflineSongs(false);
 		this.context = context;
 		this.resource = resource;
-		
+
 	}
 
 	public static OfflineSongAdapter instance = null;
@@ -49,7 +57,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.liteplayer, null);
+			v = inflater.inflate(R.layout.song_in_list, null);
 
 		}
 
@@ -62,8 +70,8 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	 * @param v
 	 */
 	private void setLayoutInformation(int position, View v) {
-		Song song = null;
-		song = songs.get(position);
+		
+		final Song song = songs.get(position);
 		/**
 		 * Set avatar for song
 		 */
@@ -76,7 +84,49 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		// avatar.setMinimumWidth(MainActivity.screenHeight/5);
 
 		// avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		/**
+		 * set menu
+		 */
+		final ImageView menu = (ImageView) v.findViewById(R.id.song_menu);
+		menu.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity.getActivity(), menu);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                    .inflate(R.menu.song_list_menu, popup.getMenu());
 
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    
+
+					@Override
+					public boolean onMenuItemClick(MenuItem arg0) {
+						// TODO Auto-generated method stub
+						switch (arg0.getItemId()) {
+						case R.id.list_addQueue:
+							MusicPlayerService.getInstance().addSongToQueue(song);
+							break;
+						case R.id.list_playNext:
+							MusicPlayerService.getInstance().addToNext(song);
+							break;
+						case R.id.list_addToPlaylist:
+							break;
+						case R.id.list_delete:
+							break;
+						default:
+							break;
+						}
+						
+						return false;
+					}
+                });
+
+                popup.show(); //showing popup menu
+			}
+		});
 		/*
 		 * Set title
 		 */
@@ -94,19 +144,15 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		 */
 		if (MusicPlayerService.getInstance().getCurrentSongId()
 				.compareTo(songs.get(position).getId()) == 0) {
-			ProgressWheel progressWheel = (ProgressWheel) v
-					.findViewById(R.id.lite_player_progress_bar);
-			progressWheel.setVisibility(View.VISIBLE);
-			if (MusicPlayerService.getInstance().isPlaying()) {
-				progressWheel.setBackgroundResource(R.drawable.ic_media_pause);
-			} else {
-				progressWheel.setBackgroundResource(R.drawable.ic_media_play);
-			}
+			ImageView playStt = (ImageView) v
+					.findViewById(R.id.lite_player_play_stt);
+			playStt.setVisibility(View.VISIBLE);
+
 			// UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
 		} else {
-			ProgressWheel progressWheel = (ProgressWheel) v
-					.findViewById(R.id.lite_player_progress_bar);
-			progressWheel.setVisibility(View.INVISIBLE);
+			ImageView playStt = (ImageView) v
+					.findViewById(R.id.lite_player_play_stt);
+			playStt.setVisibility(View.INVISIBLE);
 			// UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
 
 		}
@@ -135,7 +181,6 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		return result;
 
 	}
-	
 
 	public static OfflineSongAdapter createNewInstance() {
 		// TODO Auto-generated method stub
@@ -143,16 +188,18 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 				.getApplicationContext(), R.layout.list_view);
 		return instance;
 	}
+
 	@Override
 	public void add(Song song) {
 		// TODO Auto-generated method stub
-		if(!(song instanceof OfflineSong)){
-			
-		}else{
-			songs.add((OfflineSong) song);	
+		if (!(song instanceof OfflineSong)) {
+
+		} else {
+			songs.add((OfflineSong) song);
 		}
-		
+
 	}
+
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub

@@ -138,7 +138,7 @@ public class SoundCloudFollowerFragment extends Fragment {
 		@Override
 		protected ArrayList<User> doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			if (States.loginState == Constants.UserContant.LOGGED_IN) {
+			if (SoundCloudUserController.getInstance().isLogin()) {
 
 				try {
 					users = userController.getFollowerUsers(offset);

@@ -289,34 +289,34 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.action_toggle: {
-			if (mLayout != null) {
-				if (!mLayout.isPanelHidden()) {
-					mLayout.hidePanel();
-					item.setTitle("ACtion Show");
-				} else {
-					mLayout.showPanel();
-					item.setTitle("Action Hide");
-				}
-			}
-			return true;
-		}
-		case R.id.action_anchor: {
-			if (mLayout != null) {
-				if (mLayout.getAnchorPoint() == 1.0f) {
-					mLayout.setAnchorPoint(0.7f);
-					mLayout.expandPanel(0.7f);
-					item.setTitle("ACtion Anchor Disable");
-				} else {
-					mLayout.setAnchorPoint(1.0f);
-					mLayout.collapsePanel();
-					item.setTitle("ACtion Anchor Enable");
-				}
-			}
-			return true;
-		}
-		}
+//		switch (item.getItemId()) {
+//		case R.id.action_toggle: {
+//			if (mLayout != null) {
+//				if (!mLayout.isPanelHidden()) {
+//					mLayout.hidePanel();
+//					item.setTitle("ACtion Show");
+//				} else {
+//					mLayout.showPanel();
+//					item.setTitle("Action Hide");
+//				}
+//			}
+//			return true;
+//		}
+//		case R.id.action_anchor: {
+//			if (mLayout != null) {
+//				if (mLayout.getAnchorPoint() == 1.0f) {
+//					mLayout.setAnchorPoint(0.7f);
+//					mLayout.expandPanel(0.7f);
+//					item.setTitle("ACtion Anchor Disable");
+//				} else {
+//					mLayout.setAnchorPoint(1.0f);
+//					mLayout.collapsePanel();
+//					item.setTitle("ACtion Anchor Enable");
+//				}
+//			}
+//			return true;
+//		}
+//		}
 		return super.onOptionsItemSelected(item);
 	}
 

@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -66,7 +67,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
 	private static MusicPlayerService instance;
-
+	private String nextSongId = ""; //assign specific song played next
 	public static MusicPlayerService getInstance() {
 		if (instance == null) {
 			instance = new MusicPlayerService();
@@ -89,8 +90,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			getData();
 		} catch (Exception e) {
 			Log.w("getData", e.toString());
+			
 		} finally {
-			stackSongplayed = new Stack<String>();
 			iniMediaPlayer();
 
 			try {
@@ -132,7 +133,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	public void addSongToQueue(Song song) {
+		for (Song mSong : songQueue) {
+			if(mSong.getId().equals(song.getId())){
+				return;
+			}
+		}
 		songQueue.add(song);
+		UIController.getInstance().updateUI(QUEUE_CHANGED);
 	}
 
 	/**
@@ -168,27 +175,20 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play next Song when click to next button or at the end of current song
 	 */
 	public void playNextSong() {
-
-		stackSongplayed.push(getCurrentSongId());
-		if (isShuffle) {
-			// TODO Auto-generated method stub
-			Random random = new Random(Calendar.getInstance().getTimeInMillis());
-
-			int size = songQueue.size();
-
-			currentSongPosition = currentSongPosition
-					+ (Math.abs(random.nextInt()) % size) + 1;
-			currentSongPosition = currentSongPosition % size;
-
-		} else {
-			currentSongPosition++;
-			int size = songQueue.size();
-			currentSongPosition = currentSongPosition % size;
-
+		mediaPlayer.stop();
+		stackSongplayed.push(nextSongId);
+		for (int i=0;i<songQueue.size();i++) {
+			if(songQueue.get(i).getId().equals(nextSongId)){
+				currentSongPosition =i;
+				break;
+			}
 		}
+		
 		playNewSong(false);
-
+		computeNextSong();
 	}
+
+	
 
 	/**
 	 * Back to preivious Song when click to prev button
@@ -555,7 +555,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private void getData() {
 		currentSongPosition = -1;
 		songQueue = new ArrayList<Song>();
-
+		stackSongplayed = new Stack<String>();
 		ArrayList<Object[]> songsPLayed = SongController.getInstance()
 				.getSongsPlayed();
 
@@ -588,9 +588,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 		}
 
-		stackSongplayed = new Stack<String>();
+		
 		stackSongplayed.push(getCurrentSongId());
-
+		computeNextSong();
 	}
 
 	/**
@@ -763,5 +763,51 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		MusicPlayerMainActivity.getActivity().finish();
 		
 		stopSelf();
+	}
+	/**
+	 * Set song be the next song to be played
+	 * @param song
+	 */
+	public void addToNext(Song song) {
+		// TODO Auto-generated method stub
+		addSongToQueue(song);
+		nextSongId = song.getId();
+		
+	}
+	private void computeNextSong(){
+		int nextPosition;
+		int size = songQueue.size();
+		if (isShuffle) {
+			// TODO Auto-generated method stub
+			Random random = new Random(Calendar.getInstance().getTimeInMillis());
+
+			size = songQueue.size();
+
+			nextPosition = currentSongPosition
+					+ (Math.abs(random.nextInt()) % size) - 1;
+			nextPosition = nextPosition % size;
+
+		} else {
+			nextPosition = currentSongPosition+1;
+			
+			nextPosition = nextPosition % size;
+
+		}
+		nextSongId = songQueue.get(nextPosition).getId();
+	}
+
+	public void removeFromQueue(Song song) {
+		// TODO Auto-generated method stub
+		for (int i=0;i<songQueue.size();i++) {
+			if(songQueue.get(i).getId().equals(song.getId())){
+				if(nextSongId.equals(song.getId())){
+					computeNextSong();
+				}
+				songQueue.remove(i);
+				break;
+			}
+		}
+		
+		QueueSongAdapter.getInstance().notifyDataSetChanged();
 	}
 }

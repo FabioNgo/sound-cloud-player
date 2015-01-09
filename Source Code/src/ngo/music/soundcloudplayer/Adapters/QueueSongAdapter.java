@@ -9,10 +9,14 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
+import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -39,7 +43,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 
 		if (instance == null) {
 			instance = new QueueSongAdapter(MusicPlayerMainActivity.getActivity()
-					.getApplicationContext(), R.layout.list_view);
+					.getApplicationContext(), R.layout.song_in_queue);
 		}
 		return instance;
 	}
@@ -51,7 +55,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.liteplayer, null);
+			v = inflater.inflate(R.layout.song_in_queue, null);
 
 		}
 
@@ -64,31 +68,73 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	 * @param v
 	 */
 	private void setLayoutInformation(int position, View v) {
-		Song song = null;
-		song = songs.get(position);
+		
+		final Song song = songs.get(position);
 		/**
 		 * Set avatar for song
 		 */
 		NetworkImageView avatar = (NetworkImageView) v
-				.findViewById(R.id.lite_player_image);
+				.findViewById(R.id.song_queue_image);
 		//
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 20,
 				MusicPlayerMainActivity.screenWidth / 20, avatar);
 
 		avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		/**
+		 * Button
+		 */
+		final ImageView menu = (ImageView) v.findViewById(R.id.song_queue_menu);
+		menu.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity.getActivity(), menu);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                    .inflate(R.menu.song_queue_menu, popup.getMenu());
 
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    
+
+					@Override
+					public boolean onMenuItemClick(MenuItem arg0) {
+						// TODO Auto-generated method stub
+						switch (arg0.getItemId()) {
+						case R.id.queue_removeFromQueue:
+							MusicPlayerService.getInstance().removeFromQueue(song);
+							break;
+						case R.id.queue_playNext:
+							MusicPlayerService.getInstance().addToNext(song);
+							break;
+						case R.id.queue_addToPlaylist:
+							break;
+						case R.id.queue_delete:
+							break;
+						default:
+							break;
+						}
+						
+						return false;
+					}
+                });
+
+                popup.show(); //showing popup menu
+			}
+		});
 		/*
 		 * Set title
 		 */
-		TextView title = (TextView) v.findViewById(R.id.lite_player_title);
+		TextView title = (TextView) v.findViewById(R.id.song_queue_title);
 		title.setText(song.getTitle());
 
 		/*
 		 * Set sub title
 		 */
 		TextView subtitle = (TextView) v
-				.findViewById(R.id.lite_player_subtitle);
+				.findViewById(R.id.song_queue_subtitle);
 		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
 		/**
 		 * Set progress bar
@@ -98,7 +144,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 
 		if (songPlayingId.equals(songs.get(position).getId())) {
 			ProgressWheel progressWheel = (ProgressWheel) v
-					.findViewById(R.id.lite_player_progress_bar);
+					.findViewById(R.id.song_queue_progress_bar);
 			progressWheel.setVisibility(View.VISIBLE);
 			if (MusicPlayerService.getInstance().isPlaying()) {
 				progressWheel.setBackgroundResource(R.drawable.ic_media_pause);
@@ -108,7 +154,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 			UIController.getInstance().addProgressBar(progressWheel);
 		} else {
 			ProgressWheel progressWheel = (ProgressWheel) v
-					.findViewById(R.id.lite_player_progress_bar);
+					.findViewById(R.id.song_queue_progress_bar);
 			progressWheel.setVisibility(View.INVISIBLE);
 			UIController.getInstance().removeProgressBar(progressWheel);
 

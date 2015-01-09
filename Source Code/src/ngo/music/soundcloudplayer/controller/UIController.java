@@ -320,11 +320,15 @@ public class UIController implements Constants.MusicService,
 
 			}
 			break;
+		case QUEUE_CHANGED:
+			QueueSongAdapter.getInstance().notifyDataSetChanged();
+			break;
 		default:
 			for (PlayerUI playerUI : uiFragments) {
 				playerUI.update();
 			}
 		}
+		
 	}
 
 	/**
