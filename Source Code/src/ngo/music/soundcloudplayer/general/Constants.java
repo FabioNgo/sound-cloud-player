@@ -11,7 +11,17 @@ public interface Constants {
 
 	public static final String CLIENT_ID ="2ae2cf32fdd87967a353b7e718d7f3cd";
 	public static final String CLIENT_SECRET = "acfe1a475e4d004214fed3326a01eb79";
-	public static final URI REDIRECT_URI     = URI.create("callback.html");
+	public static final URI REDIRECT_URI     = URI.create("https://soundcloud.com/soundcloud-callback.html");
+	
+	
+	public static final String CALLBACK_HTML = "<!DOCTYPE html>"
+			+ "<html lang=\"en\">"
+			+ "<head>"
+			+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"
+			+ "<title>Connect with SoundCloud</title>"
+			+ "</head>"
+			+ "<body> <b style=\"width: 100%; text-align: center;\">This popup should automatically close in a few seconds</b> </body>"
+			+ "</html>\"";
 	
 	String TRACK_LINK = "https://api.soundcloud.com/tracks";
 	String USER_LINK = "http://api.soundcloud.com/users";

@@ -145,7 +145,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				soundCloudUserController.logout();
 				DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
 				databaseHandler.refreshDatabase();
-				Intent loginAct = new Intent(getActivity(), LoginActivity.class);
+				Intent loginAct = new Intent(getActivity(), UserLoginActivity.class);
 				startActivity(loginAct);
 			}
 		});
