@@ -79,8 +79,6 @@ public abstract class PlayerUI extends Fragment {
 	}
 
 	public void play() {
-		updateTitle(MusicPlayerService.getInstance().getCurrentSong());
-		updateSubtitle(MusicPlayerService.getInstance().getCurrentSong());
 		runnable.run();
 	}
 	protected void iniMusicProgressBar(){

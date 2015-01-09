@@ -308,6 +308,18 @@ public class UIController implements Constants.MusicService,
 			}
 
 			break;
+		case MUSIC_STOPPED:
+			timer.cancel();
+			for (PlayerUI playerUI : uiFragments) {
+
+				playerUI.pause();
+				for (ProgressWheel progressbar : musicProgressBars) {
+
+					progressbar.setBackgroundResource(R.drawable.ic_media_play);
+				}
+
+			}
+			break;
 		default:
 			for (PlayerUI playerUI : uiFragments) {
 				playerUI.update();

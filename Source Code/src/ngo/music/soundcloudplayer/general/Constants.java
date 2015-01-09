@@ -53,6 +53,9 @@ public interface Constants {
 		String PRIVATE_PLAYLISTS_COUNT = "private_playlists_count";
 		String PRIMARY_EMAIL_CONFIRMED = "primary_email_confirmed";
 		
+		int LOGGED_IN = 0;
+		int NOT_LOGGED_IN = 1;
+		
 	}
 	interface XMLConstant{
 		String XML_TAG_SONG = "song";
