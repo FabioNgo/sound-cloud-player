@@ -1,52 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-     xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent" >
-    <com.android.volley.toolbox.NetworkImageView
-    	android:id="@+id/lite_player_image"
-    	android:layout_height="match_parent"
-    	android:layout_width="wrap_content"
-    	android:scaleType="fitXY"
-    	android:layout_alignParentStart="true"
-    	android:src="@drawable/ic_launcher" />
-    <TextView
-    	android:id="@+id/lite_player_title"
-    	android:textIsSelectable="false"
-    	android:layout_marginStart="4dp"
-    	android:layout_marginTop="10dp"
-    	android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-    	android:layout_height="wrap_content"
-    	android:layout_toEndOf="@+id/lite_player_image"
-    	android:textColor="#000000"
-    	android:layout_toStartOf="@+id/lite_player_progress_bar"
-    	android:singleLine="true"
-    	android:marqueeRepeatLimit="marquee_forever"
-    	android:layout_width="wrap_content" />
-    <TextView
-    	android:id="@+id/lite_player_subtitle"
-    	android:textIsSelectable="false"
-    	android:layout_alignStart="@+id/lite_player_title"
-    	android:layout_height="wrap_content"
-    	android:layout_toEndOf="@+id/lite_player_image"
-    	android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-    	android:layout_below="@+id/lite_player_title"
-    	android:textColor="#000000"
-    	android:singleLine="true"
-    	android:layout_toStartOf="@+id/lite_player_progress_bar"
-    	android:layout_width="wrap_content" />
-    <com.todddavies.components.progressbar.ProgressWheel
-        android:id="@+id/lite_player_progress_bar"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginEnd="5dp"
-        ProgressWheel:barColor="#0097D6"
-        ProgressWheel:barLength="60dp"
-        ProgressWheel:barWidth="7dp"
-        ProgressWheel:rimColor="#330097D6"
-        ProgressWheel:rimWidth="7dp"
-        ProgressWheel:textColor="#222"
-        ProgressWheel:textSize="14sp" />
+	xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<com.android.volley.toolbox.NetworkImageView
+		android:id="@+id/lite_player_image"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:layout_alignParentStart="true"
+		android:scaleType="fitXY"
+		android:src="@drawable/ic_launcher"/>
+
+	<TextView
+		android:id="@+id/lite_player_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="4dp"
+		android:layout_marginTop="10dp"
+		android:layout_toEndOf="@+id/lite_player_image"
+		android:layout_toStartOf="@+id/lite_player_progress_bar"
+		
+		android:singleLine="true"
+		
+		android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+		android:textColor="#000000">
+
+	</TextView>
+
+	<TextView
+		android:id="@+id/lite_player_subtitle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignStart="@+id/lite_player_title"
+		android:layout_below="@+id/lite_player_title"
+		android:layout_toEndOf="@+id/lite_player_image"
+		android:layout_toStartOf="@+id/lite_player_progress_bar"
+		android:singleLine="true"
+		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+		android:textColor="#000000"
+		android:textIsSelectable="false"/>
+
+	<com.todddavies.components.progressbar.ProgressWheel
+		android:id="@+id/lite_player_progress_bar"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_alignParentEnd="true"
+		android:layout_centerVertical="true"
+		android:layout_marginEnd="5dp"
+		ProgressWheel:barColor="#0097D6"
+		ProgressWheel:barLength="60dp"
+		ProgressWheel:barWidth="7dp"
+		ProgressWheel:rimColor="#330097D6"
+		ProgressWheel:rimWidth="7dp"
+		ProgressWheel:textColor="#222"
+		ProgressWheel:textSize="14sp"/>
+
 </RelativeLayout>

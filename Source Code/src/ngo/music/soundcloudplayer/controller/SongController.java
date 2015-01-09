@@ -120,6 +120,7 @@ public class SongController implements Constants, Constants.SongConstants,
 					System.out.println("CREATE FOLDER: " + dir.mkdir());
 
 				}
+				offlineSongs = getSongsFromSDCard();
 			}
 		}
 	}
@@ -295,8 +296,9 @@ public class SongController implements Constants, Constants.SongConstants,
 	private ArrayList<Song> getSongsFromSoundCloud(int currentPage, int category) {
 
 		if (currentPage <= categoryCurrentPage[category]
-				|| !(BasicFunctions.isConnectingToInternet(MusicPlayerMainActivity
-						.getActivity()))) {
+				|| !(BasicFunctions
+						.isConnectingToInternet(MusicPlayerMainActivity
+								.getActivity()))) {
 			return onlineSongs.get(category);
 		}
 		String urlLink = exploreLinkList[category];
@@ -531,16 +533,17 @@ public class SongController implements Constants, Constants.SongConstants,
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			mNotifyManager = (NotificationManager) MusicPlayerMainActivity.getActivity()
-					.getSystemService(Context.NOTIFICATION_SERVICE);
+			mNotifyManager = (NotificationManager) MusicPlayerMainActivity
+					.getActivity().getSystemService(
+							Context.NOTIFICATION_SERVICE);
 			mBuilder = new NotificationCompat.Builder(
 					MusicPlayerMainActivity.getActivity());
 			mBuilder.setContentTitle("Music Download")
 					.setContentText("Download in progress")
 					.setSmallIcon(R.drawable.download);
 			mBuilder.setAutoCancel(true);
-			Toast.makeText(MusicPlayerMainActivity.getActivity(), "Start download",
-					Toast.LENGTH_LONG).show();
+			Toast.makeText(MusicPlayerMainActivity.getActivity(),
+					"Start download", Toast.LENGTH_LONG).show();
 			// Displays the progress bar for the first time.
 			// mNotifyManager.notify(1, mBuilder.build());
 		}
@@ -636,7 +639,7 @@ public class SongController implements Constants, Constants.SongConstants,
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} // write updated metadata
-				// TODO Auto-generated method stub
+					// TODO Auto-generated method stub
 			}
 
 		}
@@ -662,8 +665,9 @@ public class SongController implements Constants, Constants.SongConstants,
 	 */
 	public void loadFavoriteSong() {
 		if (isLoadFavoriteSong
-				&& BasicFunctions.isConnectingToInternet(MusicPlayerMainActivity
-						.getActivity())) {
+				&& BasicFunctions
+						.isConnectingToInternet(MusicPlayerMainActivity
+								.getActivity())) {
 			// System.out.println ("LOAD FAVORITE");
 			favoriteSong = new ArrayList<Song>();
 			favoriteIdList = new ArrayList<Integer>();
@@ -721,8 +725,9 @@ public class SongController implements Constants, Constants.SongConstants,
 
 		// System.out.println (isLoadStream);
 		if (isLoadStream
-				&& BasicFunctions.isConnectingToInternet(MusicPlayerMainActivity
-						.getActivity())) {
+				&& BasicFunctions
+						.isConnectingToInternet(MusicPlayerMainActivity
+								.getActivity())) {
 			streamList = new ArrayList<Song>();
 			myStreamIdList = new ArrayList<Integer>();
 			// new loadMyStreamBackground().execute();
@@ -911,7 +916,9 @@ public class SongController implements Constants, Constants.SongConstants,
 					id = reader.nextName();
 					object[0] = getSong(id);
 					object[1] = Integer.valueOf(reader.nextInt());
-					songs.add(object);
+					if (object[0] != null) {
+						songs.add(object);
+					}
 				}
 
 				reader.endObject();
@@ -925,6 +932,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		}
 		return songs;
 	}
+
 	/**
 	 * Write stack played song for play previous OfflineSong
 	 * 
@@ -951,6 +959,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		writePlayedSongs(song, queue, jsonWriter, curTime);
 		jsonWriter.close();
 	}
+
 	private void writePlayedSongs(Song playingSong, ArrayList<Song> queue,
 			JsonWriter jsonWriter, int currentTIme) throws IOException {
 		// TODO Auto-generated method stub
@@ -972,8 +981,8 @@ public class SongController implements Constants, Constants.SongConstants,
 
 	private ArrayList<Song> getSongsFromSDCard() {
 		ArrayList<Song> songs = new ArrayList<Song>();
-		Cursor c = MusicPlayerService
-				.getInstance()
+		Cursor c = MusicPlayerMainActivity
+				.getActivity()
 				.getContentResolver()
 				.query(Media.EXTERNAL_CONTENT_URI, null,
 						Media.IS_MUSIC + "!=0", null, null);

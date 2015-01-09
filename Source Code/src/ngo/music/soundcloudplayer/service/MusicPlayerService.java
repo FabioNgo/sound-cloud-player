@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
@@ -56,7 +57,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private int explorecategory = -1;
 	private boolean isShuffle = false;
 	private ArrayList<Song> songQueue = new ArrayList<Song>();
-	private Stack<Integer> stackSongplayed;
+	private Stack<String> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
 	private static final int NOTIFICATION_ID = 1;
 	private int currentSongPosition;
@@ -89,18 +90,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		} catch (Exception e) {
 			Log.w("getData", e.toString());
 		} finally {
-			stackSongplayed = new Stack<Integer>();
+			stackSongplayed = new Stack<String>();
 			iniMediaPlayer();
 
 			try {
-				updateNotification(false);
+				updateNotification();
 			} catch (Exception e) {
 
 			}
-
-			// UIController.getInstance().updateUI(APP_START);
-
-			// updateNotification(false, R.drawable.ic_media_pause);
 
 		}
 	}
@@ -172,7 +169,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNextSong() {
 
-		stackSongplayed.push(currentSongPosition);
+		stackSongplayed.push(getCurrentSongId());
 		if (isShuffle) {
 			// TODO Auto-generated method stub
 			Random random = new Random(Calendar.getInstance().getTimeInMillis());
@@ -206,7 +203,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			int size = songQueue.size();
 			currentSongPosition = currentSongPosition + size - 1;
 			currentSongPosition = currentSongPosition % size;
-			stackSongplayed.push(currentSongPosition);
+			stackSongplayed.push(getCurrentSongId());
 		}
 		playNewSong(false);
 
@@ -252,7 +249,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				playNextSong();
 			}
 
-			updateNotification(false);
+			updateNotification();
 		}
 	}
 
@@ -304,18 +301,16 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		if (States.musicPlayerState == MUSIC_PAUSE) {
 			playMedia();
 
-		}
-		if (States.musicPlayerState == MUSIC_STOPPED) {
+		} else if (States.musicPlayerState == MUSIC_STOPPED) {
 			mediaPlayer.seekTo(timeLastStop);
 			playMedia();
 
 		} else {
-			States.musicPlayerState = MUSIC_PLAYING;
-			// currentSongPosition = stackSongplayed.peek();
-			playNewSong(false);
+
+			playNewSong(true);
 
 		}
-		updateNotification(false);
+		updateNotification();
 		return;
 		// sendBroadcast(TAG_START);
 	}
@@ -383,7 +378,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			new playNewSongBackground().execute(song);
 
 		}
-		updateNotification(false);
+		updateNotification();
 
 	}
 
@@ -393,7 +388,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void pause() {
 
 		pauseMedia();
-		updateNotification(false);
+		updateNotification();
 
 	}
 
@@ -445,24 +440,32 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @param iconID
 	 *            : the id of icon
 	 */
-	private void updateNotification(boolean cancel) throws NullPointerException {
+	private void updateNotification() throws NullPointerException {
+
 		Song song = getCurrentSong();
 		/**
 		 * Big view
 		 */
 		RemoteViews bigView = new RemoteViews(getPackageName(),
 				R.layout.big_noti_layout);
-		
-		bigView.setOnClickPendingIntent(R.id.noti_play_pause, createPendingIntent(NOTI_ACTION_PLAY_PAUSE));
-		bigView.setOnClickPendingIntent(R.id.noti_prev, createPendingIntent(NOTI_ACTION_PREV));
-		bigView.setOnClickPendingIntent(R.id.noti_next, createPendingIntent(NOTI_ACTION_NEXT));
-		bigView.setOnClickPendingIntent(R.id.noti_cancel, createPendingIntent(NOTI_ACTION_CANCEL));
+
+		bigView.setOnClickPendingIntent(R.id.noti_play_pause,
+				createPendingIntent(NOTI_ACTION_PLAY_PAUSE));
+		bigView.setOnClickPendingIntent(R.id.noti_prev,
+				createPendingIntent(NOTI_ACTION_PREV));
+		bigView.setOnClickPendingIntent(R.id.noti_next,
+				createPendingIntent(NOTI_ACTION_NEXT));
+		bigView.setOnClickPendingIntent(R.id.noti_cancel,
+				createPendingIntent(NOTI_ACTION_CANCEL));
 		bigView.setTextViewText(R.id.noti_title, song.getTitle());
 		bigView.setTextViewText(R.id.noti_content, song.getArtist());
-		if(States.musicPlayerState == MUSIC_PLAYING){
-			bigView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_pause);
-		}else{
-			bigView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_play);
+
+		if (States.musicPlayerState == MUSIC_PLAYING) {
+			bigView.setImageViewResource(R.id.noti_play_pause,
+					R.drawable.ic_media_pause);
+		} else {
+			bigView.setImageViewResource(R.id.noti_play_pause,
+					R.drawable.ic_media_play);
 		}
 		if (song instanceof OfflineSong) {
 			bigView.setImageViewResource(R.id.noti_icon, R.drawable.ic_launcher);
@@ -476,14 +479,18 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		 */
 		RemoteViews smallView = new RemoteViews(getPackageName(),
 				R.layout.small_noti_layout);
-		smallView.setOnClickPendingIntent(R.id.noti_play_pause, createPendingIntent(NOTI_ACTION_PLAY_PAUSE));
-		smallView.setOnClickPendingIntent(R.id.noti_cancel, createPendingIntent(NOTI_ACTION_CANCEL));
+		smallView.setOnClickPendingIntent(R.id.noti_play_pause,
+				createPendingIntent(NOTI_ACTION_PLAY_PAUSE));
+		smallView.setOnClickPendingIntent(R.id.noti_cancel,
+				createPendingIntent(NOTI_ACTION_CANCEL));
 		smallView.setTextViewText(R.id.noti_title, song.getTitle());
 		smallView.setTextViewText(R.id.noti_content, song.getArtist());
-		if(States.musicPlayerState == MUSIC_PLAYING){
-			smallView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_pause);
-		}else{
-			smallView.setImageViewResource(R.id.noti_play_pause, R.drawable.ic_media_play);
+		if (States.musicPlayerState == MUSIC_PLAYING) {
+			smallView.setImageViewResource(R.id.noti_play_pause,
+					R.drawable.ic_media_pause);
+		} else {
+			smallView.setImageViewResource(R.id.noti_play_pause,
+					R.drawable.ic_media_play);
 		}
 		if (song instanceof OfflineSong) {
 			smallView.setImageViewResource(R.id.noti_icon,
@@ -524,9 +531,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	private PendingIntent createPendingIntent(String action) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(this,MusicPlayerBroadcastReceiver.class);
+		Intent intent = new Intent(this, MusicPlayerBroadcastReceiver.class);
 		intent.setAction(action);
-		PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, 0);
+		PendingIntent pendingIntent = PendingIntent.getBroadcast(
+				getApplicationContext(), 0, intent, 0);
 		return pendingIntent;
 	}
 
@@ -574,7 +582,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 			}
 
+		} else {
+			if (currentSongPosition == -1) {
+				currentSongPosition = 0;
+			}
 		}
+
+		stackSongplayed = new Stack<String>();
+		stackSongplayed.push(getCurrentSongId());
 
 	}
 
@@ -616,8 +631,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public String getCurrentSongId() {
 		try {
-			return songQueue.get(currentSongPosition).getId();
+
+			Song song = songQueue.get(currentSongPosition);
+			String id = song.getId();
+			return id;
 		} catch (Exception e) {
+			Log.e("getCurrentSongID", e.toString());
 			return "";
 		}
 
@@ -662,19 +681,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Remove notification
 	 */
 	public void cancelNoti() {
-		updateNotification(true);
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(NOTIFICATION_ID);
 	}
 
 	public Stack<String> getStackSongIds() {
 		// TODO Auto-generated method stub
-		Stack<String> ids = new Stack<String>();
-		for (Integer position : stackSongplayed) {
-			ids.add(songQueue.get(position).getId());
-		}
-		return ids;
+		return stackSongplayed;
 	}
-
-	
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -740,8 +754,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void release() {
 		// TODO Auto-generated method stub
+		States.musicPlayerState = MUSIC_STOPPED;
+		UIController.getInstance().updateUI(MUSIC_STOPPED);
+		
+		cancelNoti();
 		mediaPlayer.stop();
 		mediaPlayer.release();
-		cancelNoti();
+		MusicPlayerMainActivity.getActivity().finish();
+		
+		stopSelf();
 	}
 }

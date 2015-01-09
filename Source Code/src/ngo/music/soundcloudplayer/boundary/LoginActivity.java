@@ -14,6 +14,7 @@ import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -175,6 +176,7 @@ public class LoginActivity extends FragmentActivity implements
 						Intent goToMainActivity = new Intent(
 								getApplicationContext(), MusicPlayerMainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);
+						States.loginState = LOGGED_IN;
 						startActivity(goToMainActivity);
 						finish();
 					}

@@ -1,62 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent" >
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
 	<ImageView
 		android:id="@+id/noti_icon"
-		android:layout_height="100dp"
 		android:layout_width="100dp"
+		android:layout_height="100dp"
 		android:scaleType="fitXY"
-		android:src="@drawable/ic_media_play" />
+		android:src="@drawable/ic_media_play"/>
+
 	<TextView
 		android:id="@+id/noti_title"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="10dp"
 		android:layout_toEndOf="@+id/noti_icon"
-		android:layout_width="wrap_content"
+		android:ellipsize="marquee"
+		android:focusable="true"
+		android:focusableInTouchMode="true"
+		android:marqueeRepeatLimit="marquee_forever"
+		android:scrollHorizontally="true"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-		android:textColor="#212121" />
+		
+		android:textColor="#212121">
+		<requestFocus/>
+		</TextView>
+	
+ 
 	<TextView
 		android:id="@+id/noti_content"
-		android:layout_below="@+id/noti_title"
-		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
-		android:layout_toEndOf="@+id/noti_icon"
-		android:textColor="#606060" />
-	<RelativeLayout
-		android:layout_below="@+id/noti_content"
 		android:layout_height="wrap_content"
+		android:layout_below="@+id/noti_title"
 		android:layout_toEndOf="@+id/noti_icon"
-		android:layout_width="match_parent" >
+		android:textColor="#606060"/>
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/noti_content"
+		android:layout_toEndOf="@+id/noti_icon">
+
 		<LinearLayout
-			android:layout_centerHorizontal="true"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_width="wrap_content" >
+			android:layout_centerHorizontal="true">
+
 			<ImageView
 				android:id="@+id/noti_prev"
-				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
 				android:scaleType="center"
-				android:src="@drawable/ic_media_previous" />
+				android:src="@drawable/ic_media_previous"/>
+
 			<ImageView
 				android:id="@+id/noti_play_pause"
-				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
 				android:scaleType="center"
-				android:src="@drawable/ic_media_play" />
+				android:src="@drawable/ic_media_play"/>
+
 			<ImageView
 				android:id="@+id/noti_next"
-				android:scaleType="center"
-				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
-				android:src="@drawable/ic_media_next" />
+				android:layout_height="wrap_content"
+				android:scaleType="center"
+				android:src="@drawable/ic_media_next"/>
+
 			<ImageView
 				android:id="@+id/noti_cancel"
-				android:layout_gravity="center_vertical"
-				android:layout_height="wrap_content"
 				android:layout_width="wrap_content"
-				android:src="@drawable/ic_close" />
+				android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/ic_close"/>
 		</LinearLayout>
 	</RelativeLayout>
+
 </RelativeLayout>

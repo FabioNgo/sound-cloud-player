@@ -4,6 +4,8 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
+import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.States;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
-public class LitePlayerUI extends PlayerUI {
+public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 	NetworkImageView image;
 
@@ -36,12 +38,12 @@ public class LitePlayerUI extends PlayerUI {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.liteplayer, container, false);
 		iniMusicProgressBar();
-
+		
 		image = (NetworkImageView) rootView
 				.findViewById(R.id.lite_player_image);
 		BasicFunctions.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
-
+		
 		UIController.getInstance().addUiFragment(this);
 		return rootView;
 	}
@@ -54,6 +56,7 @@ public class LitePlayerUI extends PlayerUI {
 		TextView title_text = (TextView) rootView
 				.findViewById(R.id.lite_player_title);
 		title_text.setText(title);
+		
 	}
 
 	@Override
