@@ -50,11 +50,14 @@ import org.json.JSONObject;
 import com.volley.api.AppController;
 
 import android.R.integer;
+import android.app.DownloadManager;
+import android.app.DownloadManager.Query;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
 import android.media.RemoteController.MetadataEditor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.provider.MediaStore.Audio.Media;
@@ -532,20 +535,20 @@ public class SongController implements Constants, Constants.SongConstants,
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			mNotifyManager = (NotificationManager) MusicPlayerMainActivity
-					.getActivity().getSystemService(
-							Context.NOTIFICATION_SERVICE);
-			mBuilder = new NotificationCompat.Builder(
-					MusicPlayerMainActivity.getActivity());
-			mBuilder.setContentTitle("Music Download")
-					.setContentText("Download in progress")
-					.setSmallIcon(R.drawable.download);
-			mBuilder.setAutoCancel(true);
-			Toast.makeText(MusicPlayerMainActivity.getActivity(),
-					"Start download", Toast.LENGTH_LONG).show();
-			// Displays the progress bar for the first time.
-			// mNotifyManager.notify(1, mBuilder.build());
+//			// TODO Auto-generated method stub
+//			mNotifyManager = (NotificationManager) MusicPlayerMainActivity
+//					.getActivity().getSystemService(
+//							Context.NOTIFICATION_SERVICE);
+//			mBuilder = new NotificationCompat.Builder(
+//					MusicPlayerMainActivity.getActivity());
+//			mBuilder.setContentTitle("Music Download")
+//					.setContentText("Download in progress")
+//					.setSmallIcon(R.drawable.download);
+//			mBuilder.setAutoCancel(true);
+//			Toast.makeText(MusicPlayerMainActivity.getActivity(),
+//					"Start download", Toast.LENGTH_LONG).show();
+//			// Displays the progress bar for the first time.
+//			// mNotifyManager.notify(1, mBuilder.build());
 		}
 
 		@Override
@@ -563,37 +566,48 @@ public class SongController implements Constants, Constants.SongConstants,
 
 				int count;
 
+				
 				URL url = new URL(streamUrl);
+				Uri uri = Uri.parse(streamUrl);
 				URLConnection conection = url.openConnection();
 				conection.connect();
 				// getting file length
 				// int lenghtOfFile = conection.getContentLength();
 
 				// input stream to read file - with 8k buffer
-				InputStream input = new BufferedInputStream(url.openStream());
+				//InputStream input = new BufferedInputStream(url.openStream());
 
 				// Output stream to write file
 				String outputName = dir + "/" + song.getTitle() + ".mp3";
-				OutputStream output = new FileOutputStream(outputName);
+				//OutputStream output = new FileOutputStream(outputName);
 
-				byte data[] = new byte[2048];
+				android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
+				downloadManager.setDestinationInExternalFilesDir(MusicPlayerMainActivity.getActivity(), null, outputName);
+				downloadManager.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				downloadManager.setTitle(song.getTitle());
+				//I
+				//Query manager = new DownloadManager.Query();
+				
+				
+				//manager.
+				//byte data[] = new byte[2048];
 
 				// long total = 0;
 
-				while ((count = input.read(data)) != -1) {
-					mBuilder.setProgress(0, 0, true);
-					mNotifyManager.notify(1, mBuilder.build());
-					output.write(data, 0, count);
-				}
+//				while ((count = input.read(data)) != -1) {
+//					mBuilder.setProgress(0, 0, true);
+//					mNotifyManager.notify(1, mBuilder.build());
+//					output.write(data, 0, count);
+//				}
 
 				// updateMetaData(outputName,song);
 				result = "Download sucessfully";
 				// flushing output
-				output.flush();
+				//output.flush();
 
 				// closing streams
-				output.close();
-				input.close();
+				//output.close();
+				//input.close();
 
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
