@@ -27,8 +27,9 @@ public class QueueSongUI extends ListContentFragment {
 	View rootView;
 	ListView queueView;
 
-	private QueueSongUI() {
+	public QueueSongUI() {
 		// TODO Auto-generated constructor stub
+		instance = this;
 	}
 
 	public static QueueSongUI getInstance() {

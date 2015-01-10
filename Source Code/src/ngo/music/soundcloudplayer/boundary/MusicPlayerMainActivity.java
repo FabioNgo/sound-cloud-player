@@ -212,7 +212,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, QueueSongUI.getInstance())
+				.replace(R.id.play_queue_container, new QueueSongUI())
 				.commit();
 	}
 

@@ -44,7 +44,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 			return new MyFavoriteSoundCloudFragment();
 		
 		case 2:
-			return OfflineSongsFragment.getInstance();
+			return new OfflineSongsFragment();
 			
 		case 5:
 			return new SoundCloudFollowingFragment();

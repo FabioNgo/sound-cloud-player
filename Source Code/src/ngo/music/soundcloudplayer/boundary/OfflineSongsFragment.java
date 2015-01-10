@@ -22,7 +22,11 @@ public class OfflineSongsFragment extends ListContentFragment implements OnRefre
 	public static OfflineSongsFragment instance = null;
 
 	ListView songsList;
-
+	public OfflineSongsFragment() {
+		// TODO Auto-generated constructor stub
+		super();
+		instance = this;
+	}
 	public static OfflineSongsFragment getInstance() {
 		// TODO Auto-generated method stub
 		if (instance == null) {
