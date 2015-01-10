@@ -109,7 +109,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		ImageView loop = (ImageView) rootView
 				.findViewById(R.id.full_player_loop);
 
-		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+		BasicFunctions.setImageViewSize(
+				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, loop);
 		updateLoop();
 		loop.setOnClickListener(new OnClickListener() {
@@ -127,7 +128,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	private void configShuffleButton() {
 		shuffle = (ImageView) rootView.findViewById(R.id.full_player_shuffle);
-		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+		BasicFunctions.setImageViewSize(
+				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, shuffle);
 
 		shuffle.setOnClickListener(new OnClickListener() {
@@ -147,7 +149,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	private void configFastForwardButton() {
 		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
-		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+		BasicFunctions.setImageViewSize(
+				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, ff);
 		ff.setOnClickListener(new OnClickListener() {
 
@@ -175,7 +178,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private void configRewindButton() {
 		ImageView rew = (ImageView) rootView.findViewById(R.id.full_player_rew);
 		// BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, rew);
-		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 10,
+		BasicFunctions.setImageViewSize(
+				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, rew);
 
 		rew.setOnClickListener(new OnClickListener() {
@@ -205,7 +209,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	@Override
 	public void updateTitle(Song song) {
 		// TODO Auto-generated method stub
-		if (song == null) return;
+		if (song == null)
+			return;
 		String title = song.getTitle();
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
@@ -215,7 +220,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	@Override
 	public void updateSubtitle(Song song) {
 		// TODO Auto-generated method stub
-		if (song == null) return;
+		if (song == null)
+			return;
 		String subtitle = song.getArtist() + " | " + song.getAlbum();
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
@@ -314,7 +320,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			artistFullname.setText(soundCloudAccount.getFullName());
 			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
 					AppController.getInstance().getImageLoader());
-			BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenHeight / 10,
+			BasicFunctions.setImageViewSize(
+					MusicPlayerMainActivity.screenHeight / 10,
 					MusicPlayerMainActivity.screenHeight / 10, artistAvatar);
 
 			artistAvatar.setDefaultImageResId(R.drawable.ic_launcher);
@@ -374,9 +381,10 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				// TODO Auto-generated method stub
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController
 						.getInstance();
-				
+
 				soundCloudUserController.setGuest(soundCloudAccount);
-				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
+				Intent i = new Intent(getActivity(),
+						MusicPlayerMainActivity.class);
 				Bundle bundle = soundCloudUserController
 						.getBundle(soundCloudUserController.getCurrentUser());
 				i.putExtra(Constants.UserContant.USER, bundle);
@@ -386,4 +394,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		});
 	}
 
+	public void resetProgress() {
+
+	}
+
+	
 }

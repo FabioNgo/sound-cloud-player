@@ -32,15 +32,15 @@ public abstract class PlayerUI extends Fragment {
 			public void run() {
 				// TODO Auto-generated method stub
 				if (hasTextTime) {
-					currentTimeText.setText(UIController
-							.getInstance().getCurrentTime());
-					durationText.setText(UIController
-							.getInstance().getDuration());
+					currentTimeText.setText(UIController.getInstance()
+							.getCurrentTime());
+					durationText.setText(UIController.getInstance()
+							.getDuration());
 				}
 			}
 		};
 	}
-	
+
 	/**
 	 * update Title of the song
 	 */
@@ -50,18 +50,19 @@ public abstract class PlayerUI extends Fragment {
 	 * update sub Title of the song
 	 */
 	protected abstract void updateSubtitle(Song song);
-	
+
 	/**
 	 * update info of song: Artist, Image, Description....
+	 * 
 	 * @param song
 	 */
-	public void updateSongInfo(Song song){
+	public void updateSongInfo(Song song) {
 		updateTitle(song);
 		updateSubtitle(song);
 		updateImage(song);
 		updateOtherInfo(song);
 	}
-	
+
 	protected abstract void updateOtherInfo(Song song);
 
 	/**
@@ -70,7 +71,7 @@ public abstract class PlayerUI extends Fragment {
 	public void updateMusicProgress() {
 		if (MusicPlayerService.getInstance().isPlaying()) {
 			play();
-		} 
+		}
 		runnable.run();
 	}
 
@@ -81,12 +82,13 @@ public abstract class PlayerUI extends Fragment {
 	public void play() {
 		runnable.run();
 	}
-	protected void iniMusicProgressBar(){
+
+	protected void iniMusicProgressBar() {
 		musicProgressBar = (ProgressWheel) rootView
 				.findViewById(musicProgressBar_id);
 		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
 		musicProgressBar.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -94,16 +96,29 @@ public abstract class PlayerUI extends Fragment {
 			}
 		});
 	}
-	public ProgressWheel getProgressBar(){
+
+	public ProgressWheel getProgressBar() {
 		return musicProgressBar;
 	}
+
 	/**
 	 * Implement other update
 	 */
 	public abstract void update();
+
 	/**
 	 * Update Image
+	 * 
 	 * @param currentSong
 	 */
 	protected abstract void updateImage(Song song);
+
+	public void stop() {
+		// TODO Auto-generated method stub
+		if (hasTextTime) {
+			currentTimeText.setText("00:00");
+			durationText.setText("00:00");
+		}
+
+	}
 }

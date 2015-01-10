@@ -226,7 +226,7 @@ public class UIController implements Constants.MusicService,
 
 				arrayAdapter.notifyDataSetChanged();
 			}
-			
+
 			break;
 		case MUSIC_PAUSE:
 			stopTimer();
@@ -292,7 +292,7 @@ public class UIController implements Constants.MusicService,
 				}
 
 			}
-			
+
 			break;
 		case MUSIC_CUR_POINT_CHANGED:
 
@@ -313,13 +313,13 @@ public class UIController implements Constants.MusicService,
 			timer.cancel();
 			for (PlayerUI playerUI : uiFragments) {
 
-				playerUI.pause();
-				for (ProgressWheel progressbar : musicProgressBars) {
-
-					progressbar.setBackgroundResource(R.drawable.ic_media_play);
-				}
-
+				playerUI.stop();
 			}
+			for (ProgressWheel progressbar : musicProgressBars) {
+
+				progressbar.setBackgroundResource(R.drawable.ic_media_play);
+			}
+
 			break;
 		case QUEUE_CHANGED:
 			QueueSongAdapter.getInstance().notifyDataSetChanged();
@@ -330,7 +330,7 @@ public class UIController implements Constants.MusicService,
 				playerUI.update();
 			}
 		}
-		
+
 	}
 
 	/**

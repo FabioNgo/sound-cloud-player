@@ -69,11 +69,6 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		subtitle_text.setText(subtitle);
 	}
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void updateImage(Song song) {
@@ -91,4 +86,11 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void update() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
 }

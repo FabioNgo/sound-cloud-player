@@ -250,8 +250,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
+		UIController.getInstance().updateUI(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
-			mp.reset();
+			
 			if (loopState == MODE_LOOP_ONE) {
 				restartSong();
 			} else {
