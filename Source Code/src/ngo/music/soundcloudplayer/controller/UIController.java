@@ -7,6 +7,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.boundary.ListContentFragment;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
+import ngo.music.soundcloudplayer.boundary.QueueSongUI;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.States;
@@ -322,6 +323,7 @@ public class UIController implements Constants.MusicService,
 			break;
 		case QUEUE_CHANGED:
 			QueueSongAdapter.getInstance().notifyDataSetChanged();
+			QueueSongUI.getInstance().update();
 			break;
 		default:
 			for (PlayerUI playerUI : uiFragments) {

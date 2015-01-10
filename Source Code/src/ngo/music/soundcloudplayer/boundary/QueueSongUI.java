@@ -112,5 +112,8 @@ public class QueueSongUI extends ListContentFragment {
 		});
 
 	}
+	public void update(){
+		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance().getQueueSize())+" songs");
+	}
 
 }

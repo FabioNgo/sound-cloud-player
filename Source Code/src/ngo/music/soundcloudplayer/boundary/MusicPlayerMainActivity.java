@@ -291,7 +291,15 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 			ArrayList<Song> songs = SongController.getInstance()
 					.getOfflineSongs(false);
 			Random random = new Random(System.currentTimeMillis());
-			int position = Math.abs(random.nextInt())%MusicPlayerService.getInstance().getQueueSize();
+			int position = 0;
+			try {
+				position = Math.abs(random.nextInt())%MusicPlayerService.getInstance().getQueueSize();	
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
+			
+			
+			
 			MusicPlayerService.getInstance().playNewSong(position,songs);
 			if (!MusicPlayerService.getInstance().isShuffle()) {
 				MusicPlayerService.getInstance().setShuffle();

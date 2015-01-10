@@ -821,8 +821,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				break;
 			}
 		}
-
-		QueueSongAdapter.getInstance().notifyDataSetChanged();
+		computeNextSong();
+		UIController.getInstance().updateUI(QUEUE_CHANGED);
 	}
 
 	public int getQueueSize() {
@@ -835,9 +835,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		Song song = songQueue.get(currentSongPosition);
 		songQueue.clear();
 		songQueue.add(song);
-		QueueSongAdapter.getInstance().notifyDataSetChanged();
 		currentSongPosition = 0;
 		computeNextSong();
+		UIController.getInstance().updateUI(QUEUE_CHANGED);
 		
 	}
 }
