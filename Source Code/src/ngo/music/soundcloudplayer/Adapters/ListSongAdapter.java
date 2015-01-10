@@ -1,5 +1,6 @@
 package ngo.music.soundcloudplayer.Adapters;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -12,6 +13,16 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.volley.api.AppController;
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -29,10 +40,18 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
 import ngo.music.soundcloudplayer.general.Constants;
+import android.app.DownloadManager;
+import android.app.DownloadManager.Query;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
@@ -49,7 +68,11 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	
 	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
 	protected ApiWrapper wrapper;
-	
+	 long enqueue = 0;
+	    DownloadManager dm = null;
+	    
+	    private static final String ROOT_DIRECTORY = "/SoundCloudApp";
+	    
 	public static ListSongAdapter instance = null;
 	protected ArrayList<Song> songs;
 	
@@ -168,18 +191,21 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				SongController songController = SongController.getInstance();
-				try {
-					songController.downloadSong(song);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				//new downloadSongFromSoundCloud(song).execute();
 				
+				new downloadSongBackground().execute(song);
+				// TODO Auto-generated method stub
+//				SongController songController = SongController.getInstance();
+//				try {
+//					songController.downloadSong(song);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+					
 			}
 		});
+		
+		
 	}
 
 	/**
@@ -246,63 +272,100 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		return songs;
 	}
 	
-//	private class updateFavoriteCounts extends AsyncTask<String, String, String>{
-//
-//		
-//		private Song song;
-//		private TextView likeCount;
-//		private JSONObject me;
-//		public updateFavoriteCounts(Song song, TextView likeCount) {
-//			this.song = song;
-//			this.likeCount = likeCount;
-//			// TODO Auto-generated constructor stub
-//		}
-//		@Override
-//		protected String doInBackground(String... params) {
-//			// TODO Auto-generated method stub
-//			/*
-//			 * Update count
-//			 */
-//			
-////			SoundCloudUserController userController = SoundCloudUserController
-////					.getInstance();
-////			Token token = userController.getToken();
-////			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null,
-////					token);
-//
-//			/*
-//			 * API URL OF THE SONG
-//			 */
-//			String uri = TRACK_LINK + String.valueOf(song.getId());
-//
-//			try {
-//				HttpResponse resp = wrapper.get(Request.to(uri));
-//				me = Http.getJSON(resp);
-//				// set information of logged user
-//				
-//
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			return null;
-//		}
-//		
-//		@Override
-//		protected void onPostExecute(String result) {
-//			// TODO Auto-generated method stub
-//			try {
-//				((OnlineSong) song).setFavoriteCount(me.getInt(SongConstants.FOVORITINGS_COUNT));
-//			} catch (JSONException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			//System.out.println ("New like count = " + song.getLikeCountString());
-//			likeCount.setText(((OnlineSong) song).getLikeCountString());
-//			
-//		}
-//		
-//	}
-	
+	private class downloadSongBackground extends AsyncTask<Song, String, String>{
+
+		String result= "";
+		@Override
+		
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			Toast.makeText(MusicPlayerMainActivity.getActivity(), "Start download...", Toast.LENGTH_LONG).show();
+		}
+		@Override
+		protected String doInBackground(Song... params) {
+			
+			
+			BroadcastReceiver receiver = new BroadcastReceiver() {
+		        @Override
+		        public void onReceive(Context context, Intent intent) {
+		            String action = intent.getAction();
+		            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+		                long downloadId = intent.getLongExtra(
+		                        DownloadManager.EXTRA_DOWNLOAD_ID, 0);
+		                Query query = new Query();
+		                
+		                query.setFilterById(enqueue);
+		                Cursor c = dm.query(query);
+		                if (c.moveToFirst()) {
+		                    int columnIndex = c
+		                            .getColumnIndex(DownloadManager.COLUMN_STATUS);
+		                    if (DownloadManager.STATUS_SUCCESSFUL == c
+		                            .getInt(columnIndex)) {
+
+		                       // ImageView view = (ImageView) findViewById(R.id.imageView1);
+//		                        String uriString = c
+//		                                .getString(c
+//		                                        .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+		                        //view.setImageURI(Uri.parse(uriString));
+		                    }
+		                }
+		            }
+		        }
+
+				
+		    };
+		    
+		    dm = (DownloadManager)MusicPlayerMainActivity.getActivity(). getSystemService(MusicPlayerMainActivity.DOWNLOAD_SERVICE);
+		    android.app.DownloadManager.Request request;
+			try {
+				request = new android.app.DownloadManager.Request(
+				        Uri.parse(params[0].getLink()));
+				request.setTitle(params[0].getTitle() + ".mp3");
+				File dir = new File(Environment.getExternalStorageDirectory()
+						+ ROOT_DIRECTORY);
+				if (!(dir.exists() && dir.isDirectory())) {
+					System.out.println("CREATE FOLDER: " + dir.mkdir());
+
+				}
+				String outputName = dir + "/" + params[0].getTitle() + ".mp3";
+				//OutputStream output = new FileOutputStream(outputName);
+
+				//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
+				request.setDestinationInExternalPublicDir(ROOT_DIRECTORY, params[0].getTitle() + ".mp3");
+				request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				request.setMimeType("audio/mpeg");
+				 enqueue = dm.enqueue(request);
+				 result = "Download successfully";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				result = "Cannot download this file";
+				e.printStackTrace();
+			}
+//		    registerReceiver(receiver, new IntentFilter(
+//	                DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+			//new downloadSongFromSoundCloud(song).execute();
+		    
+		    
+			
+		
+
+			return result;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			
+		   
+			
+		    Intent i = new Intent();
+		    i.setAction(DownloadManager.ACTION_VIEW_DOWNLOADS);
+		    Toast.makeText(MusicPlayerMainActivity.getActivity(), result, Toast.LENGTH_LONG).show();
+		   // MusicPlayerMainActivity.getActivity().startActivity(i);
+			
+		}
+		
+	}
+
 
 }
