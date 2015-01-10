@@ -11,7 +11,7 @@ public interface Constants {
 
 	public static final String CLIENT_ID ="2ae2cf32fdd87967a353b7e718d7f3cd";
 	public static final String CLIENT_SECRET = "acfe1a475e4d004214fed3326a01eb79";
-	public static final URI REDIRECT_URI     = URI.create("https://soundcloud.com/soundcloud-callback.html");
+	public static final URI REDIRECT_URI     = URI.create("music-player://callback.html");
 	
 	
 	public static final String CALLBACK_HTML = "<!DOCTYPE html>"

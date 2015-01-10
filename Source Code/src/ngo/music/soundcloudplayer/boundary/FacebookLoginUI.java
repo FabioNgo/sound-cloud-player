@@ -23,9 +23,7 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.Inflater;
-
 import org.json.JSONException;
-
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.CloudAPI;
@@ -36,6 +34,7 @@ import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.YuvImage;
@@ -59,6 +58,7 @@ import android.widget.Toast;
  * @author LEBAO_000
  *
  */
+@SuppressLint("SetJavaScriptEnabled")
 public class FacebookLoginUI extends Fragment implements Constants, Constants.UserContant {
 
 	private View v;
@@ -133,20 +133,10 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			// TODO Auto-generated method stub
 			System.out.println ("AAAA");
 	        String link = null;
-			try {
-				
-				 
-				URI uri = wrapper.authorizationCodeUrl(Endpoints.FACEBOOK_CONNECT, Token.SCOPE_NON_EXPIRING, CloudAPI.POPUP);
-				 link = uri.toURL().toString();
-				 wrapper.requestToken(new Request(uri));
-				 System.out.println (link);
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			URI uri = wrapper.authorizationCodeUrl(Endpoints.FACEBOOK_CONNECT, Token.SCOPE_NON_EXPIRING, CloudAPI.POPUP);
+			 link = uri.toString();
+			/// wrapper.requestToken(new Request(uri));
+			 System.out.println (link);
 			return link;
 		}
 		
@@ -155,7 +145,27 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			WebView webView = (WebView) v.findViewById(R.id.facebook_login_ui);
-			webView.loadUrl(result);
+			System.out.println ("URI = " + REDIRECT_URI.toString());
+			webView.setWebViewClient(new WebViewClient() {
+                @Override
+                public boolean shouldOverrideUrlLoading(final WebView view, String url) {
+                    if (url.contains(REDIRECT_URI.toString())) {
+                        Uri result = Uri.parse(url);
+                        String error = result.getQueryParameter("error");
+                        String code = result.getQueryParameter("code");
+                        System.out.println ("ERROR: " + error);
+                        System.out.println ("CODE: " + code);
+                    }
+                    return true;
+                }
+            });
+		//	webView = (WebView) rootView.findViewById(R.id.webView);
+			webView.setPadding(0, 0, 0, 0);
+			webView.getSettings().setJavaScriptEnabled(true);
+			webView.loadUrl("http://www.facebook.com");
+			//webView.setWebChromeClient(new MyWebViewClient());
+			//webView.setWebViewClient(new WebViewClient());
+			
 			// MusicPlayerMainActivity.isExplore = true;
 			
 				new retriveUserBackground().execute(result);
@@ -173,7 +183,7 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			try {
-				System.out.println (wrapper.resolve(params[0]));
+				//System.out.println (wrapper.resolve(params[0]));
 				soundCloudUserController.retrevieUserInfoOnline(wrapper);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -194,7 +204,7 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			i.putExtra(USER, bundle);
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			//MusicPlayerMainActivity.getActivity().finish();
-			startActivity(i);
+			//startActivity(i);
 		}
 		
 	}

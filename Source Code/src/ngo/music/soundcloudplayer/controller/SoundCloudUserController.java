@@ -123,11 +123,11 @@ public class SoundCloudUserController extends UserController implements Constant
 	 */
 	public void retrevieUserInfoOnline(ApiWrapper wrapper) throws IOException, JSONException {
 		HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
-		t = wrapper.clientCredentials();
-		System.out.println ("TOKEN = " + wrapper.getToken());
+		//t = wrapper.clientCredentials();
+		//System.out.println ("TOKEN = " + wrapper.getToken());
 		JSONObject me = Http.getJSON(resp);
 		//set information of logged user
-		System.out.println(me.toString());
+		//System.out.println(me.toString());
 		currentUser  = addAllInformation(me);
 	}
 	
@@ -186,6 +186,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		t  = null;
 		guest = null;
 		currentUser = null;
+		SongController.getInstance().clear();
 		
 		
 	}
@@ -201,8 +202,10 @@ public class SoundCloudUserController extends UserController implements Constant
 	 * @return a bundle
 	 */
 	public Bundle getBundle (User user){
+		
 		Bundle bundle = new Bundle();
 		
+		if (user == null) return bundle;
 		bundle.putInt(ID, user.getId());
 		bundle.putString(USERNAME, user.getUsername());
 		bundle.putString(AVATAR_URL, user.getAvatarUrl());

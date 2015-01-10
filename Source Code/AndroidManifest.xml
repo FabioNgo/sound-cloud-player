@@ -26,6 +26,7 @@
 		<activity
 			android:label="@string/app_name"
 			android:launchMode="singleTop"
+			
 			android:name="ngo.music.soundcloudplayer.boundary.UserLoginActivity"
 			android:screenOrientation="portrait" >
 			<intent-filter>
