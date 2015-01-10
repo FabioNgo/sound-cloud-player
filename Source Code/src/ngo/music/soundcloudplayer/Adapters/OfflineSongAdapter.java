@@ -33,7 +33,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
 
-		songs = SongController.getInstance().getOfflineSongs(false);
+		songs = SongController.getInstance().getOfflineSongs(true);
 		this.context = context;
 		this.resource = resource;
 

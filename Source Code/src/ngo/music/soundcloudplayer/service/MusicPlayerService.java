@@ -63,11 +63,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private static final int NOTIFICATION_ID = 1;
 	private int currentSongPosition;
 	int timeLastStop = -1; // when the music stopped before
-	Action[] actions;
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
 	private static MusicPlayerService instance;
-	private String nextSongId = ""; //assign specific song played next
+	private String nextSongId = ""; // assign specific song played next
+
 	public static MusicPlayerService getInstance() {
 		if (instance == null) {
 			instance = new MusicPlayerService();
@@ -90,7 +90,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			getData();
 		} catch (Exception e) {
 			Log.w("getData", e.toString());
-			
+
 		} finally {
 			iniMediaPlayer();
 
@@ -134,7 +134,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void addSongToQueue(Song song) {
 		for (Song mSong : songQueue) {
-			if(mSong.getId().equals(song.getId())){
+			if (mSong.getId().equals(song.getId())) {
 				return;
 			}
 		}
@@ -177,18 +177,16 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void playNextSong() {
 		mediaPlayer.stop();
 		stackSongplayed.push(nextSongId);
-		for (int i=0;i<songQueue.size();i++) {
-			if(songQueue.get(i).getId().equals(nextSongId)){
-				currentSongPosition =i;
+		for (int i = 0; i < songQueue.size(); i++) {
+			if (songQueue.get(i).getId().equals(nextSongId)) {
+				currentSongPosition = i;
 				break;
 			}
 		}
-		
+
 		playNewSong(false);
 		computeNextSong();
 	}
-
-	
 
 	/**
 	 * Back to preivious Song when click to prev button
@@ -204,8 +202,19 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			currentSongPosition = currentSongPosition + size - 1;
 			currentSongPosition = currentSongPosition % size;
 			stackSongplayed.push(getCurrentSongId());
+			playNewSong(false);
+			return;
+		}else{
+			for (Song song : songQueue) {
+				if(song.getId().equals(stackSongplayed.peek())){
+					currentSongPosition = songQueue.indexOf(song);
+					playNewSong(false);
+					return;
+				}
+			}
+			playPreviousSong();
 		}
-		playNewSong(false);
+		
 
 	}
 
@@ -335,8 +344,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            : list of the songs want to play
 	 */
 	public void playNewSong(int position, ArrayList<Song> queue) {
-		this.songQueue.clear();
-		songQueue.addAll(queue);
+		// incase of the queue in put is songQueue itself
+		if (!this.songQueue.equals(queue)) {
+			this.songQueue.clear();
+			songQueue.addAll(queue);
+		}
 		currentSongPosition = position;
 		playNewSong(true);
 
@@ -588,7 +600,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 		}
 
-		
 		stackSongplayed.push(getCurrentSongId());
 		computeNextSong();
 	}
@@ -756,30 +767,33 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 		States.musicPlayerState = MUSIC_STOPPED;
 		UIController.getInstance().updateUI(MUSIC_STOPPED);
-		
+
 		cancelNoti();
 		mediaPlayer.stop();
 		mediaPlayer.release();
 		MusicPlayerMainActivity.getActivity().finish();
-		
+
 		stopSelf();
 	}
+
 	/**
 	 * Set song be the next song to be played
+	 * 
 	 * @param song
 	 */
 	public void addToNext(Song song) {
 		// TODO Auto-generated method stub
 		addSongToQueue(song);
 		nextSongId = song.getId();
-		
+
 	}
-	private void computeNextSong(){
+
+	private void computeNextSong() {
 		int nextPosition;
 		int size = songQueue.size();
 		if (isShuffle) {
 			// TODO Auto-generated method stub
-			Random random = new Random(Calendar.getInstance().getTimeInMillis());
+			Random random = new Random(System.currentTimeMillis());
 
 			size = songQueue.size();
 
@@ -788,8 +802,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			nextPosition = nextPosition % size;
 
 		} else {
-			nextPosition = currentSongPosition+1;
-			
+			nextPosition = currentSongPosition + 1;
+
 			nextPosition = nextPosition % size;
 
 		}
@@ -798,16 +812,32 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void removeFromQueue(Song song) {
 		// TODO Auto-generated method stub
-		for (int i=0;i<songQueue.size();i++) {
-			if(songQueue.get(i).getId().equals(song.getId())){
-				if(nextSongId.equals(song.getId())){
+		for (int i = 0; i < songQueue.size(); i++) {
+			if (songQueue.get(i).getId().equals(song.getId())) {
+				if (nextSongId.equals(song.getId())) {
 					computeNextSong();
 				}
 				songQueue.remove(i);
 				break;
 			}
 		}
-		
+
 		QueueSongAdapter.getInstance().notifyDataSetChanged();
+	}
+
+	public int getQueueSize() {
+		// TODO Auto-generated method stub
+		return songQueue.size();
+	}
+
+	public void clearQueue() {
+		// TODO Auto-generated method stub
+		Song song = songQueue.get(currentSongPosition);
+		songQueue.clear();
+		songQueue.add(song);
+		QueueSongAdapter.getInstance().notifyDataSetChanged();
+		currentSongPosition = 0;
+		computeNextSong();
+		
 	}
 }

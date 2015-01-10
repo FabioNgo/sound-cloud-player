@@ -1,11 +1,16 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.States;
@@ -32,9 +37,9 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
-		Constants.UIContant, Constants.UserContant, Constants.MusicService, Constants.Appplication {
+		Constants.UIContant, Constants.UserContant, Constants.MusicService,
+		Constants.Appplication {
 
-	
 	protected Fragment mFrag;
 	private SlidingUpPanelLayout mLayout;
 	private static MusicPlayerMainActivity activity;
@@ -63,22 +68,22 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	public MusicPlayerMainActivity() {
 		// TODO Auto-generated constructor stub
 		activity = this;
-		
+
 	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		States.appState = APP_STOPPED;
 		super.onCreate(savedInstanceState);
-		
+
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
 
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
-		if("CallFromNoti".equals(intent.getAction())){
-			
+		if ("CallFromNoti".equals(intent.getAction())) {
+
 			UIController.getInstance().updateUI(APP_RUNNING);
 		}
 		/*
@@ -91,7 +96,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		getScreesize();
 
 		activity = this;
-		
+
 		// bindService(musicPlayerServiceIntent, mConnection, 0);
 
 		/*
@@ -113,8 +118,6 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		 */
 		configMusicPlayerService();
 	}
-
-	
 
 	/**
 	 * Get data which transfered from other activity
@@ -139,8 +142,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 * Tab Sliding
 	 */
 	private void configTabSliding() {
-		
-		
+
 		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		pager = (ViewPager) findViewById(R.id.pager);
 		FragmentPagerAdapter adapter;
@@ -210,20 +212,23 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, QueueSongUI.getInstance()).commit();
+				.replace(R.id.play_queue_container, QueueSongUI.getInstance())
+				.commit();
 	}
 
 	/**
 	 * Music Player Service
 	 */
 	private void configMusicPlayerService() {
-//		if (!isMyServiceRunning()) {
-		Intent musicPlayerServiceIntent = new Intent(this, MusicPlayerService.class);
-//        bindService(musicPlayerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
-			startService(musicPlayerServiceIntent);
-//		} else {
-			
-//		}
+		// if (!isMyServiceRunning()) {
+		Intent musicPlayerServiceIntent = new Intent(this,
+				MusicPlayerService.class);
+		// bindService(musicPlayerServiceIntent, mConnection,
+		// Context.BIND_AUTO_CREATE);
+		startService(musicPlayerServiceIntent);
+		// } else {
+
+		// }
 	}
 
 	/**
@@ -248,7 +253,6 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 		if (savedInstanceState == null) {
 
-			
 			FragmentTransaction t = this.getSupportFragmentManager()
 					.beginTransaction();
 			mFrag = new UserDisplayFragment();
@@ -275,48 +279,33 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		// getMenuInflater().inflate(R.menu.demo, menu);
-		// MenuItem item = menu.findItem(R.id.action_toggle);
-		// if (mLayout != null) {
-		// if (mLayout.isPanelHidden()) {
-		// item.setTitle("Action Show");
-		// } else {
-		// item.setTitle("Action Hide");
-		// }
-		// }
+		getMenuInflater().inflate(R.menu.main_menu, menu);
+		
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-//		switch (item.getItemId()) {
-//		case R.id.action_toggle: {
-//			if (mLayout != null) {
-//				if (!mLayout.isPanelHidden()) {
-//					mLayout.hidePanel();
-//					item.setTitle("ACtion Show");
-//				} else {
-//					mLayout.showPanel();
-//					item.setTitle("Action Hide");
-//				}
-//			}
-//			return true;
-//		}
-//		case R.id.action_anchor: {
-//			if (mLayout != null) {
-//				if (mLayout.getAnchorPoint() == 1.0f) {
-//					mLayout.setAnchorPoint(0.7f);
-//					mLayout.expandPanel(0.7f);
-//					item.setTitle("ACtion Anchor Disable");
-//				} else {
-//					mLayout.setAnchorPoint(1.0f);
-//					mLayout.collapsePanel();
-//					item.setTitle("ACtion Anchor Enable");
-//				}
-//			}
-//			return true;
-//		}
-//		}
+		switch (item.getItemId()) {
+		case R.id.main_shuffle_all:
+			ArrayList<Song> songs = SongController.getInstance()
+					.getOfflineSongs(false);
+			Random random = new Random(System.currentTimeMillis());
+			int position = Math.abs(random.nextInt())%MusicPlayerService.getInstance().getQueueSize();
+			MusicPlayerService.getInstance().playNewSong(position,songs);
+			if (!MusicPlayerService.getInstance().isShuffle()) {
+				MusicPlayerService.getInstance().setShuffle();
+			}
+			break;
+
+		case R.id.main_sort_by:
+			break;
+
+		case R.id.main_settings:
+			break;
+		default:
+			break;
+		}
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -336,7 +325,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		
+
 		// if (isMyServiceRunning()) {
 		// UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		// }
@@ -344,13 +333,12 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	}
 
 	@Override
-    protected void onStart() {
-        super.onStart();
-        
-        // Bind to LocalService
-        
-    }
+	protected void onStart() {
+		super.onStart();
 
+		// Bind to LocalService
+
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -366,14 +354,13 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 	}
 
-	
 	/**
 	 * Switch tabs
+	 * 
 	 * @param tab
 	 */
-	public void switchTab(int tab){
+	public void switchTab(int tab) {
 		pager.setCurrentItem(tab);
 		configTabSliding();
 	}
 }
-
