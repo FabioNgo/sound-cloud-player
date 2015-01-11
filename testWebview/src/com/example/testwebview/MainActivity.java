@@ -1,11 +1,15 @@
 package com.example.testwebview;
 
 import com.example.testwebview.R;
+
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.ValueCallback;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -14,7 +18,20 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		WebView webview = (WebView) findViewById(R.id.webView1);
-		webview.loadUrl("http://www.google.com");
+		webview.setWebViewClient(new MyBrowser());
+		webview.getSettings().setJavaScriptEnabled(true);
+		/*webview.loadUrl("http://truyencv.com/nho-thuat/chuong-435/");
+		System.out.println ("test");
+		//webview.addJavascriptInterface(new JsInterFace(), "AndroidApp");
+		
+		String myJsString = "chuong-1-790454";
+		webview..evaluateJavascript("(function() { return FetchChapter(\"" + myJsString + "\"); })();", new ValueCallback<String>() {
+		    @Override
+		    public void onReceiveValue(String s) {
+		        System.out.println(s); // Returns the value from the function
+		    }
+		});*/
+		
 	}
 
 	@Override
@@ -34,5 +51,21 @@ public class MainActivity extends ActionBarActivity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private class MyBrowser extends WebViewClient {
+		   @Override
+		   public boolean shouldOverrideUrlLoading(WebView view, String url) {
+		      view.loadUrl(url);
+		      return true;
+		   }
+	}
+	
+	private class JsInterFace{
+		
+		void receiveString(final String value) {
+	        // String received from WebView
+	        Log.d("MyApp", value);
+	    }
 	}
 }

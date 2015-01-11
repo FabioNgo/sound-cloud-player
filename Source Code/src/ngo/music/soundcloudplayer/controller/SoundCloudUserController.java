@@ -124,7 +124,7 @@ public class SoundCloudUserController extends UserController implements Constant
 	public void retrevieUserInfoOnline(ApiWrapper wrapper) throws IOException, JSONException {
 		HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 		//t = wrapper.clientCredentials();
-		//System.out.println ("TOKEN = " + wrapper.getToken());
+		System.out.println ("TOKEN = " + wrapper.getToken());
 		JSONObject me = Http.getJSON(resp);
 		//set information of logged user
 		//System.out.println(me.toString());

@@ -272,6 +272,11 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		return songs;
 	}
 	
+	/**
+	 * Download song running in background
+	 * @author LEBAO_000
+	 *
+	 */
 	private class downloadSongBackground extends AsyncTask<Song, String, String>{
 
 		String result= "";
@@ -302,11 +307,6 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		                    if (DownloadManager.STATUS_SUCCESSFUL == c
 		                            .getInt(columnIndex)) {
 
-		                       // ImageView view = (ImageView) findViewById(R.id.imageView1);
-//		                        String uriString = c
-//		                                .getString(c
-//		                                        .getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
-		                        //view.setImageURI(Uri.parse(uriString));
 		                    }
 		                }
 		            }
@@ -320,14 +320,8 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			try {
 				request = new android.app.DownloadManager.Request(
 				        Uri.parse(params[0].getLink()));
-				request.setTitle(params[0].getTitle() + ".mp3");
-				File dir = new File(Environment.getExternalStorageDirectory()
-						+ ROOT_DIRECTORY);
-				if (!(dir.exists() && dir.isDirectory())) {
-					System.out.println("CREATE FOLDER: " + dir.mkdir());
-
-				}
-				String outputName = dir + "/" + params[0].getTitle() + ".mp3";
+				request.setTitle(params[0].getTitle());
+								
 				//OutputStream output = new FileOutputStream(outputName);
 
 				//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
