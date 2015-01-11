@@ -86,7 +86,8 @@ public abstract class PlayerUI extends Fragment {
 	protected void iniMusicProgressBar() {
 		musicProgressBar = (ProgressWheel) rootView
 				.findViewById(musicProgressBar_id);
-		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play);
+		
+		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
 		musicProgressBar.setOnClickListener(new OnClickListener() {
 
 			@Override

@@ -149,9 +149,9 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 					.findViewById(R.id.song_queue_progress_bar);
 			progressWheel.setVisibility(View.VISIBLE);
 			if (MusicPlayerService.getInstance().isPlaying()) {
-				progressWheel.setBackgroundResource(R.drawable.ic_media_pause);
+				progressWheel.setBackgroundResource(R.drawable.ic_media_pause_progress);
 			} else {
-				progressWheel.setBackgroundResource(R.drawable.ic_media_play);
+				progressWheel.setBackgroundResource(R.drawable.ic_media_play_progress);
 			}
 			UIController.getInstance().addProgressBar(progressWheel);
 		} else {

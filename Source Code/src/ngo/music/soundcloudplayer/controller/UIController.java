@@ -209,7 +209,7 @@ public class UIController implements Constants.MusicService,
 		case MUSIC_PLAYING:
 			for (ProgressWheel progressbar : musicProgressBars) {
 
-				progressbar.setBackgroundResource(R.drawable.ic_media_pause);
+				progressbar.setBackgroundResource(R.drawable.ic_media_pause_progress);
 			}
 			startTimer();
 			for (PlayerUI playerUI : uiFragments) {
@@ -236,7 +236,7 @@ public class UIController implements Constants.MusicService,
 				playerUI.pause();
 				for (ProgressWheel progressbar : musicProgressBars) {
 
-					progressbar.setBackgroundResource(R.drawable.ic_media_play);
+					progressbar.setBackgroundResource(R.drawable.ic_media_play_progress);
 				}
 
 			}
@@ -252,7 +252,7 @@ public class UIController implements Constants.MusicService,
 					for (ProgressWheel progressbar : musicProgressBars) {
 
 						progressbar
-								.setBackgroundResource(R.drawable.ic_media_pause);
+								.setBackgroundResource(R.drawable.ic_media_pause_progress);
 					}
 				} else {
 					for (ProgressWheel progressbar : musicProgressBars) {
@@ -263,7 +263,7 @@ public class UIController implements Constants.MusicService,
 										.getDuration());
 						progressbar.setProgressDegree(degree);
 						progressbar
-								.setBackgroundResource(R.drawable.ic_media_play);
+								.setBackgroundResource(R.drawable.ic_media_play_progress);
 					}
 				}
 
@@ -316,7 +316,7 @@ public class UIController implements Constants.MusicService,
 			}
 			for (ProgressWheel progressbar : musicProgressBars) {
 
-				progressbar.setBackgroundResource(R.drawable.ic_media_play);
+				progressbar.setBackgroundResource(R.drawable.ic_media_play_progress);
 			}
 
 			break;
