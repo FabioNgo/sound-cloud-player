@@ -1,26 +1,34 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!--
+	<!--
         Base application theme for API 14+. This theme completely replaces
         AppBaseTheme from BOTH res/values/styles.xml and
-        res/values-v11/styles.xml on API 14+ devices.
-    -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <item name="windowActionBar">false</item>
-        <item name="colorPrimary">#ffff9431</item>
-        <item name="colorPrimaryDark">#ffD56600</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <!--
+        res/values-v11/styles.xml on API 14+ devices.
+	-->
+	<style name="AppBaseTheme" parent="Theme.AppCompat.Light">
+		<item name="windowActionBar">false</item>
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
+		<item name="android:windowFullscreen">true</item>
+		<item name="android:windowContentOverlay">@null</item>
+		<!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->        
-    </style>
+            backward-compatibility can go here.
+		-->
+	</style>
 
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
+	<!-- Application theme. -->
+	<style name="AppTheme" parent="AppBaseTheme">
+		<!-- All customizations that are NOT specific to a particular API-level can go here. -->
+	</style>
+
+	<style name="ActionBarTheme" parent="AppBaseTheme">
+
+		<!-- All customizations that are NOT specific to a particular API-level can go here. -->
+		<item name="android:background">@color/primary</item>
+		<item name="android:textColorPrimary">@color/icons</item>
+		<item name="android:textColorSecondary">@android:color/white</item>
+	</style>
 
 </resources>

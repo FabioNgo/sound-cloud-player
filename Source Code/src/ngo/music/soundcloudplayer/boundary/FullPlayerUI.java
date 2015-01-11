@@ -31,7 +31,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
-@SuppressLint("NewApi")
+
 public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	private ImageView shuffle;
@@ -64,7 +64,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_current_time);
 		durationText = (TextView) rootView
 				.findViewById(R.id.full_player_duration);
-
+		Toolbar toolbar = (Toolbar) rootView
+				.findViewById(R.id.full_player_toolbar);
+		toolbar.setLogo(R.drawable.logo);
 		/*
 		 * Config buttons in UI
 		 */
@@ -205,7 +207,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		});
 	}
 
-	@SuppressLint("NewApi")
+	
 	@Override
 	public void updateTitle(Song song) {
 		// TODO Auto-generated method stub
@@ -234,28 +236,23 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	public void updateShuffle() {
 		// TODO Auto-generated method stub
 		if (MusicPlayerService.getInstance().isShuffle()) {
-			rootView.findViewById(R.id.full_player_shuffle).setBackgroundColor(
-					Color.CYAN);
+			((ImageView)rootView.findViewById(R.id.full_player_shuffle)).setImageResource(R.drawable.ic_media_shuffle);
 		} else {
 
-			rootView.findViewById(R.id.full_player_shuffle).setBackgroundColor(
-					Color.TRANSPARENT);
+			((ImageView)rootView.findViewById(R.id.full_player_shuffle)).setImageResource(R.drawable.ic_media_not_shuffle);
 		}
 	}
 
 	public void updateLoop() {
 		// TODO Auto-generated method stub
 		if (MusicPlayerService.getInstance().getLoopState() == MODE_LOOP_NONE) {
-			((ImageView) rootView.findViewById(R.id.full_player_loop))
-					.setBackgroundColor(Color.TRANSPARENT);
+			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_no_loop);					
 		}
 		if (MusicPlayerService.getInstance().getLoopState() == MODE_LOOP_ONE) {
-			((ImageView) rootView.findViewById(R.id.full_player_loop))
-					.setBackgroundColor(Color.CYAN);
+			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_loop_1);
 		}
 		if (MusicPlayerService.getInstance().getLoopState() == MODE_LOOP_ALL) {
-			((ImageView) rootView.findViewById(R.id.full_player_loop))
-					.setBackgroundColor(Color.YELLOW);
+			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_loop);
 		}
 	}
 

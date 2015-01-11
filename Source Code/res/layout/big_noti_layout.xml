@@ -50,24 +50,27 @@
 
 			<ImageView
 				android:id="@+id/noti_prev"
+				android:padding="5dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:scaleType="center"
-				android:src="@drawable/ic_media_previous"/>
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/ic_media_rew"/>
 
 			<ImageView
 				android:id="@+id/noti_play_pause"
+				android:padding="5dp"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:scaleType="center"
+				android:layout_gravity="center_vertical"
 				android:src="@drawable/ic_media_play"/>
 
 			<ImageView
+				android:padding="5dp"
 				android:id="@+id/noti_next"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:scaleType="center"
-				android:src="@drawable/ic_media_next"/>
+				android:layout_gravity="center_vertical"
+				android:src="@drawable/ic_media_ff"/>
 
 			<ImageView
 				android:id="@+id/noti_cancel"

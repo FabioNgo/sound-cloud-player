@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/primary"
-        sothree:theme="@style/AppTheme" />
+        sothree:theme="@style/ActionBarTheme" />
     <ListView
     	android:id="@+id/queue_list_view"
     	android:layout_height="wrap_content"

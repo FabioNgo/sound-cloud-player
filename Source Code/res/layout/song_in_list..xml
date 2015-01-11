@@ -43,7 +43,7 @@
 		android:layout_height="30dp"
 		android:layout_centerVertical="true"
 		android:layout_toStartOf="@+id/song_menu"
-		android:src="@android:drawable/ic_media_play"/>
+		android:src="@drawable/ic_media_play"/>
 
 	<ImageView
 		android:id="@+id/song_menu"

@@ -248,7 +248,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		toolbar.setLogo(R.drawable.ic_action_github);
+		toolbar.setLogo(R.drawable.logo);
 		setSupportActionBar(toolbar);
 
 		if (savedInstanceState == null) {

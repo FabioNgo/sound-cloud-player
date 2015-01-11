@@ -1,153 +1,159 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
-	android:layout_height="match_parent"
-	android:layout_width="match_parent" >
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
 	<android.support.v7.widget.Toolbar
 		xmlns:sothree="http://schemas.android.com/apk/res-auto"
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:background="@color/primary"
 		android:id="@+id/full_player_toolbar"
-		android:layout_height="?attr/actionBarSize"
 		android:layout_width="match_parent"
-		
-		sothree:theme="@style/AppTheme" />
-	
-	<!--  SONG INFO -->
-	<FrameLayout 
-	    android:id = "@+id/song_info_field"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/full_player_toolbar"
-	    
-		android:layout_width="match_parent">
-		
-	    
-		<!--  AVATAR OF SONG -->
+		android:layout_height="?attr/actionBarSize"
+		sothree:theme="@style/ActionBarTheme"/>
+
+	<!-- SONG INFO -->
+
+	<FrameLayout
+		android:id="@+id/song_info_field"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/full_player_toolbar">
+
+		<!-- AVATAR OF SONG -->
+
 		<com.android.volley.toolbox.NetworkImageView
-			
-			
 			android:id="@+id/full_player_song_image"
-			android:layout_height="fill_parent"
 			android:layout_width="fill_parent"
-			android:src="@drawable/ic_launcher" />
-		
+			android:layout_height="fill_parent"
+			android:src="@drawable/song_image"/>
+
 		<RelativeLayout
-		    android:id = "@+id/opacity_layout"
-		    android:background="#212121"
-		    android:alpha="0.6"
-		    android:gravity="bottom"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent">
-		 </RelativeLayout>
-		<!--  ARTIST INFO -->
-		
+			android:id="@+id/opacity_layout"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:alpha="0.6"
+			android:background="#212121"
+			android:gravity="bottom">
+		</RelativeLayout>
+		<!-- ARTIST INFO -->
+
 		<RelativeLayout
-		    android:id = "@+id/artist_info"
-		    android:gravity="bottom"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent">
-		<!--  AVATAR OF Artist -->
-		    <com.android.volley.toolbox.NetworkImageView
-		        
-		        android:id="@+id/artist_image"
-		        android:layout_width="wrap_content"
-		        android:src="@drawable/ic_launcher"
-		        android:layout_height="wrap_content" />
-		    
-		    <!--  Artist INFO -->
-			<RelativeLayout 
-			    
-		        android:layout_width="wrap_content"
-		        android:layout_toEndOf="@+id/artist_image"
-		        android:layout_marginStart="4dp"
-		        android:layout_marginTop="10dp"
-		        android:layout_height="wrap_content">
-			    <TextView
-			        android:id="@+id/artist_fullname"
-			        android:layout_marginStart="4dp"
-			        android:layout_width="match_parent"
-			        android:textColor="#EFEFEF"
-			        android:layout_height="wrap_content"
-			        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline" />
-		
-			    <TextView
-			        android:layout_alignStart="@+id/artist_fullname"
-			        android:layout_below="@+id/artist_fullname"
-			        android:textIsSelectable="false"
-			        android:id="@+id/artist_country"
-			        android:textColor="#EFEFEF"
-			        android:layout_width="match_parent"
-			        android:layout_height="wrap_content"
-			        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-			        android:layout_marginBottom="10dp" />
-			    
+			android:id="@+id/artist_info"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:gravity="bottom">
+
+			<!-- AVATAR OF Artist -->
+
+			<com.android.volley.toolbox.NetworkImageView
+				android:id="@+id/artist_image"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:src="@drawable/ic_launcher"/>
+
+			<!-- Artist INFO -->
+
+			<RelativeLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginStart="4dp"
+				android:layout_marginTop="10dp"
+				android:layout_toEndOf="@+id/artist_image">
+
+				<TextView
+					android:id="@+id/artist_fullname"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="4dp"
+					android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+					android:textColor="#EFEFEF"/>
+
+				<TextView
+					android:id="@+id/artist_country"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_alignStart="@+id/artist_fullname"
+					android:layout_below="@+id/artist_fullname"
+					android:layout_marginBottom="10dp"
+					android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+					android:textColor="#EFEFEF"
+					android:textIsSelectable="false"/>
 			</RelativeLayout>
 		</RelativeLayout>
-		
-
 	</FrameLayout>
-	<com.todddavies.components.progressbar.ProgressWheel
-		ProgressWheel:barColor="@color/primary_dark"
-		ProgressWheel:barLength="60dp"
-		ProgressWheel:barWidth="15dp"
-		ProgressWheel:rimColor="@color/primary_light"
-		ProgressWheel:rimWidth="15dp"
-		
-		ProgressWheel:textSize="14sp"
-		android:id="@+id/full_player_progress_bar"
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
 		android:layout_below="@+id/song_info_field"
-		android:layout_centerInParent="true"
-		android:layout_height="150dp"
-		android:layout_width="150dp" />
-	<TextView
-		android:id="@+id/full_player_current_time"
-		android:layout_alignTop="@+id/full_player_progress_bar"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="63dp"
-		android:layout_toStartOf="@+id/full_player_progress_bar"
-		android:layout_width="wrap_content"
-		android:textColor="@color/primary_text"
-		android:text="00:00"
-		android:textAppearance="?android:attr/textAppearanceSmall" />
-	<TextView
-		android:id="@+id/full_player_duration"
-		android:layout_alignBaseline="@+id/full_player_current_time"
-		android:layout_alignBottom="@+id/full_player_current_time"
-		android:layout_height="wrap_content"
-		android:layout_toEndOf="@+id/full_player_progress_bar"
-		android:layout_width="wrap_content"
-		android:textColor="@color/primary_text"
-		android:text="00:00"
-		android:textAppearance="?android:attr/textAppearanceSmall" />
-	<ImageView
-		android:id="@+id/full_player_ff"
-		android:layout_alignTop="@+id/full_player_progress_bar"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="48dp"
-		android:layout_toEndOf="@+id/full_player_duration"
-		android:layout_width="wrap_content"
-		android:src="@drawable/ic_media_ff" />
-	<ImageView
-		android:id="@+id/full_player_rew"
-		android:layout_alignTop="@+id/full_player_ff"
-		android:layout_height="wrap_content"
-		android:layout_toStartOf="@+id/full_player_current_time"
-		android:layout_width="wrap_content"
-		android:src="@drawable/ic_media_rew" />
-	<ImageView
-		android:id="@+id/full_player_shuffle"
-		android:layout_alignTop="@+id/full_player_current_time"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="20dp"
-		android:layout_toStartOf="@+id/full_player_progress_bar"
-		android:src="@drawable/shuffle_button"
-		android:layout_width="wrap_content" />
-	<ImageView
-		android:id="@+id/full_player_loop"
-		android:layout_alignBaseline="@+id/full_player_shuffle"
-		android:layout_alignBottom="@+id/full_player_shuffle"
-		android:layout_height="wrap_content"
-		android:layout_toEndOf="@+id/full_player_progress_bar"
-		android:src="@drawable/replay_button"
-		android:layout_width="wrap_content" />
+		>
+
+		<com.todddavies.components.progressbar.ProgressWheel
+			android:id="@+id/full_player_progress_bar"
+			android:layout_width="150dp"
+			android:layout_height="150dp"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true"
+			ProgressWheel:barColor="@color/primary_dark"
+			ProgressWheel:barLength="60dp"
+			ProgressWheel:barWidth="15dp"
+			ProgressWheel:rimColor="@color/primary_light"
+			ProgressWheel:rimWidth="15dp"/>
+
+		<TextView
+			android:id="@+id/full_player_current_time"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@+id/full_player_progress_bar"
+			android:text="00:00"
+			android:layout_centerVertical="true"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="@color/primary_text"/>
+
+		<TextView
+			android:id="@+id/full_player_duration"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_toEndOf="@+id/full_player_progress_bar"
+			android:text="00:00"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:textColor="@color/primary_text"/>
+
+		<ImageView
+			android:id="@+id/full_player_ff"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_toEndOf="@+id/full_player_duration"
+			android:src="@drawable/ic_media_ff"/>
+
+		<ImageView
+			android:id="@+id/full_player_rew"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_toStartOf="@+id/full_player_current_time"
+			android:src="@drawable/ic_media_rew"/>
+
+		<ImageView
+			android:id="@+id/full_player_shuffle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/full_player_current_time"
+			android:layout_marginTop="20dp"
+			android:layout_toStartOf="@+id/full_player_progress_bar"
+			android:src="@drawable/ic_media_shuffle"/>
+
+		<ImageView
+			android:id="@+id/full_player_loop"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/full_player_duration"
+			android:layout_marginTop="20dp"
+			android:layout_toEndOf="@+id/full_player_progress_bar"
+			android:src="@drawable/ic_media_loop"/>
+	</RelativeLayout>
+
 </RelativeLayout>
