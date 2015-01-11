@@ -79,7 +79,7 @@ public class OfflineSongsFragment extends ListContentFragment implements OnRefre
 				.findViewById(swipeRefreshLayoutId);
 		if (mSwipeRefreshLayout != null) {
 			mSwipeRefreshLayout.setOnRefreshListener(this);
-			mSwipeRefreshLayout.setColorSchemeColors(Color.RED, Color.BLUE);
+			mSwipeRefreshLayout.setColorSchemeResources(R.color.primary,R.color.accent);
 		}
 	}
 

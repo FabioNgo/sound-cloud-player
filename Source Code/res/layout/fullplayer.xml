@@ -6,10 +6,11 @@
 	<android.support.v7.widget.Toolbar
 		xmlns:sothree="http://schemas.android.com/apk/res-auto"
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:background="?attr/colorPrimary"
+		android:background="@color/primary"
 		android:id="@+id/full_player_toolbar"
 		android:layout_height="?attr/actionBarSize"
 		android:layout_width="match_parent"
+		
 		sothree:theme="@style/AppTheme" />
 	
 	<!--  SONG INFO -->
@@ -86,12 +87,12 @@
 
 	</FrameLayout>
 	<com.todddavies.components.progressbar.ProgressWheel
-		ProgressWheel:barColor="#0097D6"
+		ProgressWheel:barColor="@color/primary_dark"
 		ProgressWheel:barLength="60dp"
 		ProgressWheel:barWidth="15dp"
-		ProgressWheel:rimColor="#330097D6"
+		ProgressWheel:rimColor="@color/primary_light"
 		ProgressWheel:rimWidth="15dp"
-		ProgressWheel:textColor="#222"
+		
 		ProgressWheel:textSize="14sp"
 		android:id="@+id/full_player_progress_bar"
 		android:layout_below="@+id/song_info_field"
@@ -105,6 +106,7 @@
 		android:layout_marginTop="63dp"
 		android:layout_toStartOf="@+id/full_player_progress_bar"
 		android:layout_width="wrap_content"
+		android:textColor="@color/primary_text"
 		android:text="00:00"
 		android:textAppearance="?android:attr/textAppearanceSmall" />
 	<TextView
@@ -114,6 +116,7 @@
 		android:layout_height="wrap_content"
 		android:layout_toEndOf="@+id/full_player_progress_bar"
 		android:layout_width="wrap_content"
+		android:textColor="@color/primary_text"
 		android:text="00:00"
 		android:textAppearance="?android:attr/textAppearanceSmall" />
 	<ImageView

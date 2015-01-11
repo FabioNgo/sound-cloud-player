@@ -24,7 +24,7 @@
 		android:singleLine="true"
 		
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-		android:textColor="#000000">
+		android:textColor="@color/primary_text">
 
 	</TextView>
 
@@ -38,7 +38,7 @@
 		android:layout_toStartOf="@+id/lite_player_progress_bar"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-		android:textColor="#000000"
+		android:textColor="@color/secondary_text"
 		android:textIsSelectable="false"/>
 
 	<com.todddavies.components.progressbar.ProgressWheel
@@ -48,10 +48,10 @@
 		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
 		android:layout_marginEnd="5dp"
-		ProgressWheel:barColor="#0097D6"
+		ProgressWheel:barColor="@color/primary_dark"
 		ProgressWheel:barLength="60dp"
 		ProgressWheel:barWidth="7dp"
-		ProgressWheel:rimColor="#330097D6"
+		ProgressWheel:rimColor="@color/primary_light"
 		ProgressWheel:rimWidth="7dp"
 		ProgressWheel:textColor="#222"
 		ProgressWheel:textSize="14sp"/>
