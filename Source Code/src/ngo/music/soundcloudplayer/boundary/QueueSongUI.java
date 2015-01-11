@@ -74,7 +74,7 @@ public class QueueSongUI extends ListContentFragment {
 					MusicPlayerService.getInstance().clearQueue();
 					break;
 
-				case R.id.main_settings:
+				case R.id.queue_settings:
 					break;
 				default:
 					break;

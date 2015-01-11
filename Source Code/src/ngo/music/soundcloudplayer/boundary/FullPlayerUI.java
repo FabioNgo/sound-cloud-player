@@ -339,7 +339,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		/*
 		 * Config artist of Song
 		 */
-
+		if(song == null){
+			return;
+		}
 		FrameLayout songInfo = (FrameLayout) rootView
 				.findViewById(R.id.song_info_field);
 

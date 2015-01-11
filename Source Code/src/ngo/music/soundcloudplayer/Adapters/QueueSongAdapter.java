@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -104,7 +105,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.queue_removeFromQueue:
-							MusicPlayerService.getInstance().removeFromQueue(song);
+							MusicPlayerService.getInstance().removeFromQueue(song,false);
 							break;
 						case R.id.queue_playNext:
 							MusicPlayerService.getInstance().addToNext(song);
@@ -112,6 +113,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 						case R.id.queue_addToPlaylist:
 							break;
 						case R.id.queue_delete:
+							SongController.getInstance().deleteSong(song);
 							break;
 						default:
 							break;

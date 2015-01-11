@@ -38,12 +38,12 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.liteplayer, container, false);
 		iniMusicProgressBar();
-		
+
 		image = (NetworkImageView) rootView
 				.findViewById(R.id.lite_player_image);
 		BasicFunctions.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
-		
+
 		UIController.getInstance().addUiFragment(this);
 		return rootView;
 	}
@@ -51,29 +51,32 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 	@Override
 	public void updateTitle(Song song) {
 		// TODO Auto-generated method stub
-		if (song == null) return;
-		String title = song.getTitle();
+		String title = "";
+		if (song != null) {
+			title = song.getTitle();
+		}
 		TextView title_text = (TextView) rootView
 				.findViewById(R.id.lite_player_title);
 		title_text.setText(title);
-		
+
 	}
 
 	@Override
 	public void updateSubtitle(Song song) {
-		if (song == null) return;
-		// TODO Auto-generated method stub
-		String subtitle = song.getArtist() + " | " + song.getAlbum();
+		String subtitle = "";
+		if (song != null) {
+
+			subtitle = song.getArtist() + " | " + song.getAlbum();
+		}
 		TextView subtitle_text = (TextView) rootView
 				.findViewById(R.id.lite_player_subtitle);
 		subtitle_text.setText(subtitle);
 	}
 
-
 	@Override
 	public void updateImage(Song song) {
 		// TODO Auto-generated method stub
-		
+
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 		image.setDefaultImageResId(R.drawable.ic_launcher);
 		if (song != null) {
@@ -89,8 +92,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 	@Override
 	public void update() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 }
