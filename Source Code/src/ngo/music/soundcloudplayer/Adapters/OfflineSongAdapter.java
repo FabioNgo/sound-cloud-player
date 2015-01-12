@@ -115,6 +115,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 						case R.id.list_addToPlaylist:
 							break;
 						case R.id.list_delete:
+							SongController.getInstance().deleteSong(song);
 							break;
 						default:
 							break;
@@ -205,4 +206,10 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		// TODO Auto-generated method stub
 		songs.clear();
 	}
+
+	public void updateSongs() {
+		// TODO Auto-generated method stub
+		songs = SongController.getInstance().getOfflineSongs(true);
+	}
+	
 }

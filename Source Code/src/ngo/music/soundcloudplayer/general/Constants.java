@@ -165,6 +165,7 @@ public interface Constants {
 		 * DATA CHANGE
 		 */
 		int QUEUE_CHANGED = 9;
+		int OFFLINE_SONG_CHANGED = 10;
 		
 	}
 	interface Appplication{

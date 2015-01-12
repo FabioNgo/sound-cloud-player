@@ -123,7 +123,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		} else if (songQueue.isEmpty()) {
 			return null;
 		} else {
+			try{
 			return (Song) songQueue.get(currentSongPosition);
+			}catch(Exception e){
+				return null;
+			}
 		}
 
 	}
@@ -176,16 +180,20 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNextSong() {
 		mediaPlayer.stop();
-		stackSongplayed.push(nextSongId);
-		for (int i = 0; i < songQueue.size(); i++) {
-			if (songQueue.get(i).getId().equals(nextSongId)) {
-				currentSongPosition = i;
-				break;
+		if (!nextSongId.equals("")) {
+			stackSongplayed.push(nextSongId);
+			for (int i = 0; i < songQueue.size(); i++) {
+				if (songQueue.get(i).getId().equals(nextSongId)) {
+					currentSongPosition = i;
+					break;
+				}
 			}
-		}
 
-		playNewSong(false);
-		computeNextSong();
+			playNewSong(false);
+			computeNextSong();
+		} else {
+			currentSongPosition = -1;
+		}
 	}
 
 	/**
@@ -204,9 +212,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			stackSongplayed.push(getCurrentSongId());
 			playNewSong(false);
 			return;
-		}else{
+		} else {
 			for (Song song : songQueue) {
-				if(song.getId().equals(stackSongplayed.peek())){
+				if (song.getId().equals(stackSongplayed.peek())) {
 					currentSongPosition = songQueue.indexOf(song);
 					playNewSong(false);
 					return;
@@ -214,7 +222,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 			playPreviousSong();
 		}
-		
 
 	}
 
@@ -252,7 +259,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 		UIController.getInstance().updateUI(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
-			
+
 			if (loopState == MODE_LOOP_ONE) {
 				restartSong();
 			} else {
@@ -644,7 +651,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public String getCurrentSongId() {
 		try {
 
-			Song song = songQueue.get(currentSongPosition);
+			Song song = getCurrentSong();
 			String id = song.getId();
 			return id;
 		} catch (Exception e) {
@@ -717,13 +724,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			// TODO Auto-generated method stub
 			String link = "";
 			song = params[0];
-			try {
-
-				link = song.getLink();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				Log.e("getLink", e.toString());
-			}
+			link = song.getLink();
 
 			return link;
 		}
@@ -792,27 +793,37 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private void computeNextSong() {
 		int nextPosition;
 		int size = songQueue.size();
-		if (isShuffle) {
-			// TODO Auto-generated method stub
-			Random random = new Random(System.currentTimeMillis());
+		if (size != 0) {
+			if (isShuffle) {
+				// TODO Auto-generated method stub
+				Random random = new Random(System.currentTimeMillis());
+				size = songQueue.size();
 
-			size = songQueue.size();
+				nextPosition = currentSongPosition
+						+ (Math.abs(random.nextInt()) % size) - 1;
+				nextPosition = nextPosition % size;
 
-			nextPosition = currentSongPosition
-					+ (Math.abs(random.nextInt()) % size) - 1;
-			nextPosition = nextPosition % size;
+			} else {
+				nextPosition = currentSongPosition + 1;
 
+				nextPosition = nextPosition % size;
+
+			}
+
+			nextSongId = songQueue.get(nextPosition).getId();
 		} else {
-			nextPosition = currentSongPosition + 1;
-
-			nextPosition = nextPosition % size;
-
+			nextSongId = "";
 		}
-		nextSongId = songQueue.get(nextPosition).getId();
 	}
 
-	public void removeFromQueue(Song song) {
+	public void removeFromQueue(Song song, boolean forceStop) {
 		// TODO Auto-generated method stub
+		if (forceStop) {
+			if (song.getId().equals(getCurrentSongId())) {
+				playNextSong();
+			}
+
+		}
 		for (int i = 0; i < songQueue.size(); i++) {
 			if (songQueue.get(i).getId().equals(song.getId())) {
 				if (nextSongId.equals(song.getId())) {
@@ -822,7 +833,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				break;
 			}
 		}
-		computeNextSong();
+
 		UIController.getInstance().updateUI(QUEUE_CHANGED);
 	}
 
@@ -839,6 +850,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		currentSongPosition = 0;
 		computeNextSong();
 		UIController.getInstance().updateUI(QUEUE_CHANGED);
-		
+
 	}
 }

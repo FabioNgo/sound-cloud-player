@@ -51,7 +51,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		
 		case 6:
 			return new SoundCloudFollowerFragment();
-		default: return new FullPlayerUI();
+		default: return new Fragment();
 		}
 		
 

@@ -10,8 +10,8 @@
         
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        sothree:theme="@style/AppTheme" />
+        android:background="@color/primary"
+        sothree:theme="@style/ActionBarTheme" />
     <ListView
     	android:id="@+id/queue_list_view"
     	android:layout_height="wrap_content"

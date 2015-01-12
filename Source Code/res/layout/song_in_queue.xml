@@ -20,12 +20,9 @@
 		android:layout_marginTop="10dp"
 		android:layout_toEndOf="@+id/song_queue_image"
 		android:layout_toStartOf="@+id/song_queue_progress_bar"
-		
 		android:singleLine="true"
-		
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-		android:textColor="#000000">
-
+		android:textColor="@color/primary_text">
 	</TextView>
 
 	<TextView
@@ -38,7 +35,7 @@
 		android:layout_toStartOf="@+id/song_queue_progress_bar"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-		android:textColor="#000000"
+		android:textColor="@color/secondary_text"
 		android:textIsSelectable="false"/>
 
 	<com.todddavies.components.progressbar.ProgressWheel
@@ -47,22 +44,21 @@
 		android:layout_height="50dp"
 		android:layout_centerVertical="true"
 		android:layout_toStartOf="@+id/song_queue_menu"
-		ProgressWheel:barColor="#0097D6"
+		ProgressWheel:barColor="@color/primary_dark"
 		ProgressWheel:barLength="60dp"
 		ProgressWheel:barWidth="7dp"
-		ProgressWheel:rimColor="#330097D6"
+		ProgressWheel:rimColor="@color/primary_light"
 		ProgressWheel:rimWidth="6dp"
-		ProgressWheel:textColor="#222"
 		ProgressWheel:textSize="14sp"/>
+
 	<ImageView
-        android:id="@+id/song_queue_menu"  
-        android:layout_width="30dp" 
-        android:layout_height="30dp"
-        android:scaleType="fitCenter"  
-        android:layout_alignParentEnd="true"
+		android:id="@+id/song_queue_menu"
+		android:layout_width="30dp"
+		android:layout_height="30dp"
+		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
 		android:focusable="false"
-        android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"  
-         />
+		android:scaleType="fitCenter"
+		android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"/>
 
 </RelativeLayout>

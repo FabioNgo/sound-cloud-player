@@ -19,12 +19,9 @@
 		android:layout_marginTop="10dp"
 		android:layout_toEndOf="@+id/lite_player_image"
 		android:layout_toStartOf="@+id/lite_player_play_stt"
-		
 		android:singleLine="true"
-		
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-		android:textColor="#000000">
-
+		android:textColor="@color/primary_text">
 	</TextView>
 
 	<TextView
@@ -37,27 +34,25 @@
 		android:layout_toStartOf="@+id/lite_player_play_stt"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
-		android:textColor="#000000"
+		android:textColor="@color/secondary_text"
 		android:textIsSelectable="false"/>
 
 	<ImageView
 		android:id="@+id/lite_player_play_stt"
-		android:src="@android:drawable/ic_media_play"
 		android:layout_width="30dp"
 		android:layout_height="30dp"
-		android:layout_toStartOf="@+id/song_menu"
 		android:layout_centerVertical="true"
-		
-		/>
+		android:layout_toStartOf="@+id/song_menu"
+		android:src="@drawable/ic_media_play"/>
+
 	<ImageView
-        android:id="@+id/song_menu"  
-        android:layout_width="30dp" 
-        android:layout_height="30dp"
-        android:scaleType="fitCenter"  
-        android:layout_alignParentEnd="true"
+		android:id="@+id/song_menu"
+		android:layout_width="30dp"
+		android:layout_height="30dp"
+		android:layout_alignParentEnd="true"
 		android:layout_centerVertical="true"
 		android:focusable="false"
-        android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"  
-         />
+		android:scaleType="fitCenter"
+		android:src="@drawable/ic_menu_moreoverflow_normal_holo_light"/>
 
 </RelativeLayout>

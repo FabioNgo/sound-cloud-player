@@ -102,7 +102,7 @@ public abstract class Song implements Comparable <Song>{
 	 * @return the link
 	 * @throws IOException 
 	 */
-	public abstract String getLink() throws IOException;
+	public abstract String getLink();
 
 
 	/**

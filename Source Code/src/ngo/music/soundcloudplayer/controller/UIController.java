@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.boundary.ListContentFragment;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
@@ -203,17 +204,17 @@ public class UIController implements Constants.MusicService,
 	 */
 	public void updateUI(final int TAG) {
 		// TODO Auto-generated method stub
+		Song curSong = MusicPlayerService.getInstance().getCurrentSong();
 		switch (TAG) {
 		case MUSIC_PLAYING:
 			for (ProgressWheel progressbar : musicProgressBars) {
 
-				progressbar.setBackgroundResource(R.drawable.ic_media_pause);
+				progressbar.setBackgroundResource(R.drawable.ic_media_pause_progress);
 			}
 			startTimer();
 			for (PlayerUI playerUI : uiFragments) {
 
-				playerUI.updateSongInfo(MusicPlayerService.getInstance()
-						.getCurrentSong());
+				playerUI.updateSongInfo(curSong);
 
 				playerUI.play();
 
@@ -235,7 +236,7 @@ public class UIController implements Constants.MusicService,
 				playerUI.pause();
 				for (ProgressWheel progressbar : musicProgressBars) {
 
-					progressbar.setBackgroundResource(R.drawable.ic_media_play);
+					progressbar.setBackgroundResource(R.drawable.ic_media_play_progress);
 				}
 
 			}
@@ -243,8 +244,7 @@ public class UIController implements Constants.MusicService,
 		case APP_RUNNING:
 			for (PlayerUI playerUI : uiFragments) {
 
-				playerUI.updateSongInfo(MusicPlayerService.getInstance()
-						.getCurrentSong());
+				playerUI.updateSongInfo(curSong);
 
 				if (MusicPlayerService.getInstance().isPlaying()) {
 					playerUI.play();
@@ -252,7 +252,7 @@ public class UIController implements Constants.MusicService,
 					for (ProgressWheel progressbar : musicProgressBars) {
 
 						progressbar
-								.setBackgroundResource(R.drawable.ic_media_pause);
+								.setBackgroundResource(R.drawable.ic_media_pause_progress);
 					}
 				} else {
 					for (ProgressWheel progressbar : musicProgressBars) {
@@ -263,7 +263,7 @@ public class UIController implements Constants.MusicService,
 										.getDuration());
 						progressbar.setProgressDegree(degree);
 						progressbar
-								.setBackgroundResource(R.drawable.ic_media_play);
+								.setBackgroundResource(R.drawable.ic_media_play_progress);
 					}
 				}
 
@@ -278,10 +278,7 @@ public class UIController implements Constants.MusicService,
 		case MUSIC_NEW_SONG:
 			for (PlayerUI playerUI : uiFragments) {
 
-				Song currentSong = MusicPlayerService.getInstance()
-						.getCurrentSong();
-
-				playerUI.updateSongInfo(currentSong);
+				playerUI.updateSongInfo(curSong);
 
 			}
 
@@ -310,20 +307,26 @@ public class UIController implements Constants.MusicService,
 
 			break;
 		case MUSIC_STOPPED:
-			timer.cancel();
+			if (timer != null) {
+				timer.cancel();
+			}
 			for (PlayerUI playerUI : uiFragments) {
 
 				playerUI.stop();
 			}
 			for (ProgressWheel progressbar : musicProgressBars) {
 
-				progressbar.setBackgroundResource(R.drawable.ic_media_play);
+				progressbar.setBackgroundResource(R.drawable.ic_media_play_progress);
 			}
 
 			break;
 		case QUEUE_CHANGED:
 			QueueSongAdapter.getInstance().notifyDataSetChanged();
 			QueueSongUI.getInstance().update();
+			break;
+		case OFFLINE_SONG_CHANGED:
+			OfflineSongAdapter.getInstance().updateSongs();
+			OfflineSongAdapter.getInstance().notifyDataSetChanged();
 			break;
 		default:
 			for (PlayerUI playerUI : uiFragments) {

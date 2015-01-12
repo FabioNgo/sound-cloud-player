@@ -317,27 +317,26 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		    
 		    dm = (DownloadManager)MusicPlayerMainActivity.getActivity(). getSystemService(MusicPlayerMainActivity.DOWNLOAD_SERVICE);
 		    android.app.DownloadManager.Request request;
-			try {
-				request = new android.app.DownloadManager.Request(
-				        Uri.parse(params[0].getLink()));
-				request.setTitle(params[0].getTitle());
-								
-				//OutputStream output = new FileOutputStream(outputName);
 
-				//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
-				request.setDestinationInExternalPublicDir(ROOT_DIRECTORY, params[0].getTitle() + ".mp3");
-				request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-				request.setMimeType("audio/mpeg");
-				 enqueue = dm.enqueue(request);
-				 result = "Download successfully";
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				result = "Cannot download this file";
-				e.printStackTrace();
-			}
-//		    registerReceiver(receiver, new IntentFilter(
-//	                DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-			//new downloadSongFromSoundCloud(song).execute();
+			request = new android.app.DownloadManager.Request(
+			        Uri.parse(params[0].getLink()));
+			request.setTitle(params[0].getTitle());
+							
+			//OutputStream output = new FileOutputStream(outputName);
+
+			//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
+			request.setDestinationInExternalPublicDir(ROOT_DIRECTORY, params[0].getTitle() + ".mp3");
+			request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+			request.setMimeType("audio/mpeg");
+			 enqueue = dm.enqueue(request);
+			 result = "Download successfully";
+
+			//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
+//			request.setDestinationInExternalPublicDir(ROOT_DIRECTORY, params[0].getTitle() + ".mp3");
+//			request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+//			request.setMimeType("audio/mpeg");
+//			 enqueue = dm.enqueue(request);
+//			 result = "Download successfully";
 		    
 		    
 			
