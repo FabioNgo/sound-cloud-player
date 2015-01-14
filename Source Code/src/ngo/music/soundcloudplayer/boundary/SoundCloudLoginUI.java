@@ -113,7 +113,7 @@ public class SoundCloudLoginUI extends Fragment implements Constants.UserContant
 					
 					//Cannot login
 					if (currentUser == null){
-						pDialog.dismiss();
+						
 						isLogin = false;
 					}else{
 						DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
@@ -137,7 +137,7 @@ public class SoundCloudLoginUI extends Fragment implements Constants.UserContant
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			
-			
+			pDialog.dismiss();
 		}
 		
 	}

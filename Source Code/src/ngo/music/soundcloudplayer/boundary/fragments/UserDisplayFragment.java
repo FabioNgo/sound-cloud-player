@@ -1,4 +1,4 @@
-package ngo.music.soundcloudplayer.boundary;
+package ngo.music.soundcloudplayer.boundary.fragments;
 
 import java.io.IOException;
 
@@ -8,6 +8,8 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.UserLoginActivity;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;

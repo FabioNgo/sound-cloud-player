@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -113,6 +115,8 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 							MusicPlayerService.getInstance().addToNext(song);
 							break;
 						case R.id.list_addToPlaylist:
+							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment();
+							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
 							break;
 						case R.id.list_delete:
 							SongController.getInstance().deleteSong(song);

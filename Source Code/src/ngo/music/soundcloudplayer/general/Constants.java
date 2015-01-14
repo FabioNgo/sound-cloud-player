@@ -135,6 +135,13 @@ public interface Constants {
 		
 		String TRACKS = "tracks";
 	}
+	interface Data{
+		/**
+		 * DATA CHANGE
+		 */
+		int QUEUE_CHANGED = 0;
+		int OFFLINE_SONG_CHANGED = 1;
+	}
 	interface MusicService {
 		/**
 		 * MUSIC CONSTANTS
@@ -161,16 +168,12 @@ public interface Constants {
 		String NOTI_ACTION_NEXT = "next";
 		String NOTI_ACTION_REW = "rewind";
 		String NOTI_ACTION_FF = "fast forward";
-		/**
-		 * DATA CHANGE
-		 */
-		int QUEUE_CHANGED = 9;
-		int OFFLINE_SONG_CHANGED = 10;
+		
 		
 	}
 	interface Appplication{
-		int APP_RUNNING =7;
-		int APP_STOPPED = 8;
+		int APP_RUNNING =0;
+		int APP_STOPPED = 1;
 	}
 	
 	interface TabContant{
@@ -184,7 +187,10 @@ public interface Constants {
 		int ABOUT_US = 7;
 		String DEFAULT_ID = "deafault_id";
 	}
-	
+	interface Categories{
+		int ARTIST = 0;
+		int PLAYLIST = 1;
+	}
 	interface SoundCloudExploreConstant{
 		int TRENDING_MUSIC = 0;
 		int TRENDING_AUDIO = 1;

@@ -73,7 +73,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class SongController implements Constants, Constants.SongConstants,
-		Constants.SoundCloudExploreConstant , Constants.MusicService{
+		Constants.SoundCloudExploreConstant , Constants.MusicService, Constants.Data{
 
 	private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 
@@ -611,7 +611,7 @@ public class SongController implements Constants, Constants.SongConstants,
 
 				// updateMetaData(outputName,song);
 				result = "Download sucessfully";
-				UIController.getInstance().updateUI(OFFLINE_SONG_CHANGED);
+				UIController.getInstance().updateUiWhenDataChanged(OFFLINE_SONG_CHANGED);
 				// flushing output
 				// output.flush();
 
@@ -1035,7 +1035,7 @@ public class SongController implements Constants, Constants.SongConstants,
 				}
 			}
 		}
-		UIController.getInstance().updateUI(OFFLINE_SONG_CHANGED);
+		UIController.getInstance().updateUiWhenDataChanged(OFFLINE_SONG_CHANGED);
 
 	}
 }

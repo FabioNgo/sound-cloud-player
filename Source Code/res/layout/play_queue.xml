@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:sothree="http://schemas.android.com/apk/res-auto"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/queue_toolbar"
-        
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/primary"
-        sothree:theme="@style/ActionBarTheme" />
-    <ListView
-    	android:id="@+id/queue_list_view"
-    	android:layout_height="wrap_content"
-    	android:layout_below="@+id/queue_toolbar"
-    	android:layout_width="match_parent" >
-</ListView>
+	<android.support.v7.widget.Toolbar
+		xmlns:sothree="http://schemas.android.com/apk/res-auto"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:id="@+id/queue_toolbar"
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		sothree:theme="@style/ActionBarTheme"/>
+
+	<ListView
+		android:id="@+id/queue_list_view"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/queue_toolbar">
+	</ListView>
+
 </RelativeLayout>

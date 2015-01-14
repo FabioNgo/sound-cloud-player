@@ -48,7 +48,7 @@ import android.widget.RemoteViews;
 public class MusicPlayerService extends Service implements OnErrorListener,
 		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
 		OnBufferingUpdateListener, Constants.MusicService,
-		Constants.Appplication {
+		Constants.Appplication, Constants.Data {
 	public MusicPlayerService() {
 		instance = this;
 
@@ -94,11 +94,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		} finally {
 			iniMediaPlayer();
 
-			try {
-				updateNotification();
-			} catch (Exception e) {
-
-			}
+			updateNotification();
 
 		}
 	}
@@ -107,7 +103,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		super.onStartCommand(intent, flags, startId);
-		UIController.getInstance().updateUI(APP_RUNNING);
+		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		return START_STICKY;
 	}
 
@@ -123,9 +119,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		} else if (songQueue.isEmpty()) {
 			return null;
 		} else {
-			try{
-			return (Song) songQueue.get(currentSongPosition);
-			}catch(Exception e){
+			try {
+				return (Song) songQueue.get(currentSongPosition);
+			} catch (Exception e) {
 				return null;
 			}
 		}
@@ -143,7 +139,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 		}
 		songQueue.add(song);
-		UIController.getInstance().updateUI(QUEUE_CHANGED);
+		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 	}
 
 	/**
@@ -234,7 +230,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		mediaPlayer.start();
 		States.musicPlayerState = MUSIC_PLAYING;
-		UIController.getInstance().updateUI(MUSIC_PLAYING);
+		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_PLAYING);
 	}
 
 	@Override
@@ -257,7 +253,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		UIController.getInstance().updateUI(MUSIC_STOPPED);
+		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 
 			if (loopState == MODE_LOOP_ONE) {
@@ -281,7 +277,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		}
 		States.musicPlayerState = MUSIC_PAUSE;
-		UIController.getInstance().updateUI(MUSIC_PAUSE);
+		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_PAUSE);
 	}
 
 	@Override
@@ -299,7 +295,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		UIController.getInstance().updateUI(MUSIC_CUR_POINT_CHANGED);
+		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_CUR_POINT_CHANGED);
 	}
 
 	public class MusicPlayerServiceBinder extends Binder {
@@ -392,7 +388,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			States.musicPlayerState = MUSIC_PLAYING;
 		}
 
-		UIController.getInstance().updateUI(MUSIC_NEW_SONG);
+		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			Song song = getCurrentSong();
 			new playNewSongBackground().execute(song);
@@ -460,9 +456,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @param iconID
 	 *            : the id of icon
 	 */
-	private void updateNotification() throws NullPointerException {
-
+	private void updateNotification() {
+		String title = "";
+		String subTitle = "";
 		Song song = getCurrentSong();
+		if (song != null) {
+			title = song.getTitle();
+			subTitle = song.getArtist();
+		}
 		/**
 		 * Big view
 		 */
@@ -477,8 +478,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				createPendingIntent(NOTI_ACTION_NEXT));
 		bigView.setOnClickPendingIntent(R.id.noti_cancel,
 				createPendingIntent(NOTI_ACTION_CANCEL));
-		bigView.setTextViewText(R.id.noti_title, song.getTitle());
-		bigView.setTextViewText(R.id.noti_content, song.getArtist());
+
+		bigView.setTextViewText(R.id.noti_title, title);
+		bigView.setTextViewText(R.id.noti_content, subTitle);
 
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			bigView.setImageViewResource(R.id.noti_play_pause,
@@ -503,8 +505,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				createPendingIntent(NOTI_ACTION_PLAY_PAUSE));
 		smallView.setOnClickPendingIntent(R.id.noti_cancel,
 				createPendingIntent(NOTI_ACTION_CANCEL));
-		smallView.setTextViewText(R.id.noti_title, song.getTitle());
-		smallView.setTextViewText(R.id.noti_content, song.getArtist());
+		smallView.setTextViewText(R.id.noti_title, title);
+		smallView.setTextViewText(R.id.noti_content, subTitle);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			smallView.setImageViewResource(R.id.noti_play_pause,
 					R.drawable.ic_media_pause);
@@ -672,7 +674,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void setShuffle() {
 		// TODO Auto-generated method stub
 		isShuffle = !isShuffle;
-		UIController.getInstance().updateUI(-1);
+		UIController.getInstance().updateUiWhilePlayingMusic(-1);
 
 	}
 
@@ -693,7 +695,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void changeLoopState() {
 		loopState++;
 		loopState = loopState % 3;
-		UIController.getInstance().updateUI(-1);
+		UIController.getInstance().updateUiWhilePlayingMusic(-1);
 	}
 
 	/**
@@ -768,7 +770,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void release() {
 		// TODO Auto-generated method stub
 		States.musicPlayerState = MUSIC_STOPPED;
-		UIController.getInstance().updateUI(MUSIC_STOPPED);
+		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 
 		cancelNoti();
 		mediaPlayer.stop();
@@ -793,14 +795,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private void computeNextSong() {
 		int nextPosition;
 		int size = songQueue.size();
-		if (size != 0) {
+		if (size > 2) {
 			if (isShuffle) {
 				// TODO Auto-generated method stub
 				Random random = new Random(System.currentTimeMillis());
 				size = songQueue.size();
 
 				nextPosition = currentSongPosition
-						+ (Math.abs(random.nextInt()) % size) - 1;
+						+ (Math.abs(random.nextInt()) % (size - 1)) + 1;
 				nextPosition = nextPosition % size;
 
 			} else {
@@ -812,7 +814,15 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 			nextSongId = songQueue.get(nextPosition).getId();
 		} else {
-			nextSongId = "";
+			if (size == 2) {
+				nextSongId = songQueue.get(currentSongPosition + 1).getId();
+			}
+			if (size == 1) {
+				nextSongId = getCurrentSongId();
+			}
+			if (size == 0) {
+				nextSongId = "";
+			}
 		}
 	}
 
@@ -834,7 +844,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 		}
 
-		UIController.getInstance().updateUI(QUEUE_CHANGED);
+		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 	}
 
 	public int getQueueSize() {
@@ -849,7 +859,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		songQueue.add(song);
 		currentSongPosition = 0;
 		computeNextSong();
-		UIController.getInstance().updateUI(QUEUE_CHANGED);
+		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 
 	}
 }

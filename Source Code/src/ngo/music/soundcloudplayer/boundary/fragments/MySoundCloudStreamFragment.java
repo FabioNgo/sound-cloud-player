@@ -1,4 +1,4 @@
-package ngo.music.soundcloudplayer.boundary;
+package ngo.music.soundcloudplayer.boundary.fragments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import ngo.music.soundcloudplayer.Adapters.MyStreamAdapter;
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;

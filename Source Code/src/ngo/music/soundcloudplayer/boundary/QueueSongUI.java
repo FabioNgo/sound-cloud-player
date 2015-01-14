@@ -6,6 +6,7 @@ import java.util.Random;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
+import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;

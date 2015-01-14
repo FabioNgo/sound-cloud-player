@@ -1,4 +1,4 @@
-package ngo.music.soundcloudplayer.boundary;
+package ngo.music.soundcloudplayer.boundary.fragments;
 
 import android.support.v4.app.Fragment;
 

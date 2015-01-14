@@ -5,7 +5,7 @@ import java.util.List;
 
 import ngo.music.soundcloudplayer.Adapters.MyStreamAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.boundary.ListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
