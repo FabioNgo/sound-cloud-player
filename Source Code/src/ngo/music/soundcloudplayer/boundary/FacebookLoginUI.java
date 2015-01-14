@@ -23,7 +23,9 @@ import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.Inflater;
+
 import org.json.JSONException;
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.CloudAPI;
@@ -74,25 +76,7 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		
 		v = inflater.inflate(R.layout.facebook_login_ui, null);
 		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, null);
-		WebView webView = (WebView) v.findViewById(R.id.facebook_login_ui);
-		System.out.println ("URI = " + REDIRECT_URI.toString());
-		webView.setWebViewClient(new WebViewClient() {
-            @Override
-            public boolean shouldOverrideUrlLoading(final WebView view, String url) {
-                if (url.contains(REDIRECT_URI.toString())) {
-                    Uri result = Uri.parse(url);
-                    String error = result.getQueryParameter("error");
-                    String code = result.getQueryParameter("code");
-                    System.out.println ("ERROR: " + error);
-                    System.out.println ("CODE: " + code);
-                }
-                return true;
-            }
-        });
-	//	webView = (WebView) rootView.findViewById(R.id.webView);
-		webView.setPadding(0, 0, 0, 0);
-		webView.getSettings().setJavaScriptEnabled(true);
-		webView.loadUrl("http://google.com");
+		
 //		new startServerBackground().execute();
 //		https://soundcloud.com/connect?
 //		client_id=b45b1aa10f1ac2941910a7f0d10f8e28
@@ -150,7 +134,7 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			System.out.println ("AAAA");
+			
 	        String link = null;
 			URI uri = wrapper.authorizationCodeUrl(Endpoints.FACEBOOK_CONNECT, Token.SCOPE_NON_EXPIRING, CloudAPI.POPUP);
 			 link = uri.toString();
@@ -164,10 +148,14 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			
-			//webView.setWebChromeClient(new MyWebViewClient());
-			//webView.setWebViewClient(new WebViewClient());
-			
-			// MusicPlayerMainActivity.isExplore = true;
+			WebView webView = (WebView) v.findViewById(R.id.facebook_login_ui);
+			System.out.println (result);
+			webView.setWebViewClient(new MyBrowser());
+		//	webView = (WebView) rootView.findViewById(R.id.webView);
+			//webView.
+			webView.setPadding(0, 0, 0, 0);
+			webView.getSettings().setJavaScriptEnabled(true);
+			webView.loadUrl(result);
 			
 				new retriveUserBackground().execute(result);
 				//soundCloudUserController.setResponseString(stringResponse);
@@ -209,5 +197,13 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		}
 		
 	}
+	
+	private class MyBrowser extends WebViewClient {
+		   @Override
+		   public boolean shouldOverrideUrlLoading(WebView view, String url) {
+		      view.loadUrl(url);
+		      return true;
+		   }
+		}
 	
 }
