@@ -19,21 +19,15 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class OfflineSongsFragment extends ListContentFragment implements OnRefreshListener{
-	public static OfflineSongsFragment instance = null;
+	
 
-	ListView songsList;
+	
 	public OfflineSongsFragment() {
 		// TODO Auto-generated constructor stub
 		super();
-		instance = this;
+		adapter = OfflineSongAdapter.getInstance();
 	}
-	public static OfflineSongsFragment getInstance() {
-		// TODO Auto-generated method stub
-		if (instance == null) {
-			instance = new OfflineSongsFragment();
-		}
-		return instance;
-	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,25 +36,13 @@ public class OfflineSongsFragment extends ListContentFragment implements OnRefre
 		rootView = inflater.inflate(R.layout.refresh_list_view, container, false);
 		swipeRefreshLayoutId = R.id.songs_swipe_refresh;
 		iniSwipeRefreshLayout();
-		songsList = (ListView) rootView.findViewById(R.id.songs_list);
-		UIController.getInstance().addListContentFragements(instance);
+		listView = (ListView) rootView.findViewById(R.id.items_list);
+		UIController.getInstance().addListContentFragements(this);
 
 		return rootView;
 	}
 
-	@Override
-	public void load() {
-
-		// TODO Auto-generated method stub
-		if (adapter == null) {
-			adapter = OfflineSongAdapter.getInstance();
-		}
-
-		UIController.getInstance().addAdapter(adapter);
-		songsList.setAdapter((ListAdapter) adapter);
-
-		songsList.setOnItemClickListener(this);
-	}
+	
 	@Override
 	public void onRefresh() {
 		// TODO Auto-generated method stub
@@ -70,7 +52,7 @@ public class OfflineSongsFragment extends ListContentFragment implements OnRefre
 	protected void initiateRefresh() {
 		// TODO Auto-generated method stub
 		if (mSwipeRefreshLayout != null) {
-			new UpdtateNewSongBackgroundTask(mSwipeRefreshLayout).execute(songsList);
+			new UpdtateNewSongBackgroundTask(mSwipeRefreshLayout).execute(listView);
 		}
 	}
 

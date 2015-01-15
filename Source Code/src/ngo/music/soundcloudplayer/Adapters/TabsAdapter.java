@@ -45,7 +45,8 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		
 		case 2:
 			return new OfflineSongsFragment();
-			
+		case 3:
+			return new Fragment();
 		case 6:
 			return new SoundCloudFollowingFragment();
 		

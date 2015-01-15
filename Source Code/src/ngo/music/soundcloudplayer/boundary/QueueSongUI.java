@@ -31,6 +31,7 @@ public class QueueSongUI extends ListContentFragment {
 	public QueueSongUI() {
 		// TODO Auto-generated constructor stub
 		instance = this;
+		adapter = QueueSongAdapter.getInstance();
 	}
 
 	public static QueueSongUI getInstance() {
@@ -95,7 +96,7 @@ public class QueueSongUI extends ListContentFragment {
 		toolbar.setTitle("Playing Queue");
 		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance().getQueueSize())+" songs");
 
-		final QueueSongAdapter adapter = QueueSongAdapter.getInstance();
+		
 
 		UIController.getInstance().addAdapter(adapter);
 		queueView.setAdapter(adapter);

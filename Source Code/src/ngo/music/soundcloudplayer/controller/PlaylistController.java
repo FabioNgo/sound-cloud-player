@@ -18,12 +18,14 @@ import android.util.Log;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class PlaylistController implements Constants {
+public class PlaylistController implements Constants.Data, Constants {
 
 	private static PlaylistController instance = null;
 	private static final String filename = "playlists";
@@ -31,15 +33,19 @@ public class PlaylistController implements Constants {
 
 	private PlaylistController() {
 		// TODO Auto-generated constructor stub
-		playlists = new ArrayMap<String, ArrayList<Song>>();
+//		playlists = new ArrayMap<String, ArrayList<Song>>();
+		playlists = getPlaylists();
 	}
 
 	public static PlaylistController getInstance() {
 		if (instance == null) {
-			return new PlaylistController();
-		} else {
-			return instance;
+			instance = new PlaylistController();
 		}
+		while(instance.playlists ==null){
+			
+		}
+		return instance;
+
 	}
 
 	/**
@@ -67,7 +73,6 @@ public class PlaylistController implements Constants {
 			JsonReader reader = new JsonReader(
 					new InputStreamReader(fileReader));
 
-			
 			reader.beginArray();
 
 			while (reader.hasNext()) {
@@ -160,19 +165,32 @@ public class PlaylistController implements Constants {
 
 		return stream;
 	}
-	public void createPlaylist(String name) throws Exception{
-		if(playlists.containsKey(name)){
+
+	public void createPlaylist(String name) throws Exception {
+		if (playlists.containsKey(name)) {
 			throw new Exception("A playlist with the same name is existed");
 		}
+		if (name.equals("")) {
+			throw new Exception("A playlist cannot be created without a name");
+		}
 		playlists.put(name, new ArrayList<Song>());
+		UIController.getInstance().updateUiWhenDataChanged(PLAYLIST_CHANGED);
 	}
-	public void addSongToPlaylist(String playlistName, Song song) throws Exception{
-		if(!playlists.containsKey(playlistName)){
+
+	public void addSongsToPlaylist(String playlistName, ArrayList<Song> songs)
+			throws Exception {
+		if (!playlists.containsKey(playlistName)) {
 			throw new Exception("No playlist with the same name is existed");
 		}
-		playlists.get(playlistName).add(song);
+		for (Song song : songs) {
+			playlists.get(playlistName).add(song);	
+		}
+		BasicFunctions.makeToastTake("Songs were added to playlist \""+playlistName+"\"", MusicPlayerMainActivity.getActivity());
+		storePlaylist();
+		
 	}
-	public ArrayList<String> getPlaylistsName(){
+
+	public ArrayList<String> getPlaylistsName() {
 		ArrayList<String> playlistNames = new ArrayList<String>();
 		for (String string : playlists.keySet()) {
 			playlistNames.add(string);
@@ -180,7 +198,8 @@ public class PlaylistController implements Constants {
 		Collections.sort(playlistNames);
 		return playlistNames;
 	}
-	public ArrayList<Song> getSongFromPlaylist(String playlist){
+
+	public ArrayList<Song> getSongFromPlaylist(String playlist) {
 		return playlists.get(playlist);
 	}
 

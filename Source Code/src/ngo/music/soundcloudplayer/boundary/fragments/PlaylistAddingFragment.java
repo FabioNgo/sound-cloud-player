@@ -3,7 +3,9 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -12,22 +14,32 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class PlaylistAddingFragment extends DialogFragment {
-
-	public PlaylistAddingFragment() {
+	ArrayList<Song> songs;
+	private PlaylistAddingFragment instance;
+	public PlaylistAddingFragment(ArrayList<Song> songs) {
 		// TODO Auto-generated constructor stub
+		this.songs = songs;
+		instance = this;
 	}
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -41,12 +53,32 @@ public class PlaylistAddingFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		final View v = inflater.inflate(R.layout.playlist_adding_layout, null);
-		Toolbar toolbar = (Toolbar)v.findViewById(R.id.playlist_adding_toolbar);
+		final View rootView = inflater.inflate(R.layout.playlist_adding_layout, null);
+		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.playlist_adding_toolbar);
 		toolbar.setTitle("Add to playlist");
 		toolbar.inflateMenu(R.menu.add_to_playlist_menu);
-		RelativeLayout newPlaylistGroup = (RelativeLayout)v.findViewById(R.id.new_playlist_group);
+		RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
+		
 		newPlaylistGroup.setVisibility(View.GONE);
+		final ListView listPlaylist = (ListView)rootView.findViewById(R.id.playlist_adding_list);
+		listPlaylist.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View parentView, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				String playlistName = SimplePlaylistAdapter.getInstance().getItem(position);
+				try {
+					PlaylistController.getInstance().addSongsToPlaylist(playlistName, songs);
+					instance.dismiss();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Log.e("add song to playlist",e.getMessage());
+				}
+				
+			}
+		});
+		listPlaylist.setAdapter(SimplePlaylistAdapter.getInstance());
 		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			
 			@Override
@@ -54,13 +86,30 @@ public class PlaylistAddingFragment extends DialogFragment {
 				// TODO Auto-generated method stub
 				switch (arg0.getItemId()) {
 				case R.id.new_playlist:
-					BasicFunctions.makeToastTake("Asdasd", getActivity());
-					RelativeLayout newPlaylistGroup = (RelativeLayout)v.findViewById(R.id.new_playlist_group);
+					final RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
 					newPlaylistGroup.setVisibility(View.VISIBLE);
-					EditText editText = (EditText)v.findViewById(R.id.new_playlist_edit_text);
-					editText.requestFocus();
-					getDialog().getWindow().setSoftInputMode(
-			                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+					final EditText editText = (EditText)rootView.findViewById(R.id.new_playlist_edit_text);
+					final ImageView newPlaylistBtn = (ImageView)rootView.findViewById(R.id.new_playlist_submit);
+					
+					
+					newPlaylistBtn.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View view) {
+							// TODO Auto-generated method stub
+							
+							try {
+								PlaylistController.getInstance().createPlaylist(editText.getText().toString());
+								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								TextView errorText  = (TextView)rootView.findViewById(R.id.new_playlist_error_text);
+								errorText.setVisibility(View.VISIBLE);
+								errorText.setText(e.getMessage());
+							}
+							newPlaylistGroup.setVisibility(View.GONE);
+						}
+					});			
 					break;
 
 				default:
@@ -69,35 +118,7 @@ public class PlaylistAddingFragment extends DialogFragment {
 				return false;
 			}
 		});
-		ListView listPlaylist = (ListView)v.findViewById(R.id.playlist_adding_list);
-		listPlaylist.setAdapter(new PlaylistAdapter(getActivity(), R.layout.single_playilist_list_adding));
-		return v;
+		return rootView;
 	}
-	private class PlaylistAdapter extends ArrayAdapter<String>{
-		ArrayList<String> playlist = new ArrayList<String>();
-		public PlaylistAdapter(Context context, int resource) {
-			super(context, resource);
-			// TODO Auto-generated constructor stub
-			playlist = PlaylistController.getInstance().getPlaylistsName();
-		}
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
-			View v = convertView;
-			if (v == null) {
-				LayoutInflater inflater = (LayoutInflater) getContext()
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				v = inflater.inflate(R.layout.song_in_list, null);
-
-			}
-
-			setLayoutInformation(position, v);
-			return v;
-		}
-		private void setLayoutInformation(int position, View v) {
-			// TODO Auto-generated method stub
-			TextView tv = (TextView)v.findViewById(R.id.single_playlist_title);
-			tv.setText(playlist.get(position));
-		}
-	}
+	
 }

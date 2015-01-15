@@ -25,6 +25,7 @@
 			android:layout_height="40dp"
 			android:layout_toStartOf="@+id/new_playlist_submit"
 			android:inputType="text"
+			android:text=""
 			android:textSize="20dp"/>
 
 		<ImageView
@@ -35,6 +36,19 @@
 			
 			android:layout_alignParentEnd="true"
 			android:src="@drawable/ic_launcher"/>
+		<TextView
+			android:id="@+id/new_playlist_error_text"
+			android:padding="5dp"
+			android:layout_below="@+id/new_playlist_edit_text"
+			android:layout_toStartOf="@+id/new_playlist_submit"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textSize="20dp"
+			android:layout_centerHorizontal="true"
+			android:textStyle="bold"
+			android:textColor="#D32F2F"
+			android:visibility="gone" 
+			/>
 	</RelativeLayout>
 
 	<ListView

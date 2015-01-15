@@ -5,7 +5,9 @@ import java.util.concurrent.TimeUnit;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.Adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
+import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.boundary.QueueSongUI;
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
@@ -15,8 +17,10 @@ import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
+import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
@@ -80,7 +84,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		 * Remove old one
 		 */
 		for (int i = 0; i < listContentFragments.size(); i++) {
-			if (listContentFragments.get(i).equals(input)) {
+			if (listContentFragments.get(i).getClass().equals(input.getClass())) {
 				listContentFragments.remove(i);
 				i--;
 			}
@@ -128,9 +132,15 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	 * @param adapter
 	 */
 	public void addAdapter(ArrayAdapter<?> adapter) {
-		if (!adapters.contains(adapter)) {
-			adapters.add(adapter);
+		for (int i = 0; i < adapters.size(); i++) {
+			if (adapters.get(i).getClass().equals(adapter.getClass())) {
+				adapters.remove(i);
+				i--;
+			}
 		}
+
+		adapters.add(adapter);
+
 	}
 
 	/**
@@ -370,6 +380,9 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			QueueSongAdapter.getInstance().notifyDataSetChanged();
 			QueueSongUI.getInstance().update();
 			break;
+		case PLAYLIST_CHANGED:
+			SimplePlaylistAdapter.getInstance().updatePlaylist();
+			// SimplePlaylistAdapter.getInstance().notifyDataSetChanged();
 		default:
 
 		}

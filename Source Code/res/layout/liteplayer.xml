@@ -52,7 +52,7 @@
 		ProgressWheel:barLength="60dp"
 		ProgressWheel:barWidth="6dp"
 		ProgressWheel:rimColor="@color/primary_light"
-		ProgressWheel:rimWidth="7dp"
+		ProgressWheel:rimWidth="6dp"
 		ProgressWheel:textColor="#222"
 		ProgressWheel:textSize="14sp"/>
 
