@@ -45,7 +45,7 @@ public class MySoundCloudStreamFragment extends Fragment implements Constants{
 		 */
 	
 		rootView = inflater.inflate(R.layout.list_view, container,false);
-		songsList = (ListView) rootView.findViewById(R.id.songs_list);
+		songsList = (ListView) rootView.findViewById(R.id.items_list);
 		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 //		Token t = soundCloudUserController.getToken();
 //		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);

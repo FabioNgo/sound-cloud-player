@@ -51,7 +51,7 @@ public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
 		 * Initialize View
 		 */
 		rootView = inflater.inflate(R.layout.list_view, container,false);
-		songsList = (ListView) rootView.findViewById(R.id.songs_list);
+		songsList = (ListView) rootView.findViewById(R.id.items_list);
 		
 		
 		

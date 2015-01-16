@@ -42,7 +42,7 @@ public class ArtistsFragment extends ListContentFragment implements OnRefreshLis
 		rootView = inflater.inflate(R.layout.refresh_list_view, container, false);
 		swipeRefreshLayoutId = R.id.songs_swipe_refresh;
 		iniSwipeRefreshLayout();
-		songsList = (ListView) rootView.findViewById(R.id.songs_list);
+		songsList = (ListView) rootView.findViewById(R.id.items_list);
 		UIController.getInstance().addListContentFragements(instance);
 
 		return rootView;

@@ -58,12 +58,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 */
 	protected abstract ArrayList<Song> getItemsFromCat(String cat);
 
-	public static CompositionListAdapter instance = null;
-
-	public static CompositionListAdapter getInstance() {
-
-		return instance;
-	}
+	
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -147,6 +142,12 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		// popup.show(); //showing popup menu
 		// }
 		// });
+		/**
+		 * Set cat title
+		 * 
+		 */
+		TextView catText = (TextView) v.findViewById(R.id.composition_view_cat);
+		catText.setText(cat);
 		/*
 		 * Set song title1
 		 */

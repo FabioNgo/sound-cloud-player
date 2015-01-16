@@ -5,6 +5,7 @@ import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.fragments.MyFavoriteSoundCloudFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.MySoundCloudStreamFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.SoundCloudFollowerFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.SoundCloudFollowingFragment;
 import android.support.v4.app.Fragment;
@@ -46,7 +47,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		case 2:
 			return new OfflineSongsFragment();
 		case 3:
-			return new Fragment();
+			return new PlaylistFragment();
 		case 6:
 			return new SoundCloudFollowingFragment();
 		

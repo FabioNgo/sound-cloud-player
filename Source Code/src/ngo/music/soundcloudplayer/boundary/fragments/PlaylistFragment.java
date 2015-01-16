@@ -15,13 +15,15 @@ public class PlaylistFragment extends ListContentFragment {
 		// TODO Auto-generated constructor stub
 		super();
 		adapter = PlaylistAdapter.getInstance();
+		
+		
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		rootView = inflater.inflate(R.layout.refresh_list_view, container,
+		rootView = inflater.inflate(R.layout.list_view, container,
 				false);
 		
 

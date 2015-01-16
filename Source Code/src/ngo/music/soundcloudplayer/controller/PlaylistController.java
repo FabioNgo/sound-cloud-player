@@ -33,7 +33,7 @@ public class PlaylistController implements Constants.Data, Constants {
 
 	private PlaylistController() {
 		// TODO Auto-generated constructor stub
-//		playlists = new ArrayMap<String, ArrayList<Song>>();
+		// playlists = new ArrayMap<String, ArrayList<Song>>();
 		playlists = getPlaylists();
 	}
 
@@ -41,8 +41,8 @@ public class PlaylistController implements Constants.Data, Constants {
 		if (instance == null) {
 			instance = new PlaylistController();
 		}
-		while(instance.playlists ==null){
-			
+		while (instance.playlists == null) {
+
 		}
 		return instance;
 
@@ -55,9 +55,9 @@ public class PlaylistController implements Constants.Data, Constants {
 	 */
 	public ArrayMap<String, ArrayList<Song>> getPlaylists() {
 		ArrayMap<String, ArrayList<Song>> playlists = new ArrayMap<String, ArrayList<Song>>();
-		File file = new File(MusicPlayerService.getInstance()
-				.getApplicationContext()
-				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
+		File file = new File(MusicPlayerMainActivity.getActivity()
+
+		.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
 		if (!file.exists()) {
 			try {
 				file.createNewFile();
@@ -79,13 +79,15 @@ public class PlaylistController implements Constants.Data, Constants {
 				reader.beginObject();
 				String playlist = reader.nextName();
 				ArrayList<Song> songs = new ArrayList<Song>();
-				reader.beginArray();
+				reader.beginObject();
 				while (reader.hasNext()) {
-					String id = reader.nextString();
+
+					String id = reader.nextName();
+					String value = reader.nextString();
 					songs.add(SongController.getInstance().getSong(id));
 
 				}
-				reader.endArray();
+				reader.endObject();
 				playlists.put(playlist, songs);
 				reader.endObject();
 			}
@@ -129,15 +131,15 @@ public class PlaylistController implements Constants.Data, Constants {
 			ArrayList<Song> songs = playlists.get(playlist);
 			jsonWriter.beginObject();
 			jsonWriter.name(playlist);
-			jsonWriter.beginArray();
-			for (Song song : songs) {
-				jsonWriter.beginObject();
-				jsonWriter.name(song.getId());
+			jsonWriter.beginObject();
 
-				jsonWriter.endObject();
+			for (Song song : songs) {
+
+				jsonWriter.name(song.getId());
+				jsonWriter.value("");
 
 			}
-			jsonWriter.endArray();
+			jsonWriter.endObject();
 			jsonWriter.endObject();
 		}
 		jsonWriter.endArray();
@@ -183,11 +185,12 @@ public class PlaylistController implements Constants.Data, Constants {
 			throw new Exception("No playlist with the same name is existed");
 		}
 		for (Song song : songs) {
-			playlists.get(playlistName).add(song);	
+			playlists.get(playlistName).add(song);
 		}
-		BasicFunctions.makeToastTake("Songs were added to playlist \""+playlistName+"\"", MusicPlayerMainActivity.getActivity());
+		BasicFunctions.makeToastTake("Songs were added to playlist \""
+				+ playlistName + "\"", MusicPlayerMainActivity.getActivity());
 		storePlaylist();
-		
+
 	}
 
 	public ArrayList<String> getPlaylistsName() {

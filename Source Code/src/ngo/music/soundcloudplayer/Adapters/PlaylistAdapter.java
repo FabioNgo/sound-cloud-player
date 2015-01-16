@@ -2,17 +2,29 @@ package ngo.music.soundcloudplayer.Adapters;
 
 import java.util.ArrayList;
 
+import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
 
 public class PlaylistAdapter extends CompositionListAdapter {
 
-	
+	public static PlaylistAdapter instance = null;
 
-	public PlaylistAdapter(Context context, int resource) {
+	public static PlaylistAdapter getInstance() {
+		if(instance==null){
+			instance  = createNewInstance();
+		}
+		return instance;
+		
+	}
+
+	private PlaylistAdapter(Context context, int resource) {
 		super(context, resource);
 		// TODO Auto-generated constructor stub
+		instance = this;
+		
 	}
 
 	@Override
@@ -27,5 +39,10 @@ public class PlaylistAdapter extends CompositionListAdapter {
 		// TODO Auto-generated method stub
 		return PlaylistController.getInstance().getSongFromPlaylist(cat);
 	}
-
+	public static PlaylistAdapter createNewInstance() {
+		// TODO Auto-generated method stub
+		instance = new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
+				.getApplicationContext(), R.layout.list_view);
+		return instance;
+	}
 }
