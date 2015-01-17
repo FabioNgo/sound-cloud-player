@@ -31,7 +31,8 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 
 	Context context;
 	int resource;
-	private ArrayList<String> categories;
+	protected ArrayList<String> categories;
+	CompositionViewHolder holder = null;
 
 	public CompositionListAdapter(Context context, int resource) {
 		super(context, resource);
@@ -63,15 +64,21 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
+
 		v = convertView;
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.composition_view, null);
-
+			v = inflater.inflate(R.layout.composition_view, parent, false);
+			
+			holder = new CompositionViewHolder(NUM_ITEM_IN_ONE_CATEGORY,v);
+			v.setTag(holder);
+		}else{
+			holder = (CompositionViewHolder) v.getTag();
 		}
+		
+		setLayoutInformation(holder,categories.get(position), v);
 
-		setLayoutInformation(position, v);
 		return v;
 	}
 
@@ -79,141 +86,66 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 * @param position
 	 * @param v
 	 */
-	private void setLayoutInformation(int position, View v) {
-		String cat = categories.get(position);
-		ArrayList<Song> songs = getItemsFromCat(cat);
-		String[] titles = { "1. ", "2. ", "3. ", "4. ", "5. " };
-		// final Song song = songs.get(position);
-		/**
-		 * Set avatar for song
-		 */
-		// ImageView avatar = (ImageView)
-		// v.findViewById(R.id.lite_player_image);
-		//
-		// ImageLoader mImageLoader =
-		// AppController.getInstance().getImageLoader();
-		// avatar.setMinimumHeight(MainActivity.screenHeight/5);
-		// avatar.setMinimumWidth(MainActivity.screenHeight/5);
+	public void setLayoutInformation(CompositionViewHolder holder,String catString, View v) {
+		
+		String[] catData = getSongsTitleFromCat(catString);
 
-		// avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
-		/**
-		 * set menu
-		 */
-		// final ImageView menu = (ImageView) v.findViewById(R.id.song_menu);
-		// menu.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // TODO Auto-generated method stub
-		// PopupMenu popup = new
-		// PopupMenu(MusicPlayerMainActivity.getActivity(), menu);
-		// //Inflating the Popup using xml file
-		// popup.getMenuInflater()
-		// .inflate(R.menu.song_list_menu, popup.getMenu());
-		//
-		// //registering popup with OnMenuItemClickListener
-		// popup.setOnMenuItemClickListener(new
-		// PopupMenu.OnMenuItemClickListener() {
-		//
-		//
-		// @Override
-		// public boolean onMenuItemClick(MenuItem arg0) {
-		// // TODO Auto-generated method stub
-		// switch (arg0.getItemId()) {
-		// case R.id.list_addQueue:
-		// MusicPlayerService.getInstance().addSongToQueue(song);
-		// break;
-		// case R.id.list_playNext:
-		// MusicPlayerService.getInstance().addToNext(song);
-		// break;
-		// case R.id.list_addToPlaylist:
-		// break;
-		// case R.id.list_delete:
-		// SongController.getInstance().deleteSong(song);
-		// break;
-		// default:
-		// break;
-		// }
-		//
-		// return false;
-		// }
-		// });
-		//
-		// popup.show(); //showing popup menu
-		// }
-		// });
-		/**
-		 * Set cat title
-		 * 
-		 */
-		TextView catText = (TextView) v.findViewById(R.id.composition_view_cat);
-		catText.setText(cat);
 		/*
-		 * Set song title1
+		 * Set song titles
 		 */
-		TextView item1 = (TextView) v.findViewById(R.id.item_1);
+		for (int i = 0; i < holder.items.length; i++) {
+			if(i==0){
+				holder.items[i].setText(catData[0]); //playlist name
+			}else{
 
-		try {
-			titles[0] += songs.get(0).getTitle();
-		} catch (Exception e) {
-
+				String content = ""+i+". "+catData[i];
+				holder.items[i].setText(content);
+			}
+			
 		}
-		item1.setText(titles[0]);
-		/*
-		 * Set song title2
-		 */
-		TextView item2 = (TextView) v.findViewById(R.id.item_2);
-
-		try {
-			titles[1] += songs.get(1).getTitle();
-		} catch (Exception e) {
-
-		}
-		item2.setText(titles[1]);
-		/*
-		 * Set song title3
-		 */
-		TextView item3 = (TextView) v.findViewById(R.id.item_3);
-
-		try {
-			titles[2] += songs.get(2).getTitle();
-		} catch (Exception e) {
-
-		}
-		item3.setText(titles[2]);
-		/*
-		 * Set song title4
-		 */
-		TextView item4 = (TextView) v.findViewById(R.id.item_4);
-
-		try {
-			titles[3] += songs.get(3).getTitle();
-		} catch (Exception e) {
-
-		}
-		item4.setText(titles[3]);
-		/*
-		 * Set song title1
-		 */
-		TextView item5 = (TextView) v.findViewById(R.id.item_5);
-
-		try {
-			titles[4] += songs.get(4).getTitle();
-		} catch (Exception e) {
-
-		}
-		item5.setText(titles[4]);
+		
 
 	}
 
+	private String[] getSongsTitleFromCat(String catString) {
+		// TODO Auto-generated method stub
+		String[] temp = catString.split(String.valueOf('\1'));
+		String[] result = new String[holder.items.length];
+		for(int i=0;i<result.length;i++){
+			result[i] = "";
+			if(i<temp.length){
+				result[i]=temp[i];
+			}
+		}
+		return result;
+	}
+	/**
+	 * get only title of category
+	 */
 	@Override
 	public String getItem(int position) {
+		String[] temp = categories.get(position).split(String.valueOf('\1'));
+		return temp[0];
+	}
+	/**
+	 * get title and content of a category
+	 */
+	public String getWholeItem(int position){
 		return categories.get(position);
 	}
-
 	@Override
 	public int getCount() {
 		return categories.size();
 	}
-
+	public void update(){
+		categories = getCategories();
+		this.notifyDataSetChanged();
+	}
+	@Override
+	public boolean hasStableIds() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+	
+	
 }

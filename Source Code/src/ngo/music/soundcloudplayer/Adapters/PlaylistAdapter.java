@@ -13,25 +13,25 @@ public class PlaylistAdapter extends CompositionListAdapter {
 	public static PlaylistAdapter instance = null;
 
 	public static PlaylistAdapter getInstance() {
-		if(instance==null){
-			instance  = createNewInstance();
+		if (instance == null) {
+			instance = createNewInstance();
 		}
 		return instance;
-		
+
 	}
 
 	private PlaylistAdapter(Context context, int resource) {
 		super(context, resource);
 		// TODO Auto-generated constructor stub
 		instance = this;
-		
+
 	}
 
 	@Override
 	protected ArrayList<String> getCategories() {
 		// TODO Auto-generated method stub
-		return PlaylistController.getInstance().getPlaylistsName();
-		
+		return PlaylistController.getInstance().getPlaylistsString();
+
 	}
 
 	@Override
@@ -39,10 +39,15 @@ public class PlaylistAdapter extends CompositionListAdapter {
 		// TODO Auto-generated method stub
 		return PlaylistController.getInstance().getSongFromPlaylist(cat);
 	}
+
 	public static PlaylistAdapter createNewInstance() {
 		// TODO Auto-generated method stub
 		instance = new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
 				.getApplicationContext(), R.layout.list_view);
 		return instance;
 	}
+	
+	
+	
+
 }

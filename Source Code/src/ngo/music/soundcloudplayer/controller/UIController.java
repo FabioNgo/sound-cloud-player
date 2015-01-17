@@ -11,6 +11,7 @@ import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.boundary.QueueSongUI;
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.States;
@@ -382,7 +383,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			break;
 		case PLAYLIST_CHANGED:
 			SimplePlaylistAdapter.getInstance().updatePlaylist();
-			// SimplePlaylistAdapter.getInstance().notifyDataSetChanged();
+			PlaylistFragment.getInstance().update();
 		default:
 
 		}

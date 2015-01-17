@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import android.content.Context;
@@ -29,7 +30,7 @@ public class PlaylistController implements Constants.Data, Constants {
 
 	private static PlaylistController instance = null;
 	private static final String filename = "playlists";
-	ArrayMap<String, ArrayList<Song>> playlists;
+	LinkedHashMap<String, ArrayList<Song>> playlists;
 
 	private PlaylistController() {
 		// TODO Auto-generated constructor stub
@@ -41,9 +42,7 @@ public class PlaylistController implements Constants.Data, Constants {
 		if (instance == null) {
 			instance = new PlaylistController();
 		}
-		while (instance.playlists == null) {
 
-		}
 		return instance;
 
 	}
@@ -53,8 +52,8 @@ public class PlaylistController implements Constants.Data, Constants {
 	 * 
 	 * @return
 	 */
-	public ArrayMap<String, ArrayList<Song>> getPlaylists() {
-		ArrayMap<String, ArrayList<Song>> playlists = new ArrayMap<String, ArrayList<Song>>();
+	public LinkedHashMap<String, ArrayList<Song>> getPlaylists() {
+		LinkedHashMap<String, ArrayList<Song>> playlists = new LinkedHashMap<String, ArrayList<Song>>();
 		File file = new File(MusicPlayerMainActivity.getActivity()
 
 		.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
@@ -65,7 +64,7 @@ public class PlaylistController implements Constants.Data, Constants {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			return null;
+			return playlists;
 		}
 
 		try {
@@ -123,12 +122,13 @@ public class PlaylistController implements Constants.Data, Constants {
 		jsonWriter.close();
 	}
 
-	private void writePlaylists(ArrayMap<String, ArrayList<Song>> playlists,
+	private void writePlaylists(
+			LinkedHashMap<String, ArrayList<Song>> playlists2,
 			JsonWriter jsonWriter) throws IOException {
 		// TODO Auto-generated method stub
 		jsonWriter.beginArray();
-		for (String playlist : playlists.keySet()) {
-			ArrayList<Song> songs = playlists.get(playlist);
+		for (String playlist : playlists2.keySet()) {
+			ArrayList<Song> songs = playlists2.get(playlist);
 			jsonWriter.beginObject();
 			jsonWriter.name(playlist);
 			jsonWriter.beginObject();
@@ -185,12 +185,15 @@ public class PlaylistController implements Constants.Data, Constants {
 			throw new Exception("No playlist with the same name is existed");
 		}
 		for (Song song : songs) {
-			playlists.get(playlistName).add(song);
+			ArrayList<Song> exsitedSongs = playlists.get(playlistName);
+			if (!exsitedSongs.contains(song)) {
+				exsitedSongs.add(song);
+			}
 		}
 		BasicFunctions.makeToastTake("Songs were added to playlist \""
 				+ playlistName + "\"", MusicPlayerMainActivity.getActivity());
 		storePlaylist();
-
+		UIController.getInstance().updateUiWhenDataChanged(PLAYLIST_CHANGED);
 	}
 
 	public ArrayList<String> getPlaylistsName() {
@@ -198,12 +201,32 @@ public class PlaylistController implements Constants.Data, Constants {
 		for (String string : playlists.keySet()) {
 			playlistNames.add(string);
 		}
-		Collections.sort(playlistNames);
 		return playlistNames;
 	}
 
 	public ArrayList<Song> getSongFromPlaylist(String playlist) {
 		return playlists.get(playlist);
+	}
+
+	/**
+	 * get playlist Name and songs Titles
+	 * 
+	 * @return
+	 */
+	public ArrayList<String> getPlaylistsString() {
+		// TODO Auto-generated method stub
+		ArrayList<String> playlistsString = new ArrayList<String>();
+		for (String string : playlists.keySet()) {
+			String temp = string;
+			ArrayList<Song> songs = getSongFromPlaylist(string);
+			for (Song song : songs) {
+				temp += "\1" + song.getTitle();
+			}
+
+			playlistsString.add(temp);
+		}
+		return playlistsString;
+
 	}
 
 }

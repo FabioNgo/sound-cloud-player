@@ -56,7 +56,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	private int loopState = 0;
 	private int explorecategory = -1;
-	private boolean isShuffle = false;
+	private boolean isShuffle = true;
 	private ArrayList<Song> songQueue = new ArrayList<Song>();
 	private Stack<String> stackSongplayed;
 	public MediaPlayer mediaPlayer = null;
@@ -354,6 +354,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			songQueue.addAll(queue);
 		}
 		currentSongPosition = position;
+		isShuffle = true;
 		playNewSong(true);
 
 	}
@@ -694,7 +695,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void changeLoopState() {
 		loopState++;
-		loopState = loopState % 3;
+		loopState = loopState % 2;
 		UIController.getInstance().updateUiWhilePlayingMusic(-1);
 	}
 
@@ -815,7 +816,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			nextSongId = songQueue.get(nextPosition).getId();
 		} else {
 			if (size == 2) {
-				nextSongId = songQueue.get(currentSongPosition + 1).getId();
+				nextSongId = songQueue.get((currentSongPosition + 1)%2).getId();
 			}
 			if (size == 1) {
 				nextSongId = getCurrentSongId();

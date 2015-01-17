@@ -2,6 +2,8 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 
 import java.util.ArrayList;
 
+import ngo.music.soundcloudplayer.Adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.Adapters.CompositionViewHolder;
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.PlaylistAdapter;
@@ -32,7 +34,7 @@ import android.widget.ListView;
  *
  */
 public abstract class ListContentFragment extends Fragment implements
-		Constants.MusicService, Constants.Appplication, OnItemClickListener {
+		Constants.MusicService,Constants.Categories, Constants.Appplication, OnItemClickListener {
 
 	protected SwipeRefreshLayout mSwipeRefreshLayout;
 	protected int swipeRefreshLayoutId = -1;
@@ -73,10 +75,29 @@ public abstract class ListContentFragment extends Fragment implements
 			if (!songs.isEmpty()) {
 				MusicPlayerService.getInstance().playNewSong(0, songs);
 			}else{
-				BasicFunctions.makeToastTake("No song to paly", MusicPlayerMainActivity.getActivity());
+				BasicFunctions.makeToastTake("No song to play", MusicPlayerMainActivity.getActivity());
 			}
 		}
 
+	}/**
+	 * Update UI when playlist change (Update Single exsited view in list View)
+	 */
+	public void update() {
+		CompositionListAdapter adapter = (CompositionListAdapter) listView.getAdapter();
+		adapter.update();
+		for (int i = 0; i <= listView.getLastVisiblePosition()
+				- listView.getFirstVisiblePosition(); i++) {
+			View v = listView.getChildAt(i);
+			if (v != null) {
+
+				CompositionViewHolder holder = new CompositionViewHolder(NUM_ITEM_IN_ONE_CATEGORY, v);
+
+				adapter.setLayoutInformation(
+						holder,
+						adapter.getWholeItem(i
+								+ listView.getFirstVisiblePosition()), v);
+			}
+		}
 	}
 
 }

@@ -157,9 +157,8 @@ public interface Constants {
 		/**
 		 * LOOP CONSTANTS
 		 */
-		int MODE_LOOP_NONE = 0;
-		int MODE_LOOP_ALL = 1;
-		int MODE_LOOP_ONE = 2;
+		int MODE_LOOP_ALL = 0;
+		int MODE_LOOP_ONE = 1;
 		/**
 		 * NOTIFICATION ACTION
 		 */
@@ -191,6 +190,7 @@ public interface Constants {
 	interface Categories{
 		int ARTIST = 0;
 		int PLAYLIST = 1;
+		int NUM_ITEM_IN_ONE_CATEGORY = 5;
 	}
 	interface SoundCloudExploreConstant{
 		int TRENDING_MUSIC = 0;

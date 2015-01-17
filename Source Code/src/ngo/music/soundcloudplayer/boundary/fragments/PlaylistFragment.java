@@ -10,22 +10,20 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 public class PlaylistFragment extends ListContentFragment {
+	private static PlaylistFragment instance;
 
 	public PlaylistFragment() {
 		// TODO Auto-generated constructor stub
 		super();
 		adapter = PlaylistAdapter.getInstance();
-		
-		
+		instance = this;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		rootView = inflater.inflate(R.layout.list_view, container,
-				false);
-		
+		rootView = inflater.inflate(R.layout.list_view, container, false);
 
 		listView = (ListView) rootView.findViewById(R.id.items_list);
 		UIController.getInstance().addListContentFragements(this);
@@ -34,5 +32,14 @@ public class PlaylistFragment extends ListContentFragment {
 
 	}
 
+	public static PlaylistFragment getInstance() {
+		// TODO Auto-generated method stub
+		if (instance == null) {
+			instance = new PlaylistFragment();
+		}
+		return instance;
+	}
+
+	
 
 }

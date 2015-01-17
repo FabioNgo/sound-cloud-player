@@ -53,7 +53,7 @@ public class PlaylistAddingFragment extends DialogFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		final View rootView = inflater.inflate(R.layout.playlist_adding_layout, null);
+		final View rootView = inflater.inflate(R.layout.playlist_adding_layout, container,false);
 		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.playlist_adding_toolbar);
 		toolbar.setTitle("Add to playlist");
 		toolbar.inflateMenu(R.menu.add_to_playlist_menu);
@@ -70,12 +70,14 @@ public class PlaylistAddingFragment extends DialogFragment {
 				String playlistName = SimplePlaylistAdapter.getInstance().getItem(position);
 				try {
 					PlaylistController.getInstance().addSongsToPlaylist(playlistName, songs);
-					instance.dismiss();
+					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					Log.e("add song to playlist",e.getMessage());
+					Log.e("add song to playlist",e.toString());
 				}
-				
+				finally{
+					instance.dismiss();
+				}
 			}
 		});
 		listPlaylist.setAdapter(SimplePlaylistAdapter.getInstance());
@@ -101,6 +103,7 @@ public class PlaylistAddingFragment extends DialogFragment {
 							try {
 								PlaylistController.getInstance().createPlaylist(editText.getText().toString());
 								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
+								
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								TextView errorText  = (TextView)rootView.findViewById(R.id.new_playlist_error_text);
@@ -120,5 +123,5 @@ public class PlaylistAddingFragment extends DialogFragment {
 		});
 		return rootView;
 	}
-	
+
 }
