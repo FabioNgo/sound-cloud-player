@@ -86,15 +86,14 @@
 	<RelativeLayout
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_below="@+id/song_info_field"
-		>
+		android:layout_below="@+id/song_info_field">
 
 		<com.todddavies.components.progressbar.ProgressWheel
 			android:id="@+id/full_player_progress_bar"
 			android:layout_width="150dp"
 			android:layout_height="150dp"
-			android:layout_centerVertical="true"
 			android:layout_centerHorizontal="true"
+			android:layout_centerVertical="true"
 			ProgressWheel:barColor="@color/primary_dark"
 			ProgressWheel:barLength="60dp"
 			ProgressWheel:barWidth="15dp"
@@ -105,9 +104,9 @@
 			android:id="@+id/full_player_current_time"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
 			android:layout_toStartOf="@+id/full_player_progress_bar"
 			android:text="00:00"
-			android:layout_centerVertical="true"
 			android:textAppearance="?android:attr/textAppearanceSmall"
 			android:textColor="@color/primary_text"/>
 

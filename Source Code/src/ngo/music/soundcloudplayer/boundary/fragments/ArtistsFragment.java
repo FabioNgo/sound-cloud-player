@@ -1,4 +1,4 @@
-package ngo.music.soundcloudplayer.boundary;
+package ngo.music.soundcloudplayer.boundary.fragments;
 
 import java.util.ArrayList;
 
@@ -18,19 +18,19 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class OfflineSongsFragment extends ListContentFragment implements OnRefreshListener{
-	public static OfflineSongsFragment instance = null;
+public class ArtistsFragment extends ListContentFragment implements OnRefreshListener{
+	public static ArtistsFragment instance = null;
 
 	ListView songsList;
-	public OfflineSongsFragment() {
+	public ArtistsFragment() {
 		// TODO Auto-generated constructor stub
 		super();
 		instance = this;
 	}
-	public static OfflineSongsFragment getInstance() {
+	public static ArtistsFragment getInstance() {
 		// TODO Auto-generated method stub
 		if (instance == null) {
-			instance = new OfflineSongsFragment();
+			instance = new ArtistsFragment();
 		}
 		return instance;
 	}
@@ -42,7 +42,7 @@ public class OfflineSongsFragment extends ListContentFragment implements OnRefre
 		rootView = inflater.inflate(R.layout.refresh_list_view, container, false);
 		swipeRefreshLayoutId = R.id.songs_swipe_refresh;
 		iniSwipeRefreshLayout();
-		songsList = (ListView) rootView.findViewById(R.id.songs_list);
+		songsList = (ListView) rootView.findViewById(R.id.items_list);
 		UIController.getInstance().addListContentFragements(instance);
 
 		return rootView;

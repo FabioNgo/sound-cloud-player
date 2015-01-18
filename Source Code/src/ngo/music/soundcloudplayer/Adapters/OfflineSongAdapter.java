@@ -4,11 +4,13 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -76,7 +78,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		 * Set avatar for song
 		 */
 		// ImageView avatar = (ImageView)
-		// v.findViewById(R.id.lite_player_image);
+		// v.findViewById(R.id.song_image);
 		//
 		// ImageLoader mImageLoader =
 		// AppController.getInstance().getImageLoader();
@@ -113,6 +115,10 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 							MusicPlayerService.getInstance().addToNext(song);
 							break;
 						case R.id.list_addToPlaylist:
+							ArrayList<Song> songs = new ArrayList<Song>();
+							songs.add(song);
+							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
+							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
 							break;
 						case R.id.list_delete:
 							SongController.getInstance().deleteSong(song);
@@ -131,14 +137,14 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/*
 		 * Set title
 		 */
-		TextView title = (TextView) v.findViewById(R.id.lite_player_title);
+		TextView title = (TextView) v.findViewById(R.id.song_title);
 		title.setText(song.getTitle());
 
 		/*
 		 * Set sub title
 		 */
 		TextView subtitle = (TextView) v
-				.findViewById(R.id.lite_player_subtitle);
+				.findViewById(R.id.song_subtitle);
 		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
 		/**
 		 * Set progress bar
@@ -146,13 +152,13 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		if (MusicPlayerService.getInstance().getCurrentSongId()
 				.compareTo(songs.get(position).getId()) == 0) {
 			ImageView playStt = (ImageView) v
-					.findViewById(R.id.lite_player_play_stt);
+					.findViewById(R.id.song_play_stt);
 			playStt.setVisibility(View.VISIBLE);
 
 			// UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
 		} else {
 			ImageView playStt = (ImageView) v
-					.findViewById(R.id.lite_player_play_stt);
+					.findViewById(R.id.song_play_stt);
 			playStt.setVisibility(View.INVISIBLE);
 			// UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
 

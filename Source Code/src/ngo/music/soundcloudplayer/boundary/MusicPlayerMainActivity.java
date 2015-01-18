@@ -7,6 +7,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
 import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.boundary.fragments.UserDisplayFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
@@ -84,7 +85,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		Intent intent = getIntent();
 		if ("CallFromNoti".equals(intent.getAction())) {
 
-			UIController.getInstance().updateUI(APP_RUNNING);
+			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		}
 		/*
 		 * Get data from other activity
@@ -154,7 +155,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		}
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
-		pager.setOffscreenPageLimit(10000);
+		pager.setOffscreenPageLimit(0);
 		final int pageMargin = (int) TypedValue.applyDimension(
 				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 						.getDisplayMetrics());

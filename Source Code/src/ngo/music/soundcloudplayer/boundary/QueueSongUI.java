@@ -6,6 +6,7 @@ import java.util.Random;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
+import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -30,6 +31,7 @@ public class QueueSongUI extends ListContentFragment {
 	public QueueSongUI() {
 		// TODO Auto-generated constructor stub
 		instance = this;
+		adapter = QueueSongAdapter.getInstance();
 	}
 
 	public static QueueSongUI getInstance() {
@@ -94,7 +96,7 @@ public class QueueSongUI extends ListContentFragment {
 		toolbar.setTitle("Playing Queue");
 		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance().getQueueSize())+" songs");
 
-		final QueueSongAdapter adapter = QueueSongAdapter.getInstance();
+		
 
 		UIController.getInstance().addAdapter(adapter);
 		queueView.setAdapter(adapter);

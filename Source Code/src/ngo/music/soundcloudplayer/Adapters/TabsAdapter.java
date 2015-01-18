@@ -2,11 +2,12 @@ package ngo.music.soundcloudplayer.Adapters;
 
 
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
-import ngo.music.soundcloudplayer.boundary.MyFavoriteSoundCloudFragment;
-import ngo.music.soundcloudplayer.boundary.MySoundCloudStreamFragment;
-import ngo.music.soundcloudplayer.boundary.OfflineSongsFragment;
-import ngo.music.soundcloudplayer.boundary.SoundCloudFollowerFragment;
-import ngo.music.soundcloudplayer.boundary.SoundCloudFollowingFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.MyFavoriteSoundCloudFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.MySoundCloudStreamFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.SoundCloudFollowerFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.SoundCloudFollowingFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,7 +16,7 @@ public class TabsAdapter extends FragmentPagerAdapter {
 
 
 	private final String[] TITLES = { "My Streams", "My Favorites", "Offline Songs",
-			"Playlists", "Album", "My Followings", "My Followers", "About Us" };
+			"Playlists", "Album", "Artist", "My Followings", "My Followers", "About Us" };
 
 	public TabsAdapter(FragmentManager fm) {
 		super(fm);
@@ -45,11 +46,12 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		
 		case 2:
 			return new OfflineSongsFragment();
-			
-		case 5:
+		case 3:
+			return new PlaylistFragment();
+		case 6:
 			return new SoundCloudFollowingFragment();
 		
-		case 6:
+		case 7:
 			return new SoundCloudFollowerFragment();
 		default: return new Fragment();
 		}

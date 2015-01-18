@@ -245,9 +245,6 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	public void updateLoop() {
 		// TODO Auto-generated method stub
-		if (MusicPlayerService.getInstance().getLoopState() == MODE_LOOP_NONE) {
-			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_no_loop);					
-		}
 		if (MusicPlayerService.getInstance().getLoopState() == MODE_LOOP_ONE) {
 			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_loop_1);
 		}
