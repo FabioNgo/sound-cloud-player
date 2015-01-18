@@ -880,7 +880,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	public void clear() {
 		favoriteIdList.clear();
 		streamList.clear();
-
+		
 		isLoadFavoriteSong = true;
 		isLoadStream = true;
 		favoriteIdList.clear();
@@ -1038,4 +1038,6 @@ public class SongController implements Constants, Constants.SongConstants,
 		UIController.getInstance().updateUiWhenDataChanged(OFFLINE_SONG_CHANGED);
 
 	}
+	
+	
 }
