@@ -97,11 +97,13 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 				i.putExtra(DEFAULT_ID, SONGS);
 				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+				soundCloudUserController.clearUserData();
 				soundCloudUserController.setGuest(null);
 				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
 				SongController songController = SongController.getInstance();
 				songController.isLoadFavoriteSong = true;
 				songController.isLoadStream = true;
+				
 				//songController.loadFavoriteSong();
 				i.putExtra(USER, bundle);
 				MusicPlayerMainActivity.getActivity().finish();
