@@ -78,7 +78,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		 * Set avatar for song
 		 */
 		// ImageView avatar = (ImageView)
-		// v.findViewById(R.id.lite_player_image);
+		// v.findViewById(R.id.song_image);
 		//
 		// ImageLoader mImageLoader =
 		// AppController.getInstance().getImageLoader();
@@ -137,14 +137,14 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/*
 		 * Set title
 		 */
-		TextView title = (TextView) v.findViewById(R.id.lite_player_title);
+		TextView title = (TextView) v.findViewById(R.id.song_title);
 		title.setText(song.getTitle());
 
 		/*
 		 * Set sub title
 		 */
 		TextView subtitle = (TextView) v
-				.findViewById(R.id.lite_player_subtitle);
+				.findViewById(R.id.song_subtitle);
 		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
 		/**
 		 * Set progress bar
@@ -152,13 +152,13 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		if (MusicPlayerService.getInstance().getCurrentSongId()
 				.compareTo(songs.get(position).getId()) == 0) {
 			ImageView playStt = (ImageView) v
-					.findViewById(R.id.lite_player_play_stt);
+					.findViewById(R.id.song_play_stt);
 			playStt.setVisibility(View.VISIBLE);
 
 			// UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
 		} else {
 			ImageView playStt = (ImageView) v
-					.findViewById(R.id.lite_player_play_stt);
+					.findViewById(R.id.song_play_stt);
 			playStt.setVisibility(View.INVISIBLE);
 			// UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
 

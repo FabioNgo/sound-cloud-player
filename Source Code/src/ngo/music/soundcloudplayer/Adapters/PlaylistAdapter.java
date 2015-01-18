@@ -30,14 +30,14 @@ public class PlaylistAdapter extends CompositionListAdapter {
 	@Override
 	protected ArrayList<String> getCategories() {
 		// TODO Auto-generated method stub
-		return PlaylistController.getInstance().getPlaylistsString();
+		return PlaylistController.getInstance().getCategoryString();
 
 	}
 
 	@Override
 	protected ArrayList<Song> getItemsFromCat(String cat) {
 		// TODO Auto-generated method stub
-		return PlaylistController.getInstance().getSongFromPlaylist(cat);
+		return PlaylistController.getInstance().getSongFromCategory(cat);
 	}
 
 	public static PlaylistAdapter createNewInstance() {

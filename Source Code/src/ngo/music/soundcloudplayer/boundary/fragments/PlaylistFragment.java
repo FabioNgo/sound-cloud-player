@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class PlaylistFragment extends ListContentFragment {
+public class PlaylistFragment extends CompositionListContentFragment {
 	private static PlaylistFragment instance;
 
 	public PlaylistFragment() {

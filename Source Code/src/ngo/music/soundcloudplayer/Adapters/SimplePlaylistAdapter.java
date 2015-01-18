@@ -27,7 +27,7 @@ public class SimplePlaylistAdapter extends ArrayAdapter<String> {
 	private SimplePlaylistAdapter() {
 		super(MusicPlayerMainActivity.getActivity(), R.layout.single_playilist_list_adding);
 		// TODO Auto-generated constructor stub
-		playlists = PlaylistController.getInstance().getPlaylistsName();
+		playlists = PlaylistController.getInstance().getCategoryName();
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class SimplePlaylistAdapter extends ArrayAdapter<String> {
 
 	public void updatePlaylist() {
 		// TODO Auto-generated method stub
-		playlists = PlaylistController.getInstance().getPlaylistsName();
+		playlists = PlaylistController.getInstance().getCategoryName();
 		this.notifyDataSetChanged();
 	}
 	@Override

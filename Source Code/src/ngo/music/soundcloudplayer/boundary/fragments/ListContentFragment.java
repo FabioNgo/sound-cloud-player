@@ -68,10 +68,10 @@ public abstract class ListContentFragment extends Fragment implements
 			ArrayList<Song> songs = ((ListSongAdapter) adapter).getSongs();
 			MusicPlayerService.getInstance().playNewSong(position, songs);
 		}
-		if (adapter instanceof PlaylistAdapter) {
-			String playlist = PlaylistAdapter.getInstance().getItem(position);
+		if (adapter instanceof CompositionListAdapter) {
+			String playlist = CompositionListAdapter.getInstance(PLAYLIST).getItem(position);
 			ArrayList<Song> songs = PlaylistController.getInstance()
-					.getSongFromPlaylist(playlist);
+					.getSongFromCategory(playlist);
 			if (!songs.isEmpty()) {
 				MusicPlayerService.getInstance().playNewSong(0, songs);
 			}else{
@@ -79,25 +79,6 @@ public abstract class ListContentFragment extends Fragment implements
 			}
 		}
 
-	}/**
-	 * Update UI when playlist change (Update Single exsited view in list View)
-	 */
-	public void update() {
-		CompositionListAdapter adapter = (CompositionListAdapter) listView.getAdapter();
-		adapter.update();
-		for (int i = 0; i <= listView.getLastVisiblePosition()
-				- listView.getFirstVisiblePosition(); i++) {
-			View v = listView.getChildAt(i);
-			if (v != null) {
-
-				CompositionViewHolder holder = new CompositionViewHolder(NUM_ITEM_IN_ONE_CATEGORY, v);
-
-				adapter.setLayoutInformation(
-						holder,
-						adapter.getWholeItem(i
-								+ listView.getFirstVisiblePosition()), v);
-			}
-		}
 	}
 
 }

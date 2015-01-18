@@ -69,7 +69,7 @@ public class PlaylistAddingFragment extends DialogFragment {
 				// TODO Auto-generated method stub
 				String playlistName = SimplePlaylistAdapter.getInstance().getItem(position);
 				try {
-					PlaylistController.getInstance().addSongsToPlaylist(playlistName, songs);
+					PlaylistController.getInstance().addSongsToCategory(playlistName, songs);
 					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
@@ -91,6 +91,7 @@ public class PlaylistAddingFragment extends DialogFragment {
 					final RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
 					newPlaylistGroup.setVisibility(View.VISIBLE);
 					final EditText editText = (EditText)rootView.findViewById(R.id.new_playlist_edit_text);
+					editText.setText("");
 					final ImageView newPlaylistBtn = (ImageView)rootView.findViewById(R.id.new_playlist_submit);
 					
 					
@@ -101,7 +102,7 @@ public class PlaylistAddingFragment extends DialogFragment {
 							// TODO Auto-generated method stub
 							
 							try {
-								PlaylistController.getInstance().createPlaylist(editText.getText().toString());
+								PlaylistController.getInstance().createCategory(editText.getText().toString());
 								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
 								
 							} catch (Exception e) {

@@ -4,7 +4,7 @@
 	android:layout_height="match_parent">
 
 	<com.android.volley.toolbox.NetworkImageView
-		android:id="@+id/song_image"
+		android:id="@+id/song_cate_image"
 		android:layout_width="wrap_content"
 		android:layout_height="match_parent"
 		android:layout_alignParentStart="true"
@@ -12,41 +12,34 @@
 		android:src="@drawable/ic_launcher"/>
 
 	<TextView
-		android:id="@+id/song_title"
+		android:id="@+id/song_cate_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="4dp"
 		android:layout_marginTop="10dp"
-		android:layout_toEndOf="@+id/song_image"
-		android:layout_toStartOf="@+id/song_play_stt"
+		android:layout_toEndOf="@+id/song_cate_image"
+		android:layout_toStartOf="@+id/song_cate_menu"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
 		android:textColor="@color/primary_text">
 	</TextView>
 
 	<TextView
-		android:id="@+id/song_subtitle"
+		android:id="@+id/song_cate_subtitle"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignStart="@+id/song_title"
-		android:layout_below="@+id/song_title"
-		android:layout_toEndOf="@+id/song_image"
-		android:layout_toStartOf="@+id/song_play_stt"
+		android:layout_alignStart="@+id/song_cate_title"
+		android:layout_below="@+id/song_cate_title"
+		android:layout_toEndOf="@+id/song_cate_image"
+		android:layout_toStartOf="@+id/song_cate_menu"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
 		android:textColor="@color/secondary_text"
 		android:textIsSelectable="false"/>
 
-	<ImageView
-		android:id="@+id/song_play_stt"
-		android:layout_width="30dp"
-		android:layout_height="30dp"
-		android:layout_centerVertical="true"
-		android:layout_toStartOf="@+id/song_menu"
-		android:src="@drawable/ic_media_play"/>
 
 	<ImageView
-		android:id="@+id/song_menu"
+		android:id="@+id/song_cate_menu"
 		android:layout_width="30dp"
 		android:layout_height="30dp"
 		android:layout_alignParentEnd="true"

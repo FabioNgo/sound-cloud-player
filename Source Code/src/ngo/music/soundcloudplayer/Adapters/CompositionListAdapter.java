@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.fragments.ListItemsInCompositionListFragment;
+import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -59,8 +61,6 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 */
 	protected abstract ArrayList<Song> getItemsFromCat(String cat);
 
-	
-
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
@@ -70,14 +70,14 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			v = inflater.inflate(R.layout.composition_view, parent, false);
-			
-			holder = new CompositionViewHolder(NUM_ITEM_IN_ONE_CATEGORY,v);
+
+			holder = new CompositionViewHolder(NUM_ITEM_IN_ONE_CATEGORY, v);
 			v.setTag(holder);
-		}else{
+		} else {
 			holder = (CompositionViewHolder) v.getTag();
 		}
-		
-		setLayoutInformation(holder,categories.get(position), v);
+
+		setLayoutInformation(holder, categories.get(position), v);
 
 		return v;
 	}
@@ -86,39 +86,79 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 * @param position
 	 * @param v
 	 */
-	public void setLayoutInformation(CompositionViewHolder holder,String catString, View v) {
-		
+	public void setLayoutInformation(final CompositionViewHolder holder,
+			String catString, View v) {
+
 		String[] catData = getSongsTitleFromCat(catString);
 
 		/*
 		 * Set song titles
 		 */
 		for (int i = 0; i < holder.items.length; i++) {
-			if(i==0){
-				holder.items[i].setText(catData[0]); //playlist name
-			}else{
+			if (i == 0) {
+				holder.items[i].setText(catData[0]); // playlist name
+			} else {
 
-				String content = ""+i+". "+catData[i];
+				String content = "" + i + ". " + catData[i];
 				holder.items[i].setText(content);
 			}
-			
-		}
-		
 
+		}
+
+		/**
+		 * Menu
+		 */
+		holder.menu.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
+						.getActivity(), holder.menu);
+				// Inflating the Popup using xml file
+				popup.getMenuInflater().inflate(R.menu.composition_list_item_menu,
+						popup.getMenu());
+
+				// registering popup with OnMenuItemClickListener
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem arg0) {
+						// TODO Auto-generated method stub
+						switch (arg0.getItemId()) {
+						case R.id.composition_list_item_shows:
+							String cat = (String) holder.items[0].getText();
+							new ListItemsInCompositionListFragment(
+									getItemsFromCat(cat), cat).show(
+									MusicPlayerMainActivity.getActivity()
+											.getSupportFragmentManager(),
+									"Show songs in cate");
+						default:
+							break;
+						}
+
+						return false;
+					}
+				});
+
+				popup.show(); // showing popup menu
+			}
+		});
 	}
 
 	private String[] getSongsTitleFromCat(String catString) {
 		// TODO Auto-generated method stub
 		String[] temp = catString.split(String.valueOf('\1'));
 		String[] result = new String[holder.items.length];
-		for(int i=0;i<result.length;i++){
+		for (int i = 0; i < result.length; i++) {
 			result[i] = "";
-			if(i<temp.length){
-				result[i]=temp[i];
+			if (i < temp.length) {
+				result[i] = temp[i];
 			}
 		}
 		return result;
 	}
+
 	/**
 	 * get only title of category
 	 */
@@ -127,25 +167,39 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		String[] temp = categories.get(position).split(String.valueOf('\1'));
 		return temp[0];
 	}
+
 	/**
 	 * get title and content of a category
 	 */
-	public String getWholeItem(int position){
+	public String getWholeItem(int position) {
 		return categories.get(position);
 	}
+
 	@Override
 	public int getCount() {
 		return categories.size();
 	}
-	public void update(){
+
+	public void update() {
 		categories = getCategories();
 		this.notifyDataSetChanged();
 	}
+
 	@Override
 	public boolean hasStableIds() {
 		// TODO Auto-generated method stub
 		return true;
 	}
-	
-	
+
+	public static CompositionListAdapter getInstance(int type) {
+		// TODO Auto-generated method stub
+		switch (type) {
+		case PLAYLIST:
+			return PlaylistAdapter.getInstance();
+
+		default:
+			return null;
+		}
+	}
+
 }
