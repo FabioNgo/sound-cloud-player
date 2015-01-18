@@ -145,6 +145,7 @@ public interface Constants {
 		int QUEUE_CHANGED = 0;
 		int OFFLINE_SONG_CHANGED = 1;
 		int PLAYLIST_CHANGED = 2;
+		int ITEM_IN_PLAYLIST_CHANGED = 3;
 	}
 	interface MusicService {
 		/**

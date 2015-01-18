@@ -4,6 +4,9 @@
 	<item
 		android:id="@+id/composition_list_item_shows"
 		android:title="Show Songs"/>
+	<item
+		android:id="@+id/composition_list_item_delete"
+		android:title="Delete"/>
 	
 
 </menu>

@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.CompositionListAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
 import ngo.music.soundcloudplayer.Adapters.SongsInCateAdapter;
@@ -42,6 +43,8 @@ public class ListItemsInCompositionListFragment extends DialogFragment implement
 	ArrayList<Song> songs;
 	String cat = "";
 	int type = -1;
+	View rootView;
+	SongsInCateAdapter adapter;
 	private ListItemsInCompositionListFragment instance;
 	public ListItemsInCompositionListFragment(ArrayList<Song> songs,String cat) {
 		// TODO Auto-generated constructor stub
@@ -61,7 +64,7 @@ public class ListItemsInCompositionListFragment extends DialogFragment implement
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		final View rootView = inflater.inflate(R.layout.list_items_in_conposition_list_layout, container,false);
+		rootView  = inflater.inflate(R.layout.list_items_in_conposition_list_layout, container,false);
 		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
 		toolbar.setTitle(cat);
 		toolbar.setSubtitle(songs.size()+" song(s)");
@@ -78,9 +81,27 @@ public class ListItemsInCompositionListFragment extends DialogFragment implement
 				MusicPlayerService.getInstance().playNewSong(position, songs);
 			}
 		});
-		listPlaylist.setAdapter(new SongsInCateAdapter(MusicPlayerMainActivity.getActivity(),R.layout.song_in_cate,songs,cat));
+		adapter = SongsInCateAdapter.createInstance(type,R.layout.song_in_cate,songs,cat);
+		listPlaylist.setAdapter(adapter);
 		
 		return rootView;
+	}
+	public static ListItemsInCompositionListFragment createInstance(ArrayList<Song> songs,
+			String catTitle, int type) {
+		// TODO Auto-generated method stub
+		switch (type) {
+		case PLAYLIST:
+			return new ListItemInPlaylistFragment(songs, catTitle);
+			
+
+		default:
+			return null;
+		}
+	}
+	public void update(){
+		adapter.update();
+		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
+		toolbar.setSubtitle(adapter.getCount()+" song(s)");
 	}
 	
 }

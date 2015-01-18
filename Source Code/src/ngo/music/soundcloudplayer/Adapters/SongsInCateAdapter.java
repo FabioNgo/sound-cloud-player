@@ -29,43 +29,50 @@ import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
-public class SongsInCateAdapter extends ArrayAdapter<Song>  implements Constants.Categories{
+public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
+		Constants.Categories {
 	private View v;
-	int adapterType = -1;
+	int type = -1;
 	Context context;
 	int resource;
-	String cate;
+	String cat;
 
 	public static SongsInCateAdapter instance = null;
 	private ArrayList<Song> songs;
 
 	public SongsInCateAdapter(Context context, int resource,
-			ArrayList<Song> objects, String cate) {
+			ArrayList<Song> objects, String cat) {
 		// TODO Auto-generated constructor stub
 		super(context, resource);
 		this.context = context;
 		this.resource = resource;
-		songs = objects;
-		this.cate = cate;
+		songs = getSongsFromCat(cat);
+		this.cat = cat;
 	}
+	public abstract ArrayList<Song> getSongsFromCat(String cat);
+	
 	/**
 	 * 
-	 * @param type in Constants.Categories
+	 * @param type
+	 *            in Constants.Categories
 	 * @param resource
 	 * @param objects
 	 * @param cate
 	 * @return
 	 */
-	public static SongsInCateAdapter createInstance(int type,int resource,ArrayList<Song> objects, String cate){
+	public static SongsInCateAdapter createInstance(int type, int resource,
+			ArrayList<Song> objects, String cate) {
 		switch (type) {
 		case PLAYLIST:
-			return new SongsInPlaylistAdapter(MusicPlayerMainActivity.getActivity(),resource,objects,cate);
-			
+			return new SongsInPlaylistAdapter(
+					MusicPlayerMainActivity.getActivity(), resource, objects,
+					cate);
 
 		default:
 			return null;
 		}
 	}
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
@@ -123,8 +130,9 @@ public class SongsInCateAdapter extends ArrayAdapter<Song>  implements Constants
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.song_cat_remove:
-							CategoryController.getInstance(adapterType)
-									.removeSongFromCate(song, cate);
+							CategoryController.getInstance(type)
+									.removeSongFromCate(song, cat);
+							break;
 						default:
 							break;
 						}
@@ -145,10 +153,9 @@ public class SongsInCateAdapter extends ArrayAdapter<Song>  implements Constants
 		/*
 		 * Set sub title
 		 */
-		TextView subtitle = (TextView) v
-				.findViewById(R.id.song_cate_subtitle);
+		TextView subtitle = (TextView) v.findViewById(R.id.song_cate_subtitle);
 		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
-		
+
 	}
 
 	@Override
@@ -161,8 +168,23 @@ public class SongsInCateAdapter extends ArrayAdapter<Song>  implements Constants
 		return songs.size();
 	}
 
-	
+	public static SongsInCateAdapter getInstance(int type) {
+		// TODO Auto-generated method stub
+		switch (type) {
+		case PLAYLIST:
+			
+			return SongsInPlaylistAdapter.instance;
 
-	
+		default:
+			break;
+		}
+		return null;
+	}
+
+	public void update() {
+		// TODO Auto-generated method stub
+		songs = getSongsFromCat(cat);
+		this.notifyDataSetChanged();
+	}
 
 }

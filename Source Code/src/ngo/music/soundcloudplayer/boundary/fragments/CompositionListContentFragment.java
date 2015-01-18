@@ -35,7 +35,7 @@ import android.widget.ListView;
  */
 public abstract class CompositionListContentFragment extends
 		ListContentFragment implements Constants.Categories {
-
+	int type = -1;
 	/**
 	 * Update UI when playlist change (Update Single exsited view in list View)
 	 * 
@@ -51,13 +51,46 @@ public abstract class CompositionListContentFragment extends
 
 				CompositionViewHolder holder = new CompositionViewHolder(
 						NUM_ITEM_IN_ONE_CATEGORY, v);
-
-				adapter.setLayoutInformation(
-						holder,
-						adapter.getWholeItem(i
-								+ listView.getFirstVisiblePosition()), v);
+				try {
+					adapter.setLayoutInformation(
+							holder,
+							adapter.getWholeItem(i
+									+ listView.getFirstVisiblePosition()), v);
+				} catch (IndexOutOfBoundsException e) {
+					/**
+					 * When this exception occur, some item has been deleted in list.
+					 */
+					break;
+					
+				}
 			}
 		}
+		adapter.update();
 	}
+	public static CompositionListContentFragment createInstance(int type){
+		switch (type) {
+		case PLAYLIST:
+			return new PlaylistFragment();
+			
 
+		default:
+			break;
+		}
+		return null;
+	}
+	public static CompositionListContentFragment getInstance(int type){
+		switch (type) {
+		case PLAYLIST:
+			if(PlaylistFragment.instance == null){
+				createInstance(type);
+			}
+			return PlaylistFragment.instance;
+			
+
+		default:
+			break;
+		}
+		return null;
+	}
+	
 }

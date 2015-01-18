@@ -14,7 +14,7 @@ public class PlaylistController extends CategoryController implements Constants.
 		instance = this;
 		filename = "playlists";
 		categories = getCategories();
-		TAG_DATA_CHANGED = PLAYLIST_CHANGED;
+		TAG_DATA_CHANGED = ITEM_IN_PLAYLIST_CHANGED;
 	}
 
 	public static PlaylistController getInstance() {

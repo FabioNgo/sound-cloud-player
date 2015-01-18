@@ -8,8 +8,11 @@ import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
+import ngo.music.soundcloudplayer.Adapters.SongsInCateAdapter;
+import ngo.music.soundcloudplayer.Adapters.SongsInPlaylistAdapter;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.boundary.QueueSongUI;
+import ngo.music.soundcloudplayer.boundary.fragments.CompositionListContentFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -26,7 +29,8 @@ import android.widget.SimpleAdapter;
 import com.todddavies.components.progressbar.ProgressWheel;
 
 public class UIController implements Constants.MusicService, Constants.Data,
-		Constants.Appplication {
+		Constants.Appplication, Constants.Categories {
+	
 	private static UIController instance;
 	private CountDownTimer timer;
 	private ArrayList<PlayerUI> uiFragments;
@@ -97,7 +101,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		/**
 		 * try to load new fragment
 		 */
-		if (loaded) {
+		if (States.appState == APP_RUNNING) {
 
 			input.load();
 		}
@@ -375,7 +379,6 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		switch (TAG) {
 		case OFFLINE_SONG_CHANGED:
 			OfflineSongAdapter.getInstance().updateSongs();
-			OfflineSongAdapter.getInstance().notifyDataSetChanged();
 			break;
 		case QUEUE_CHANGED:
 			QueueSongAdapter.getInstance().notifyDataSetChanged();
@@ -383,9 +386,14 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			break;
 		case PLAYLIST_CHANGED:
 			SimplePlaylistAdapter.getInstance().updatePlaylist();
-			PlaylistFragment.getInstance().update();
+			CompositionListContentFragment.getInstance(PLAYLIST).update();
+			break;
+		case ITEM_IN_PLAYLIST_CHANGED:
+			SongsInCateAdapter.getInstance(PLAYLIST).update();
+			CompositionListContentFragment.getInstance(PLAYLIST).update();
+			break;
 		default:
-
+			break;
 		}
 
 	}

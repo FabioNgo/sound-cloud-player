@@ -28,7 +28,7 @@ import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
 public abstract class CategoryController implements Constants.Data, Constants,
-Constants.TabContant{
+Constants.Categories{
 
 	
 	protected String filename = "";
@@ -189,18 +189,35 @@ Constants.TabContant{
 		for (int i = 0; i < songs.size(); i++) {
 			if(songs.get(i).getId().equals(song.getId())){
 				songs.remove(i);
-				return;
+				break;
 			}
+		}
+		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+		try {
+			storeCategories();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public void removeCategory(String cate){
+		categories.remove(cate);
+		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+		try {
+			storeCategories();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	/**
 	 * 
-	 * @param type from TabConstant
+	 * @param type from Constant.Categproes
 	 * @return
 	 */
 	public static CategoryController createInstance(int type){
 		switch (type) {
-		case PLAYLISTS:
+		case PLAYLIST:
 			return new PlaylistController();
 			
 		default:
@@ -213,13 +230,14 @@ Constants.TabContant{
 	public static CategoryController getInstance(int type) {
 		// TODO Auto-generated method stub
 		switch (type) {
-		case PLAYLISTS:
+		case PLAYLIST:
 			return PlaylistController.getInstance();
 
 		default:
 			return null;
 		}
 	}
+	
 
 
 	

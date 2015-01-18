@@ -30,7 +30,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		implements Constants.Categories {
 	private View v;
-
+	int adapterType = -1;
 	Context context;
 	int resource;
 	protected ArrayList<String> categories;
@@ -43,6 +43,33 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		this.context = context;
 		this.resource = resource;
 
+	}
+
+	public static CompositionListAdapter createNewInstance(int type) {
+		// TODO Auto-generated method stub
+		switch (type) {
+		case PLAYLIST:
+			return new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
+					.getApplicationContext(), R.layout.list_view);
+
+		default:
+			return null;
+		}
+
+	}
+
+	public static CompositionListAdapter getInstance(int type) {
+
+		switch (type) {
+		case PLAYLIST:
+			if(PlaylistAdapter.instance == null){
+				createNewInstance(type);
+			}
+			return PlaylistAdapter.instance;
+
+		default:
+			return null;
+		}
 	}
 
 	/**
@@ -124,15 +151,19 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 
 					@Override
 					public boolean onMenuItemClick(MenuItem arg0) {
+						String cat = (String) holder.items[0].getText();
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.composition_list_item_shows:
-							String cat = (String) holder.items[0].getText();
-							new ListItemsInCompositionListFragment(
-									getItemsFromCat(cat), cat).show(
+							
+							ListItemsInCompositionListFragment.createInstance(
+									getItemsFromCat(cat), cat,adapterType).show(
 									MusicPlayerMainActivity.getActivity()
 											.getSupportFragmentManager(),
 									"Show songs in cate");
+							break;
+						case R.id.composition_list_item_delete:
+							CategoryController.getInstance(adapterType).removeCategory(cat);
 						default:
 							break;
 						}
@@ -171,7 +202,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	/**
 	 * get title and content of a category
 	 */
-	public String getWholeItem(int position) {
+	public String getWholeItem(int position) throws IndexOutOfBoundsException {
 		return categories.get(position);
 	}
 
@@ -191,15 +222,6 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		return true;
 	}
 
-	public static CompositionListAdapter getInstance(int type) {
-		// TODO Auto-generated method stub
-		switch (type) {
-		case PLAYLIST:
-			return PlaylistAdapter.getInstance();
-
-		default:
-			return null;
-		}
-	}
+	
 
 }

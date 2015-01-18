@@ -216,6 +216,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	public void updateSongs() {
 		// TODO Auto-generated method stub
 		songs = SongController.getInstance().getOfflineSongs(true);
+		this.notifyDataSetChanged();
 	}
 	
 }
