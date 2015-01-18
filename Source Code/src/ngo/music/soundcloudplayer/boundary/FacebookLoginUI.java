@@ -120,8 +120,10 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			
 	        if (url.contains("access_token")){
 	        	String result = url.substring(url.indexOf("access_token=") + 13, url.indexOf("&scope="));
-	        	
-	        	wrapper.setToken(new Token(result,"refresh_token"));
+	        	Token t = new Token(result,"refresh_token");
+	        	wrapper.setToken(t);
+	        	SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+	        	soundCloudUserController.setToken(t);
 	        	new retriveUserBackground().execute();
 	        }
 			return false;

@@ -253,6 +253,10 @@ public class SoundCloudUserController extends UserController implements Constant
 	public Token getToken(){
 		return t;
 	}
+	
+	public void setToken(Token t){
+		this.t = t;
+	}
 
 	/**
 	 * like a song 
