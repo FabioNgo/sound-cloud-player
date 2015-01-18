@@ -11,7 +11,10 @@ public interface Constants {
 
 	public static final String CLIENT_ID ="2ae2cf32fdd87967a353b7e718d7f3cd";
 	public static final String CLIENT_SECRET = "acfe1a475e4d004214fed3326a01eb79";
-	public static final URI REDIRECT_URI     = URI.create("https%3A//soundcloud.com/soundcloud-callback.html");
+	public static final URI REDIRECT_URI     = URI.create("http://vnntu.com/web2015/callback.html");
+	
+	
+	String URL_WEBSOCKET = "ws://192.168.0.102:8080/WebMobileGroupChatServer/chat?name=";
 	
 	
 	public static final String CALLBACK_HTML = "<!DOCTYPE html>"
@@ -40,7 +43,7 @@ public interface Constants {
 		String USERNAME = "username";
 		String ID = "id";
 		String PERMALINK = "permalink";
-		String URI = "uri";
+		String URI_LINK = "uri";
 		String PERMALINK_URL = "permalink_url";
 		String AVATAR_URL = "avatar_url";
 		String COUNTRY = "country";

@@ -174,7 +174,7 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 		bundle.putInt(PRIVATE_PLAYLISTS_COUNT, user.getPlaylistCount());
 		bundle.putInt(PRIVATE_TRACK_COUNT, user.getPrivateTracksCount());
 		bundle.putInt(PUBLIC_FAVORITES_COUNT,user.getPublicFavoriteCount());
-		bundle.putString(URI, user.getUri());
+		bundle.putString(URI_LINK, user.getUri());
 		bundle.putInt(TRACK_COUNT, user.getTrackCount());
 		
 		

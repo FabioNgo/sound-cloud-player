@@ -153,7 +153,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		soundcloudAccount.setPrivateTracksCount(me.getInt(PRIVATE_TRACK_COUNT));
 		soundcloudAccount.setPublicFavoriteCount(me.getInt(PUBLIC_FAVORITES_COUNT));
 		soundcloudAccount.setTrackCount(me.getInt(TRACK_COUNT));
-		soundcloudAccount.setUri(me.getString(URI));
+		soundcloudAccount.setUri(me.getString(URI_LINK));
 		soundcloudAccount.setUsername(me.getString(USERNAME));
 		soundcloudAccount.setWebsite(me.getString(WEBSITE));
 		soundcloudAccount.setWebsiteTitle(me.getString(WEBSITE_TITLE));
@@ -174,7 +174,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		soundcloudAccount.setId(me.getInt(ID));
 		soundcloudAccount.setPlaylistCount(me.getInt(PLAYLIST_COUNT));
 		soundcloudAccount.setTrackCount(me.getInt(TRACK_COUNT));
-		soundcloudAccount.setUri(me.getString(URI));
+		soundcloudAccount.setUri(me.getString(URI_LINK));
 		soundcloudAccount.setUsername(me.getString(USERNAME));
 		soundcloudAccount.setCity(me.getString(CITY));
 		
@@ -223,7 +223,7 @@ public class SoundCloudUserController extends UserController implements Constant
 		bundle.putInt(PRIVATE_PLAYLISTS_COUNT, user.getPlaylistCount());
 		bundle.putInt(PRIVATE_TRACK_COUNT, user.getPrivateTracksCount());
 		bundle.putInt(PUBLIC_FAVORITES_COUNT,user.getPublicFavoriteCount());
-		bundle.putString(URI, user.getUri());
+		bundle.putString(URI_LINK, user.getUri());
 		bundle.putInt(TRACK_COUNT, user.getTrackCount());
 		
 		

@@ -21,4 +21,13 @@
     <string name="com_facebook_loading">Loading...</string>
     <string name="logout">Log Out</string>
     <string name="my_music">My Music</string>
+    
+    
+      
+    <string name="title">(Android WebSockets Chat App)</string>
+    <string name="author_name">By Ravi Tamada</string>
+    <string name="author_url">www.androidhive.info</string>
+    <string name="enter_name">Enter your name</string>
+    <string name="btn_join">JOIN</string>
+    <string name="btn_send">Send</string>
 </resources>

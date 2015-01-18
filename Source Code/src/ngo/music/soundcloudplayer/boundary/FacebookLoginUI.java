@@ -1,30 +1,68 @@
 package ngo.music.soundcloudplayer.boundary;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.net.MalformedURLException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.zip.Inflater;
 
+
+
+
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.http.Header;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.ProtocolException;
+import org.apache.http.client.CircularRedirectException;
+import org.apache.http.client.RedirectHandler;
+import org.apache.http.client.params.ClientPNames;
+import org.apache.http.client.utils.URIUtils;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.DefaultRedirectHandler;
+import org.apache.http.impl.client.RedirectLocations;
+import org.apache.http.params.HttpParams;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HttpContext;
 import org.json.JSONException;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//import com.codebutler.android_websockets.WebSocketClient;
+
+
+
+
+
+
+
+
+
+
+
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
@@ -37,17 +75,25 @@ import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.YuvImage;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
+import android.webkit.JsResult;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -55,16 +101,25 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
+
+
 /**
  * Login UI of SoundCloud
  * @author LEBAO_000
  *
  */
-@SuppressLint("SetJavaScriptEnabled")
+@SuppressLint({ "SetJavaScriptEnabled", "JavascriptInterface" })
 public class FacebookLoginUI extends Fragment implements Constants, Constants.UserContant {
 
+	private static final String LINK = "http://www.vnntu.com/web2015/soundcloud/login.html";
 	private View v;
 	ApiWrapper wrapper = null;
+
+	//JavaScriptInterface JSInterface;
+	//private WebSocketClient client;
+	
+	 // Client name
+    private String name = null;
 	public FacebookLoginUI() {
 		// TODO Auto-generated constructor stub
 	}
@@ -76,38 +131,20 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		
 		v = inflater.inflate(R.layout.facebook_login_ui, null);
 		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, null);
+
+		WebView webView = (WebView) v.findViewById(R.id.facebook_login_ui);
 		
-//		new startServerBackground().execute();
-//		https://soundcloud.com/connect?
-//		client_id=b45b1aa10f1ac2941910a7f0d10f8e28
-//		&response_type=token
-//		&scope=non-expiring%20fast-connect%20purchase%20upload
-//		&display=next
-//		&redirect_uri=https%3A//soundcloud.com/soundcloud-callback.html
-		
-		//PrintWriter writer = null;
-		//File file = new File("callback.html");
-		//System.out.println (file.getAbsolutePath());
-		//File callback = new File(writer.)
-		
-		new loginFacebookBackground().execute();
-		
-		//System.out.println (temp.getPath());
-//	
-//		try {
-//			startServer(wrapper);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		//System.out.println (getResources("callback.html"));
-		//String authorizationUrl = wrapper.("callback.html");
-		// TODO Auto-generated method stub
-        
-        
-       
-       // Intent i = new Intent(getActivity(), MainActivity.class);
-        //startActivity(i);
+		webView.setWebChromeClient(new MyWebChromeClient());
+		webView.setWebViewClient(new MyBrowser());
+		//webView.
+		webView.getSettings().setJavaScriptEnabled(true);
+		webView.getSettings().getJavaScriptEnabled();
+		webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+
+		webView.clearCache(true);
+        	
+		webView.loadUrl(LINK);
+
 		return v;
 	}		
 	
@@ -135,12 +172,14 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			
-	        String link = null;
-			URI uri = wrapper.authorizationCodeUrl(Endpoints.FACEBOOK_CONNECT, Token.SCOPE_NON_EXPIRING, CloudAPI.POPUP);
-			 link = uri.toString();
+	       // String link = null;
+			//URI uri = wrapper.authorizationCodeUrl(Endpoints.FACEBOOK_CONNECT, Token.SCOPE_NON_EXPIRING, CloudAPI.POPUP);
+			
+		 
+			// link = uri.toString();
 			/// wrapper.requestToken(new Request(uri));
-			 System.out.println (link);
-			return link;
+			// System.out.println ("LINK = " + link);
+			return null;
 		}
 		
 		
@@ -149,15 +188,22 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			// TODO Auto-generated method stub
 			
 			WebView webView = (WebView) v.findViewById(R.id.facebook_login_ui);
-			System.out.println (result);
+			//System.out.println (result);
+			//webView.setWebChromeClient(new WebChromeClient());
 			webView.setWebViewClient(new MyBrowser());
+			//webView.setWebViewClient(new MyBrowser());
 		//	webView = (WebView) rootView.findViewById(R.id.webView);
 			//webView.
-			webView.setPadding(0, 0, 0, 0);
 			webView.getSettings().setJavaScriptEnabled(true);
-			webView.loadUrl(result);
-			
-				new retriveUserBackground().execute(result);
+			webView.getSettings().setLoadsImagesAutomatically(true);
+			webView.clearCache(true);
+			webView.loadUrl(LINK);
+			 //DefaultHttpClient httpClient = new DefaultHttpClient();
+//			    RedirectHandler customRedirectHandler = new CustomRedirectHandler();
+//			    //...
+//			    ((AbstractHttpClient) wrapper.getHttpClient()).setRedirectHandler(customRedirectHandler);
+//			    //webView.
+				
 				//soundCloudUserController.setResponseString(stringResponse);
 				
 				
@@ -189,21 +235,41 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			// TODO Auto-generated method stub
 			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-			System.out.println (bundle.getString(USERNAME));
+			//System.out.println (bundle.getString(USERNAME));
 			i.putExtra(USER, bundle);
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			//MusicPlayerMainActivity.getActivity().finish();
-			//startActivity(i);
+			startActivity(i);
 		}
 		
 	}
 	
 	private class MyBrowser extends WebViewClient {
-		   @Override
-		   public boolean shouldOverrideUrlLoading(WebView view, String url) {
-		      view.loadUrl(url);
-		      return true;
-		   }
-		}
+		@Override
+	    public boolean shouldOverrideUrlLoading(WebView view, String url) {
+			
+	        if (url.contains("access_token")){
+	        	String result = url.substring(url.indexOf("access_token=") + 13, url.indexOf("&scope="));
+	        	
+	        	wrapper.setToken(new Token(result,"refresh_token"));
+	        	new retriveUserBackground().execute();
+	        }
+			return false;
+	      
+	    }
+	}
+	
+	public class MyWebChromeClient extends WebChromeClient {
+		
+	}
+	
+
+
+
+   
+
+    
+	
+	
 	
 }
