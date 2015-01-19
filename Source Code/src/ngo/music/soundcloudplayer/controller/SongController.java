@@ -838,7 +838,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		// song.setLabelName(me.getString(LABEL_NAME));
 		// song.setLicense(me.getString(LICENSE));
 		// song.setPermalink(me.getString(PERMALINK));
-		// song.setPermalinkUrl(me.getString(PERMALINK_URL));
+		((OnlineSong) song).setPermalinkUrl(me.getString(PERMALINK_URL));
 
 		((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
 

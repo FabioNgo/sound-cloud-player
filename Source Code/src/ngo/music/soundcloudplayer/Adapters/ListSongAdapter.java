@@ -4,34 +4,19 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.http.HttpResponse;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.android.volley.RequestQueue;
+
+
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.Volley;
+
 import com.volley.api.AppController;
 
 
-
-
-
-
-
-
-
-
-
-
-
 import ngo.music.soundcloudplayer.R;
+
 import ngo.music.soundcloudplayer.api.ApiWrapper;
-import ngo.music.soundcloudplayer.api.Http;
-import ngo.music.soundcloudplayer.api.Request;
-import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.boundary.UserLoginActivity;
+
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
@@ -54,7 +39,9 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.LruCache;
+import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -69,16 +56,17 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
 	protected ApiWrapper wrapper;
 	 long enqueue = 0;
-	    DownloadManager dm = null;
+	 DownloadManager dm = null;
 	    
-	    private static final String ROOT_DIRECTORY = "/SoundCloudApp";
+	 private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 	    
 	public static ListSongAdapter instance = null;
 	protected ArrayList<Song> songs;
 	
-	protected ListSongAdapter(Context context, int resource, ArrayList<Song> onlineSongs, ApiWrapper wrapper) {
+	private ShareActionProvider mShareActionProvider;
+	protected ListSongAdapter(Context context, int resource, ArrayList<Song> songs2, ApiWrapper wrapper) {
 		super(context, resource);
-		songs = onlineSongs;
+		songs = songs2;
 		this.wrapper = wrapper;
 		
 		// TODO Auto-generated constructor stub
@@ -190,18 +178,37 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		download.setOnClickListener(new OnClickListener() {
 			
 			@Override
-			public void onClick(View v) {
-				
+			public void onClick(View v) {				
 				new downloadSongBackground().execute(song);
-				// TODO Auto-generated method stub
-//				SongController songController = SongController.getInstance();
-//				try {
-//					songController.downloadSong(song);
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-					
+			}
+		});
+		
+		
+		/*
+		 * Share song 
+		 */
+		RelativeLayout share = (RelativeLayout) v.findViewById(R.id.share_field);
+		share.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {	
+				
+				System.out.println ("SHARE");
+				//MenuItem item = menu.findItem(R.id.menu_item_share);
+				//mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+				Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+				sharingIntent.setType("text/plain");
+				//if (song instanceof OnlineSong){
+					String shareBody =  ((OnlineSong)song).getPermalinkUrl();
+					String shareSubject =  ((OnlineSong)song).getTitle();
+					System.out.println (shareBody);
+					sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,shareSubject );
+					sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,shareBody );
+					MusicPlayerMainActivity.getActivity().startActivity(Intent.createChooser(sharingIntent, "Share via "));
+				//}
+				
+				
+				return;
 			}
 		});
 		
@@ -331,13 +338,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			 enqueue = dm.enqueue(request);
 			 result = "Download successfully";
 
-			//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
-//			request.setDestinationInExternalPublicDir(ROOT_DIRECTORY, params[0].getTitle() + ".mp3");
-//			request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-//			request.setMimeType("audio/mpeg");
-//			 enqueue = dm.enqueue(request);
-//			 result = "Download successfully";
-		    
+
 		    
 			
 		
@@ -358,6 +359,12 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			
 		}
 		
+	}
+	
+	private void setShareIntent(Intent shareIntent){
+		if (mShareActionProvider !=null){
+			mShareActionProvider.setShareIntent(shareIntent);
+		}
 	}
 
 
