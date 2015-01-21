@@ -30,7 +30,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 public class UIController implements Constants.MusicService, Constants.Data,
 		Constants.Appplication, Constants.Categories {
-	
+
 	private static UIController instance;
 	private CountDownTimer timer;
 	private ArrayList<PlayerUI> uiFragments;
@@ -389,8 +389,13 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			CompositionListContentFragment.getInstance(PLAYLIST).update();
 			break;
 		case ITEM_IN_PLAYLIST_CHANGED:
-			SongsInCateAdapter.getInstance(PLAYLIST).update();
-			CompositionListContentFragment.getInstance(PLAYLIST).update();
+			if (SongsInCateAdapter.getInstance(PLAYLIST) != null) {
+				SongsInCateAdapter.getInstance(PLAYLIST).update();
+			}
+			if (CompositionListContentFragment.getInstance(PLAYLIST) != null) {
+				CompositionListContentFragment.getInstance(PLAYLIST).update();
+			}
+			
 			break;
 		default:
 			break;

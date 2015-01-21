@@ -38,7 +38,11 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-
+/**
+ * List Item Fragment when click show Songs on each category item
+ * @author Fabio Ngo
+ *
+ */
 public class ListItemsInCompositionListFragment extends DialogFragment implements Constants.Categories {
 	ArrayList<Song> songs;
 	String cat = "";
@@ -81,7 +85,7 @@ public class ListItemsInCompositionListFragment extends DialogFragment implement
 				MusicPlayerService.getInstance().playNewSong(position, songs);
 			}
 		});
-		adapter = SongsInCateAdapter.createInstance(type,R.layout.song_in_cate,songs,cat);
+		adapter = SongsInCateAdapter.createInstance(type,R.layout.song_in_cate,cat);
 		listPlaylist.setAdapter(adapter);
 		
 		return rootView;

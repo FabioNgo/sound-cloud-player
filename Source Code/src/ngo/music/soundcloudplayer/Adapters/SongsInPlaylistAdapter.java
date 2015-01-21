@@ -8,9 +8,9 @@ import android.content.Context;
 public class SongsInPlaylistAdapter extends SongsInCateAdapter {
 	static SongsInPlaylistAdapter instance;
 	public SongsInPlaylistAdapter(Context context, int resource,
-			ArrayList<Song> objects, String cate) {
+			String cate) {
 		
-		super(context, resource, objects, cate);
+		super(context, resource, cate);
 		// TODO Auto-generated constructor stub
 		type = PLAYLIST;
 		instance = this;

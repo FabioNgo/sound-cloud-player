@@ -41,7 +41,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 	private ArrayList<Song> songs;
 
 	public SongsInCateAdapter(Context context, int resource,
-			ArrayList<Song> objects, String cat) {
+			 String cat) {
 		// TODO Auto-generated constructor stub
 		super(context, resource);
 		this.context = context;
@@ -61,11 +61,11 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 	 * @return
 	 */
 	public static SongsInCateAdapter createInstance(int type, int resource,
-			ArrayList<Song> objects, String cate) {
+			 String cate) {
 		switch (type) {
 		case PLAYLIST:
 			return new SongsInPlaylistAdapter(
-					MusicPlayerMainActivity.getActivity(), resource, objects,
+					MusicPlayerMainActivity.getActivity(), resource,
 					cate);
 
 		default:
