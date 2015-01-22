@@ -45,7 +45,7 @@ public class LoginActivity extends FragmentActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//AppController.printKeyHash(this);
-		MusicPlayerService.getInstance();
+//		MusicPlayerService.getInstance();
 		DatabaseHandler databaseHandler = DatabaseHandler.getInstance(this);
 		if (BasicFunctions.isConnectingToInternet(activity)) {
 			if (databaseHandler.isUserLoggedIn()) {

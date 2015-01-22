@@ -15,10 +15,9 @@ public class PlaylistFragment extends CompositionListContentFragment {
 
 	public PlaylistFragment() {
 		// TODO Auto-generated constructor stub
-		super();
+		
 		adapter = CompositionListAdapter.getInstance(PLAYLIST);
 		instance = this;
-		UIController.getInstance().addListContentFragements(this);
 		type = PLAYLIST;
 	}
 
@@ -30,7 +29,7 @@ public class PlaylistFragment extends CompositionListContentFragment {
 
 		listView = (ListView) rootView.findViewById(R.id.items_list);
 		
-
+		UIController.getInstance().addListContentFragements(this);
 		return rootView;
 
 	}
