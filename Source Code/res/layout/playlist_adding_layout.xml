@@ -32,10 +32,10 @@
 			android:id="@+id/new_playlist_submit"
 			android:layout_width="40dp"
 			android:layout_height="40dp"
-			android:scaleType="fitXY"
 			
+			android:scaleType="center"
 			android:layout_alignParentEnd="true"
-			android:src="@drawable/ic_launcher"/>
+			android:src="@drawable/ic_submit"/>
 		<TextView
 			android:id="@+id/new_playlist_error_text"
 			android:padding="5dp"

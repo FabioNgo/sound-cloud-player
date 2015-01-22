@@ -104,14 +104,14 @@ public class PlaylistAddingFragment extends DialogFragment {
 							try {
 								PlaylistController.getInstance().createCategory(editText.getText().toString());
 								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
-								
+								newPlaylistGroup.setVisibility(View.GONE);
 							} catch (Exception e) {
 								// TODO Auto-generated catch block
 								TextView errorText  = (TextView)rootView.findViewById(R.id.new_playlist_error_text);
 								errorText.setVisibility(View.VISIBLE);
 								errorText.setText(e.getMessage());
 							}
-							newPlaylistGroup.setVisibility(View.GONE);
+							
 						}
 					});			
 					break;
