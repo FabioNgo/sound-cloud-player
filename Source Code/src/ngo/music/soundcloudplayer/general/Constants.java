@@ -14,23 +14,13 @@ public interface Constants {
 	public static final URI REDIRECT_URI     = URI.create("http://vnntu.com/web2015/callback.html");
 	
 	
-	String URL_WEBSOCKET = "ws://192.168.0.102:8080/WebMobileGroupChatServer/chat?name=";
-	
-	
-	public static final String CALLBACK_HTML = "<!DOCTYPE html>"
-			+ "<html lang=\"en\">"
-			+ "<head>"
-			+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">"
-			+ "<title>Connect with SoundCloud</title>"
-			+ "</head>"
-			+ "<body> <b style=\"width: 100%; text-align: center;\">This popup should automatically close in a few seconds</b> </body>"
-			+ "</html>\"";
 	
 	String TRACK_LINK = "https://api.soundcloud.com/tracks";
 	String USER_LINK = "http://api.soundcloud.com/users";
 	String ME_FAVORITES = "/me/favorites";
 	String ME_MY_STREAM = "/me/tracks";
 	String PLAYLISTS_LINK = "api.soundcloud.com/playlists";
+	String ME_PLAYLISTS = "/me/playlists";
 	String ME_FOLLOWERS = "/me/followers";
 	String ME_FOLLOWINGS = "/me/followings";
 	

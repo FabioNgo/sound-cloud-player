@@ -54,33 +54,24 @@ public class PlaylistAddingFragment extends DialogFragment {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		final View rootView = inflater.inflate(R.layout.playlist_adding_layout, container,false);
-		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.playlist_adding_toolbar);
-		toolbar.setTitle("Add to playlist");
-		toolbar.inflateMenu(R.menu.add_to_playlist_menu);
+		
 		RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
 		
 		newPlaylistGroup.setVisibility(View.GONE);
-		final ListView listPlaylist = (ListView)rootView.findViewById(R.id.playlist_adding_list);
-		listPlaylist.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View parentView, int position,
-					long id) {
-				// TODO Auto-generated method stub
-				String playlistName = SimplePlaylistAdapter.getInstance().getItem(position);
-				try {
-					PlaylistController.getInstance().addSongsToCategory(playlistName, songs);
-					
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					Log.e("add song to playlist",e.toString());
-				}
-				finally{
-					instance.dismiss();
-				}
-			}
-		});
-		listPlaylist.setAdapter(SimplePlaylistAdapter.getInstance());
+		
+		configPlayList(rootView);
+		
+		configToolbar(rootView);
+		return rootView;
+	}
+	/**
+	 * Config Toolbar
+	 * @param rootView
+	 */
+	private void configToolbar(final View rootView) {
+		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.playlist_adding_toolbar);
+		toolbar.setTitle("Add to playlist");
+		toolbar.inflateMenu(R.menu.add_to_playlist_menu);
 		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 			
 			@Override
@@ -122,7 +113,36 @@ public class PlaylistAddingFragment extends DialogFragment {
 				return false;
 			}
 		});
-		return rootView;
+	}
+	
+	
+	/** Config Playlist layout
+	 * @param rootView
+	 */
+	private void configPlayList(final View rootView) {
+		final ListView listPlaylist = (ListView)rootView.findViewById(R.id.playlist_adding_list);
+		listPlaylist.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View parentView, int position,
+					long id) {
+				// TODO Auto-generated method stub
+				String playlistName = SimplePlaylistAdapter.getInstance().getItem(position);
+				try {
+					PlaylistController.getInstance().addSongsToCategory(playlistName, songs);
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					Log.e("add song to playlist",e.toString());
+				}
+				finally{
+					instance.dismiss();
+				}
+			}
+		});
+		
+		
+		listPlaylist.setAdapter(SimplePlaylistAdapter.getInstance());
 	}
 
 }

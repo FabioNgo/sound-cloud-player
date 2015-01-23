@@ -1027,13 +1027,20 @@ public class SongController implements Constants, Constants.SongConstants,
 					Media.EXTERNAL_CONTENT_URI, Integer.valueOf(song.getId()));
 			MusicPlayerService.getInstance().getContentResolver()
 					.delete(deleteUri, null, null);
-			File file = new File(song.getLink());
-			if (file.isFile()) {
-				if (file.exists()) {
-					file.delete();
+			File file;
+			try {
+				file = new File(song.getLink());
+				if (file.isFile()) {
+					if (file.exists()) {
+						file.delete();
 
+					}
 				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
+			
 		}
 		UIController.getInstance().updateUiWhenDataChanged(OFFLINE_SONG_CHANGED);
 

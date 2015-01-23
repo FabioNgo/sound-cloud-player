@@ -88,19 +88,16 @@ public class OnlineSong extends Song{
 	 */
 	private File artworkData;
 	@Override
-	public String getLink() {
+	public String getLink() throws IOException {
 		// TODO Auto-generated method stub
 		SoundCloudUserController userController = SoundCloudUserController.getInstance();
 		ApiWrapper wrapper = userController.getApiWrapper();
 		
 		Stream stream = null;
 		
-			try {
+			
 				stream = wrapper.resolveStreamUrl(streamUrl,false);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			
 			return stream.streamUrl;
 		
 		

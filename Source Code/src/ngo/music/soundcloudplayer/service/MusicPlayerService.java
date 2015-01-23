@@ -727,7 +727,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			// TODO Auto-generated method stub
 			String link = "";
 			song = params[0];
-			link = song.getLink();
+			try{
+				link = song.getLink();
+			}catch (Exception e){
+				e.printStackTrace();
+				link = null;
+			}
 
 			return link;
 		}
@@ -735,6 +740,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		@Override
 		protected void onPostExecute(String link) {
 			// TODO Auto-generated method stub
+			if (link == null){
+				playNextSong();
+				return;
+			}
 			try {
 
 				mediaPlayer.reset();

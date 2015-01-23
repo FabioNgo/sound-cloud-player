@@ -657,6 +657,23 @@ public class SoundCloudUserController extends UserController implements Constant
 
 	}
 
+	public ArrayList<String> getPlaylist() {
+		// TODO Auto-generated method stub
+		wrapper = getApiWrapper();
+		HttpResponse resp;
+		try {
+			resp = wrapper.get(Request.to(ME_PLAYLISTS));
+			String resposeStr = Http.getString(resp);
+			System.out.println (resposeStr);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return null;
+	}
+
 	
 	
 	

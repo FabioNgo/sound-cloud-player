@@ -7,17 +7,17 @@ import java.util.ArrayList;
 
 
 
+
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-
 import com.volley.api.AppController;
 
 
+
 import ngo.music.soundcloudplayer.R;
-
 import ngo.music.soundcloudplayer.api.ApiWrapper;
-
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -25,6 +25,7 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.app.DownloadManager;
 import android.app.DownloadManager.Query;
 import android.app.NotificationManager;
@@ -39,6 +40,7 @@ import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.util.LruCache;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -99,10 +101,12 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	 * @param v rootview
 	 */
 	private void setLayoutInfomation(int position, View v) {
-		Song song = songs.get(position);
+		final Song song = songs.get(position);
 		NetworkImageView avatar = configLayoutAvatar(v, song);
 		configTitleSong(v, song);
 		configSongDetail(v, song, avatar);
+		configPopupMenu(v, song);
+		
 		notifyDataSetChanged();
 	}
 
@@ -241,6 +245,60 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			gerne.setText("#"+song.getGenre());
 		}
 	}
+	
+	/**
+	 * Config popup Menu
+	 * @param v
+	 * @param song
+	 */
+	private void configPopupMenu(View v, final Song song){
+		final ImageView menu = (ImageView) v.findViewById(R.id.song_menu);
+		menu.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity.getActivity(), menu);
+                //Inflating the Popup using xml file
+                popup.getMenuInflater()
+                    .inflate(R.menu.song_list_menu, popup.getMenu());
+                
+
+                //registering popup with OnMenuItemClickListener
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    
+
+					@Override
+					public boolean onMenuItemClick(MenuItem arg0) {
+						// TODO Auto-generated method stub
+						switch (arg0.getItemId()) {
+						case R.id.list_addQueue:
+							MusicPlayerService.getInstance().addSongToQueue(song);
+							break;
+						case R.id.list_playNext:
+							MusicPlayerService.getInstance().addToNext(song);
+							break;
+						case R.id.list_addToPlaylist:
+							ArrayList<Song> songs = new ArrayList<Song>();
+							songs.add(song);
+							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
+							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
+							break;
+						case R.id.list_delete:
+							SongController.getInstance().deleteSong(song);
+							break;
+						default:
+							break;
+						}
+						
+						return false;
+					}
+                });
+
+                popup.show(); //showing popup menu
+			}
+		});	
+	}
 
 	/**
 	 * config avatar of Song
@@ -325,18 +383,24 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		    dm = (DownloadManager)MusicPlayerMainActivity.getActivity(). getSystemService(MusicPlayerMainActivity.DOWNLOAD_SERVICE);
 		    android.app.DownloadManager.Request request;
 
-			request = new android.app.DownloadManager.Request(
-			        Uri.parse(params[0].getLink()));
-			request.setTitle(params[0].getTitle());
-							
-			//OutputStream output = new FileOutputStream(outputName);
+			try {
+				request = new android.app.DownloadManager.Request(
+				        Uri.parse(params[0].getLink()));
+				request.setTitle(params[0].getTitle());
+				
+				//OutputStream output = new FileOutputStream(outputName);
 
-			//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
-			request.setDestinationInExternalPublicDir(ROOT_DIRECTORY, params[0].getTitle() + ".mp3");
-			request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-			request.setMimeType("audio/mpeg");
-			 enqueue = dm.enqueue(request);
-			 result = "Download successfully";
+				//android.app.DownloadManager.Request downloadManager =  new DownloadManager.Request(uri);
+				request.setDestinationInExternalPublicDir(ROOT_DIRECTORY, params[0].getTitle() + ".mp3");
+				request.setNotificationVisibility(android.app.DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+				request.setMimeType("audio/mpeg");
+				 enqueue = dm.enqueue(request);
+				 result = "Download successfully";
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 
 
 		    

@@ -303,7 +303,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		}
 
 		@Override
-		protected void onPostExecute(
+		protected void onPostExecute(	
 				ngo.music.soundcloudplayer.entity.SoundCloudAccount result) {
 			// TODO Auto-generated method stub
 			TextView artistFullname = (TextView) rootView

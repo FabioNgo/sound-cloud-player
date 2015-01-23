@@ -44,6 +44,10 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	protected int TAG_DATA_CHANGED = -1;
 	protected int TAG_ITEM_CHANGED = -1;
 
+	/**
+	 * Get list of Categories
+	 * @return
+	 */
 	public ArrayList<Category> getCategories() {
 		ArrayList<Category> categories = new ArrayList<Category>();
 		File file = new File(MusicPlayerMainActivity.getActivity()
