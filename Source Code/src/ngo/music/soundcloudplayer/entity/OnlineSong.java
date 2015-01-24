@@ -68,7 +68,7 @@ public class OnlineSong extends Song{
 	private String uri;
 	private String permalinkUrl;
 	private String waveformUrl;
-	private String streamUrl;
+	private String streamUrl = null;
 	private String resolvedStreamUrl;
 	private String downloadUrl;
 	private int playbackCount;
@@ -76,6 +76,7 @@ public class OnlineSong extends Song{
 	private int favoriteCount;
 	private int likesCount;
 	private int commentCount;
+	private Stream stream = null;
 	/**
 	 * binary data of the audio file
 	 * only for uploading
@@ -90,15 +91,18 @@ public class OnlineSong extends Song{
 	@Override
 	public String getLink() throws IOException {
 		// TODO Auto-generated method stub
-		SoundCloudUserController userController = SoundCloudUserController.getInstance();
-		ApiWrapper wrapper = userController.getApiWrapper();
-		
-		Stream stream = null;
+		if (stream != null){
+			
+		}else{
 		
 			
-				stream = wrapper.resolveStreamUrl(streamUrl,false);
+			SoundCloudUserController userController = SoundCloudUserController.getInstance();
+			ApiWrapper wrapper = userController.getApiWrapper();
 			
-			return stream.streamUrl;
+			
+			stream = wrapper.resolveStreamUrl(streamUrl,false);
+		}
+		return stream.streamUrl;
 		
 		
 	}
@@ -767,5 +771,10 @@ public class OnlineSong extends Song{
 	public void setResolvedStreamUrl(String resolvedStreamUrl) {
 		this.resolvedStreamUrl = resolvedStreamUrl;
 	}
+	
+	public Stream getStream(){
+		return stream;
+	}
+	
 
 }

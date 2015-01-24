@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
+import ngo.music.soundcloudplayer.controller.SoundCloudPlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import android.app.AlertDialog;
@@ -34,11 +35,24 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class PlaylistAddingFragment extends DialogFragment {
+	
+	public static final int PLAYLIST = 0;
+	public static final int SOUNDCLOUD_PLAYLIST = 1;
+	private int typePlaylist;
 	ArrayList<Song> songs;
 	private PlaylistAddingFragment instance;
-	public PlaylistAddingFragment(ArrayList<Song> songs) {
+	
+	/**
+	 * 
+	 * @param songs
+	 * @param type PLAYLIST = offline playlist
+	 * 				SOUNDCLOUD_PLAYLIST = soundcloud playlist
+	 */
+	public PlaylistAddingFragment(ArrayList<Song> songs, int type) {
 		// TODO Auto-generated constructor stub
 		this.songs = songs;
+		typePlaylist = type;
+		
 		instance = this;
 	}
 	@Override
@@ -72,47 +86,62 @@ public class PlaylistAddingFragment extends DialogFragment {
 		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.playlist_adding_toolbar);
 		toolbar.setTitle("Add to playlist");
 		toolbar.inflateMenu(R.menu.add_to_playlist_menu);
-		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
-			@Override
-			public boolean onMenuItemClick(MenuItem arg0) {
-				// TODO Auto-generated method stub
-				switch (arg0.getItemId()) {
-				case R.id.new_playlist:
-					final RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
-					newPlaylistGroup.setVisibility(View.VISIBLE);
-					final EditText editText = (EditText)rootView.findViewById(R.id.new_playlist_edit_text);
-					editText.setText("");
-					final ImageView newPlaylistBtn = (ImageView)rootView.findViewById(R.id.new_playlist_submit);
-					
-					
-					newPlaylistBtn.setOnClickListener(new OnClickListener() {
-						
-						@Override
-						public void onClick(View view) {
-							// TODO Auto-generated method stub
-							
-							try {
-								PlaylistController.getInstance().createCategory(editText.getText().toString());
-								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
-								newPlaylistGroup.setVisibility(View.GONE);
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								TextView errorText  = (TextView)rootView.findViewById(R.id.new_playlist_error_text);
-								errorText.setVisibility(View.VISIBLE);
-								errorText.setText(e.getMessage());
-							}
-							
-						}
-					});			
-					break;
-
-				default:
-					break;
-				}
-				return false;
-			}
-		});
+//		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+//			
+//			@Override
+//			public boolean onMenuItemClick(MenuItem arg0) {
+//				// TODO Auto-generated method stub
+//				System.out.println ("TYPE PLAYLIST = " + arg0.getItemId());
+//				switch (arg0.getItemId()) {
+//				case R.id.new_playlist:
+//					
+//					final RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
+//					newPlaylistGroup.setVisibility(View.VISIBLE);
+//					final EditText editText = (EditText)rootView.findViewById(R.id.new_playlist_edit_text);
+//					editText.setText("");
+//					final ImageView newPlaylistBtn = (ImageView)rootView.findViewById(R.id.new_playlist_submit);
+//					
+//					
+//					newPlaylistBtn.setOnClickListener(new OnClickListener() {
+//						
+//						
+//
+//						@Override
+//						public void onClick(View view) {
+//							// TODO Auto-generated method stub
+//							
+//							try {
+//								
+//								switch (typePlaylist) {
+//								case PLAYLIST:
+//									PlaylistController.getInstance().createCategory(editText.getText().toString());
+//									break;
+//								case SOUNDCLOUD_PLAYLIST:
+//									SoundCloudPlaylistController.getInstance().createCategory(editText.getText().toString());
+//									break;
+//								default:
+//									break;
+//								}
+//								
+//								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
+//								newPlaylistGroup.setVisibility(View.GONE);
+//							} catch (Exception e) {
+//								// TODO Auto-generated catch block
+//								TextView errorText  = (TextView)rootView.findViewById(R.id.new_playlist_error_text);
+//								errorText.setVisibility(View.VISIBLE);
+//								errorText.setText(e.getMessage());
+//							}
+//							
+//						}
+//					});			
+//					break;
+//
+//				default:
+//					break;
+//				}
+//				return false;
+//			}
+//		});
 	}
 	
 	
@@ -144,5 +173,7 @@ public class PlaylistAddingFragment extends DialogFragment {
 		
 		listPlaylist.setAdapter(SimplePlaylistAdapter.getInstance());
 	}
+	
+	
 
 }

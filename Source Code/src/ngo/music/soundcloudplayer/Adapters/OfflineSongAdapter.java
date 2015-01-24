@@ -117,7 +117,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 						case R.id.list_addToPlaylist:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
+							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs, PlaylistAddingFragment.PLAYLIST);
 							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
 							break;
 						case R.id.list_delete:

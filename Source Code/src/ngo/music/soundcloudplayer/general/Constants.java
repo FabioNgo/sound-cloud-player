@@ -217,4 +217,19 @@ public interface Constants {
 		String ELECTRONIC_LINK = "https://api-v2.soundcloud.com/explore/electronic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
 		String FOLK_LINK = "https://api-v2.soundcloud.com/explore/folk?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
 	}
+	
+	interface PlaylistConstant{
+		String PLAYLIST_ID = "id";
+		String PLAYLIST_TITLE = "title";
+		String PLAYLIST_CREATED_AT = "created_at";
+		String PLAYLIST_CREATOR_ID = "user_id";
+		String PLAYLIST_CREATOR = "user";
+		String PLAYLIST_PERMALINK_URL = "permalink_url";
+		String PLAYLIST_ARTWORK_URL = "artwork_url";
+		String PLAYLIST_DESCRIPTION = "description";
+		String PLAYLIST_DURATION = "duration";
+		
+				
+		
+	}
 }

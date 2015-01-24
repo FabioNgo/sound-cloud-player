@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
+import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -44,6 +45,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Action;
 import android.util.Log;
 import android.widget.RemoteViews;
+import android.widget.Toast;
 
 public class MusicPlayerService extends Service implements OnErrorListener,
 		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
@@ -175,7 +177,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play next Song when click to next button or at the end of current song
 	 */
 	public void playNextSong() {
+		
 		mediaPlayer.stop();
+		
 		if (!nextSongId.equals("")) {
 			stackSongplayed.push(nextSongId);
 			for (int i = 0; i < songQueue.size(); i++) {
@@ -221,6 +225,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
+	
+	
+	
+	
+	
 	/**
 	 * start Media player.
 	 * 
@@ -253,6 +262,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
+		System.out.println ("ON COMPLETITON : POS " + currentSongPosition);
+		System.out.println ("ON COMPLETITON : STATE" + States.musicPlayerState);
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 
@@ -392,7 +403,20 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			Song song = getCurrentSong();
-			new playNewSongBackground().execute(song);
+			if (song instanceof OnlineSong){
+				Stream stream =((OnlineSong) song).getStream(); 
+				if ( stream != null){
+					System.out.println ("SERVICE STREAM NOT NULL");
+					System.out.println ("SERVICE = " + stream.streamUrl);
+					String link = stream.streamUrl;
+					playSong(song,link);
+				}else{
+					new playNewSongBackground().execute(song);
+				}
+			}else{
+				playSong(song, ((OfflineSong)song).getLink());
+				
+			}
 
 		}
 		updateNotification();
@@ -742,27 +766,39 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			// TODO Auto-generated method stub
 			if (link == null){
 				playNextSong();
+				Toast.makeText(getApplicationContext(), "Cannot play this song", Toast.LENGTH_LONG).show();
 				return;
 			}
-			try {
-
-				mediaPlayer.reset();
-
-				mediaPlayer.setDataSource(link);
-				mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-				mediaPlayer.prepare();
-				playMedia();
-				if (song instanceof OfflineSong) {
-					SongController.getInstance().storePlayingSong();
-				}
-
-			} catch (Exception e) {
-				Log.e("playsong", e.toString());
-
-			}
+			playSong(song,link);
 		}
 
+		
 	}
+	
+	/**
+	 * @param link
+	 * A part of playNewSong function. Called after get link of song
+	 */
+	private void playSong(Song song, String link) {
+		
+		try {
+
+			mediaPlayer.reset();
+
+			mediaPlayer.setDataSource(link);
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			mediaPlayer.prepare();
+			playMedia();
+			if (song instanceof OfflineSong) {
+				SongController.getInstance().storePlayingSong();
+			}
+
+		} catch (Exception e) {
+			Log.e("playsong", e.toString());
+
+		}
+	}
+
 
 	public boolean queueChanged() {
 		// TODO Auto-generated method stub

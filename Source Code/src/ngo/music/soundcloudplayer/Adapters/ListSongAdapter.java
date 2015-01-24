@@ -55,7 +55,7 @@ import android.widget.Toast;
 
 public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Constants {
 	
-	private static final String ME_FAVORITE = "https://api.soundcloud.com/me/favorites/";
+	
 	protected ApiWrapper wrapper;
 	 long enqueue = 0;
 	 DownloadManager dm = null;
@@ -281,7 +281,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 						case R.id.list_addToPlaylist:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
+							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs, PlaylistAddingFragment.SOUNDCLOUD_PLAYLIST);
 							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
 							break;
 						case R.id.list_delete:

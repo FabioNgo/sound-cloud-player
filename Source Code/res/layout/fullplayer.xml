@@ -47,6 +47,7 @@
 			<!-- AVATAR OF Artist -->
 
 			<com.android.volley.toolbox.NetworkImageView
+			    android:layout_marginLeft="10dp"
 				android:id="@+id/artist_image"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
@@ -56,6 +57,7 @@
 
 			<RelativeLayout
 				android:layout_width="wrap_content"
+				
 				android:layout_height="wrap_content"
 				android:layout_marginStart="4dp"
 				android:layout_marginTop="10dp"

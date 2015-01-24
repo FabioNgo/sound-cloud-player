@@ -303,25 +303,28 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		}
 
 		@Override
-		protected void onPostExecute(	
-				ngo.music.soundcloudplayer.entity.SoundCloudAccount result) {
+		protected void onPostExecute(SoundCloudAccount result) {
 			// TODO Auto-generated method stub
 			TextView artistFullname = (TextView) rootView
 					.findViewById(R.id.artist_fullname);
 			NetworkImageView artistAvatar = (NetworkImageView) rootView
 					.findViewById(R.id.artist_image);
+			RelativeLayout artisInfo = (RelativeLayout) rootView.findViewById(R.id.artist_info);
+			
 
+			
 			artistFullname.setText(soundCloudAccount.getFullName());
+			
 			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
 					AppController.getInstance().getImageLoader());
-			BasicFunctions.setImageViewSize(
-					MusicPlayerMainActivity.screenHeight / 10,
-					MusicPlayerMainActivity.screenHeight / 10, artistAvatar);
+//			BasicFunctions.setImageViewSize(
+//					MusicPlayerMainActivity.screenHeight / 10,
+//					MusicPlayerMainActivity.screenHeight / 10, artistAvatar);
 
 			artistAvatar.setDefaultImageResId(R.drawable.ic_launcher);
-
-			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
-					AppController.getInstance().getImageLoader());
+//
+//			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
+//					AppController.getInstance().getImageLoader());
 
 		}
 
@@ -334,6 +337,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 * Config artist of Song
 		 */
 		if(song == null){
+			
 			return;
 		}
 		FrameLayout songInfo = (FrameLayout) rootView
@@ -343,6 +347,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		songInfo.getLayoutParams().height = songInfo.getLayoutParams().width;
 
 		artistInfo = (RelativeLayout) rootView.findViewById(R.id.artist_info);
+		artistInfo.getLayoutParams().height =MusicPlayerMainActivity.screenHeight / 10; 
 
 		/*
 		 * If play online, load avatar of artist
@@ -350,7 +355,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		OnlineSong onlineSong = null;
 
 		if (song instanceof OnlineSong) {
-
+			artistInfo.setVisibility(View.VISIBLE);
 			onlineSong = (OnlineSong) song;
 			// artistInfo.setAlpha((float) 0.6);
 			try {

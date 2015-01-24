@@ -27,6 +27,7 @@ import ngo.music.soundcloudplayer.api.Params;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.entity.Playlist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
 import ngo.music.soundcloudplayer.entity.User;
@@ -124,7 +125,7 @@ public class SoundCloudUserController extends UserController implements Constant
 	public void retrevieUserInfoOnline(ApiWrapper wrapper) throws IOException, JSONException {
 		HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 		//t = wrapper.clientCredentials();
-		//System.out.println ("TOKEN = " + wrapper.getToken());
+		System.out.println (resp.getStatusLine());
 		JSONObject me = Http.getJSON(resp);
 		//set information of logged user
 		
@@ -307,7 +308,7 @@ public class SoundCloudUserController extends UserController implements Constant
 			// TODO Auto-generated method stub
 			ApiWrapper wrapper = getApiWrapper();
 			String request =  ME_FAVORITE + song[0].getId();
-			System.out.println(request);
+			
 			try {
 				wrapper.put(Request.to(request));
 			} catch (IOException e) {
@@ -603,10 +604,12 @@ public class SoundCloudUserController extends UserController implements Constant
 	 * @return
 	 */
 	public SoundCloudAccount getUserbyId(String params){
-		SoundCloudAccount soundCloudAccount = null;
+		SoundCloudAccount soundCloudAccount = new SoundCloudAccount();
 		wrapper = getApiWrapper();
 		try {
+			
 			HttpResponse resp  = wrapper.get(Request.to(Constants.USER_LINK + "/" + String.valueOf(params)));
+			
 			String respString = Http.getString(resp);
 			JSONObject me = new JSONObject(respString);
 			soundCloudAccount = (SoundCloudAccount) addSimpleUserInfo(me);
@@ -657,22 +660,7 @@ public class SoundCloudUserController extends UserController implements Constant
 
 	}
 
-	public ArrayList<String> getPlaylist() {
-		// TODO Auto-generated method stub
-		wrapper = getApiWrapper();
-		HttpResponse resp;
-		try {
-			resp = wrapper.get(Request.to(ME_PLAYLISTS));
-			String resposeStr = Http.getString(resp);
-			System.out.println (resposeStr);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		return null;
-	}
+	
 
 	
 	

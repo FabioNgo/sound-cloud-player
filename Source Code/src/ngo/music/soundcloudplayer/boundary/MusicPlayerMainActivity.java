@@ -47,8 +47,8 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	private PagerSlidingTabStrip tabs;
 	private ViewPager pager;
 	/*
-	 * If true : Display Fragemnt with tab : Trending Music, Audio...... If
-	 * flase: Display Fragment with tab : My music ......
+	 * If true : Display Fragment with tab : Trending Music, Audio...... If
+	 * False: Display Fragment with tab : My music ......
 	 */
 	public static boolean isExplore = false;
 
@@ -66,14 +66,19 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		return activity;
 	}
 
-	public MusicPlayerMainActivity() {
-		// TODO Auto-generated constructor stub
-		activity = this;
-
-	}
+//	public MusicPlayerMainActivity() {
+//		// TODO Auto-generated constructor stub
+//		activity = this;
+//
+//	}
+	
+	
+	
+	
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		activity = this;
 		States.appState = APP_STOPPED;
 		super.onCreate(savedInstanceState);
 

@@ -57,10 +57,12 @@ public abstract class PlayerUI extends Fragment {
 	 * @param song
 	 */
 	public void updateSongInfo(Song song) {
+		updateOtherInfo(song);
 		updateTitle(song);
 		updateSubtitle(song);
+		
 		updateImage(song);
-		updateOtherInfo(song);
+		
 	}
 
 	protected abstract void updateOtherInfo(Song song);
