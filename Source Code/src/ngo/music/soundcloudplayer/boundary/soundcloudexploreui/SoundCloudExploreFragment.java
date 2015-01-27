@@ -21,11 +21,16 @@ import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.app.ProgressDialog;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -69,6 +74,21 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 //		}
 //		return instance;
 //	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		// TODO Auto-generated method stub
+		 inflater = getActivity().getMenuInflater();
+		 inflater.inflate(R.menu.options_menu, menu);
+		 
+		 //Associate searchable configuration with the SearchView
+		 SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+		 SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
+		 searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+		 
+		 
+		    
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

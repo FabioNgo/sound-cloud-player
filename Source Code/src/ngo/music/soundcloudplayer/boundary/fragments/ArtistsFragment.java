@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.AsyncTask.UpdtateNewSongBackgroundTask;
+import ngo.music.soundcloudplayer.AsyncTask.UpdateNewSongBackgroundTask;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.graphics.Color;
@@ -70,7 +70,7 @@ public class ArtistsFragment extends ListContentFragment implements OnRefreshLis
 	protected void initiateRefresh() {
 		// TODO Auto-generated method stub
 		if (mSwipeRefreshLayout != null) {
-			new UpdtateNewSongBackgroundTask(mSwipeRefreshLayout).execute(songsList);
+			new UpdateNewSongBackgroundTask(mSwipeRefreshLayout).execute(songsList);
 		}
 	}
 

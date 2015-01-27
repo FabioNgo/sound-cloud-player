@@ -17,13 +17,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-public class UpdtateNewSongBackgroundTask extends
+public class UpdateNewSongBackgroundTask extends
 		AsyncTask<ListView, Void, ArrayList<Song>> {
 
 	static final int TASK_DURATION = 3 * 1000; // 3 seconds
 	private Adapter adapter;
 	private SwipeRefreshLayout mSwipeRefreshLayout;
-	public UpdtateNewSongBackgroundTask(SwipeRefreshLayout mSwipeRefreshLayout) {
+	public UpdateNewSongBackgroundTask(SwipeRefreshLayout mSwipeRefreshLayout) {
 		// TODO Auto-generated constructor stub
 		this.mSwipeRefreshLayout = mSwipeRefreshLayout;
 	}

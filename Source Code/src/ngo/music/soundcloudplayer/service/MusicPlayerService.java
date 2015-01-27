@@ -20,6 +20,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver;
 import ngo.music.soundcloudplayer.general.States;
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -247,7 +248,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	private void playMedia() {
 		// TODO Auto-generated method stub
-
+		
 		mediaPlayer.start();
 		States.musicPlayerState = MUSIC_PLAYING;
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_PLAYING);
@@ -273,8 +274,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		System.out.println("ON COMPLETITON : POS " + currentSongPosition);
-		System.out.println("ON COMPLETITON : STATE" + States.musicPlayerState);
+
+		System.out.println ("SONG IN POS " + currentSongPosition + "  FINISHED");
+
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 
@@ -808,6 +810,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setDataSource(link);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.prepare();
+			
 			playMedia();
 			if (song instanceof OfflineSong) {
 				SongController.getInstance().storePlayingSong();
@@ -815,6 +818,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		} catch (Exception e) {
 			Log.e("playsong", e.toString());
+			//stopSelf();
+			iniMediaPlayer();
+			playNextSong();
+			
 
 		}
 	}

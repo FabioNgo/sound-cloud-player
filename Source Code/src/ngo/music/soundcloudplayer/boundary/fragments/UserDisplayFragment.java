@@ -157,24 +157,26 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		/*
 		 * Upload Button
 		 */
-		RelativeLayout uploadButton = (RelativeLayout) rootView.findViewById(R.id.upload_soundcloud_field);
-		uploadButton.getLayoutParams().height = constantLayoutHeight;
-		uploadButton.setVisibility(View.GONE);
-//		if (!userController.isLogin()){
-//			uploadButton.setVisibility(View.GONE);
-//		}else{
-//			uploadButton.setVisibility(View.VISIBLE);
-//		}
-//		uploadButton.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				
-//				Intent uploadActivity = new Intent(getActivity(), UploadSongActivity.class);
-//				startActivity(uploadActivity);
-//			}
-//		});
+		RelativeLayout mySoundCloudLayout = (RelativeLayout) rootView.findViewById(R.id.acc_soundcloud_field);
+		mySoundCloudLayout.getLayoutParams().height = constantLayoutHeight;
+		
+		mySoundCloudLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				MusicPlayerMainActivity.type = MusicPlayerMainActivity.MY_SOUNDCLOUD;
+				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
+				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+				
+				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				i.putExtra(USER, bundle);
+				//i.putExtra(ME_FAVORITES,stringResponse);
+				MusicPlayerMainActivity.getActivity().finish();
+				startActivity(i);
+			}
+		});
+
 	}
 
 	/**
@@ -275,7 +277,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
-			MusicPlayerMainActivity.isExplore = true;
+			MusicPlayerMainActivity.type = MusicPlayerMainActivity.SOUNDCLOUD_EXPLORE;
 			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
 			soundCloudUserController.setResponseString(stringResponse);
@@ -284,10 +286,65 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			MusicPlayerMainActivity.getActivity().finish();
 			startActivity(i);
-			
+
+			pDialog.dismiss();
+		}
+		
+	}
 	
-			 
+	
+	private class loadMySoundCloudBackground extends AsyncTask<String, String, String>{
+
+		ProgressDialog pDialog =  new ProgressDialog(getActivity().getApplicationContext());
+		String stringResponse;
+		
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
 			
+			//super.onPreExecute();
+			
+			pDialog = new ProgressDialog(getActivity());
+			pDialog.setMessage("Please wait......");
+			pDialog.setIndeterminate(false);
+			pDialog.setCancelable(false);
+			
+			pDialog.show();
+			
+		}
+		
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			SongController songController = SongController.getInstance();
+			songController.initialSongCategory();
+			
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, soundCloudUserController.getToken());
+			try {
+				HttpResponse resp = wrapper.get(Request.to(ME_FAVORITES));
+				stringResponse = Http.getString(resp);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			MusicPlayerMainActivity.type = MusicPlayerMainActivity.SOUNDCLOUD_EXPLORE;
+			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
+			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			soundCloudUserController.setResponseString(stringResponse);
+			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+			i.putExtra(USER, bundle);
+			//i.putExtra(ME_FAVORITES,stringResponse);
+			MusicPlayerMainActivity.getActivity().finish();
+			startActivity(i);
+
 			pDialog.dismiss();
 		}
 		

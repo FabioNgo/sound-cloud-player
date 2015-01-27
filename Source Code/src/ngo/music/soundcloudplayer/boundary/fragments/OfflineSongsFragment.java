@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.AsyncTask.UpdtateNewSongBackgroundTask;
+import ngo.music.soundcloudplayer.AsyncTask.UpdateNewSongBackgroundTask;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.graphics.Color;
@@ -52,7 +52,7 @@ public class OfflineSongsFragment extends ListContentFragment implements OnRefre
 	protected void initiateRefresh() {
 		// TODO Auto-generated method stub
 		if (mSwipeRefreshLayout != null) {
-			new UpdtateNewSongBackgroundTask(mSwipeRefreshLayout).execute(listView);
+			new UpdateNewSongBackgroundTask(mSwipeRefreshLayout).execute(listView);
 		}
 	}
 

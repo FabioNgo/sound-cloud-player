@@ -34,13 +34,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class MyFavoriteSoundCloudFragment extends Fragment implements Constants{
+public class MySoundCloudFavoriteFragment extends Fragment implements Constants{
 
 	private View rootView;
 	private ListView songsList;
 	private ApiWrapper wrapper;
 	private FavoriteSongAdapter adapter;
-	public MyFavoriteSoundCloudFragment() {
+	public MySoundCloudFavoriteFragment() {
 		// TODO Auto-generated constructor stub
 	}
 	@Override

@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.Adapters.MySoundCloudTabAdapter;
 import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
-import ngo.music.soundcloudplayer.Adapters.TabsAdapter;
+import ngo.music.soundcloudplayer.Adapters.OfflineTabsAdapter;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.fragments.UserDisplayFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -50,7 +51,12 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 * If true : Display Fragment with tab : Trending Music, Audio...... If
 	 * False: Display Fragment with tab : My music ......
 	 */
-	public static boolean isExplore = false;
+	public static int type = 0;
+	
+	public static final int OFFLINE = 0;
+	public static final int SOUNDCLOUD_EXPLORE = 1;
+	public static final int MY_SOUNDCLOUD = 2;
+	//private int type;
 
 	private int defaultTabPosition = 0;
 	protected Object mService;
@@ -95,7 +101,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		/*
 		 * Get data from other activity
 		 */
-		getDataFromOtherActivity();
+//		getDataFromOtherActivity();
 		/*
 		 * get Screen size
 		 */
@@ -125,24 +131,24 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		configMusicPlayerService();
 	}
 
-	/**
-	 * Get data which transfered from other activity
-	 */
-	private void getDataFromOtherActivity() {
-		try {
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController
-					.getInstance();
-			Token token = soundCloudUserController.getToken();
-			if (token == null)
-				defaultTabPosition = 2;
-
-			Bundle bundle = getIntent().getExtras();
-			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
-
-		} catch (NullPointerException e) {
-
-		}
-	}
+//	/**
+//	 * Get data which transfered from other activity
+//	 */
+//	private void getDataFromOtherActivity() {
+//		try {
+//			SoundCloudUserController soundCloudUserController = SoundCloudUserController
+//					.getInstance();
+//			
+//			
+//				
+//
+//			Bundle bundle = getIntent().getExtras();
+//			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
+//
+//		} catch (NullPointerException e) {
+//
+//		}
+//	}
 
 	/**
 	 * Tab Sliding
@@ -152,12 +158,24 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		pager = (ViewPager) findViewById(R.id.pager);
 		FragmentPagerAdapter adapter;
-		if (isExplore) {
-			adapter = new SoundCloudExploreTabAdater(
-					getSupportFragmentManager());
-		} else {
-			adapter = new TabsAdapter(getSupportFragmentManager());
+		switch (type){
+		case OFFLINE:
+			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
+			break;
+		case SOUNDCLOUD_EXPLORE:
+			adapter = new SoundCloudExploreTabAdater(getSupportFragmentManager());
+			break;
+			
+		case MY_SOUNDCLOUD:
+			adapter =  new MySoundCloudTabAdapter(getSupportFragmentManager());
+			break;
+			
+		default:
+			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
+			break;
+			
 		}
+		
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
 		pager.setOffscreenPageLimit(10);
@@ -167,7 +185,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		pager.setPageMargin(pageMargin);
 
 		tabs.setViewPager(pager);
-		isExplore = false;
+		type = 0;
 	}
 
 	/**

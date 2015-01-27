@@ -7,7 +7,7 @@ import ngo.music.soundcloudplayer.Adapters.CompositionViewHolder;
 import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.Adapters.PlaylistAdapter;
-import ngo.music.soundcloudplayer.AsyncTask.UpdtateNewSongBackgroundTask;
+import ngo.music.soundcloudplayer.AsyncTask.UpdateNewSongBackgroundTask;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.controller.UIController;
