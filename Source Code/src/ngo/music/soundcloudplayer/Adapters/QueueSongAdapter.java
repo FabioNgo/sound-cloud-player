@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -28,6 +29,7 @@ import com.volley.api.AppController;
 public class QueueSongAdapter extends ArrayAdapter<Song> {
 	private View v;
 	private boolean isdatachanged = true;
+
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
 		songs = MusicPlayerService.getInstance().getQueue();
@@ -43,8 +45,9 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	public static QueueSongAdapter getInstance() {
 
 		if (instance == null) {
-			instance = new QueueSongAdapter(MusicPlayerMainActivity.getActivity()
-					.getApplicationContext(), R.layout.song_in_queue);
+			instance = new QueueSongAdapter(MusicPlayerMainActivity
+					.getActivity().getApplicationContext(),
+					R.layout.song_in_queue);
 		}
 		return instance;
 	}
@@ -69,7 +72,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	 * @param v
 	 */
 	private void setLayoutInformation(int position, View v) {
-		
+
 		final Song song = songs.get(position);
 		/**
 		 * Set avatar for song
@@ -78,39 +81,50 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 				.findViewById(R.id.song_queue_image);
 		//
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth / 20,
-				MusicPlayerMainActivity.screenWidth / 20, avatar);
 
-		avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		BasicFunctions.setImageViewSize(
+				BasicFunctions.dpToPx(50, getContext()),
+				BasicFunctions.dpToPx(50, getContext()), avatar);
+		String artworkUrl = song.getArtworkUrl();
+		if (artworkUrl.equals("")) {
+			avatar.setImageResource(R.drawable.ic_launcher);
+		} else {
+			avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+		}
 		/**
 		 * Button
 		 */
 		final ImageView menu = (ImageView) v.findViewById(R.id.song_queue_menu);
 		menu.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity.getActivity(), menu);
-                //Inflating the Popup using xml file
-                popup.getMenuInflater()
-                    .inflate(R.menu.song_queue_menu, popup.getMenu());
+				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
+						.getActivity(), menu);
+				// Inflating the Popup using xml file
+				popup.getMenuInflater().inflate(R.menu.song_queue_menu,
+						popup.getMenu());
 
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    
+				// registering popup with OnMenuItemClickListener
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
 					@Override
 					public boolean onMenuItemClick(MenuItem arg0) {
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.queue_removeFromQueue:
-							MusicPlayerService.getInstance().removeFromQueue(song,false);
+							MusicPlayerService.getInstance().removeFromQueue(
+									song, false);
 							break;
 						case R.id.queue_playNext:
 							MusicPlayerService.getInstance().addToNext(song);
 							break;
 						case R.id.queue_addToPlaylist:
+							ArrayList<Song> songs = new ArrayList<Song>();
+							songs.add(song);
+							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs, PlaylistAddingFragment.PLAYLIST);
+							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
 							break;
 						case R.id.queue_delete:
 							SongController.getInstance().deleteSong(song);
@@ -118,12 +132,12 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 						default:
 							break;
 						}
-						
+
 						return false;
 					}
-                });
+				});
 
-                popup.show(); //showing popup menu
+				popup.show(); // showing popup menu
 			}
 		});
 		/*
@@ -135,8 +149,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		/*
 		 * Set sub title
 		 */
-		TextView subtitle = (TextView) v
-				.findViewById(R.id.song_queue_subtitle);
+		TextView subtitle = (TextView) v.findViewById(R.id.song_queue_subtitle);
 		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
 		/**
 		 * Set progress bar
@@ -149,9 +162,11 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 					.findViewById(R.id.song_queue_progress_bar);
 			progressWheel.setVisibility(View.VISIBLE);
 			if (MusicPlayerService.getInstance().isPlaying()) {
-				progressWheel.setBackgroundResource(R.drawable.ic_media_pause_progress);
+				progressWheel
+						.setBackgroundResource(R.drawable.ic_media_pause_progress);
 			} else {
-				progressWheel.setBackgroundResource(R.drawable.ic_media_play_progress);
+				progressWheel
+						.setBackgroundResource(R.drawable.ic_media_play_progress);
 			}
 			UIController.getInstance().addProgressBar(progressWheel);
 		} else {
@@ -189,15 +204,17 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	}
 
 	public void updateQueue() {
-		
+
 		songs = MusicPlayerService.getInstance().getQueue();
-//		updateDataChanged(true);
+		// updateDataChanged(true);
 		return;
 	}
-	public void updateDataChanged(boolean input){
+
+	public void updateDataChanged(boolean input) {
 		isdatachanged = input;
 	}
-	public boolean isDataChanged(){
+
+	public boolean isDataChanged() {
 		return isdatachanged;
 	}
 }

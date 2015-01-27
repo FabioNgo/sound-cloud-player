@@ -131,6 +131,20 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 
 	}
+	/**
+	 * Get next song 
+	 * 
+	 * @return
+	 */
+	public Song getNextSong() {
+
+		if(nextSongId.equals("")){
+			return null;
+		}else{
+			return SongController.getInstance().getSong(nextSongId);
+		}
+
+	}
 
 	public ArrayList<Song> getQueue() {
 		return songQueue;
@@ -393,6 +407,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            press start
 	 */
 	private void playNewSong(boolean startNow) {
+		Song song = getCurrentSong();
+		if(song == null){
+			BasicFunctions.makeToastTake("No song to play", getApplicationContext());
+			return;
+		}
 		if (startNow) {
 
 			States.musicPlayerState = MUSIC_PLAYING;
@@ -400,7 +419,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
-			Song song = getCurrentSong();
+			
 			if (song instanceof OnlineSong) {
 				Stream stream = ((OnlineSong) song).getStream();
 				if (stream != null) {

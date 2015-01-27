@@ -77,8 +77,8 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set avatar for song
 		 */
-		// ImageView avatar = (ImageView)
-		// v.findViewById(R.id.song_image);
+//		 ImageView avatar = (ImageView)
+//		 v.findViewById(R.id.song_image);
 		//
 		// ImageLoader mImageLoader =
 		// AppController.getInstance().getImageLoader();

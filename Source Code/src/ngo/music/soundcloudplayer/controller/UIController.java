@@ -16,6 +16,7 @@ import ngo.music.soundcloudplayer.boundary.fragments.CompositionListContentFragm
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -177,6 +178,10 @@ public class UIController implements Constants.MusicService, Constants.Data,
 						* (double) MusicPlayerService.getInstance()
 								.getCurrentTime()
 						/ MusicPlayerService.getInstance().getDuration());
+				if(degree == 180){
+					String format = String.format("Next song: %s)", MusicPlayerService.getInstance().getNextSong().getTitle());
+					BasicFunctions.makeToastTake(format, MusicPlayerService.getInstance());
+				}
 				for (ProgressWheel progressbar : musicProgressBars) {
 
 					progressbar.setProgressDegree(degree);
@@ -220,8 +225,11 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	public void updateUiWhilePlayingMusic(final int TAG) {
 		// TODO Auto-generated method stub
 		Song curSong = MusicPlayerService.getInstance().getCurrentSong();
+		String format = "";
 		switch (TAG) {
 		case MUSIC_PLAYING:
+			format = String.format("Song playing: %s ", curSong.getTitle(), curSong.getArtist());
+			BasicFunctions.makeToastTake(format, MusicPlayerService.getInstance());
 			for (ProgressWheel progressbar : musicProgressBars) {
 
 				progressbar
@@ -260,6 +268,8 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			break;
 
 		case MUSIC_NEW_SONG:
+//			format = String.format("Song playing: %s", curSong.getTitle(), curSong.getArtist());
+//			BasicFunctions.makeToastTake(format, MusicPlayerService.getInstance());
 			for (PlayerUI playerUI : uiFragments) {
 
 				playerUI.updateSongInfo(curSong);

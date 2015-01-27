@@ -9,7 +9,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.view.Gravity;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -140,7 +143,14 @@ public class BasicFunctions {
 	}
 
 	public static void makeToastTake(String text, Context context) {
-		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+		Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+		LinearLayout layout = (LinearLayout) toast.getView();
+		
+		if (layout.getChildCount() > 0) {
+		  TextView tv = (TextView) layout.getChildAt(0);
+		  tv.setGravity(Gravity.CENTER_HORIZONTAL);
+		}
+		toast.show();
 	}
 
 	
