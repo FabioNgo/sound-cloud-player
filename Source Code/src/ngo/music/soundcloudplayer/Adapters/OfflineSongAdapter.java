@@ -159,7 +159,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		} else {
 			ImageView playStt = (ImageView) v
 					.findViewById(R.id.song_play_stt);
-			playStt.setVisibility(View.INVISIBLE);
+			playStt.setVisibility(View.GONE);
 			// UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
 
 		}

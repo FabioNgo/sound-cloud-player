@@ -39,6 +39,7 @@ import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
@@ -106,6 +107,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		super.onStartCommand(intent, flags, startId);
 		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
+		
 		return START_STICKY;
 	}
 
@@ -177,9 +179,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play next Song when click to next button or at the end of current song
 	 */
 	public void playNextSong() {
-		
+
 		mediaPlayer.stop();
-		
+
 		if (!nextSongId.equals("")) {
 			stackSongplayed.push(nextSongId);
 			for (int i = 0; i < songQueue.size(); i++) {
@@ -225,11 +227,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	}
 
-	
-	
-	
-	
-	
 	/**
 	 * start Media player.
 	 * 
@@ -262,8 +259,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		System.out.println ("ON COMPLETITON : POS " + currentSongPosition);
-		System.out.println ("ON COMPLETITON : STATE" + States.musicPlayerState);
+		System.out.println("ON COMPLETITON : POS " + currentSongPosition);
+		System.out.println("ON COMPLETITON : STATE" + States.musicPlayerState);
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 
@@ -306,7 +303,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_CUR_POINT_CHANGED);
+		UIController.getInstance().updateUiWhilePlayingMusic(
+				MUSIC_CUR_POINT_CHANGED);
 	}
 
 	public class MusicPlayerServiceBinder extends Binder {
@@ -367,7 +365,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		currentSongPosition = position;
 		isShuffle = true;
 		playNewSong(true);
-
+		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 	}
 
 	public void playNewExploreSong(int position, int category,
@@ -403,19 +401,19 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			Song song = getCurrentSong();
-			if (song instanceof OnlineSong){
-				Stream stream =((OnlineSong) song).getStream(); 
-				if ( stream != null){
-					System.out.println ("SERVICE STREAM NOT NULL");
-					System.out.println ("SERVICE = " + stream.streamUrl);
+			if (song instanceof OnlineSong) {
+				Stream stream = ((OnlineSong) song).getStream();
+				if (stream != null) {
+					System.out.println("SERVICE STREAM NOT NULL");
+					System.out.println("SERVICE = " + stream.streamUrl);
 					String link = stream.streamUrl;
-					playSong(song,link);
-				}else{
+					playSong(song, link);
+				} else {
 					new playNewSongBackground().execute(song);
 				}
-			}else{
-				playSong(song, ((OfflineSong)song).getLink());
-				
+			} else {
+				playSong(song, ((OfflineSong) song).getLink());
+
 			}
 
 		}
@@ -567,6 +565,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		PendingIntent resultPendingIntent = PendingIntent.getActivity(
 				getApplicationContext(), 0, resultIntent, 0);
 		builder.setContentIntent(resultPendingIntent);
+		if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP) {
+			builder.setVisibility(Notification.VISIBILITY_PUBLIC);
+		}
 		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		Notification notification = builder.build();
 		notification.flags |= NotificationCompat.FLAG_ONGOING_EVENT;
@@ -751,9 +752,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			// TODO Auto-generated method stub
 			String link = "";
 			song = params[0];
-			try{
+			try {
 				link = song.getLink();
-			}catch (Exception e){
+			} catch (Exception e) {
 				e.printStackTrace();
 				link = null;
 			}
@@ -764,23 +765,23 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		@Override
 		protected void onPostExecute(String link) {
 			// TODO Auto-generated method stub
-			if (link == null){
+			if (link == null) {
 				playNextSong();
-				Toast.makeText(getApplicationContext(), "Cannot play this song", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(),
+						"Cannot play this song", Toast.LENGTH_LONG).show();
 				return;
 			}
-			playSong(song,link);
+			playSong(song, link);
 		}
 
-		
 	}
-	
+
 	/**
 	 * @param link
-	 * A part of playNewSong function. Called after get link of song
+	 *            A part of playNewSong function. Called after get link of song
 	 */
 	private void playSong(Song song, String link) {
-		
+
 		try {
 
 			mediaPlayer.reset();
@@ -798,7 +799,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		}
 	}
-
 
 	public boolean queueChanged() {
 		// TODO Auto-generated method stub
@@ -861,7 +861,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			nextSongId = songQueue.get(nextPosition).getId();
 		} else {
 			if (size == 2) {
-				nextSongId = songQueue.get((currentSongPosition + 1)%2).getId();
+				nextSongId = songQueue.get((currentSongPosition + 1) % 2)
+						.getId();
 			}
 			if (size == 1) {
 				nextSongId = getCurrentSongId();

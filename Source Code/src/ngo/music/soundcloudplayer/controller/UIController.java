@@ -359,6 +359,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			}
 			loaded = true;
 			States.appState = APP_RUNNING;
+			
 			break;
 		default:
 
