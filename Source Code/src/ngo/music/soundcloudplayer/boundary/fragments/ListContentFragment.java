@@ -49,9 +49,9 @@ public abstract class ListContentFragment extends Fragment implements
 	 *            : is the first time loading or not
 	 */
 	public void load() {
+		adapter.notifyDataSetChanged();
 		UIController.getInstance().addAdapter(adapter);
 		listView.setAdapter((ListAdapter) adapter);
-
 		listView.setOnItemClickListener(this);
 	}
 

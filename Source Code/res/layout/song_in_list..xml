@@ -20,7 +20,7 @@
 		android:layout_toEndOf="@+id/song_image"
 		android:layout_toStartOf="@+id/song_play_stt"
 		android:singleLine="true"
-		android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
+		android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
 		android:textColor="@color/primary_text">
 	</TextView>
 

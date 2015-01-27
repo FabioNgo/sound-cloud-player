@@ -178,7 +178,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
-		pager.setOffscreenPageLimit(0);
+		pager.setOffscreenPageLimit(10);
 		final int pageMargin = (int) TypedValue.applyDimension(
 				TypedValue.COMPLEX_UNIT_DIP, 4, getResources()
 						.getDisplayMetrics());

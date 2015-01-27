@@ -157,7 +157,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		} else {
 			ProgressWheel progressWheel = (ProgressWheel) v
 					.findViewById(R.id.song_queue_progress_bar);
-			progressWheel.setVisibility(View.INVISIBLE);
+			progressWheel.setVisibility(View.GONE);
 			UIController.getInstance().removeProgressBar(progressWheel);
 
 		}
