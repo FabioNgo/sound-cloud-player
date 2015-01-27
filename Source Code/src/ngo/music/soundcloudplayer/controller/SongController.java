@@ -75,6 +75,8 @@ import android.widget.Toast;
 public class SongController implements Constants, Constants.SongConstants,
 		Constants.SoundCloudExploreConstant , Constants.MusicService, Constants.Data{
 
+	private static final int OFFSET = 5;
+
 	private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 
 	private static final int NUMBER_CATEGORY = 14;
@@ -310,7 +312,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			return onlineSongs.get(category);
 		}
 		String urlLink = exploreLinkList[category];
-		String offset = "offset=" + String.valueOf((currentPage - 1) * 10);
+		String offset = "offset=" + String.valueOf((currentPage - 1) * OFFSET);
 
 		urlLink = urlLink.replace("offset=0", offset);
 

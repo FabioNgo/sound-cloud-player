@@ -109,6 +109,7 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			i.putExtra(USER, bundle);
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			//MusicPlayerMainActivity.getActivity().finish();
+			getActivity().finish();
 			startActivity(i);
 		}
 		
