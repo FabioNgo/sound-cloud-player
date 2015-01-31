@@ -28,7 +28,7 @@ import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
-import ngo.music.soundcloudplayer.entity.Playlist;
+import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SCAccount;
 import ngo.music.soundcloudplayer.entity.User;

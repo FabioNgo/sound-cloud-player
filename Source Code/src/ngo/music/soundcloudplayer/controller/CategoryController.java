@@ -50,6 +50,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	public abstract ArrayList<Category> getCategories();
 	
 	public abstract void storeCategories() throws IOException;
+	
 	public void createCategory(String name) throws Exception {
 		for (Category category : categories) {
 			if (category.getTitle().equals(name)) {
@@ -159,7 +160,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			return new PlaylistController();
 		case ALBUM:
 			return new AlbumController();
-
+		case SC_PLAYLIST:
+			return new SCPlaylistController();
 		default:
 			return null;
 		}
@@ -169,10 +171,11 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		// TODO Auto-generated method stub
 		switch (type) {
 		case PLAYLIST:
-			
 			return PlaylistController.getInstance();
 		case ALBUM:
 			return AlbumController.getInstance();
+		case SC_PLAYLIST:
+			return SCPlaylistController.getInstance();
 		default:
 			return null;
 		}

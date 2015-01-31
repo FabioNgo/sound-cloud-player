@@ -114,6 +114,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		if (States.appState == APP_RUNNING) {
 
 			input.load();
+			
 		}
 
 	}
@@ -452,6 +453,20 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			}
 
 			break;
+		case SC_PLAYLIST_CHANGED:
+			
+			CompositionListContentFragment.getInstance(SC_PLAYLIST).update();
+			break;
+		case ITEM_IN_SC_PLAYLIST_CHANGED:
+			if (SongsInCateAdapter.getInstance(SC_PLAYLIST) != null) {
+				SongsInCateAdapter.getInstance(SC_PLAYLIST).update();
+			}
+			if (CompositionListContentFragment.getInstance(SC_PLAYLIST) != null) {
+				CompositionListContentFragment.getInstance(SC_PLAYLIST).update();
+			}
+
+			break;
+
 		default:
 			break;
 		}

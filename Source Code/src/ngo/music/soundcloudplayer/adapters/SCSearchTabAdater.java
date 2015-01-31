@@ -2,6 +2,7 @@ package ngo.music.soundcloudplayer.adapters;
 
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.SCPlaylistFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.AlternativeRockFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.AmbientFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.ClassicalFragment;
