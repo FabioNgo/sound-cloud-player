@@ -63,7 +63,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	public void reset() {
 		// TODO Auto-generated method stub
 		uiFragments = new ArrayList<PlayerUI>();
-		musicProgressBars = new ProgressWheel[3];
+		musicProgressBars = new ProgressWheel[2];
 
 		adapters = new ArrayList<ArrayAdapter<?>>();
 		listContentFragments = new ArrayList<ListContentFragment>();
@@ -130,10 +130,6 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		}
 		if ("LiteUi".equals(Tag)) {
 			musicProgressBars[1] = progressbar;
-			return;
-		}
-		if ("inSongView".equals(Tag)) {
-			musicProgressBars[2] = progressbar;
 			return;
 		}
 	}

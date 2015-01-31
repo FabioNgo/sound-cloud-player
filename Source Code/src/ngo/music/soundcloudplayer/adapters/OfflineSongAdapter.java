@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.adapters;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.ViewHolder.SongInListViewHolder;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -22,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
@@ -55,15 +57,19 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
+		SongInListViewHolder viewHolder = null;
 		v = convertView;
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.song_in_list, null);
-
+			v = inflater.inflate(R.layout.song_in_list, parent,false);
+			viewHolder = new SongInListViewHolder(v);
+			v.setTag(viewHolder);
+		}else{
+			viewHolder = (SongInListViewHolder) v.getTag();
 		}
 
-		setLayoutInformation(position, v);
+		setLayoutInformation(position,viewHolder, v);
 		return v;
 	}
 
@@ -71,7 +77,7 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 	 * @param position
 	 * @param v
 	 */
-	private void setLayoutInformation(int position, View v) {
+	private void setLayoutInformation(int position,final SongInListViewHolder viewHolder, View v) {
 		
 		final Song song = songs.get(position);
 		/**
@@ -89,13 +95,13 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * set menu
 		 */
-		final ImageView menu = (ImageView) v.findViewById(R.id.song_menu);
-		menu.setOnClickListener(new OnClickListener() {
+		
+		viewHolder.menu.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity.getActivity(), menu);
+				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity.getActivity(), viewHolder.menu);
                 //Inflating the Popup using xml file
                 popup.getMenuInflater()
                     .inflate(R.menu.song_list_menu, popup.getMenu());
@@ -137,30 +143,24 @@ public class OfflineSongAdapter extends ArrayAdapter<Song> {
 		/*
 		 * Set title
 		 */
-		TextView title = (TextView) v.findViewById(R.id.song_title);
-		title.setText(song.getTitle());
+		
+		viewHolder.title.setText(song.getTitle());
 
 		/*
 		 * Set sub title
 		 */
-		TextView subtitle = (TextView) v
-				.findViewById(R.id.song_subtitle);
-		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
+		
+		viewHolder.subtitle.setText(song.getArtist() + " | " + song.getAlbum());
 		/**
 		 * Set progress bar
 		 */
 		if (MusicPlayerService.getInstance().getCurrentSongId()
 				.compareTo(songs.get(position).getId()) == 0) {
-			ImageView playStt = (ImageView) v
-					.findViewById(R.id.song_play_stt);
-			playStt.setVisibility(View.VISIBLE);
-
-			// UpdateUiFromServiceController.getInstance().addProgressBar(progressWheel);
+			
+			viewHolder.background.setBackgroundResource(R.color.primary_light);
 		} else {
-			ImageView playStt = (ImageView) v
-					.findViewById(R.id.song_play_stt);
-			playStt.setVisibility(View.GONE);
-			// UpdateUiFromServiceController.getInstance().removeProgressBar(progressWheel);
+			
+			viewHolder.background.setBackgroundResource(R.color.background_material_light);
 
 		}
 	}

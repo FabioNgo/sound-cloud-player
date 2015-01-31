@@ -913,6 +913,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 					computeNextSong();
 				}
 				songQueue.remove(i);
+				if(i<currentSongPosition){
+					currentSongPosition--;
+				}
 				break;
 			}
 		}

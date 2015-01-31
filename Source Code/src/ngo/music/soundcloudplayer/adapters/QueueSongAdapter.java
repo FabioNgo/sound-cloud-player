@@ -81,7 +81,6 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	 */
 	public void setLayoutInformation(int position,
 			final SongInQueueViewHolder viewHolder, View v) {
-
 		final Song song = songs.get(position);
 		/**
 		 * Set avatar for song
@@ -154,7 +153,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		 * Set title
 		 */
 
-		viewHolder.title.setText(song.getTitle());
+		
 
 		/*
 		 * Set sub title
@@ -168,20 +167,13 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 				.getCurrentSongId();
 
 		if (songPlayingId.equals(song.getId())) {
-
-			viewHolder.progressWheel.setVisibility(View.VISIBLE);
-			if (MusicPlayerService.getInstance().isPlaying()) {
-				viewHolder.progressWheel
-						.setBackgroundResource(R.drawable.ic_media_pause_progress);
-			} else {
-				viewHolder.progressWheel
-						.setBackgroundResource(R.drawable.ic_media_play_progress);
-			}
-			UIController.getInstance().addProgressBar(viewHolder.progressWheel,"inSongView");
+			viewHolder.background.setBackgroundResource(R.color.primary_light);
+			viewHolder.title.setText(song.getTitle());
+			
 		} else {
 
-			viewHolder.progressWheel.setVisibility(View.GONE);
-			
+			viewHolder.background.setBackgroundResource(R.color.background_material_light);
+			viewHolder.title.setText(song.getTitle());
 
 		}
 

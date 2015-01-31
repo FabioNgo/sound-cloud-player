@@ -113,7 +113,7 @@ public class QueueSongUI extends ListContentFragment {
 			public void onItemClick(AdapterView<?> parent, View arg1,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				
+
 				MusicPlayerService.getInstance().playSongInQueue(position);
 
 			}
@@ -123,8 +123,30 @@ public class QueueSongUI extends ListContentFragment {
 	}
 
 	public void update() {
+		QueueSongAdapter adapter = (QueueSongAdapter) listView.getAdapter();
 		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance()
 				.getQueueSize()) + " songs");
+		adapter.notifyDataSetChanged();
+		for (int i = 0; i <= listView.getLastVisiblePosition()
+				- listView.getFirstVisiblePosition(); i++) {
+			View v = listView.getChildAt(i);
+			if (v != null) {
+
+				SongInQueueViewHolder holder = (SongInQueueViewHolder) v
+						.getTag();
+				try {
+					adapter.setLayoutInformation(i+
+							listView.getFirstVisiblePosition(), holder, v);
+				} catch (IndexOutOfBoundsException e) {
+					/**
+					 * When this exception occur, some item has been deleted in
+					 * list.
+					 */
+					break;
+
+				}
+			}
+		}
 		
 	}
 

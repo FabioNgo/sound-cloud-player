@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/song_queue_background"
 	android:layout_width="match_parent"
 	android:layout_height="50dp">
 
@@ -16,7 +17,6 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="4dp"
 		android:layout_toEndOf="@+id/song_queue_image"
-		android:layout_toStartOf="@+id/song_queue_progress_bar"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
 		android:textColor="@color/primary_text">
@@ -29,24 +29,12 @@
 		android:layout_alignStart="@+id/song_queue_title"
 		android:layout_below="@+id/song_queue_title"
 		android:layout_toEndOf="@+id/song_queue_image"
-		android:layout_toStartOf="@+id/song_queue_progress_bar"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
 		android:textColor="@color/secondary_text"
 		android:textIsSelectable="false"/>
 
-	<com.todddavies.components.progressbar.ProgressWheel
-		android:id="@+id/song_queue_progress_bar"
-		android:layout_width="50dp"
-		android:layout_height="50dp"
-		android:layout_centerVertical="true"
-		android:layout_toStartOf="@+id/song_queue_menu"
-		ProgressWheel:barColor="@color/primary_dark"
-		ProgressWheel:barLength="60dp"
-		ProgressWheel:barWidth="7dp"
-		ProgressWheel:rimColor="@color/primary_light"
-		ProgressWheel:rimWidth="6dp"
-		ProgressWheel:textSize="14sp"/>
+	
 
 	<ImageView
 		android:id="@+id/song_queue_menu"
