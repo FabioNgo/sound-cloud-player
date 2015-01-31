@@ -5,15 +5,15 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreAdapter;
+import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SCExploreAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -50,7 +50,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
     /**
      * false : not loading
      */
-    boolean loadingMore = false;
+    protected boolean loadingMore = false;
     protected ListSongAdapter adapter;
     protected ListView songsList;
     
@@ -64,7 +64,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 //	}
 	protected View rootView = null;
 
-	ApiWrapper wrapper;
+	protected ApiWrapper wrapper;
 	
 	
 //	public static SoundCloudExploreFragment getInstance() {
@@ -78,8 +78,8 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// TODO Auto-generated method stub
-		 inflater = getActivity().getMenuInflater();
-		 inflater.inflate(R.menu.options_menu, menu);
+		 //inflater = getActivity().getMenuInflater();
+		 //inflater.inflate(R.menu.options_menu, menu);
 		 
 		 //Associate searchable configuration with the SearchView
 		 SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
@@ -96,7 +96,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 		
 		rootView = inflater.inflate(R.layout.list_view, container,false);
 		songsList = (ListView) rootView.findViewById(R.id.items_list);
-		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+		SCUserController soundCloudUserController = SCUserController.getInstance();
 		Token t = soundCloudUserController.getToken();
 		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);
 		//responseString = getArguments().getString(ME_FAVORITES) ;
@@ -108,7 +108,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			 songs = songController.getOnlineSongs(category); 
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
 			//System.out.println (songs.size() + "......" + category);
-			adapter = new SoundCloudExploreAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
+			adapter = new SCExploreAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
 			adapter.notifyDataSetChanged();
 			songsList.setAdapter(adapter);
 			
@@ -137,7 +137,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-					new loadMoreButtonBackground().execute();
+					new loadMoreBackground().execute();
 				}
 			});
 			songsList.setOnScrollListener(new OnScrollListener() {
@@ -159,7 +159,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 					if(lastInScreen >= totalItemCount-1 && !loadingMore){
 						loadingMore = true;
 
-						new loadMoreButtonBackground().execute();
+						new loadMoreBackground().execute();
 
 					}
 					// TODO Auto-generated method stub
@@ -191,7 +191,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 	}
 	
 
-	private class loadMoreButtonBackground extends AsyncTask<String, String, String>{
+	protected class loadMoreBackground extends AsyncTask<String, String, String>{
 		
 		SongController songController = SongController.getInstance();
 		
@@ -211,7 +211,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			 int currentPosition = songsList.getFirstVisiblePosition();
 			 
              // Appending new data to menuItems ArrayList
-             adapter = new SoundCloudExploreAdapter(getActivity(),R.layout.list_view, songController.getOnlineSongs(category), wrapper);
+             adapter = new SCExploreAdapter(getActivity(),R.layout.list_view, songController.getOnlineSongs(category), wrapper);
 
              // Setting new scroll position
              songsList.setSelectionFromTop(currentPosition + 1, 0);

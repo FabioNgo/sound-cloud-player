@@ -6,8 +6,8 @@ package ngo.music.soundcloudplayer.boundary;
 import com.volley.api.AppController;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.boundary.SoundCloudLoginUI.Background;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.boundary.SCLoginUI.Background;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
@@ -33,7 +33,7 @@ import android.widget.Toast;
  */
 public class UserLoginActivity extends FragmentActivity implements
 		Constants.UserContant {
-	SoundCloudLoginUI soundcloudLoginUI = null;
+	SCLoginUI soundcloudLoginUI = null;
 	GoogleLoginUI googleLoginUI = null;
 	FacebookLoginUI facebookLoginUI = null;
 	GeneralLoginUI generalLoginUI = null;
@@ -83,9 +83,9 @@ public class UserLoginActivity extends FragmentActivity implements
 		// Toast.LENGTH_LONG).show();
 		// return;
 		// }
-		if (fragment instanceof SoundCloudLoginUI) {
+		if (fragment instanceof SCLoginUI) {
 			if (soundcloudLoginUI == null) {
-				soundcloudLoginUI = new SoundCloudLoginUI();
+				soundcloudLoginUI = new SCLoginUI();
 
 			}
 			getSupportFragmentManager().beginTransaction()
@@ -156,7 +156,7 @@ public class UserLoginActivity extends FragmentActivity implements
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					SoundCloudUserController userController = SoundCloudUserController
+					SCUserController userController = SCUserController
 							.getInstance();
 					username = USERNAME_LOGIN;
 					password = PASSWORD_LOGIN;

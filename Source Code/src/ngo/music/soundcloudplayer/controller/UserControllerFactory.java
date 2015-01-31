@@ -15,7 +15,7 @@ public class UserControllerFactory {
 		case Constants.GOOGLE_PLUS_USER:
 			return new GooglePlusUserController();
 		case Constants.SOUNDCLOUD_USER:
-			return  SoundCloudUserController.getInstance();
+			return  SCUserController.getInstance();
 		default:
 			return null;
 		}

@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Stack;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
+import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.boundary.LoginActivity;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
@@ -140,7 +140,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public Song getNextSong() {
 
 		if(nextSongId.equals("")){
-			return null;
+			return getCurrentSong();
 		}else{
 			return SongController.getInstance().getSong(nextSongId);
 		}

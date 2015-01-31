@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.MySoundCloudTabAdapter;
-import ngo.music.soundcloudplayer.Adapters.SoundCloudExploreTabAdater;
-import ngo.music.soundcloudplayer.Adapters.OfflineTabsAdapter;
+import ngo.music.soundcloudplayer.adapters.MySCTabAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineTabsAdapter;
+import ngo.music.soundcloudplayer.adapters.SCExploreTabAdater;
+import ngo.music.soundcloudplayer.adapters.SCSearchTabAdater;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.fragments.UserDisplayFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -26,11 +27,16 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
@@ -56,12 +62,17 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	public static final int OFFLINE = 0;
 	public static final int SOUNDCLOUD_EXPLORE = 1;
 	public static final int MY_SOUNDCLOUD = 2;
+	public static final int SOUNDCLOUD_SEARCH = 3;
 	//private int type;
 
 	private int defaultTabPosition = 0;
 	protected Object mService;
 	protected boolean mBound;
 
+	/**
+	 * Search Query
+	 */
+	public static String query;
 	/**
 	 * Screen's Size
 	 */
@@ -71,6 +82,8 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	public static MusicPlayerMainActivity getActivity() {
 		return activity;
 	}
+	
+	Menu menu;
 
 //	public MusicPlayerMainActivity() {
 //		// TODO Auto-generated constructor stub
@@ -98,6 +111,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		}
+		
 		/*
 		 * Get data from other activity
 		 */
@@ -163,13 +177,15 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
 			break;
 		case SOUNDCLOUD_EXPLORE:
-			adapter = new SoundCloudExploreTabAdater(getSupportFragmentManager());
+			adapter = new SCExploreTabAdater(getSupportFragmentManager());
 			break;
 			
 		case MY_SOUNDCLOUD:
-			adapter =  new MySoundCloudTabAdapter(getSupportFragmentManager());
+			adapter =  new MySCTabAdapter(getSupportFragmentManager());
 			break;
-			
+		case SOUNDCLOUD_SEARCH:
+			adapter =  new SCSearchTabAdater(getSupportFragmentManager());
+			break;
 		default:
 			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
 			break;
@@ -300,10 +316,44 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		screenWidth = displayMetrics.widthPixels;
 	}
 
+//	@Override
+//	public boolean onPrepareOptionsMenu(Menu menu) {
+//		// TODO Auto-generated method stub
+//		
+//		//getMenuInflater().inflate(R.menu.main_menu, menu);
+//		System.out.println ("TYPE = " + type);
+//		if (type == SOUNDCLOUD_EXPLORE){
+//			View v = (View) menu.findItem(R.id.search);
+//			//v.setVisibility(View.VISIBLE);
+//		}
+//		return true;
+//	}	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_menu, menu);
+//		if (type == SOUNDCLOUD_EXPLORE){
+//			View v = (View) menu.findItem(R.id.search);
+//			v.setVisibility(View.VISIBLE);
+//		}
+		/** Get the action view of the menu item whose id is search */
+//        View v = (View) menu.findItem(R.id.search).getActionView();
+//        
+// 
+//        /** Get the edit text from the action view */
+//        EditText txtSearch = ( EditText ) v.findViewById(R.id.txt_search);
+// 
+//        /** Setting an action listener */
+//        txtSearch.setOnEditorActionListener(new OnEditorActionListener() {
+// 
+//            @Override
+//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+//                Toast.makeText(getBaseContext(), "Search : " + v.getText(), Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//
+//			
+//        });
 		
 		return true;
 	}

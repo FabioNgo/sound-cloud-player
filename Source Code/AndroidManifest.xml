@@ -40,7 +40,7 @@
 			android:launchMode="singleTop"
 			android:name="ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity"
 			android:screenOrientation="portrait" >
-			<meta-data android:name = "ngo.music.soundcloudplayer.searchable"/>
+
 			
 		</activity>
 		<activity
@@ -69,5 +69,7 @@
         <provider android:authorities="com.facebook.app.NativeAppCallContentProvider889973167688262"
                   android:name="com.facebook.NativeAppCallContentProvider"
                   android:exported="true" />
+        <activity android:name="ngo.music.soundcloudplayer.boundary.SCActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name="ngo.music.soundcloudplayer.boundary.SCSearchActivity" android:screenOrientation="portrait"></activity>
 	</application>
 </manifest>

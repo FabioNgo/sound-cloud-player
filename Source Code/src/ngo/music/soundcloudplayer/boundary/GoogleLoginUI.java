@@ -5,7 +5,7 @@ import java.util.zip.Inflater;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
@@ -96,7 +96,7 @@ public class GoogleLoginUI extends Fragment implements Constants.UserContant {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					SoundCloudUserController userController = SoundCloudUserController.getInstance();
+					SCUserController userController = SCUserController.getInstance();
 					User currentUser = userController.validateLogin(username, password);
 					
 					//Cannot login

@@ -1,8 +1,8 @@
 package ngo.music.soundcloudplayer.boundary.fragments;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.CompositionListAdapter;
-import ngo.music.soundcloudplayer.Adapters.PlaylistAdapter;
+import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.controller.UIController;
 import android.os.Bundle;
 import android.view.LayoutInflater;

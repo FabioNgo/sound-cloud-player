@@ -2,7 +2,7 @@ package ngo.music.soundcloudplayer.controller;
 
 import java.util.ArrayList;
 
-import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;

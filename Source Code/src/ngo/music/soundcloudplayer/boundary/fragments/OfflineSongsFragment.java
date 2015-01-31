@@ -3,8 +3,8 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.AsyncTask.UpdateNewSongBackgroundTask;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.asynctask.UpdateNewSongBackgroundTask;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.graphics.Color;

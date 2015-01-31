@@ -15,7 +15,7 @@ import com.facebook.widget.ProfilePictureView;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -94,7 +94,7 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 			@Override
 			public void onClick(View v) {
 				if (BasicFunctions.isConnectingToInternet(getActivity())){
-					SoundCloudLoginUI soundCloudLoginUI =  new SoundCloudLoginUI();
+					SCLoginUI soundCloudLoginUI =  new SCLoginUI();
 					((UserLoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
 				}else{
 					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();

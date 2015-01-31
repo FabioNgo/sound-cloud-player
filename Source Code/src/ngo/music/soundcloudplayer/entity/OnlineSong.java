@@ -5,7 +5,9 @@ import java.io.IOException;
 
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Stream;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.controller.SCUserController;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
 
@@ -96,8 +98,9 @@ public class OnlineSong extends Song{
 		}else{
 		
 			
-			SoundCloudUserController userController = SoundCloudUserController.getInstance();
+			SCUserController userController = SCUserController.getInstance();
 			ApiWrapper wrapper = userController.getApiWrapper();
+			wrapper.setToken(new Token(Constants.DEFAULT_TOKEN,"refresh_token"));
 			
 			
 			stream = wrapper.resolveStreamUrl(streamUrl,false);
@@ -675,10 +678,15 @@ public class OnlineSong extends Song{
 
 	@Override
 	public String getArtist(){
-		if (user.getFullName() .compareTo("") != 0){
-			return user.getFullName();
-		}else{
-			return user.getUsername();	
+		try{
+			if (user.getFullName() .compareTo("") != 0){
+				return user.getFullName();
+			}else{
+				return user.getUsername();	
+			}
+		}catch (Exception e){
+			//e.printStackTrace();
+			return "";
 		}
 		
 	}

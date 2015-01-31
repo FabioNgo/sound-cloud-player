@@ -19,8 +19,8 @@ import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Http;
@@ -33,7 +33,7 @@ import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.Song;
-import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
+import ngo.music.soundcloudplayer.entity.SCAccount;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -79,7 +79,7 @@ public class SongController implements Constants, Constants.SongConstants,
 
 	private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 
-	private static final int NUMBER_CATEGORY = 14;
+	private static final int NUMBER_CATEGORY = 15;
 
 	private String[] exploreLinkList;
 	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
@@ -193,7 +193,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	public Song getSongFromID(long id) {
 
 		Song currentSong = null;
-		SoundCloudUserController userController = SoundCloudUserController
+		SCUserController userController = SCUserController
 				.getInstance();
 		ApiWrapper wrapper = userController.getApiWrapper();
 		/*
@@ -224,7 +224,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	 */
 	public Song getSongFromUrl(String url) {
 		Stream stream = null;
-		SoundCloudUserController userController = SoundCloudUserController
+		SCUserController userController = SCUserController
 				.getInstance();
 
 		ApiWrapper wrapper = userController.getApiWrapper();
@@ -305,12 +305,20 @@ public class SongController implements Constants, Constants.SongConstants,
 
 	private ArrayList<Song> getSongsFromSoundCloud(int currentPage, int category) {
 
+		/*
+		 * category = Search
+		 */
+		if (category == SEARCH){
+			return searchSongSC(MusicPlayerMainActivity.query, currentPage);
+		}
 		if (currentPage <= categoryCurrentPage[category]
 				|| !(BasicFunctions
 						.isConnectingToInternet(MusicPlayerMainActivity
 								.getActivity()))) {
 			return onlineSongs.get(category);
 		}
+		
+		
 		String urlLink = exploreLinkList[category];
 		String offset = "offset=" + String.valueOf((currentPage - 1) * OFFSET);
 
@@ -336,7 +344,6 @@ public class SongController implements Constants, Constants.SongConstants,
 			// System.out.println ("SIZE = " + listSong.length());
 			ArrayList<Song> song = onlineSongs.get(category);
 			for (int i = 0; i < listSong.length(); i++) {
-
 				JSONObject jsonObject = listSong.getJSONObject(i);
 				int position = searchId(idList, jsonObject.getInt(ID));
 				if (position < 0) {
@@ -405,7 +412,7 @@ public class SongController implements Constants, Constants.SongConstants,
 
 			// song.setStreamable(me.getBoolean(STREAMABLE));
 
-			SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
+			SCAccount soundCloudAccount = getUserInfoOfSong(me);
 			((OnlineSong) song).setUser(soundCloudAccount);
 			((OnlineSong) song).setLikesCount(me.getInt(LIKES_COUNT));
 			((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
@@ -424,9 +431,9 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @param me
 	 * @throws JSONException
 	 */
-	private SoundCloudAccount getUserInfoOfSong(JSONObject me)
+	private SCAccount getUserInfoOfSong(JSONObject me)
 			throws JSONException {
-		SoundCloudAccount soundCloudAccount = new SoundCloudAccount();
+		SCAccount soundCloudAccount = new SCAccount();
 		JSONObject jsonObjectUser = me.getJSONObject(USER);
 		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
 		soundCloudAccount.setFullName(jsonObjectUser
@@ -527,7 +534,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			favoriteSong = new ArrayList<Song>();
 			favoriteIdList = new ArrayList<Integer>();
 			// new loadFavoriteSongBackground().execute();
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController
+			SCUserController soundCloudUserController = SCUserController
 					.getInstance();
 
 			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
@@ -551,7 +558,7 @@ public class SongController implements Constants, Constants.SongConstants,
 							jsonObject.getInt(ID));
 					if (position < 0) {
 						try {
-							favoriteSong.add(addSongInformation2(jsonObject));
+							favoriteSong.add(addSongInformationSimple(jsonObject));
 							favoriteIdList.add(-(position + 1),
 									jsonObject.getInt(ID));
 						} catch (JSONException e) {
@@ -586,7 +593,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			streamList = new ArrayList<Song>();
 			myStreamIdList = new ArrayList<Integer>();
 			// new loadMyStreamBackground().execute();
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController
+			SCUserController soundCloudUserController = SCUserController
 					.getInstance();
 
 			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
@@ -614,7 +621,7 @@ public class SongController implements Constants, Constants.SongConstants,
 							jsonObject.getInt(ID));
 					if (position < 0) {
 						try {
-							streamList.add(addSongInformation2(jsonObject));
+							streamList.add(addSongInformationSimple(jsonObject));
 							myStreamIdList.add(-(position + 1),
 									jsonObject.getInt(ID));
 						} catch (JSONException e) {
@@ -647,9 +654,9 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	private Song addSongInformation2(JSONObject me) throws JSONException,
+	private OnlineSong addSongInformationSimple(JSONObject me) throws JSONException,
 			IOException {
-		Song song = new OnlineSong();
+		OnlineSong song = new OnlineSong();
 
 		// song.setCommentable(me.getBoolean(COMMENTABLE));
 		// song.setCommentCount(me.getInt(COMMENT_COUNT));
@@ -694,7 +701,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		((OnlineSong) song).setStreamUrl(me.getString(STREAM_URL));
 		// SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
 		// song.setUser(soundCloudAccount);
-		SoundCloudAccount soundCloudAccount = new SoundCloudAccount();
+		SCAccount soundCloudAccount = new SCAccount();
 		JSONObject jsonObjectUser = me.getJSONObject(USER);
 		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
 		// soundCloudAccount.setFullName(jsonObjectUser.getString(Constants.UserContant.FULLNAME));
@@ -704,7 +711,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		// Stream stream = wrapper.resolveStreamUrl(me.getString(STREAM_URL),
 		// true);
 		// song.setStreamUrl(stream.streamUrl);
-
+		
 		return song;
 	}
 
@@ -717,6 +724,54 @@ public class SongController implements Constants, Constants.SongConstants,
 		favoriteIdList.clear();
 		myStreamIdList.clear();
 	}
+	
+	/**
+	 * SearchSong from Soundcloud
+	 * @param query
+	 * @param page
+	 */
+	public ArrayList<Song> searchSongSC(String query, int page) {
+		// TODO Auto-generated method stub
+		
+		SCUserController soundCloudUserController = SCUserController.getInstance();
+		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+		ArrayList<Song> searchSongs = onlineSongs.get(Constants.SoundCloudExploreConstant.SEARCH); 
+		int offset = page*OFFSET;
+		String request =  "http://api.soundcloud.com/tracks.json?q=" + query + "&limit=5&offset="+ String.valueOf(offset);
+		
+		System.out.println (request);
+		//System.out.println (me);
+	//	JSONObject obj = Http.getJSON(resp);
+		//JSONArray a = obj.getJSONArray("errors");
+		//System.out.println (obj);
+		try {
+			HttpResponse resp = wrapper.get(Request.to(request));
+			//System.out.println (resp.getStatusLine());
+			String me =  Http.getString(resp);
+			JSONArray array =  new JSONArray(me);
+			//JSONObject object = array.getJSONObject(0);
+			//System.out.println (object.toString());
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object  = array.getJSONObject(i);
+				searchSongs.add((Song) addSongInformationSimple(object));
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return searchSongs;
+	}
+	
+	/**
+	 * Refresh search list
+	 */
+	public void clearSearch (){
+		onlineSongs.get(SEARCH).clear();
+	}
+
 
 	/****************************************************
 	 * ****************Offline Song Part*****************
@@ -876,6 +931,9 @@ public class SongController implements Constants, Constants.SongConstants,
 		UIController.getInstance().updateUiWhenDataChanged(OFFLINE_SONG_CHANGED);
 
 	}
+	
+	
+
 	
 	
 }

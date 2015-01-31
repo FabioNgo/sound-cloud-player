@@ -1,4 +1,4 @@
-package ngo.music.soundcloudplayer.Adapters;
+package ngo.music.soundcloudplayer.adapters;
 
 
 import java.util.ArrayList;

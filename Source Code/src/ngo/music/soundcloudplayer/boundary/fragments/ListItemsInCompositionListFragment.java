@@ -3,10 +3,10 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.CompositionListAdapter;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
-import ngo.music.soundcloudplayer.Adapters.SongsInCateAdapter;
+import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SimplePlaylistAdapter;
+import ngo.music.soundcloudplayer.adapters.SongsInCateAdapter;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;

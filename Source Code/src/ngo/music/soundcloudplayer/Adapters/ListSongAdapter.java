@@ -1,4 +1,4 @@
-package ngo.music.soundcloudplayer.Adapters;
+package ngo.music.soundcloudplayer.adapters;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,7 +19,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -121,7 +121,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 		/*
 		 * Initial controller
 		 */
-		SoundCloudUserController userController = SoundCloudUserController
+		SCUserController userController = SCUserController
 				.getInstance();
 	
 		
@@ -143,7 +143,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (SoundCloudUserController.getInstance().likeSong(song)){
+				if (SCUserController.getInstance().likeSong(song)){
 					notifyDataSetChanged();
 					Toast.makeText(getContext(), "You liked this song", Toast.LENGTH_LONG).show();
 					//new updateFavoriteCounts(song, likeCount).execute();
@@ -401,12 +401,6 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 				e.printStackTrace();
 			}
 			
-
-
-		    
-			
-		
-
 			return result;
 		}
 		

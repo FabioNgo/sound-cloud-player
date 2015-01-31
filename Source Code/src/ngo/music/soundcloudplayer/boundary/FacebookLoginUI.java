@@ -8,7 +8,7 @@ import org.json.JSONException;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
 import android.annotation.SuppressLint;
@@ -83,7 +83,7 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 	
 	
 	private class retriveUserBackground extends AsyncTask<String, String, String>{
-		SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+		SCUserController soundCloudUserController = SCUserController.getInstance();
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
@@ -121,9 +121,10 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			
 	        if (url.contains("access_token")){
 	        	String result = url.substring(url.indexOf("access_token=") + 13, url.indexOf("&scope="));
+	        	System.out.println (result);
 	        	Token t = new Token(result,"refresh_token");
 	        	wrapper.setToken(t);
-	        	SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+	        	SCUserController soundCloudUserController = SCUserController.getInstance();
 	        	soundCloudUserController.setToken(t);
 	        	new retriveUserBackground().execute();
 	        }

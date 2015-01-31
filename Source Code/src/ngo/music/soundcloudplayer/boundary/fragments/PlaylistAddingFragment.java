@@ -3,7 +3,7 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
+import ngo.music.soundcloudplayer.adapters.SimplePlaylistAdapter;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.app.Dialog;

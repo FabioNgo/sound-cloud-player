@@ -3,11 +3,11 @@ package ngo.music.soundcloudplayer.boundary;
 import java.util.concurrent.ExecutionException;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
-import ngo.music.soundcloudplayer.entity.SoundCloudAccount;
+import ngo.music.soundcloudplayer.entity.SCAccount;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -38,7 +38,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private NetworkImageView songImage;
 	private RelativeLayout artistInfo;
 
-	SoundCloudAccount soundCloudAccount = null;
+	SCAccount soundCloudAccount = null;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -283,9 +283,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	}
 
 	private class getUserbyIdBackground extends
-			AsyncTask<String, String, SoundCloudAccount> {
+			AsyncTask<String, String, SCAccount> {
 
-		SoundCloudAccount soundCloudAccount = null;
+		SCAccount soundCloudAccount = null;
 
 		@Override
 		protected void onPreExecute() {
@@ -294,16 +294,16 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		}
 
 		@Override
-		protected SoundCloudAccount doInBackground(String... params) {
+		protected SCAccount doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController
+			SCUserController soundCloudUserController = SCUserController
 					.getInstance();
 			soundCloudAccount = soundCloudUserController.getUserbyId(params[0]);
 			return soundCloudAccount;
 		}
 
 		@Override
-		protected void onPostExecute(SoundCloudAccount result) {
+		protected void onPostExecute(SCAccount result) {
 			// TODO Auto-generated method stub
 			TextView artistFullname = (TextView) rootView
 					.findViewById(R.id.artist_fullname);
@@ -380,7 +380,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				SoundCloudUserController soundCloudUserController = SoundCloudUserController
+				SCUserController soundCloudUserController = SCUserController
 						.getInstance();
 
 				soundCloudUserController.setGuest(soundCloudAccount);

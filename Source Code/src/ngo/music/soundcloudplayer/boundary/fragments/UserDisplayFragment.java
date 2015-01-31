@@ -9,10 +9,11 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.SCActivity;
 import ngo.music.soundcloudplayer.boundary.UserLoginActivity;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
@@ -96,7 +97,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				//MainActivity.isExplore = false;
 				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 				i.putExtra(DEFAULT_ID, SONGS);
-				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+				SCUserController soundCloudUserController = SCUserController.getInstance();
 				soundCloudUserController.clearUserData();
 				soundCloudUserController.setGuest(null);
 				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
@@ -134,7 +135,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		 */
 		RelativeLayout logOut = (RelativeLayout) rootView.findViewById(R.id.log_out_field);
 		logOut.getLayoutParams().height =constantLayoutHeight;
-		SoundCloudUserController userController = SoundCloudUserController.getInstance();
+		SCUserController userController = SCUserController.getInstance();
 		
 		if (!userController.isLogin()){
 			((TextView) rootView.findViewById(R.id.logout_id)).setText("Log in");
@@ -145,7 +146,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+				SCUserController soundCloudUserController = SCUserController.getInstance();
 				soundCloudUserController.logout();
 				DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
 				databaseHandler.refreshDatabase();
@@ -155,7 +156,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		});
 		
 		/*
-		 * Upload Button
+		 * My SoundCloud
 		 */
 		RelativeLayout mySoundCloudLayout = (RelativeLayout) rootView.findViewById(R.id.acc_soundcloud_field);
 		mySoundCloudLayout.getLayoutParams().height = constantLayoutHeight;
@@ -167,7 +168,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				// TODO Auto-generated method stub
 				MusicPlayerMainActivity.type = MusicPlayerMainActivity.MY_SOUNDCLOUD;
 				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
-				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+				SCUserController soundCloudUserController = SCUserController.getInstance();
 				
 				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
 				i.putExtra(USER, bundle);
@@ -261,7 +262,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			SongController songController = SongController.getInstance();
 			songController.initialSongCategory();
 			
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			SCUserController soundCloudUserController = SCUserController.getInstance();
 			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, soundCloudUserController.getToken());
 			try {
 				HttpResponse resp = wrapper.get(Request.to(ME_FAVORITES));
@@ -277,9 +278,9 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 		@Override
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
-			MusicPlayerMainActivity.type = MusicPlayerMainActivity.SOUNDCLOUD_EXPLORE;
-			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			SCActivity.type = SCActivity.SOUNDCLOUD_EXPLORE;
+			Intent i = new Intent(getActivity(), SCActivity.class);
+			SCUserController soundCloudUserController = SCUserController.getInstance();
 			soundCloudUserController.setResponseString(stringResponse);
 			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
 			i.putExtra(USER, bundle);
@@ -319,7 +320,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			SongController songController = SongController.getInstance();
 			songController.initialSongCategory();
 			
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			SCUserController soundCloudUserController = SCUserController.getInstance();
 			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, soundCloudUserController.getToken());
 			try {
 				HttpResponse resp = wrapper.get(Request.to(ME_FAVORITES));
@@ -337,7 +338,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			// TODO Auto-generated method stub
 			MusicPlayerMainActivity.type = MusicPlayerMainActivity.SOUNDCLOUD_EXPLORE;
 			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
-			SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+			SCUserController soundCloudUserController = SCUserController.getInstance();
 			soundCloudUserController.setResponseString(stringResponse);
 			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
 			i.putExtra(USER, bundle);

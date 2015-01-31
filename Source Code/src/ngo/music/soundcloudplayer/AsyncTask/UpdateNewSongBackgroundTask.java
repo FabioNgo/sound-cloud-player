@@ -1,10 +1,10 @@
-package ngo.music.soundcloudplayer.AsyncTask;
+package ngo.music.soundcloudplayer.asynctask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import ngo.music.soundcloudplayer.Adapters.MyStreamAdapter;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.adapters.MySCStreamAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;

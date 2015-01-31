@@ -10,10 +10,10 @@ import java.util.HashMap;
 import org.json.JSONException;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.controller.SoundCloudUserController;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -176,7 +176,7 @@ public class UploadSongActivity extends Activity implements Constants {
 				// TODO Auto-generated method stub
 				//MusicPlayerMainActivity.isExplore = false;
 				Intent i = new Intent(getApplicationContext(), MusicPlayerMainActivity.class);
-				SoundCloudUserController soundCloudUserController = SoundCloudUserController.getInstance();
+				SCUserController soundCloudUserController = SCUserController.getInstance();
 				
 				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
 				i.putExtra(UserContant.USER, bundle);

@@ -2,12 +2,12 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 
 import java.util.ArrayList;
 
-import ngo.music.soundcloudplayer.Adapters.CompositionListAdapter;
-import ngo.music.soundcloudplayer.Adapters.CompositionViewHolder;
-import ngo.music.soundcloudplayer.Adapters.ListSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.PlaylistAdapter;
-import ngo.music.soundcloudplayer.AsyncTask.UpdateNewSongBackgroundTask;
+import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.adapters.CompositionViewHolder;
+import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
+import ngo.music.soundcloudplayer.asynctask.UpdateNewSongBackgroundTask;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.controller.UIController;

@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.Adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.PlaylistAdapter;
-import ngo.music.soundcloudplayer.Adapters.QueueSongAdapter;
-import ngo.music.soundcloudplayer.Adapters.SimplePlaylistAdapter;
-import ngo.music.soundcloudplayer.Adapters.SongsInCateAdapter;
-import ngo.music.soundcloudplayer.Adapters.SongsInPlaylistAdapter;
+import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
+import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
+import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SimplePlaylistAdapter;
+import ngo.music.soundcloudplayer.adapters.SongsInCateAdapter;
+import ngo.music.soundcloudplayer.adapters.SongsInPlaylistAdapter;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.boundary.QueueSongUI;
 import ngo.music.soundcloudplayer.boundary.fragments.CompositionListContentFragment;

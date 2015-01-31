@@ -12,7 +12,7 @@ public interface Constants {
 	public static final String CLIENT_ID ="2ae2cf32fdd87967a353b7e718d7f3cd";
 	public static final String CLIENT_SECRET = "acfe1a475e4d004214fed3326a01eb79";
 	public static final URI REDIRECT_URI     = URI.create("http://vnntu.com/web2015/callback.html");
-	
+	public static final String DEFAULT_TOKEN  = "1-89385-17404897-36e93ca8ded37dc";
 	
 	
 	String TRACK_LINK = "https://api.soundcloud.com/tracks";
@@ -201,6 +201,7 @@ public interface Constants {
 		int ELECTRO = 11;
 		int ELECTRONIC = 12;
 		int FOLK = 13;
+		int SEARCH = 14;
 		
 		String TRENDING_MUSIC_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=5&offset=0&linked_partitioning=1";
 		String TRENDING_AUDIO_LINK = "https://api-v2.soundcloud.com/explore/popular%2Baudio?tag=out-of-experiment&limit=5&offset=0&linked_partitioning=1";

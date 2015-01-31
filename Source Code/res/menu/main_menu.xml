@@ -1,6 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <group 
+        android:id = "@+id/search_group">
+		<item
+		    android:id = "@+id/search"
+	        android:title="Search"
+	        android:icon="@drawable/ic_action_search"
+	        app:showAsAction="ifRoom|collapseActionView"
+	        android:visible="false"
+	        app:actionViewClass="android.support.v7.widget.SearchView" />
+	</group>	    
+
+    
 	<item
 		android:id="@+id/main_shuffle_all"
 		android:title="Shuffle All"/>
