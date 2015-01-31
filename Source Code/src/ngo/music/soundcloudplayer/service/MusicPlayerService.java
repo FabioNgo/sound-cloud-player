@@ -874,7 +874,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				size = songQueue.size();
 
 				nextPosition = currentSongPosition
-						+ (Math.abs(random.nextInt()) % (size - 1)) + 1;
+						+ (Math.abs(random.nextInt()) % (size - 1));
 				nextPosition = nextPosition % size;
 
 			} else {

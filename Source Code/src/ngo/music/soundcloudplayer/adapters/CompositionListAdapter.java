@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.adapters;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragments.ListItemsInCompositionListFragment;
 import ngo.music.soundcloudplayer.controller.CategoryController;

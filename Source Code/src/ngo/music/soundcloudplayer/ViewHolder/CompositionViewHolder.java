@@ -1,4 +1,4 @@
-package ngo.music.soundcloudplayer.adapters;
+package ngo.music.soundcloudplayer.ViewHolder;
 
 import ngo.music.soundcloudplayer.R;
 import android.view.View;

@@ -10,15 +10,21 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class PlaylistAddingFragment extends DialogFragment {
 	
@@ -72,62 +78,62 @@ public class PlaylistAddingFragment extends DialogFragment {
 		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.playlist_adding_toolbar);
 		toolbar.setTitle("Add to playlist");
 		toolbar.inflateMenu(R.menu.add_to_playlist_menu);
-//		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-//			
-//			@Override
-//			public boolean onMenuItemClick(MenuItem arg0) {
-//				// TODO Auto-generated method stub
-//				System.out.println ("TYPE PLAYLIST = " + arg0.getItemId());
-//				switch (arg0.getItemId()) {
-//				case R.id.new_playlist:
-//					
-//					final RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
-//					newPlaylistGroup.setVisibility(View.VISIBLE);
-//					final EditText editText = (EditText)rootView.findViewById(R.id.new_playlist_edit_text);
-//					editText.setText("");
-//					final ImageView newPlaylistBtn = (ImageView)rootView.findViewById(R.id.new_playlist_submit);
-//					
-//					
-//					newPlaylistBtn.setOnClickListener(new OnClickListener() {
-//						
-//						
-//
-//						@Override
-//						public void onClick(View view) {
-//							// TODO Auto-generated method stub
-//							
-//							try {
-//								
-//								switch (typePlaylist) {
-//								case PLAYLIST:
-//									PlaylistController.getInstance().createCategory(editText.getText().toString());
-//									break;
-//								case SOUNDCLOUD_PLAYLIST:
+		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem arg0) {
+				// TODO Auto-generated method stub
+				System.out.println ("TYPE PLAYLIST = " + arg0.getItemId());
+				switch (arg0.getItemId()) {
+				case R.id.new_playlist:
+					
+					final RelativeLayout newPlaylistGroup = (RelativeLayout)rootView.findViewById(R.id.new_playlist_group);
+					newPlaylistGroup.setVisibility(View.VISIBLE);
+					final EditText editText = (EditText)rootView.findViewById(R.id.new_playlist_edit_text);
+					editText.setText("");
+					final ImageView newPlaylistBtn = (ImageView)rootView.findViewById(R.id.new_playlist_submit);
+					
+					
+					newPlaylistBtn.setOnClickListener(new OnClickListener() {
+						
+						
+
+						@Override
+						public void onClick(View view) {
+							// TODO Auto-generated method stub
+							
+							try {
+								
+								switch (typePlaylist) {
+								case PLAYLIST:
+									PlaylistController.getInstance().createCategory(editText.getText().toString());
+									break;
+								case SOUNDCLOUD_PLAYLIST:
 //									SoundCloudPlaylistController.getInstance().createCategory(editText.getText().toString());
-//									break;
-//								default:
-//									break;
-//								}
-//								
-//								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
-//								newPlaylistGroup.setVisibility(View.GONE);
-//							} catch (Exception e) {
-//								// TODO Auto-generated catch block
-//								TextView errorText  = (TextView)rootView.findViewById(R.id.new_playlist_error_text);
-//								errorText.setVisibility(View.VISIBLE);
-//								errorText.setText(e.getMessage());
-//							}
-//							
-//						}
-//					});			
-//					break;
-//
-//				default:
-//					break;
-//				}
-//				return false;
-//			}
-//		});
+									break;
+								default:
+									break;
+								}
+								
+								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
+								newPlaylistGroup.setVisibility(View.GONE);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								TextView errorText  = (TextView)rootView.findViewById(R.id.new_playlist_error_text);
+								errorText.setVisibility(View.VISIBLE);
+								errorText.setText(e.getMessage());
+							}
+							
+						}
+					});			
+					break;
+
+				default:
+					break;
+				}
+				return false;
+			}
+		});
 	}
 	
 	

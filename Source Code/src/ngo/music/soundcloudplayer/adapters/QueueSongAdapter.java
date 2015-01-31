@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.adapters;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.ViewHolder.SongInQueueViewHolder;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -29,6 +30,7 @@ import com.volley.api.AppController;
 public class QueueSongAdapter extends ArrayAdapter<Song> {
 	private View v;
 	private boolean isdatachanged = true;
+	
 
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
@@ -56,14 +58,20 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		v = convertView;
+		SongInQueueViewHolder viewHolder = null;
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.song_in_queue, null);
+			v = inflater.inflate(R.layout.song_in_queue, parent, false);
+			viewHolder = new SongInQueueViewHolder(v);
+			v.setTag(viewHolder);
+
+		} else {
+			viewHolder = new SongInQueueViewHolder(v);
+			viewHolder = (SongInQueueViewHolder) v.getTag();
 
 		}
-
-		setLayoutInformation(position, v);
+		setLayoutInformation(position, viewHolder, v);
 		return v;
 	}
 
@@ -71,37 +79,36 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 	 * @param position
 	 * @param v
 	 */
-	private void setLayoutInformation(int position, View v) {
+	public void setLayoutInformation(int position,
+			final SongInQueueViewHolder viewHolder, View v) {
 
 		final Song song = songs.get(position);
 		/**
 		 * Set avatar for song
 		 */
-		NetworkImageView avatar = (NetworkImageView) v
-				.findViewById(R.id.song_queue_image);
-		//
+
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 
 		BasicFunctions.setImageViewSize(
 				BasicFunctions.dpToPx(50, getContext()),
-				BasicFunctions.dpToPx(50, getContext()), avatar);
+				BasicFunctions.dpToPx(50, getContext()), viewHolder.avatar);
 		String artworkUrl = song.getArtworkUrl();
 		if (artworkUrl.equals("")) {
-			avatar.setImageResource(R.drawable.ic_launcher);
+			viewHolder.avatar.setImageResource(R.drawable.ic_launcher);
 		} else {
-			avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
+			viewHolder.avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
 		}
 		/**
 		 * Button
 		 */
-		final ImageView menu = (ImageView) v.findViewById(R.id.song_queue_menu);
-		menu.setOnClickListener(new OnClickListener() {
+
+		viewHolder.menu.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
-						.getActivity(), menu);
+						.getActivity(), viewHolder.menu);
 				// Inflating the Popup using xml file
 				popup.getMenuInflater().inflate(R.menu.song_queue_menu,
 						popup.getMenu());
@@ -115,7 +122,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 						switch (arg0.getItemId()) {
 						case R.id.queue_removeFromQueue:
 							MusicPlayerService.getInstance().removeFromQueue(
-									song, false);
+									song, true);
 							break;
 						case R.id.queue_playNext:
 							MusicPlayerService.getInstance().addToNext(song);
@@ -123,8 +130,11 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 						case R.id.queue_addToPlaylist:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs, PlaylistAddingFragment.PLAYLIST);
-							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
+							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(
+									songs, PlaylistAddingFragment.PLAYLIST);
+							playlistAddingFragment.show(MusicPlayerMainActivity
+									.getActivity().getSupportFragmentManager(),
+									"New Playlist");
 							break;
 						case R.id.queue_delete:
 							SongController.getInstance().deleteSong(song);
@@ -143,37 +153,35 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		/*
 		 * Set title
 		 */
-		TextView title = (TextView) v.findViewById(R.id.song_queue_title);
-		title.setText(song.getTitle());
+
+		viewHolder.title.setText(song.getTitle());
 
 		/*
 		 * Set sub title
 		 */
-		TextView subtitle = (TextView) v.findViewById(R.id.song_queue_subtitle);
-		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
+
+		viewHolder.subtitle.setText(song.getArtist() + " | " + song.getAlbum());
 		/**
 		 * Set progress bar
 		 */
 		String songPlayingId = MusicPlayerService.getInstance()
 				.getCurrentSongId();
 
-		if (songPlayingId.equals(songs.get(position).getId())) {
-			ProgressWheel progressWheel = (ProgressWheel) v
-					.findViewById(R.id.song_queue_progress_bar);
-			progressWheel.setVisibility(View.VISIBLE);
+		if (songPlayingId.equals(song.getId())) {
+
+			viewHolder.progressWheel.setVisibility(View.VISIBLE);
 			if (MusicPlayerService.getInstance().isPlaying()) {
-				progressWheel
+				viewHolder.progressWheel
 						.setBackgroundResource(R.drawable.ic_media_pause_progress);
 			} else {
-				progressWheel
+				viewHolder.progressWheel
 						.setBackgroundResource(R.drawable.ic_media_play_progress);
 			}
-			UIController.getInstance().addProgressBar(progressWheel);
+			UIController.getInstance().addProgressBar(viewHolder.progressWheel,"inSongView");
 		} else {
-			ProgressWheel progressWheel = (ProgressWheel) v
-					.findViewById(R.id.song_queue_progress_bar);
-			progressWheel.setVisibility(View.GONE);
-			UIController.getInstance().removeProgressBar(progressWheel);
+
+			viewHolder.progressWheel.setVisibility(View.GONE);
+			
 
 		}
 
@@ -207,6 +215,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 
 		songs = MusicPlayerService.getInstance().getQueue();
 		// updateDataChanged(true);
+		notifyDataSetChanged();
 		return;
 	}
 

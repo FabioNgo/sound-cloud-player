@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
+import ngo.music.soundcloudplayer.ViewHolder.SongInQueueViewHolder;
+import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
@@ -26,12 +29,11 @@ public class QueueSongUI extends ListContentFragment {
 	public static QueueSongUI instance = null;
 	Toolbar toolbar;
 	View rootView;
-	ListView queueView;
 
 	public QueueSongUI() {
 		// TODO Auto-generated constructor stub
 		instance = this;
-		
+
 	}
 
 	public static QueueSongUI getInstance() {
@@ -57,16 +59,19 @@ public class QueueSongUI extends ListContentFragment {
 		toolbar = (Toolbar) rootView.findViewById(R.id.queue_toolbar);
 		toolbar.inflateMenu(R.menu.queue_menu);
 		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
 				case R.id.queue_shuffle_all:
-					ArrayList<Song> songs = MusicPlayerService.getInstance().getQueue();
+					ArrayList<Song> songs = MusicPlayerService.getInstance()
+							.getQueue();
 					Random random = new Random(System.currentTimeMillis());
-					int position = Math.abs(random.nextInt())%MusicPlayerService.getInstance().getQueueSize();
-					MusicPlayerService.getInstance().playNewSong(position,songs);
+					int position = Math.abs(random.nextInt())
+							% MusicPlayerService.getInstance().getQueueSize();
+					MusicPlayerService.getInstance().playNewSong(position,
+							songs);
 					if (!MusicPlayerService.getInstance().isShuffle()) {
 						MusicPlayerService.getInstance().setShuffle();
 					}
@@ -84,7 +89,7 @@ public class QueueSongUI extends ListContentFragment {
 				return false;
 			}
 		});
-		queueView = (ListView) rootView.findViewById(R.id.queue_list_view);
+		listView = (ListView) rootView.findViewById(R.id.queue_list_view);
 		UIController.getInstance().addListContentFragements(instance);
 		return rootView;
 	}
@@ -93,22 +98,22 @@ public class QueueSongUI extends ListContentFragment {
 	public void load() {
 		// TODO Auto-generated method stub
 		adapter = QueueSongAdapter.getInstance();
-		if (toolbar == null) return;
+		if (toolbar == null)
+			return;
 		toolbar.setTitle("Playing Queue");
-		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance().getQueueSize())+" songs");
-
-		
+		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance()
+				.getQueueSize()) + " songs");
 
 		UIController.getInstance().addAdapter(adapter);
-		queueView.setAdapter(adapter);
+		listView.setAdapter(adapter);
 
-		queueView.setOnItemClickListener(new OnItemClickListener() {
+		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View arg1,
 					int position, long id) {
 				// TODO Auto-generated method stub
-				OfflineSongAdapter.getInstance().notifyDataSetChanged();
+				
 				MusicPlayerService.getInstance().playSongInQueue(position);
 
 			}
@@ -116,8 +121,11 @@ public class QueueSongUI extends ListContentFragment {
 		});
 
 	}
-	public void update(){
-		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance().getQueueSize())+" songs");
+
+	public void update() {
+		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance()
+				.getQueueSize()) + " songs");
+		
 	}
 
 }

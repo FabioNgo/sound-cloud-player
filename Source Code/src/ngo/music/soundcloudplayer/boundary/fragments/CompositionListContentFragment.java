@@ -1,31 +1,9 @@
 package ngo.music.soundcloudplayer.boundary.fragments;
 
-import java.util.ArrayList;
-
+import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
 import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
-import ngo.music.soundcloudplayer.adapters.CompositionViewHolder;
-import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
-import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
-import ngo.music.soundcloudplayer.asynctask.UpdateNewSongBackgroundTask;
-import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.controller.PlaylistController;
-import ngo.music.soundcloudplayer.controller.UIController;
-import ngo.music.soundcloudplayer.entity.Song;
-import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
-import ngo.music.soundcloudplayer.service.MusicPlayerService;
-import android.graphics.Color;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.view.View;
-import android.widget.Adapter;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 /**
  * 
@@ -49,8 +27,7 @@ public abstract class CompositionListContentFragment extends
 			View v = listView.getChildAt(i);
 			if (v != null) {
 
-				CompositionViewHolder holder = new CompositionViewHolder(
-						NUM_ITEM_IN_ONE_CATEGORY, v);
+				CompositionViewHolder holder = (CompositionViewHolder) v.getTag();
 				try {
 					adapter.setLayoutInformation(
 							holder,
