@@ -944,6 +944,8 @@ public class SongController implements Constants, Constants.SongConstants,
 					category.addSong(song);
 					isAlbumExsited = true;
 					break;
+				}else{
+					isAlbumExsited = false;
 				}
 			}
 			if (!isAlbumExsited) {
