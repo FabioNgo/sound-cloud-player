@@ -138,6 +138,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 					new loadMoreBackground().execute();
+					adapter.notifyDataSetChanged();
 				}
 			});
 			songsList.setOnScrollListener(new OnScrollListener() {

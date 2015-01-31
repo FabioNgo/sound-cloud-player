@@ -151,7 +151,8 @@ public class MySCFollowingFragment extends Fragment {
 		userController.setGuest(guest);
 		userController.clearUserData();
 		Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
-
+		MusicPlayerMainActivity.type = MusicPlayerMainActivity.MY_SOUNDCLOUD;
+		
 		Bundle bundle = userController.getBundle(userController
 				.getCurrentUser());
 		i.putExtra(Constants.UserContant.USER, bundle);
