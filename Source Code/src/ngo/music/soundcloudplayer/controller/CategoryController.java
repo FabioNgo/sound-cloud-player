@@ -39,7 +39,6 @@ import ngo.music.soundcloudplayer.service.MusicPlayerService;
 public abstract class CategoryController implements Constants.Data, Constants,
 		Constants.Categories {
 
-	protected String filename = "";
 	ArrayList<Category> categories;
 	protected int TAG_DATA_CHANGED = -1;
 	protected int TAG_ITEM_CHANGED = -1;
@@ -48,55 +47,9 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	 * Get list of Categories
 	 * @return
 	 */
-	public ArrayList<Category> getCategories() {
-		ArrayList<Category> categories = new ArrayList<Category>();
-		File file = new File(MusicPlayerMainActivity.getActivity()
-
-		.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return categories;
-		}
-
-		try {
-			FileReader reader = new FileReader(file);
-			BufferedReader bufferedReader = new BufferedReader(reader);
-			String line = "";
-			while ((line = bufferedReader.readLine()) != null) {
-				categories.add(new Category(line));
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return categories;
-	}
-
-	public void storeCategories() throws IOException {
-		// TODO Auto-generated method stub
-
-		File file = new File(MusicPlayerService.getInstance()
-				.getApplicationContext()
-				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
-		file.createNewFile();
-		FileWriter fileWriter = new FileWriter(file);
-		BufferedWriter writer = new BufferedWriter(fileWriter);
-		for (Category category : categories) {
-			writer.write(category.toStoredString());
-			writer.newLine();
-		}
-		writer.flush();
-		writer.close();
-	}
-
+	public abstract ArrayList<Category> getCategories();
+	
+	public abstract void storeCategories() throws IOException;
 	public void createCategory(String name) throws Exception {
 		for (Category category : categories) {
 			if (category.getTitle().equals(name)) {
@@ -204,6 +157,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		switch (type) {
 		case PLAYLIST:
 			return new PlaylistController();
+		case ALBUM:
+			return new AlbumController();
 
 		default:
 			return null;
@@ -214,8 +169,10 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		// TODO Auto-generated method stub
 		switch (type) {
 		case PLAYLIST:
+			
 			return PlaylistController.getInstance();
-
+		case ALBUM:
+			return AlbumController.getInstance();
 		default:
 			return null;
 		}

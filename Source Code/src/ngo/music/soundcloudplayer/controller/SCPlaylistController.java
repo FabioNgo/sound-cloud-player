@@ -33,7 +33,6 @@ public class SCPlaylistController extends CategoryController implements Constant
 		// playlists = new ArrayMap<String, ArrayList<Song>>();
 		System.out.println ("SOUND CLOUD PLAYLIST CREATED");
 		instance = this;
-		filename = "playlists";
 		categories = getCategories();
 		TAG_DATA_CHANGED = PLAYLIST_CHANGED;
 		TAG_ITEM_CHANGED = ITEM_IN_PLAYLIST_CHANGED;
@@ -200,6 +199,18 @@ public class SCPlaylistController extends CategoryController implements Constant
 			e.printStackTrace();
 		}
 		return playlists;
+	}
+
+	@Override
+	public ArrayList<Category> getCategories() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Category>();
+	}
+
+	@Override
+	public void storeCategories() throws IOException {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

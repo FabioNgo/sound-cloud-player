@@ -8,6 +8,7 @@ import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.asynctask.UpdateNewSongBackgroundTask;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -61,16 +62,19 @@ public abstract class ListContentFragment extends Fragment implements
 		if (adapter instanceof OfflineSongAdapter) {
 			ArrayList<Song> songs = ((OfflineSongAdapter) adapter).getSongs();
 			MusicPlayerService.getInstance().playNewSong(position, songs);
+			return;
 		}
 		if (adapter instanceof ListSongAdapter) {
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
 			ArrayList<Song> songs = ((ListSongAdapter) adapter).getSongs();
 			MusicPlayerService.getInstance().playNewSong(position, songs);
+			return;
 		}
 		if (adapter instanceof CompositionListAdapter) {
-			String playlist = CompositionListAdapter.getInstance(PLAYLIST).getItem(position);
-			ArrayList<Song> songs = PlaylistController.getInstance()
-					.getSongFromCategory(playlist);
+			int type = ((CompositionListAdapter)adapter).getAdapterType();
+			String category = CompositionListAdapter.getInstance(type).getItem(position);
+			ArrayList<Song> songs = CategoryController.getInstance(type)
+					.getSongFromCategory(category);
 			if (!songs.isEmpty()) {
 				MusicPlayerService.getInstance().playNewSong(0, songs);
 			}else{

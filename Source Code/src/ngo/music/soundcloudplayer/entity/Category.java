@@ -17,7 +17,14 @@ public class Category {
 		this.title = title;
 		this.songs = songs;
 	}
+	public Category(String title,Song song) {
 
+		// TODO Auto-generated constructor stub
+
+		this.title = title;
+		this.songs = new ArrayList<Song>();
+		songs.add(song);
+	}
 	public Category(String string) {
 
 		String[] temp = string.split(separator);
@@ -76,6 +83,14 @@ public class Category {
 				this.songs.add(song1);
 			}
 		}
+	}
+
+	public void addSong(Song song) {
+
+		if (!this.songs.contains(song)) {
+			this.songs.add(song);
+		}
+
 	}
 
 	public String getTitle() {

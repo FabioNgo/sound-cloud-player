@@ -31,7 +31,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		implements Constants.Categories {
 	private View v;
-	int adapterType = -1;
+	int type = -1;
 	Context context;
 	int resource;
 	protected ArrayList<String> categories;
@@ -52,7 +52,9 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		case PLAYLIST:
 			return new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
 					.getApplicationContext(), R.layout.list_view);
-
+		case ALBUM:
+			return new AlbumAdapter(MusicPlayerMainActivity.getActivity()
+					.getApplicationContext(), R.layout.list_view);
 		default:
 			return null;
 		}
@@ -67,7 +69,11 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 				createNewInstance(type);
 			}
 			return PlaylistAdapter.instance;
-
+		case ALBUM:
+			if(AlbumAdapter.instance == null){
+				createNewInstance(type);
+			}
+			return AlbumAdapter.instance;
 		default:
 			return null;
 		}
@@ -158,13 +164,13 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 						case R.id.composition_list_item_shows:
 							
 							ListItemsInCompositionListFragment.createInstance(
-									getItemsFromCat(cat), cat,adapterType).show(
+									getItemsFromCat(cat), cat,type).show(
 									MusicPlayerMainActivity.getActivity()
 											.getSupportFragmentManager(),
 									"Show songs in cate");
 							break;
 						case R.id.composition_list_item_delete:
-							CategoryController.getInstance(adapterType).removeCategory(cat);
+							CategoryController.getInstance(type).removeCategory(cat);
 						default:
 							break;
 						}
@@ -221,6 +227,11 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	public boolean hasStableIds() {
 		// TODO Auto-generated method stub
 		return true;
+	}
+
+	public int getAdapterType() {
+		// TODO Auto-generated method stub
+		return type;
 	}
 
 	

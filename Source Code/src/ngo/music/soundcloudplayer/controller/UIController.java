@@ -439,6 +439,19 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			}
 
 			break;
+		case ALBUM_CHANGED:
+			
+			CompositionListContentFragment.getInstance(ALBUM).update();
+			break;
+		case ITEM_IN_ALBUM_CHANGED:
+			if (SongsInCateAdapter.getInstance(ALBUM) != null) {
+				SongsInCateAdapter.getInstance(ALBUM).update();
+			}
+			if (CompositionListContentFragment.getInstance(ALBUM) != null) {
+				CompositionListContentFragment.getInstance(ALBUM).update();
+			}
+
+			break;
 		default:
 			break;
 		}

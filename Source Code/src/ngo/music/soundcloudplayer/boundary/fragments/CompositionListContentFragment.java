@@ -49,7 +49,8 @@ public abstract class CompositionListContentFragment extends
 		case PLAYLIST:
 			return new PlaylistFragment();
 			
-
+		case ALBUM:
+			return new AlbumsFragment();
 		default:
 			break;
 		}
@@ -62,7 +63,11 @@ public abstract class CompositionListContentFragment extends
 				createInstance(type);
 			}
 			return PlaylistFragment.instance;
-			
+		case ALBUM:
+			if(AlbumsFragment.instance == null){
+				createInstance(type);
+			}
+			return AlbumsFragment.instance;
 
 		default:
 			break;

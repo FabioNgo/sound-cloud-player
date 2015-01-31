@@ -135,7 +135,9 @@ public interface Constants {
 		int QUEUE_CHANGED = 0;
 		int OFFLINE_SONG_CHANGED = 1;
 		int PLAYLIST_CHANGED = 2;
-		int ITEM_IN_PLAYLIST_CHANGED = 3;
+		int ALBUM_CHANGED = 3;
+		int ITEM_IN_PLAYLIST_CHANGED = 4;
+		int ITEM_IN_ALBUM_CHANGED = 5;
 	}
 	interface MusicService {
 		/**
@@ -184,6 +186,7 @@ public interface Constants {
 	interface Categories{
 		int ARTIST = 0;
 		int PLAYLIST = 1;
+		int ALBUM = 2;
 		int NUM_ITEM_IN_ONE_CATEGORY = 5;
 	}
 	interface SoundCloudExploreConstant{

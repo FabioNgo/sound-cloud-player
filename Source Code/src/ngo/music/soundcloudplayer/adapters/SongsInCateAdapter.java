@@ -67,7 +67,10 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 			return new SongsInPlaylistAdapter(
 					MusicPlayerMainActivity.getActivity(), resource,
 					cate);
-
+		case ALBUM:
+			return new SongsInAlbumsAdapter(
+					MusicPlayerMainActivity.getActivity(), resource,
+					cate);
 		default:
 			return null;
 		}
