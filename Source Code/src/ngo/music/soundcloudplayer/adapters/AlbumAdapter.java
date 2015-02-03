@@ -17,7 +17,7 @@ public class AlbumAdapter extends CompositionListAdapter {
 		super(context, resource);
 		// TODO Auto-generated constructor stub
 		instance = this;
-		type = ALBUM;
+		
 	}
 
 	@Override
@@ -28,9 +28,21 @@ public class AlbumAdapter extends CompositionListAdapter {
 	}
 
 	@Override
-	protected ArrayList<Song> getItemsFromCat(String cat) {
+	protected ArrayList<Song> getSongsFromCat(String cat) {
 		// TODO Auto-generated method stub
 		return AlbumController.getInstance().getSongFromCategory(cat);
+	}
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return ALBUM;
+	}
+
+	@Override
+	protected boolean setCanDelete() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

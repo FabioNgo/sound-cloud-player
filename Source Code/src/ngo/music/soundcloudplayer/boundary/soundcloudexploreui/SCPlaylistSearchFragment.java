@@ -37,13 +37,13 @@ public class SCPlaylistSearchFragment extends CompositionListContentFragment  {
 	int current_page;
 	protected boolean loadingMore = false;
 	public SCPlaylistSearchFragment() {
+		super();
 		query = MusicPlayerMainActivity.query;
-		
-		
 		current_page = 1;
-		adapter = CompositionListAdapter.getInstance(SC_SEARCH_PLAYLIST);
-		instance = this;
-		type = SC_SEARCH_PLAYLIST;
+		
+		//adapter = CompositionListAdapter.getInstance(SC_SEARCH_PLAYLIST);
+		//instance = this;
+		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -138,4 +138,10 @@ protected class loadMoreBackground extends AsyncTask<String, String, String>{
              loadingMore = false;
 		}
 	}
+
+@Override
+protected int setType() {
+	// TODO Auto-generated method stub
+	return SC_SEARCH_PLAYLIST;
+}
 }

@@ -6,13 +6,14 @@ import java.util.ArrayList;
 import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.general.Constants;
 
-public class AlbumController extends CategoryController {
-	private static AlbumController instance = null;
+public class ArtistController extends CategoryController{
+	private static ArtistController instance = null;
 
+	
 
-	public static AlbumController getInstance() {
+	public static ArtistController getInstance() {
 		if (instance == null) {
-			instance = new AlbumController();
+			instance = new ArtistController();
 		}
 
 		return instance;
@@ -22,7 +23,7 @@ public class AlbumController extends CategoryController {
 	@Override
 	public ArrayList<Category> getCategories() {
 		// TODO Auto-generated method stub
-		ArrayList<Category> cate = SongController.getInstance().getOfflineAlbums();
+		ArrayList<Category> cate = SongController.getInstance().getOfflineArtists();
 		return cate;
 	}
 
@@ -35,12 +36,12 @@ public class AlbumController extends CategoryController {
 	@Override
 	protected int setTagItemChange() {
 		// TODO Auto-generated method stub
-		return ITEM_IN_ALBUM_CHANGED;
+		return ITEM_IN_ARTIST_CHANGED;
 	}
 
 	@Override
 	protected int setTagDataChange() {
 		// TODO Auto-generated method stub
-		return ALBUM_CHANGED;
+		return ARTIST_CHANGED;
 	}
 }

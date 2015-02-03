@@ -13,4 +13,10 @@ public class ListItemInSCPlaylistSearchFragment extends
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return SC_SEARCH_PLAYLIST;
+	}
+
 }

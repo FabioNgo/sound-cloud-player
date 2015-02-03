@@ -139,7 +139,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public Song getNextSong() {
 
-		if(nextSongId.equals("")){
+		if(nextSongId.equals("")|| loopState == MODE_LOOP_ONE){
 			return getCurrentSong();
 		}else{
 			return SongController.getInstance().getSong(nextSongId);

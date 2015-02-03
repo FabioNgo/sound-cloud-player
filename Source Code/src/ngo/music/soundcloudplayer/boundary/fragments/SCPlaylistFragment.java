@@ -12,11 +12,7 @@ import android.widget.ListView;
 
 public class SCPlaylistFragment extends CompositionListContentFragment  {
 	static SCPlaylistFragment instance = null;
-	public SCPlaylistFragment() {
-		adapter = CompositionListAdapter.getInstance(SC_PLAYLIST);
-		instance = this;
-		type = SC_PLAYLIST;
-	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -28,5 +24,11 @@ public class SCPlaylistFragment extends CompositionListContentFragment  {
 		UIController.getInstance().addListContentFragements(this);
 		return rootView;
 
+	}
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return SC_PLAYLIST;
 	}
 }

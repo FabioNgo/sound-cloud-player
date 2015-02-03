@@ -42,7 +42,25 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	ArrayList<Category> categories =  new ArrayList<Category>();
 	protected int TAG_DATA_CHANGED = -1;
 	protected int TAG_ITEM_CHANGED = -1;
+	public CategoryController() {
+		// TODO Auto-generated constructor stub
+		// playlists = new ArrayMap<String, ArrayList<Song>>();
 
+		
+		categories = getCategories();
+		TAG_DATA_CHANGED = setTagDataChange();
+		TAG_ITEM_CHANGED = setTagItemChange();
+	}
+	/**
+	 * 
+	 * @return ITEM_IN_CATEGORY_CHANGED in Constants.Data
+	 */
+	protected abstract int setTagItemChange();
+	/**
+	 * 
+	 * @return CATEGORY_CHANGED in Constants.Data
+	 */
+	protected abstract int setTagDataChange();
 	/**
 	 * Get list of Categories
 	 * @return
@@ -131,7 +149,10 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * In order to remove online category, need to override this function
+	 * @param cate
+	 */
 	public void removeCategory(String cate) {
 		for (int i = 0; i < categories.size(); i++) {
 			if(categories.get(i).getTitle().equals(cate)){
@@ -160,6 +181,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			return new PlaylistController();
 		case ALBUM:
 			return new AlbumController();
+		case ARTIST:
+			return new ArtistController();
 		case SC_PLAYLIST:
 			return new SCPlaylistController();
 		case SC_SEARCH_PLAYLIST:
@@ -176,6 +199,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			return PlaylistController.getInstance();
 		case ALBUM:
 			return AlbumController.getInstance();
+		case ARTIST:
+			return ArtistController.getInstance();
 		case SC_PLAYLIST:
 			return SCPlaylistController.getInstance();
 		case SC_SEARCH_PLAYLIST:

@@ -31,24 +31,38 @@ import com.todddavies.components.progressbar.ProgressWheel;
 public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		implements Constants.Categories {
 	private View v;
-	int type = -1;
+	private int type = -1;
 	Context context;
 	int resource;
 	protected ArrayList<String> categories;
 	CompositionViewHolder holder = null;
+	private boolean canDelete;
 
 	public CompositionListAdapter(Context context, int resource) {
 		super(context, resource);
-
+		type = setType();
+		canDelete = setCanDelete();
 		this.categories = getCategories();
 		this.context = context;
 		this.resource = resource;
 
 	}
 
+	/**
+	 * 
+	 * @return if the category item can be delete or not
+	 */
+	protected abstract boolean setCanDelete();
+
+	/**
+	 * 
+	 * @return type of Category in Constant.Category
+	 */
+	protected abstract int setType();
+
 	public static CompositionListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
-		System.out.println ("SC_PLAYLIST = " + type);
+		System.out.println("SC_PLAYLIST = " + type);
 		switch (type) {
 		case PLAYLIST:
 			return new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
@@ -56,11 +70,16 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		case ALBUM:
 			return new AlbumAdapter(MusicPlayerMainActivity.getActivity()
 					.getApplicationContext(), R.layout.list_view);
+		case ARTIST:
+			return new ArtistAdapter(MusicPlayerMainActivity.getActivity()
+					.getApplicationContext(), R.layout.list_view);
 		case SC_PLAYLIST:
+
 			return new SCPlaylistAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(), R.layout.list_view);
 		
 		case SC_SEARCH_PLAYLIST:
 			return new SCPlaylistSearchAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(), R.layout.list_view);
+
 		default:
 			return null;
 		}
@@ -71,15 +90,16 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 
 		switch (type) {
 		case PLAYLIST:
-			if(PlaylistAdapter.instance == null){
+			if (PlaylistAdapter.instance == null) {
 				createNewInstance(type);
 			}
 			return PlaylistAdapter.instance;
 		case ALBUM:
-			if(AlbumAdapter.instance == null){
+			if (AlbumAdapter.instance == null) {
 				createNewInstance(type);
 			}
 			return AlbumAdapter.instance;
+
 		case SC_PLAYLIST:
 			if(SCPlaylistAdapter.instance == null){
 				createNewInstance(type);
@@ -90,6 +110,13 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 				createNewInstance(type);
 			}
 			return SCPlaylistSearchAdapter.instance;	
+
+		case ARTIST:
+			if (ArtistAdapter.instance == null) {
+				createNewInstance(type);
+			}
+			return ArtistAdapter.instance;
+
 		default:
 			return null;
 		}
@@ -109,7 +136,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 *            : category
 	 * @return list of songs
 	 */
-	protected abstract ArrayList<Song> getItemsFromCat(String cat);
+	protected abstract ArrayList<Song> getSongsFromCat(String cat);
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -166,9 +193,12 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
 						.getActivity(), holder.menu);
 				// Inflating the Popup using xml file
-				popup.getMenuInflater().inflate(R.menu.composition_list_item_menu,
-						popup.getMenu());
-
+				popup.getMenuInflater().inflate(
+						R.menu.composition_list_item_menu, popup.getMenu());
+				if (!canDelete) {
+					popup.getMenu().findItem(R.id.composition_list_item_delete)
+							.setVisible(false);
+				}
 				// registering popup with OnMenuItemClickListener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -178,15 +208,16 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.composition_list_item_shows:
-							
+
 							ListItemsInCompositionListFragment.createInstance(
-									getItemsFromCat(cat), cat,type).show(
+									getSongsFromCat(cat), cat, type).show(
 									MusicPlayerMainActivity.getActivity()
 											.getSupportFragmentManager(),
 									"Show songs in cate");
 							break;
 						case R.id.composition_list_item_delete:
-							CategoryController.getInstance(type).removeCategory(cat);
+							CategoryController.getInstance(type)
+									.removeCategory(cat);
 						default:
 							break;
 						}
@@ -249,7 +280,5 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		// TODO Auto-generated method stub
 		return type;
 	}
-
-	
 
 }

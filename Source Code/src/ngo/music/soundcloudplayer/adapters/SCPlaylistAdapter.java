@@ -18,7 +18,7 @@ public class SCPlaylistAdapter extends CompositionListAdapter {
 		super(context, resource);
 		// TODO Auto-generated constructor stub
 		instance = this;
-		type = SC_PLAYLIST;
+		
 	}
 
 	@Override
@@ -29,9 +29,21 @@ public class SCPlaylistAdapter extends CompositionListAdapter {
 	}
 
 	@Override
-	protected ArrayList<Song> getItemsFromCat(String cat) {
+	protected ArrayList<Song> getSongsFromCat(String cat) {
 		// TODO Auto-generated method stub
 		return SCPlaylistController.getInstance().getSongFromCategory(cat);
+	}
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return SC_PLAYLIST;
+	}
+
+	@Override
+	protected boolean setCanDelete() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }

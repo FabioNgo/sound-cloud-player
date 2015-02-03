@@ -14,7 +14,20 @@ import android.view.View;
  */
 public abstract class CompositionListContentFragment extends
 		ListContentFragment implements Constants.Categories {
-	protected int type = -1;
+
+	int type = -1;
+
+
+	protected CompositionListContentFragment(){
+		type = setType();
+		adapter = CompositionListAdapter.getInstance(type);
+	}
+	/**
+	 * 
+	 * @return type of category in Constants.Categories
+	 */
+	protected abstract int setType();
+
 	/**
 	 * Update UI when playlist change (Update Single exsited view in list View)
 	 * 
@@ -52,7 +65,8 @@ public abstract class CompositionListContentFragment extends
 			
 		case ALBUM:
 			return new AlbumsFragment();
-			
+		case ARTIST:
+			return new ArtistsFragment();
 		case SC_PLAYLIST:
 			return new SCPlaylistFragment();
 		case SC_SEARCH_PLAYLIST:
@@ -74,6 +88,11 @@ public abstract class CompositionListContentFragment extends
 				createInstance(type);
 			}
 			return AlbumsFragment.instance;
+		case ARTIST:
+			if(ArtistsFragment.instance == null){
+				createInstance(type);
+			}
+			return ArtistsFragment.instance;
 
 		case SC_PLAYLIST:
 			if(SCPlaylistFragment.instance == null){

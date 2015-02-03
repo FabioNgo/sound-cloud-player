@@ -15,24 +15,15 @@ import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class PlaylistController extends CategoryController implements Constants.Data, Constants {
+public class PlaylistController extends CategoryController {
 
 	private static PlaylistController instance = null;
-	String filename = "playlists";
+	String filename ="";
 	
-	PlaylistController() {
-		// TODO Auto-generated constructor stub
-		// playlists = new ArrayMap<String, ArrayList<Song>>();
-		
-		instance = this;
-		categories = getCategories();
-		TAG_DATA_CHANGED = ALBUM_CHANGED;
-		TAG_ITEM_CHANGED = ITEM_IN_ALBUM_CHANGED;
-	}
 
 	public static PlaylistController getInstance() {
 		if (instance == null) {
-			new PlaylistController();
+			instance = new PlaylistController();
 		}
 
 		return instance;
@@ -41,7 +32,7 @@ public class PlaylistController extends CategoryController implements Constants.
 	@Override
 	public ArrayList<Category> getCategories() {
 
-		
+		filename = "playlists";
 		ArrayList<Category> categories = new ArrayList<Category>();
 		File file = new File(MusicPlayerMainActivity.getActivity()
 
@@ -88,6 +79,16 @@ public class PlaylistController extends CategoryController implements Constants.
 		}
 		writer.flush();
 		writer.close();
+	}
+	@Override
+	protected int setTagItemChange() {
+		// TODO Auto-generated method stub
+		return ITEM_IN_PLAYLIST_CHANGED;
+	}
+	@Override
+	protected int setTagDataChange() {
+		// TODO Auto-generated method stub
+		return PLAYLIST_CHANGED;
 	}
 
 	

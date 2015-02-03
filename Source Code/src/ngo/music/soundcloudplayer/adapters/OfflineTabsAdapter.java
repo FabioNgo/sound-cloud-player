@@ -1,25 +1,26 @@
 package ngo.music.soundcloudplayer.adapters;
 
-
 import ngo.music.soundcloudplayer.boundary.fragments.AlbumsFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.ArtistsFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.CompositionListContentFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.controller.AlbumController;
-import ngo.music.soundcloudplayer.entity.Album;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-public class OfflineTabsAdapter extends FragmentPagerAdapter {
+public class OfflineTabsAdapter extends FragmentPagerAdapter implements
+		Constants.Categories {
 
-
-	private final String[] TITLES = { "Songs","Playlists", "Albums", "Artists", "About Us" };
+	private final String[] TITLES = { "Songs", "Playlists", "Albums",
+			"Artists", "About Us" };
 
 	public OfflineTabsAdapter(FragmentManager fm) {
 		super(fm);
-		
-	}
 
+	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
@@ -33,17 +34,20 @@ public class OfflineTabsAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
-		
+
 		switch (position) {
 		case 0:
 			return new OfflineSongsFragment();
 		case 1:
-			return new PlaylistFragment();
+
+			return CompositionListContentFragment.createInstance(PLAYLIST);
 		case 2:
-			return new AlbumsFragment();
-		default: return new Fragment();
+			return CompositionListContentFragment.createInstance(ALBUM);
+		case 3:
+			return CompositionListContentFragment.createInstance(ARTIST);
+		default:
+			return new Fragment();
 		}
-		
 
 	}
 
