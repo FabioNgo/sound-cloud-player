@@ -6,23 +6,14 @@ import java.util.ArrayList;
 import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.general.Constants;
 
-public class ArtistController extends CategoryController implements
-		Constants.Data, Constants {
+public class ArtistController extends CategoryController{
 	private static ArtistController instance = null;
 
-	public ArtistController() {
-		// TODO Auto-generated constructor stub
-		// playlists = new ArrayMap<String, ArrayList<Song>>();
-
-		instance = this;
-		categories = getCategories();
-		TAG_DATA_CHANGED = ARTIST_CHANGED;
-		TAG_ITEM_CHANGED = ITEM_IN_ARTIST_CHANGED;
-	}
+	
 
 	public static ArtistController getInstance() {
 		if (instance == null) {
-			new ArtistController();
+			instance = new ArtistController();
 		}
 
 		return instance;
@@ -40,5 +31,17 @@ public class ArtistController extends CategoryController implements
 	public void storeCategories() throws IOException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected int setTagItemChange() {
+		// TODO Auto-generated method stub
+		return ITEM_IN_ARTIST_CHANGED;
+	}
+
+	@Override
+	protected int setTagDataChange() {
+		// TODO Auto-generated method stub
+		return ARTIST_CHANGED;
 	}
 }

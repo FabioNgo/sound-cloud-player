@@ -12,12 +12,7 @@ import android.widget.ListView;
 
 public class ArtistsFragment extends CompositionListContentFragment  {
 	static ArtistsFragment instance = null;
-	ArtistsFragment() {
-		type = ARTIST;
-		adapter = CompositionListAdapter.getInstance(type);
-		instance = this;
-		
-	}
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -29,5 +24,11 @@ public class ArtistsFragment extends CompositionListContentFragment  {
 		UIController.getInstance().addListContentFragements(this);
 		return rootView;
 
+	}
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return ARTIST;
 	}
 }

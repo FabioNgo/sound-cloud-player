@@ -31,21 +31,34 @@ import com.todddavies.components.progressbar.ProgressWheel;
 public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		implements Constants.Categories {
 	private View v;
-	int type = -1;
+	private int type = -1;
 	Context context;
 	int resource;
 	protected ArrayList<String> categories;
 	CompositionViewHolder holder = null;
-	protected boolean canDelete;
+	private boolean canDelete;
 
 	public CompositionListAdapter(Context context, int resource) {
 		super(context, resource);
-
+		type = setType();
+		canDelete = setCanDelete();
 		this.categories = getCategories();
 		this.context = context;
 		this.resource = resource;
 
 	}
+
+	/**
+	 * 
+	 * @return if the category item can be delete or not
+	 */
+	protected abstract boolean setCanDelete();
+
+	/**
+	 * 
+	 * @return type of Category in Constant.Category
+	 */
+	protected abstract int setType();
 
 	public static CompositionListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
@@ -107,7 +120,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 *            : category
 	 * @return list of songs
 	 */
-	protected abstract ArrayList<Song> getItemsFromCat(String cat);
+	protected abstract ArrayList<Song> getSongsFromCat(String cat);
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -158,8 +171,6 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		 */
 		holder.menu.setOnClickListener(new OnClickListener() {
 
-			
-
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -183,7 +194,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 						case R.id.composition_list_item_shows:
 
 							ListItemsInCompositionListFragment.createInstance(
-									getItemsFromCat(cat), cat, type).show(
+									getSongsFromCat(cat), cat, type).show(
 									MusicPlayerMainActivity.getActivity()
 											.getSupportFragmentManager(),
 									"Show songs in cate");

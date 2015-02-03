@@ -30,26 +30,18 @@ import ngo.music.soundcloudplayer.entity.SCAccount;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class SCPlaylistController extends CategoryController implements Constants.Data, Constants, Constants.PlaylistConstant {
+public class SCPlaylistController extends CategoryController implements Constants.PlaylistConstant {
 
 	private static final int OFFSET = 5;
 	private static SCPlaylistController instance = null;
 	ArrayList<SCPlaylist> playlists =  new ArrayList<SCPlaylist>();
 	
 	
-	SCPlaylistController() {
-		// TODO Auto-generated constructor stub
-		// playlists = new ArrayMap<String, ArrayList<Song>>();
-		System.out.println ("SOUND CLOUD PLAYLIST CREATED");
-		instance = this;
-		categories = getCategories();
-		TAG_DATA_CHANGED = PLAYLIST_CHANGED;
-		TAG_ITEM_CHANGED = ITEM_IN_PLAYLIST_CHANGED;
-	}
+	
 
 	public static SCPlaylistController getInstance() {
 		if (instance == null) {
-			new SCPlaylistController();
+			instance = new SCPlaylistController();
 		}
 
 		return instance;
@@ -204,6 +196,18 @@ public class SCPlaylistController extends CategoryController implements Constant
 	public  void storeCategories() throws IOException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	protected int setTagItemChange() {
+		// TODO Auto-generated method stub
+		return ITEM_IN_SC_PLAYLIST_CHANGED;
+	}
+
+	@Override
+	protected int setTagDataChange() {
+		// TODO Auto-generated method stub
+		return SC_PLAYLIST_CHANGED;
 	}
 	
 	

@@ -43,19 +43,19 @@ import android.widget.TextView;
  * @author Fabio Ngo
  *
  */
-public class ListItemsInCompositionListFragment extends DialogFragment implements Constants.Categories {
+public abstract class ListItemsInCompositionListFragment extends DialogFragment implements Constants.Categories {
 	ArrayList<Song> songs;
 	String cat = "";
 	int type = -1;
 	View rootView;
 	SongsInCateAdapter adapter;
-	private ListItemsInCompositionListFragment instance;
-	public ListItemsInCompositionListFragment(ArrayList<Song> songs,String cat) {
+	ListItemsInCompositionListFragment(ArrayList<Song> songs,String cat) {
 		// TODO Auto-generated constructor stub
 		this.songs = songs;
-		instance = this;
 		this.cat = cat;
+		type = setType();
 	}
+	protected abstract int setType();
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 	  Dialog dialog = super.onCreateDialog(savedInstanceState);

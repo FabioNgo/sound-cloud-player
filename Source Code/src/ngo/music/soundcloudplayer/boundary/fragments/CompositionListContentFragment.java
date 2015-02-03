@@ -14,6 +14,15 @@ import android.view.View;
 public abstract class CompositionListContentFragment extends
 		ListContentFragment implements Constants.Categories {
 	int type = -1;
+	CompositionListContentFragment(){
+		type = setType();
+		adapter = CompositionListAdapter.getInstance(type);
+	}
+	/**
+	 * 
+	 * @return type of category in Constants.Categories
+	 */
+	protected abstract int setType();
 	/**
 	 * Update UI when playlist change (Update Single exsited view in list View)
 	 * 

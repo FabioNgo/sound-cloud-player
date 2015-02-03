@@ -7,10 +7,16 @@ import ngo.music.soundcloudplayer.entity.Song;
 public class ListItemInAlbumFragment extends
 		ListItemsInCompositionListFragment {
 
-	public ListItemInAlbumFragment(ArrayList<Song> songs, String cat) {
+	ListItemInAlbumFragment(ArrayList<Song> songs, String cat) {
 		super(songs, cat);
-		type = ALBUM;
 		// TODO Auto-generated constructor stub
 	}
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return ALBUM;
+	}
+
 
 }

@@ -13,13 +13,7 @@ import android.widget.ListView;
 public class PlaylistFragment extends CompositionListContentFragment {
 	static PlaylistFragment instance;
 
-	PlaylistFragment() {
-		// TODO Auto-generated constructor stub
-		type = PLAYLIST;
-		adapter = CompositionListAdapter.getInstance(type);
-		instance = this;
-		
-	}
+	
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,6 +26,14 @@ public class PlaylistFragment extends CompositionListContentFragment {
 		UIController.getInstance().addListContentFragements(this);
 		return rootView;
 
+	}
+
+
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return PLAYLIST;
 	}
 
 	

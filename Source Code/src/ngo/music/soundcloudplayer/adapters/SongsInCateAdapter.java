@@ -32,7 +32,7 @@ import com.todddavies.components.progressbar.ProgressWheel;
 public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 		Constants.Categories {
 	private View v;
-	int type = -1;
+	private int type = -1;
 	Context context;
 	int resource;
 	String cat;
@@ -46,10 +46,18 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 		super(context, resource);
 		this.context = context;
 		this.resource = resource;
-		songs = getSongsFromCat(cat);
+
+		type = setType();
 		this.cat = cat;
+		songs = CompositionListAdapter.getInstance(type).getSongsFromCat(cat);
+		
 	}
-	public abstract ArrayList<Song> getSongsFromCat(String cat);
+	/**
+	 * 
+	 * @return the type of category in Constant.Categories
+	 */
+	protected abstract int setType();
+	
 	
 	/**
 	 * 
@@ -167,6 +175,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 
 	@Override
 	public Song getItem(int position) {
+		
 		return songs.get(position);
 	}
 
@@ -190,7 +199,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 
 	public void update() {
 		// TODO Auto-generated method stub
-		songs = getSongsFromCat(cat);
+		songs = CompositionListAdapter.getInstance(type).getSongsFromCat(cat);
 		this.notifyDataSetChanged();
 	}
 

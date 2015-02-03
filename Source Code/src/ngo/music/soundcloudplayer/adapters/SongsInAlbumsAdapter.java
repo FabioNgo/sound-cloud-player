@@ -12,13 +12,13 @@ public class SongsInAlbumsAdapter extends SongsInCateAdapter {
 		
 		super(context, resource, cate);
 		// TODO Auto-generated constructor stub
-		type = ALBUM;
 		instance = this;
 	}
+	
 	@Override
-	public ArrayList<Song> getSongsFromCat(String cat) {
+	protected int setType() {
 		// TODO Auto-generated method stub
-		return CompositionListAdapter.getInstance(ALBUM).getItemsFromCat(cat);
+		return ALBUM;
 	}
 
 
