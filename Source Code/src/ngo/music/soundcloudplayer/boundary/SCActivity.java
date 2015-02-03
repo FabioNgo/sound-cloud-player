@@ -54,7 +54,7 @@ public class SCActivity extends MusicPlayerMainActivity {
 				//new searchBackground().execute(query);
 				SCActivity.type = SCActivity.SOUNDCLOUD_SEARCH;
 				
-				//SCPlaylistSearchController.getInstance().searchPlaylistSC(query, 1);
+				SCPlaylistSearchController.getInstance().searchPlaylistSC(query, 0);
 				new searchBackground().execute(query);
 //				SongController.getInstance().searchSongSC(query, 0);
 //				SCUserController.getInstance().searchUserSC(query, 0);

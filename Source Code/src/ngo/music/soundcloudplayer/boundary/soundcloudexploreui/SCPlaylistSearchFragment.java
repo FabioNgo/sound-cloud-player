@@ -139,9 +139,9 @@ protected class loadMoreBackground extends AsyncTask<String, String, String>{
 		}
 	}
 
-@Override
-protected int setType() {
-	// TODO Auto-generated method stub
-	return SC_SEARCH_PLAYLIST;
-}
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return SC_SEARCH_PLAYLIST;
+	}
 }

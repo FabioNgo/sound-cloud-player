@@ -37,7 +37,17 @@ public class SCPlaylistController extends CategoryController implements Constant
 	ArrayList<SCPlaylist> playlists =  new ArrayList<SCPlaylist>();
 	
 	
-	
+	SCPlaylistController() {
+		// TODO Auto-generated constructor stub
+		// playlists = new ArrayMap<String, ArrayList<Song>>();
+		System.out.println ("SOUND CLOUD PLAYLIST CREATED");
+		instance = this;
+		categories = getCategories();
+		System.out.println("categories  = " + categories);
+		TAG_DATA_CHANGED = SC_PLAYLIST_CHANGED;
+		TAG_ITEM_CHANGED = ITEM_IN_SC_PLAYLIST_CHANGED;
+	}
+
 
 	public static SCPlaylistController getInstance() {
 		if (instance == null) {

@@ -43,12 +43,13 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 		System.out.println ("SOUND CLOUD PLAYLIST CREATED");
 		instance = this;
 		categories = getCategories();
-		
-		TAG_DATA_CHANGED = PLAYLIST_CHANGED;
-		TAG_ITEM_CHANGED = ITEM_IN_PLAYLIST_CHANGED;
+		System.out.println("categories  = " + categories);
+		TAG_DATA_CHANGED = SC_SEARCH_PLAYLIST_CHANGED;
+		TAG_ITEM_CHANGED = ITEM_IN_SC_SEARCH_PLAYLIST_CHANGED;
 	}
 
 	public static SCPlaylistSearchController getInstance() {
+		
 		if (instance == null) {
 			new SCPlaylistSearchController();
 		}
@@ -152,7 +153,9 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 	
 	@Override
 	public ArrayList<Category> getCategories() {
+		System.out.println (categories);
 		if (categories == null){
+			
 			return new ArrayList<Category>();
 		}
 		return categories;
@@ -166,6 +169,7 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 	protected SCPlaylist addPlaylistInfomation(JSONObject jObject) throws JSONException{
 		SCPlaylist playlist = new SCPlaylist("");
 		playlist.setTitle(jObject.getString(PLAYLIST_TITLE));
+		System.out.println ("PLAYLIST TITLE  = " + jObject.getString(PLAYLIST_TITLE));
 		playlist.setId(jObject.getString(PLAYLIST_ID));
 		
 		playlist.setUserId(jObject.getInt(PLAYLIST_CREATOR_ID));

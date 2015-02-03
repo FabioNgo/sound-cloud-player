@@ -55,7 +55,7 @@ public class SCSearchTabAdater extends FragmentPagerAdapter {
 		case 1:
 			return new SCUserSearchFragment();
 		case 2:
-			return new SCSongSearchFragment();
+			return new SCPlaylistSearchFragment();
 		default: 
 			return new SCSongSearchFragment();
 		}
