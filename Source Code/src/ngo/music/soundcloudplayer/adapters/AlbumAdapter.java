@@ -18,6 +18,7 @@ public class AlbumAdapter extends CompositionListAdapter {
 		// TODO Auto-generated constructor stub
 		instance = this;
 		type = ALBUM;
+		canDelete = false;
 	}
 
 	@Override

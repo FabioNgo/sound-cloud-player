@@ -36,6 +36,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	int resource;
 	protected ArrayList<String> categories;
 	CompositionViewHolder holder = null;
+	protected boolean canDelete;
 
 	public CompositionListAdapter(Context context, int resource) {
 		super(context, resource);
@@ -48,7 +49,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 
 	public static CompositionListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
-		System.out.println ("SC_PLAYLIST = " + type);
+		System.out.println("SC_PLAYLIST = " + type);
 		switch (type) {
 		case PLAYLIST:
 			return new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
@@ -60,8 +61,9 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 			return new ArtistAdapter(MusicPlayerMainActivity.getActivity()
 					.getApplicationContext(), R.layout.list_view);
 		case SC_PLAYLIST:
-			
-			return new SCPlaylistAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(), R.layout.list_view);
+
+			return new SCPlaylistAdapter(MusicPlayerMainActivity.getActivity()
+					.getApplicationContext(), R.layout.list_view);
 		default:
 			return null;
 		}
@@ -72,17 +74,17 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 
 		switch (type) {
 		case PLAYLIST:
-			if(PlaylistAdapter.instance == null){
+			if (PlaylistAdapter.instance == null) {
 				createNewInstance(type);
 			}
 			return PlaylistAdapter.instance;
 		case ALBUM:
-			if(AlbumAdapter.instance == null){
+			if (AlbumAdapter.instance == null) {
 				createNewInstance(type);
 			}
 			return AlbumAdapter.instance;
 		case ARTIST:
-			if(ArtistAdapter.instance == null){
+			if (ArtistAdapter.instance == null) {
 				createNewInstance(type);
 			}
 			return ArtistAdapter.instance;
@@ -156,15 +158,20 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		 */
 		holder.menu.setOnClickListener(new OnClickListener() {
 
+			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
 						.getActivity(), holder.menu);
 				// Inflating the Popup using xml file
-				popup.getMenuInflater().inflate(R.menu.composition_list_item_menu,
-						popup.getMenu());
-
+				popup.getMenuInflater().inflate(
+						R.menu.composition_list_item_menu, popup.getMenu());
+				if (!canDelete) {
+					popup.getMenu().findItem(R.id.composition_list_item_delete)
+							.setVisible(false);
+				}
 				// registering popup with OnMenuItemClickListener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -174,15 +181,16 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.composition_list_item_shows:
-							
+
 							ListItemsInCompositionListFragment.createInstance(
-									getItemsFromCat(cat), cat,type).show(
+									getItemsFromCat(cat), cat, type).show(
 									MusicPlayerMainActivity.getActivity()
 											.getSupportFragmentManager(),
 									"Show songs in cate");
 							break;
 						case R.id.composition_list_item_delete:
-							CategoryController.getInstance(type).removeCategory(cat);
+							CategoryController.getInstance(type)
+									.removeCategory(cat);
 						default:
 							break;
 						}
@@ -245,7 +253,5 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		// TODO Auto-generated method stub
 		return type;
 	}
-
-	
 
 }

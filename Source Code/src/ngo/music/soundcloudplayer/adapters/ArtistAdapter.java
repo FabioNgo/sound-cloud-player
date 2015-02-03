@@ -19,6 +19,8 @@ public class ArtistAdapter extends CompositionListAdapter {
 		// TODO Auto-generated constructor stub
 		instance = this;
 		type = ARTIST;
+		canDelete = false;
+		
 	}
 
 	@Override

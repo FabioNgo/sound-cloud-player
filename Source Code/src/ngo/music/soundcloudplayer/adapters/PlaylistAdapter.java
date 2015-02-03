@@ -17,6 +17,7 @@ public class PlaylistAdapter extends CompositionListAdapter {
 		// TODO Auto-generated constructor stub
 		instance = this;
 		type = PLAYLIST;
+		canDelete = true;
 	}
 
 	@Override
