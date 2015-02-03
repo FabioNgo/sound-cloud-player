@@ -957,4 +957,28 @@ public class SongController implements Constants, Constants.SongConstants,
 		return cate;
 	}
 
+	public ArrayList<Category> getOfflineArtists() {
+		// TODO Auto-generated method stub
+		boolean isArtistExsited = false;
+		ArrayList<Category> cate = new ArrayList<Category>();
+		for (Song song : offlineSongs) {
+			String artist = song.getArtist();
+			for (Category category : cate) {
+				if (category.getTitle().equals(artist)) {
+					category.addSong(song);
+					isArtistExsited = true;
+					break;
+				}else{
+					isArtistExsited = false;
+				}
+			}
+			if (!isArtistExsited) {
+				cate.add(new Category(artist, song));
+				isArtistExsited = false;
+			}
+
+		}
+		return cate;
+	}
+
 }

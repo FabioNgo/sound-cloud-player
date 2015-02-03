@@ -99,6 +99,8 @@ public class ListItemsInCompositionListFragment extends DialogFragment implement
 			
 		case ALBUM:
 			return new ListItemInAlbumFragment(songs, catTitle);
+		case ARTIST:
+			return new ListItemInArtistFragment(songs, catTitle);
 		default:
 			return null;
 		}

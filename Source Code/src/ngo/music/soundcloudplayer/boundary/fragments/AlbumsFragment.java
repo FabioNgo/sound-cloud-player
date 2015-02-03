@@ -12,10 +12,11 @@ import android.widget.ListView;
 
 public class AlbumsFragment extends CompositionListContentFragment  {
 	static AlbumsFragment instance = null;
-	public AlbumsFragment() {
-		adapter = CompositionListAdapter.getInstance(ALBUM);
-		instance = this;
+	AlbumsFragment() {
 		type = ALBUM;
+		adapter = CompositionListAdapter.getInstance(type);
+		instance = this;
+		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

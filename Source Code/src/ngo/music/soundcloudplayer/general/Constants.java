@@ -140,6 +140,8 @@ public interface Constants {
 		int ITEM_IN_ALBUM_CHANGED = 5;
 		int SC_PLAYLIST_CHANGED = 6;
 		int ITEM_IN_SC_PLAYLIST_CHANGED = 7;
+		int ARTIST_CHANGED = 8;
+		int ITEM_IN_ARTIST_CHANGED = 8;
 		
 	}
 	interface MusicService {

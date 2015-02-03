@@ -13,12 +13,12 @@ import android.widget.ListView;
 public class PlaylistFragment extends CompositionListContentFragment {
 	static PlaylistFragment instance;
 
-	public PlaylistFragment() {
+	PlaylistFragment() {
 		// TODO Auto-generated constructor stub
-		
-		adapter = CompositionListAdapter.getInstance(PLAYLIST);
-		instance = this;
 		type = PLAYLIST;
+		adapter = CompositionListAdapter.getInstance(type);
+		instance = this;
+		
 	}
 
 	@Override

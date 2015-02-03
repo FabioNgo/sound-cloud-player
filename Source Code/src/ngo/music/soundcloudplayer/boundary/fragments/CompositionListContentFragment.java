@@ -51,7 +51,8 @@ public abstract class CompositionListContentFragment extends
 			
 		case ALBUM:
 			return new AlbumsFragment();
-			
+		case ARTIST:
+			return new ArtistsFragment();
 		case SC_PLAYLIST:
 			return new SCPlaylistFragment();
 		default:
@@ -71,6 +72,11 @@ public abstract class CompositionListContentFragment extends
 				createInstance(type);
 			}
 			return AlbumsFragment.instance;
+		case ARTIST:
+			if(ArtistsFragment.instance == null){
+				createInstance(type);
+			}
+			return ArtistsFragment.instance;
 
 		case SC_PLAYLIST:
 			if(SCPlaylistFragment.instance == null){

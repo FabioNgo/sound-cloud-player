@@ -160,6 +160,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			return new PlaylistController();
 		case ALBUM:
 			return new AlbumController();
+		case ARTIST:
+			return new ArtistController();
 		case SC_PLAYLIST:
 			return new SCPlaylistController();
 		default:
@@ -174,6 +176,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			return PlaylistController.getInstance();
 		case ALBUM:
 			return AlbumController.getInstance();
+		case ARTIST:
+			return ArtistController.getInstance();
 		case SC_PLAYLIST:
 			return SCPlaylistController.getInstance();
 		default:
