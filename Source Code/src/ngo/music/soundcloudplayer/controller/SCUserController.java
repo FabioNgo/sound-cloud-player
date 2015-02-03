@@ -451,7 +451,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 		return getFollowingsJSON(respString);
 	}
 	
-	public ArrayList<User> getSCUserSearch(String query ,int offset) throws IOException, JSONException {
+	public ArrayList<User> getSCUserSearch(String query ,int page) throws IOException, JSONException {
 		
 		// TODO Auto-generated method stub
 		ApiWrapper wrapper = getApiWrapper();
@@ -461,8 +461,10 @@ public class SCUserController extends UserController implements Constants.UserCo
 //			offset = offset-getUser().getFollowingCount();
 //		}
 			
-		String request = Constants.USER_LINK + "/" + "?q=" + query + "&offset=" + String.valueOf(offset);
-
+		
+		int offset = page * 10;
+		String request = Constants.USER_LINK + "/" + "?q=" + query + "&limit=10&offset=" + offset;
+		System.out.println ("REQUEST USER = " + request);
 		HttpResponse response = wrapper.get(Request.to(request));
 		
 		String respString = Http.getString(response);
@@ -692,42 +694,47 @@ public class SCUserController extends UserController implements Constants.UserCo
 
 	}
 	
-	/**
-	 * Search User from Soundcloud
-	 * @param query
-	 * @param page
-	 */
-	public ArrayList<SCAccount> searchSongSC(String query, int page) {
+//	/**
+//	 * Search User from Soundcloud
+//	 * @param query
+//	 * @param page
+//	 */
+//	public ArrayList<SCAccount> searchUserSC(String query, int page) {
+//		// TODO Auto-generated method stub
+//		SCUserController soundCloudUserController = SCUserController.getInstance();
+//		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+//		ArrayList<SCAccount> soundcloudUser = new ArrayList<SCAccount>(); 
+//		int offset = page*OFFSET;
+//		String request =  "http://api.soundcloud.com/users.json?q=" + query + "&limit=5&offset="+ String.valueOf(offset);
+//		
+//		//System.out.println (me);
+//	//	JSONObject obj = Http.getJSON(resp);
+//		//JSONArray a = obj.getJSONArray("errors");
+//		//System.out.println (obj);
+//		try {
+//			HttpResponse resp = wrapper.get(Request.to(request));
+//			//System.out.println (resp.getStatusLine());
+//			String me =  Http.getString(resp);
+//			JSONArray array =  new JSONArray(me);
+//			//JSONObject object = array.getJSONObject(0);
+//			//System.out.println (object.toString());
+//			for (int i = 0; i < array.length(); i++) {
+//				JSONObject object  = array.getJSONObject(i);
+//				soundcloudUser.add((SCAccount) addSimpleUserInfo(object));
+//			}
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return soundcloudUser;
+//	}
+
+	public void clearSearch() {
 		// TODO Auto-generated method stub
-		SCUserController soundCloudUserController = SCUserController.getInstance();
-		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
-		ArrayList<SCAccount> soundcloudUser = new ArrayList<SCAccount>(); 
-		int offset = page*OFFSET;
-		String request =  "http://api.soundcloud.com/users.json?q=" + query + "&limit="+ String.valueOf(offset);
-		
-		//System.out.println (me);
-	//	JSONObject obj = Http.getJSON(resp);
-		//JSONArray a = obj.getJSONArray("errors");
-		//System.out.println (obj);
-		try {
-			HttpResponse resp = wrapper.get(Request.to(request));
-			//System.out.println (resp.getStatusLine());
-			String me =  Http.getString(resp);
-			JSONArray array =  new JSONArray(me);
-			//JSONObject object = array.getJSONObject(0);
-			//System.out.println (object.toString());
-			for (int i = 0; i < array.length(); i++) {
-				JSONObject object  = array.getJSONObject(i);
-				soundcloudUser.add((SCAccount) addSimpleUserInfo(object));
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return soundcloudUser;
+		scUserSearchLists.clear();
 	}
 
 

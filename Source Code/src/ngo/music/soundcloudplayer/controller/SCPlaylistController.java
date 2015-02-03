@@ -58,7 +58,7 @@ public class SCPlaylistController extends CategoryController implements Constant
 
 	
 	
-	private class loadPlaylistBackground extends AsyncTask<String, String, ArrayList<Category>>{
+	private class loadUserPlaylistBackground extends AsyncTask<String, String, ArrayList<Category>>{
 		
 		ArrayList<Category> categories;
 		@Override
@@ -71,12 +71,10 @@ public class SCPlaylistController extends CategoryController implements Constant
 		protected ArrayList<Category> doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			
-			
-			ApiWrapper  wrapper = SCUserController.getInstance().getApiWrapper();
-			String currentViewUserId = String.valueOf(SCUserController.getInstance().getUser().getId());
-			
-			
 			try {
+
+				ApiWrapper  wrapper = SCUserController.getInstance().getApiWrapper();
+				String currentViewUserId = String.valueOf(SCUserController.getInstance().getUser().getId());
 				HttpResponse resp;
 				String request = Constants.USER_LINK + "/"+ currentViewUserId +"/playlists";
 				resp = wrapper.get(Request.to(request));
@@ -112,8 +110,9 @@ public class SCPlaylistController extends CategoryController implements Constant
 		
 	}
 	
-	private SCPlaylist addPlaylistInfomation(JSONObject jObject) throws JSONException{
-		SCPlaylist playlist = new SCPlaylist(jObject.getString(PLAYLIST_TITLE));
+	protected SCPlaylist addPlaylistInfomation(JSONObject jObject) throws JSONException{
+		SCPlaylist playlist = new SCPlaylist("");
+		playlist.setTitle(jObject.getString(PLAYLIST_TITLE));
 		playlist.setId(jObject.getString(PLAYLIST_ID));
 		
 		playlist.setUserId(jObject.getInt(PLAYLIST_CREATOR_ID));
@@ -127,7 +126,7 @@ public class SCPlaylistController extends CategoryController implements Constant
 	 * Add soundcloud song to soundcloud playlist
 	 * @param song
 	 */
-	public boolean addSongToPlaylist(SCPlaylist scPplaylist, OnlineSong song){
+	protected boolean addSongToPlaylist(SCPlaylist scPplaylist, OnlineSong song){
 	
 		ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
 		String request = ME_PLAYLISTS + "/" + scPplaylist.getId(); 
@@ -144,43 +143,43 @@ public class SCPlaylistController extends CategoryController implements Constant
 	
 	
 	
-	/**
-	 * Search User from Soundcloud
-	 * @param query
-	 * @param page
-	 */
-	public ArrayList<SCPlaylist> searchSongSC(String query, int page) {
-		// TODO Auto-generated method stub
-		SCUserController soundCloudUserController = SCUserController.getInstance();
-		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
-		ArrayList<SCPlaylist> playlists = new ArrayList<SCPlaylist>(); 
-		int offset = page*OFFSET;
-		String request =  "http://api.soundcloud.com/playlists.json?q=" + query + "&limit="+ String.valueOf(offset);
-		
-		//System.out.println (me);
-	//	JSONObject obj = Http.getJSON(resp);
-		//JSONArray a = obj.getJSONArray("errors");
-		//System.out.println (obj);
-		try {
-			HttpResponse resp = wrapper.get(Request.to(request));
-			//System.out.println (resp.getStatusLine());
-			String me =  Http.getString(resp);
-			JSONArray array =  new JSONArray(me);
-			//JSONObject object = array.getJSONObject(0);
-			//System.out.println (object.toString());
-			for (int i = 0; i < array.length(); i++) {
-				JSONObject object  = array.getJSONObject(i);
-				playlists.add(addPlaylistInfomation(object));
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return playlists;
-	}
+//	/**
+//	 * Search User from Soundcloud
+//	 * @param query
+//	 * @param page
+//	 */
+//	public ArrayList<SCPlaylist> searchSongSC(String query, int page) {
+//		// TODO Auto-generated method stub
+//		SCUserController soundCloudUserController = SCUserController.getInstance();
+//		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+//		ArrayList<SCPlaylist> playlists = new ArrayList<SCPlaylist>(); 
+//		int offset = page*OFFSET;
+//		String request =  "http://api.soundcloud.com/playlists.json?q=" + query + "&limit="+ String.valueOf(offset);
+//		
+//		//System.out.println (me);
+//	//	JSONObject obj = Http.getJSON(resp);
+//		//JSONArray a = obj.getJSONArray("errors");
+//		//System.out.println (obj);
+//		try {
+//			HttpResponse resp = wrapper.get(Request.to(request));
+//			//System.out.println (resp.getStatusLine());
+//			String me =  Http.getString(resp);
+//			JSONArray array =  new JSONArray(me);
+//			//JSONObject object = array.getJSONObject(0);
+//			//System.out.println (object.toString());
+//			for (int i = 0; i < array.length(); i++) {
+//				JSONObject object  = array.getJSONObject(i);
+//				playlists.add(addPlaylistInfomation(object));
+//			}
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return playlists;
+//	}
 
 	
 	@Override
@@ -188,7 +187,7 @@ public class SCPlaylistController extends CategoryController implements Constant
 		
 		ArrayList<Category> categories = new ArrayList<Category>();
 		try {
-			return new loadPlaylistBackground().execute().get();
+			return new loadUserPlaylistBackground().execute().get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -47,6 +47,7 @@ public class SCUserSearchFragment extends Fragment {
 	int currentPosition;
 	SCFollowAdapter adapter;
 	String query;
+	int current_page = 0;
 	
 	public SCUserSearchFragment() {
 		// TODO Auto-generated constructor stub
@@ -178,7 +179,8 @@ public class SCUserSearchFragment extends Fragment {
 			// SoundCloudUserController.getInstance();
 			// ArrayList<User> users = new ArrayList<User>();
 			try {
-				users = userController.getSCUserSearch(query,offset);
+				users = userController.getSCUserSearch(query,current_page);
+				current_page++;
 				// System.out.println ("SIZE = " +users.size());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block

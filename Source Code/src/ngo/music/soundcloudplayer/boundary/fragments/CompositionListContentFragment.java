@@ -2,6 +2,7 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 
 import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
 import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SCPlaylistSearchFragment;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.view.View;
 
@@ -13,7 +14,7 @@ import android.view.View;
  */
 public abstract class CompositionListContentFragment extends
 		ListContentFragment implements Constants.Categories {
-	int type = -1;
+	protected int type = -1;
 	/**
 	 * Update UI when playlist change (Update Single exsited view in list View)
 	 * 
@@ -54,6 +55,8 @@ public abstract class CompositionListContentFragment extends
 			
 		case SC_PLAYLIST:
 			return new SCPlaylistFragment();
+		case SC_SEARCH_PLAYLIST:
+			return new SCPlaylistSearchFragment();
 		default:
 			break;
 		}
@@ -77,6 +80,11 @@ public abstract class CompositionListContentFragment extends
 				createInstance(type);
 			}
 			return SCPlaylistFragment.instance;
+		case SC_SEARCH_PLAYLIST:
+			if(SCPlaylistSearchFragment.instance == null){
+				createInstance(type);
+			}
+			return SCPlaylistSearchFragment.instance;
 		default:
 			break;
 		}

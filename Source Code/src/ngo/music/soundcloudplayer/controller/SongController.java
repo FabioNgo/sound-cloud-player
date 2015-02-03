@@ -736,9 +736,9 @@ public class SongController implements Constants, Constants.SongConstants,
 		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
 		ArrayList<Song> searchSongs = onlineSongs
 				.get(Constants.SoundCloudExploreConstant.SEARCH);
-		int offset = page * OFFSET;
+		int offset = (page) * 10;
 		String request = "http://api.soundcloud.com/tracks.json?q=" + query
-				+ "&limit=5&offset=" + String.valueOf(offset);
+				+ "&limit=10&offset=" + String.valueOf(offset);
 
 		System.out.println(request);
 		// System.out.println (me);
@@ -771,6 +771,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	 */
 	public void clearSearch() {
 		onlineSongs.get(SEARCH).clear();
+		
 	}
 
 	/****************************************************

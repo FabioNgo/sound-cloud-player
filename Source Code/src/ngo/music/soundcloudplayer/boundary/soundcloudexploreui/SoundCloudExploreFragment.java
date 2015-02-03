@@ -105,6 +105,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 		try {
 			ArrayList<Song> songs;
 			SongController songController = SongController.getInstance();
+			System.out.println ("CATE = " + category);
 			 songs = songController.getOnlineSongs(category); 
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
 			//System.out.println (songs.size() + "......" + category);
@@ -118,6 +119,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long id) {
 					ArrayList<Song> listSong =  adapter.getSongs();
+					System.out.println ("CAT " + category);
 					MusicPlayerService.getInstance().playNewExploreSong(position,category, listSong);
 					// TODO Auto-generated method stub
 					
@@ -126,21 +128,6 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			
 			
 			 
-			// Creating a button - Load More
-			Button btnLoadMore = new Button(getActivity());
-			btnLoadMore.setText("Load More");
-			 
-			// Adding button to listview at footer
-			//songsList.addFooterView(btnLoadMore);
-			btnLoadMore.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					new loadMoreBackground().execute();
-					adapter.notifyDataSetChanged();
-				}
-			});
 			songsList.setOnScrollListener(new OnScrollListener() {
 				
 				@Override
@@ -161,8 +148,10 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 						loadingMore = true;
 
 						new loadMoreBackground().execute();
+						adapter.notifyDataSetChanged();
 
 					}
+					
 					// TODO Auto-generated method stub
 					
 				}
@@ -192,7 +181,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 	}
 	
 
-	protected class loadMoreBackground extends AsyncTask<String, String, String>{
+	private class loadMoreBackground extends AsyncTask<String, String, String>{
 		
 		SongController songController = SongController.getInstance();
 		

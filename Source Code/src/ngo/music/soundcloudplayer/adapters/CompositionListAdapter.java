@@ -57,8 +57,10 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 			return new AlbumAdapter(MusicPlayerMainActivity.getActivity()
 					.getApplicationContext(), R.layout.list_view);
 		case SC_PLAYLIST:
-			
 			return new SCPlaylistAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(), R.layout.list_view);
+		
+		case SC_SEARCH_PLAYLIST:
+			return new SCPlaylistSearchAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(), R.layout.list_view);
 		default:
 			return null;
 		}
@@ -78,6 +80,16 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 				createNewInstance(type);
 			}
 			return AlbumAdapter.instance;
+		case SC_PLAYLIST:
+			if(SCPlaylistAdapter.instance == null){
+				createNewInstance(type);
+			}
+			return SCPlaylistAdapter.instance;
+		case SC_SEARCH_PLAYLIST:
+			if(SCPlaylistSearchAdapter.instance == null){
+				createNewInstance(type);
+			}
+			return SCPlaylistSearchAdapter.instance;	
 		default:
 			return null;
 		}

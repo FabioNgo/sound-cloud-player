@@ -374,6 +374,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNewSong(int position, ArrayList<Song> queue) {
 		// incase of the queue in put is songQueue itself
+		
+		System.out.println ("PLAY NEW SONG");
 		if (!this.songQueue.equals(queue)) {
 			this.songQueue.clear();
 			songQueue.addAll(queue);
@@ -386,6 +388,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void playNewExploreSong(int position, int category,
 			ArrayList<Song> listSongs) {
+		System.out.println (category);
 		explorecategory = category;
 		playNewSong(position, listSongs);
 
@@ -409,6 +412,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            press start
 	 */
 	private void playNewSong(boolean startNow) {
+		
+		System.out.println ("PLAY NEW SONG 2");
 		Song song = getCurrentSong();
 		if(song == null){
 			BasicFunctions.makeToastTake("No song to play", getApplicationContext());
@@ -438,6 +443,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 
 		}
+		System.out.println ("END PLAY NEW SONG 2");
 		updateNotification();
 
 	}
@@ -501,6 +507,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            : the id of icon
 	 */
 	private void updateNotification() {
+		System.out.println ("NOTIFICATION");
 		String title = "";
 		String subTitle = "";
 		Song song = getCurrentSong();
@@ -596,6 +603,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		notification.bigContentView = bigView;
 		notificationManager.notify(NOTIFICATION_ID, notification);
 		startForeground(NOTIFICATION_ID, notification);
+		
+		System.out.println ("END NOTIFICATION");
 	}
 
 	private PendingIntent createPendingIntent(String action) {

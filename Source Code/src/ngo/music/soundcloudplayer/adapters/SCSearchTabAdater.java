@@ -15,6 +15,7 @@ import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.DubstepFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.ElectroFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.ElectronicFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.FolkFragment;
+import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SCPlaylistSearchFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SCSongSearchFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SCUserSearchFragment;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
@@ -54,7 +55,7 @@ public class SCSearchTabAdater extends FragmentPagerAdapter {
 		case 1:
 			return new SCUserSearchFragment();
 		case 2:
-			return new SCPlaylistFragment();
+			return new SCSongSearchFragment();
 		default: 
 			return new SCSongSearchFragment();
 		}

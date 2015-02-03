@@ -467,6 +467,19 @@ public class UIController implements Constants.MusicService, Constants.Data,
 
 			break;
 
+		case SC_SEARCH_PLAYLIST_CHANGED:
+			
+			CompositionListContentFragment.getInstance(SC_SEARCH_PLAYLIST).update();
+			break;
+		case ITEM_IN_SC_SEARCH_PLAYLIST_CHANGED:
+			if (SongsInCateAdapter.getInstance(SC_SEARCH_PLAYLIST) != null) {
+				SongsInCateAdapter.getInstance(SC_SEARCH_PLAYLIST).update();
+			}
+			if (CompositionListContentFragment.getInstance(SC_SEARCH_PLAYLIST) != null) {
+				CompositionListContentFragment.getInstance(SC_SEARCH_PLAYLIST).update();
+			}
+
+			break;
 		default:
 			break;
 		}

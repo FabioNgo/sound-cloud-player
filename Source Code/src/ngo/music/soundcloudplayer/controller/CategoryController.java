@@ -39,7 +39,7 @@ import ngo.music.soundcloudplayer.service.MusicPlayerService;
 public abstract class CategoryController implements Constants.Data, Constants,
 		Constants.Categories {
 
-	ArrayList<Category> categories;
+	ArrayList<Category> categories =  new ArrayList<Category>();
 	protected int TAG_DATA_CHANGED = -1;
 	protected int TAG_ITEM_CHANGED = -1;
 
@@ -162,6 +162,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			return new AlbumController();
 		case SC_PLAYLIST:
 			return new SCPlaylistController();
+		case SC_SEARCH_PLAYLIST:
+			return new SCPlaylistSearchController();
 		default:
 			return null;
 		}
@@ -176,6 +178,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			return AlbumController.getInstance();
 		case SC_PLAYLIST:
 			return SCPlaylistController.getInstance();
+		case SC_SEARCH_PLAYLIST:
+			return SCPlaylistSearchController.getInstance();	
 		default:
 			return null;
 		}

@@ -103,8 +103,11 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 	private void setLayoutInfomation(int position, View v) {
 		final Song song = songs.get(position);
 		NetworkImageView avatar = configLayoutAvatar(v, song);
+		
 		configTitleSong(v, song);
+		
 		configSongDetail(v, song, avatar);
+		
 		configPopupMenu(v, song);
 		
 		notifyDataSetChanged();

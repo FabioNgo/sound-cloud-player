@@ -6,6 +6,7 @@ import ngo.music.soundcloudplayer.controller.SongController;
 
 public class SCPlaylist extends Category{
 
+	
 	public SCPlaylist(String title, ArrayList<Song> songs) {
 
 		super(title,songs);

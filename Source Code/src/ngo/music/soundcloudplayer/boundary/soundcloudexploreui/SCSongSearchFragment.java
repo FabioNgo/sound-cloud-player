@@ -23,13 +23,14 @@ public class SCSongSearchFragment extends SoundCloudExploreFragment {
 		query = MusicPlayerMainActivity.query;
 		
 		category  = Constants.SoundCloudExploreConstant.SEARCH;
-		current_page = 1;
+		current_page = 01;
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		current_page = 1;
+		current_page = 0;
+		
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 	
@@ -48,7 +49,7 @@ public class SCSongSearchFragment extends SoundCloudExploreFragment {
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 				songController = SongController.getInstance();
-				System.out.println ("Q IN FRAG = " + query);
+				
 	           songController.searchSongSC(query,current_page );
 	           current_page++;
 	           return null;

@@ -140,6 +140,8 @@ public interface Constants {
 		int ITEM_IN_ALBUM_CHANGED = 5;
 		int SC_PLAYLIST_CHANGED = 6;
 		int ITEM_IN_SC_PLAYLIST_CHANGED = 7;
+		int SC_SEARCH_PLAYLIST_CHANGED = 8;
+		int ITEM_IN_SC_SEARCH_PLAYLIST_CHANGED = 9;
 		
 	}
 	interface MusicService {
@@ -191,6 +193,7 @@ public interface Constants {
 		int PLAYLIST = 1;
 		int ALBUM = 2;
 		int SC_PLAYLIST = 3;
+		int SC_SEARCH_PLAYLIST = 4;
 		int NUM_ITEM_IN_ONE_CATEGORY = 5;
 	}
 	interface SoundCloudExploreConstant{
