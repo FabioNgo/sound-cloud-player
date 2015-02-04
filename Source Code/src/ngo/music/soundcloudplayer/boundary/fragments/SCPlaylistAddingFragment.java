@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.entity.Song;
 
-public class PlaylistAddingFragment extends CategoryAddingFragment {
+public class SCPlaylistAddingFragment extends CategoryAddingFragment {
 
-	public PlaylistAddingFragment(ArrayList<Song> songs) {
+	public SCPlaylistAddingFragment(ArrayList<Song> songs) {
 		super(songs);
 		// TODO Auto-generated constructor stub
 	}
@@ -14,7 +14,7 @@ public class PlaylistAddingFragment extends CategoryAddingFragment {
 	@Override
 	protected int setType() {
 		// TODO Auto-generated method stub
-		return PLAYLIST;
+		return SC_PLAYLIST;
 	}
 
 }

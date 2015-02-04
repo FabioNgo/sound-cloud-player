@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
 import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.controller.SongController;

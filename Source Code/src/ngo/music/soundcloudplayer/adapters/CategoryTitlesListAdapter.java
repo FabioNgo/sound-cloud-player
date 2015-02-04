@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,21 +15,45 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-public class SimplePlaylistAdapter extends ArrayAdapter<String> {
-	public static SimplePlaylistAdapter instance = null;
-	public static SimplePlaylistAdapter getInstance(){
-		if(instance == null){
-			instance = new SimplePlaylistAdapter();
+public abstract class CategoryTitlesListAdapter extends ArrayAdapter<String> implements Constants.Categories {
+	
+	private int type;
+	public static CategoryTitlesListAdapter getInstance(int type){
+		switch (type) {
+		case PLAYLIST:
+			if(PlaylistTitlesListAdapter.instance == null){
+				createInstance(type);
+			}
+			return PlaylistTitlesListAdapter.instance;
+		case SC_PLAYLIST:
+			if(SCPlaylistTitlesListAdapter.instance == null){
+				createInstance(type);
+			}
+			return SCPlaylistTitlesListAdapter.instance;
+		default:
+			return null;
 		}
-		return instance;
 	}
+	public static void createInstance(int type){
+		switch (type) {
+		case PLAYLIST:
+			PlaylistTitlesListAdapter.instance = new PlaylistTitlesListAdapter();
+			break;
+		case SC_PLAYLIST:
+			SCPlaylistTitlesListAdapter.instance = new SCPlaylistTitlesListAdapter();
+			break;
+		default:
+			break;
+		}
+	}
+	protected abstract int setType();
+	private ArrayList<String> titles = new ArrayList<String>();
 
-	private ArrayList<String> playlists = new ArrayList<String>();
-
-	private SimplePlaylistAdapter() {
+	protected CategoryTitlesListAdapter() {
 		super(MusicPlayerMainActivity.getActivity(), R.layout.single_playilist_list_adding);
 		// TODO Auto-generated constructor stub
-		playlists = PlaylistController.getInstance().getCategoryName();
+		type = setType();
+		titles = CategoryController.getInstance(type).getCategoryName();
 	}
 
 	@Override
@@ -48,21 +74,21 @@ public class SimplePlaylistAdapter extends ArrayAdapter<String> {
 	private void setLayoutInformation(int position, View v) {
 		// TODO Auto-generated method stub
 		TextView tv = (TextView) v.findViewById(R.id.single_playlist_title);
-		tv.setText(playlists.get(position));
+		tv.setText(titles.get(position));
 	}
 
-	public void updatePlaylist() {
+	public void updateCategory() {
 		// TODO Auto-generated method stub
-		playlists = PlaylistController.getInstance().getCategoryName();
+		titles = CategoryController.getInstance(type).getCategoryName();
 		this.notifyDataSetChanged();
 	}
 	@Override
 	public String getItem(int position) {
-		return playlists.get(position);
+		return titles.get(position);
 	}
 
 	@Override
 	public int getCount() {
-		return playlists.size();
+		return titles.size();
 	}
 }

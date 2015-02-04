@@ -12,23 +12,18 @@ import java.util.ArrayList;
 import android.content.Context;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.entity.Category;
+import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
 public class PlaylistController extends CategoryController {
 
-	private static PlaylistController instance = null;
+	static PlaylistController instance = null;
 	String filename ="";
 	
 
-	public static PlaylistController getInstance() {
-		if (instance == null) {
-			instance = new PlaylistController();
-		}
-
-		return instance;
-
-	}
+	
 	@Override
 	public ArrayList<Category> getCategories() {
 
@@ -66,7 +61,7 @@ public class PlaylistController extends CategoryController {
 	@Override
 	public  void storeCategories() throws IOException {
 		// TODO Auto-generated method stub
-
+		filename = "playlists";
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
 				.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
@@ -90,7 +85,27 @@ public class PlaylistController extends CategoryController {
 		// TODO Auto-generated method stub
 		return PLAYLIST_CHANGED;
 	}
-
+	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
+			throws Exception {
+		
+		for (Category cate : categories) {
+			if(cate.getTitle().equals(categoryName)){
+				cate.addSongs(songs);
+				BasicFunctions.makeToastTake("Songs were added successfully",
+						MusicPlayerMainActivity.getActivity());
+				storeCategories();
+				UIController.getInstance().updateUiWhenDataChanged(TAG_ITEM_CHANGED);
+				return;
+			}
+		}
+		throw new Exception("Playlist does not exsist");
+		
+	}
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return PLAYLIST;
+	}
 	
 
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.ViewHolder.SongInQueueViewHolder;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
@@ -30,7 +31,6 @@ import com.volley.api.AppController;
 public class QueueSongAdapter extends ArrayAdapter<Song> {
 	private View v;
 	private boolean isdatachanged = true;
-	
 
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
@@ -129,8 +129,8 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 						case R.id.queue_addToPlaylist:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(
-									songs, PlaylistAddingFragment.PLAYLIST);
+							CategoryAddingFragment playlistAddingFragment = new PlaylistAddingFragment(
+									songs);
 							playlistAddingFragment.show(MusicPlayerMainActivity
 									.getActivity().getSupportFragmentManager(),
 									"New Playlist");
@@ -153,8 +153,6 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		 * Set title
 		 */
 
-		
-
 		/*
 		 * Set sub title
 		 */
@@ -169,10 +167,11 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 		if (songPlayingId.equals(song.getId())) {
 			viewHolder.background.setBackgroundResource(R.color.primary_light);
 			viewHolder.title.setText(song.getTitle());
-			
+
 		} else {
 
-			viewHolder.background.setBackgroundResource(R.color.background_material_light);
+			viewHolder.background
+					.setBackgroundResource(R.color.background_material_light);
 			viewHolder.title.setText(song.getTitle());
 
 		}

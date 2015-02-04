@@ -127,7 +127,9 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 * 
 	 * @return categories
 	 */
-	protected abstract ArrayList<String> getCategories();
+	protected ArrayList<String> getCategories(){
+		return CategoryController.getInstance(type).getCategoryString();
+	}
 
 	/**
 	 * get item from specific categories
@@ -136,7 +138,9 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 *            : category
 	 * @return list of songs
 	 */
-	protected abstract ArrayList<Song> getSongsFromCat(String cat);
+	protected ArrayList<Song> getSongsFromCat(String cat){
+		return CategoryController.getInstance(type).getSongFromCategory(cat);
+	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {

@@ -18,18 +18,7 @@ public class PlaylistAdapter extends CompositionListAdapter {
 		instance = this;
 	}
 
-	@Override
-	protected ArrayList<String> getCategories() {
-		// TODO Auto-generated method stub
-		return PlaylistController.getInstance().getCategoryString();
-
-	}
-
-	@Override
-	protected ArrayList<Song> getSongsFromCat(String cat) {
-		// TODO Auto-generated method stub
-		return PlaylistController.getInstance().getSongFromCategory(cat);
-	}
+	
 
 	@Override
 	protected int setType() {

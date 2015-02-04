@@ -18,21 +18,7 @@ public class ArtistAdapter extends CompositionListAdapter {
 		super(context, resource);
 		// TODO Auto-generated constructor stub
 		instance = this;
-		
-		
-	}
 
-	@Override
-	protected ArrayList<String> getCategories() {
-		// TODO Auto-generated method stub
-		return ArtistController.getInstance().getCategoryString();
-
-	}
-
-	@Override
-	protected ArrayList<Song> getSongsFromCat(String cat) {
-		// TODO Auto-generated method stub
-		return ArtistController.getInstance().getSongFromCategory(cat);
 	}
 
 	@Override

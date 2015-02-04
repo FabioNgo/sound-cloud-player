@@ -20,18 +20,7 @@ public class AlbumAdapter extends CompositionListAdapter {
 		
 	}
 
-	@Override
-	protected ArrayList<String> getCategories() {
-		// TODO Auto-generated method stub
-		return AlbumController.getInstance().getCategoryString();
-
-	}
-
-	@Override
-	protected ArrayList<Song> getSongsFromCat(String cat) {
-		// TODO Auto-generated method stub
-		return AlbumController.getInstance().getSongFromCategory(cat);
-	}
+	
 
 	@Override
 	protected int setType() {

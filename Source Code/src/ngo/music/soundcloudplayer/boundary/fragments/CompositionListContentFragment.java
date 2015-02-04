@@ -61,16 +61,20 @@ public abstract class CompositionListContentFragment extends
 	public static CompositionListContentFragment createInstance(int type){
 		switch (type) {
 		case PLAYLIST:
-			return new PlaylistFragment();
-			
+			PlaylistFragment.instance =  new PlaylistFragment();
+			return PlaylistFragment.instance; 
 		case ALBUM:
-			return new AlbumsFragment();
+			AlbumsFragment.instance =  new AlbumsFragment();
+			return AlbumsFragment.instance;
 		case ARTIST:
-			return new ArtistsFragment();
+			ArtistsFragment.instance =  new ArtistsFragment();
+			return ArtistsFragment.instance;
 		case SC_PLAYLIST:
-			return new SCPlaylistFragment();
+			SCPlaylistFragment.instance =  new SCPlaylistFragment();
+			return SCPlaylistFragment.instance;
 		case SC_SEARCH_PLAYLIST:
-			return new SCPlaylistSearchFragment();
+			SCPlaylistSearchFragment.instance =  new SCPlaylistSearchFragment();
+			return SCPlaylistSearchFragment.instance;
 		default:
 			break;
 		}

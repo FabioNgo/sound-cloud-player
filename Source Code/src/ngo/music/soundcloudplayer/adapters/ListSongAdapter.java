@@ -8,16 +8,19 @@ import java.util.ArrayList;
 
 
 
+
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
 
 
+
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.SCPlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -284,7 +287,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements Cons
 						case R.id.list_addToPlaylist:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							PlaylistAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs, PlaylistAddingFragment.SOUNDCLOUD_PLAYLIST);
+							CategoryAddingFragment playlistAddingFragment = new SCPlaylistAddingFragment(songs);
 							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
 							break;
 						case R.id.list_delete:

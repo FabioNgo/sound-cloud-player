@@ -4,21 +4,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.entity.Category;
+import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 
 public class ArtistController extends CategoryController{
-	private static ArtistController instance = null;
+	static ArtistController instance = null;
 
 	
 
-	public static ArtistController getInstance() {
-		if (instance == null) {
-			instance = new ArtistController();
-		}
-
-		return instance;
-
-	}
+	
 
 	@Override
 	public ArrayList<Category> getCategories() {
@@ -43,5 +37,18 @@ public class ArtistController extends CategoryController{
 	protected int setTagDataChange() {
 		// TODO Auto-generated method stub
 		return ARTIST_CHANGED;
+	}
+
+	@Override
+	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return ARTIST;
 	}
 }

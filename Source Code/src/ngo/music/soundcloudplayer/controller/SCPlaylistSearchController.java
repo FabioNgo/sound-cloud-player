@@ -33,7 +33,7 @@ import ngo.music.soundcloudplayer.service.MusicPlayerService;
 public class SCPlaylistSearchController extends SCPlaylistController implements Constants.Data, Constants, Constants.PlaylistConstant {
 
 	private static final int OFFSET = 5;
-	private static SCPlaylistSearchController instance = null;
+	static SCPlaylistSearchController instance = null;
 	ArrayList<SCPlaylist> playlists =  new ArrayList<SCPlaylist>();
 	
 	

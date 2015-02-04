@@ -33,7 +33,7 @@ import ngo.music.soundcloudplayer.service.MusicPlayerService;
 public class SCPlaylistController extends CategoryController implements Constants.PlaylistConstant {
 
 	private static final int OFFSET = 5;
-	private static SCPlaylistController instance = null;
+	static SCPlaylistController instance = null;
 	ArrayList<SCPlaylist> playlists =  new ArrayList<SCPlaylist>();
 	
 	
@@ -217,6 +217,21 @@ public class SCPlaylistController extends CategoryController implements Constant
 	protected int setTagDataChange() {
 		// TODO Auto-generated method stub
 		return SC_PLAYLIST_CHANGED;
+	}
+
+
+	@Override
+	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
+			throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return SC_PLAYLIST;
 	}
 	
 	
