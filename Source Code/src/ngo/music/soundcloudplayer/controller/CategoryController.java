@@ -229,6 +229,26 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		}
 	}
 
+	public void updateTitle(String oldName, String newName) throws Exception{
+		// TODO Auto-generated method stub
+		if("".equals(newName)){
+			throw new Exception("Playlist name cannot be empty");
+		}
+		for (Category category : categories) {
+			if(category.getTitle().equals(newName)){
+				throw new Exception("Playlist name exsited");
+			}
+		}
+		for (Category category : categories) {
+			if(category.getTitle().equals(oldName)){
+				category.setTitle(newName);
+				break;
+			}
+		}
+		storeCategories();
+		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+	}
+
 //	private class getCategoriesAsync extends
 //			AsyncTask<String, String, String> {
 //

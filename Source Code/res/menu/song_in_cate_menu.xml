@@ -2,6 +2,9 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<item
+		android:id="@+id/song_cat_add"
+		android:title="Add To Playlist"/>
+	<item
 		android:id="@+id/song_cat_remove"
 		android:title="Remove From This"/>
 	

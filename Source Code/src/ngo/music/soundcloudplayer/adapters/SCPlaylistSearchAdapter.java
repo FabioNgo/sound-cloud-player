@@ -49,4 +49,10 @@ public class SCPlaylistSearchAdapter extends CompositionListAdapter {
 		return SCPlaylistSearchController.getInstance().getSongFromCategory(cat);
 	}
 
+	@Override
+	protected boolean setCanEdit() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -10,9 +10,11 @@ import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
+import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -22,6 +24,7 @@ import android.view.View.OnCreateContextMenuListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,16 +40,24 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	protected ArrayList<String> categories;
 	CompositionViewHolder holder = null;
 	private boolean canDelete;
+	private boolean canEdit;
 
 	public CompositionListAdapter(Context context, int resource) {
 		super(context, resource);
 		type = setType();
 		canDelete = setCanDelete();
+		canEdit = setCanEdit();
 		this.categories = getCategories();
 		this.context = context;
 		this.resource = resource;
 
 	}
+
+	/**
+	 * 
+	 * @return if the category can be editted or not
+	 */
+	protected abstract boolean setCanEdit();
 
 	/**
 	 * 
@@ -75,10 +86,12 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 					.getApplicationContext(), R.layout.list_view);
 		case SC_PLAYLIST:
 
-			return new SCPlaylistAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(), R.layout.list_view);
-		
+			return new SCPlaylistAdapter(MusicPlayerMainActivity.getActivity()
+					.getApplicationContext(), R.layout.list_view);
+
 		case SC_SEARCH_PLAYLIST:
-			return new SCPlaylistSearchAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(), R.layout.list_view);
+			return new SCPlaylistSearchAdapter(MusicPlayerMainActivity
+					.getActivity().getApplicationContext(), R.layout.list_view);
 
 		default:
 			return null;
@@ -101,15 +114,15 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 			return AlbumAdapter.instance;
 
 		case SC_PLAYLIST:
-			if(SCPlaylistAdapter.instance == null){
+			if (SCPlaylistAdapter.instance == null) {
 				createNewInstance(type);
 			}
 			return SCPlaylistAdapter.instance;
 		case SC_SEARCH_PLAYLIST:
-			if(SCPlaylistSearchAdapter.instance == null){
+			if (SCPlaylistSearchAdapter.instance == null) {
 				createNewInstance(type);
 			}
-			return SCPlaylistSearchAdapter.instance;	
+			return SCPlaylistSearchAdapter.instance;
 
 		case ARTIST:
 			if (ArtistAdapter.instance == null) {
@@ -127,7 +140,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 * 
 	 * @return categories
 	 */
-	protected ArrayList<String> getCategories(){
+	protected ArrayList<String> getCategories() {
 		return CategoryController.getInstance(type).getCategoryString();
 	}
 
@@ -138,7 +151,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 *            : category
 	 * @return list of songs
 	 */
-	protected ArrayList<Song> getSongsFromCat(String cat){
+	protected ArrayList<Song> getSongsFromCat(String cat) {
 		return CategoryController.getInstance(type).getSongFromCategory(cat);
 	}
 
@@ -231,6 +244,74 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 				});
 
 				popup.show(); // showing popup menu
+			}
+		});
+		/**
+		 * Edit Text
+		 */
+		holder.editText.setVisibility(View.INVISIBLE);
+		/**
+		 * Clear Button
+		 */
+		holder.clearBtn.setVisibility(View.INVISIBLE);
+		holder.clearBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				holder.items[0].setVisibility(View.VISIBLE);
+				holder.editText.setVisibility(View.INVISIBLE);
+				holder.editText.getLayoutParams().height = BasicFunctions.dpToPx(20, context);
+				holder.editBtn.setVisibility(View.VISIBLE);
+				holder.clearBtn.setVisibility(View.INVISIBLE);
+				holder.submitBtn.setVisibility(View.INVISIBLE);
+			}
+		});
+		/**
+		 * submit Button
+		 */
+		holder.submitBtn.setVisibility(View.INVISIBLE);
+		holder.submitBtn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				try {
+					CategoryController.getInstance(type).updateTitle((String) holder.items[0].getText(),holder.editText.getText().toString());
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					BasicFunctions.makeToastTake(e.getMessage(), context);
+					return;
+				}
+				holder.items[0].setVisibility(View.VISIBLE);
+				holder.editText.getLayoutParams().height = BasicFunctions.dpToPx(20, context);
+				holder.editText.setVisibility(View.VISIBLE);
+				holder.editBtn.setVisibility(View.VISIBLE);
+				holder.clearBtn.setVisibility(View.INVISIBLE);
+				holder.submitBtn.setVisibility(View.INVISIBLE);
+			}
+		});
+		if (canEdit) {
+			holder.editBtn.setVisibility(View.VISIBLE);
+
+		} else {
+			holder.editBtn.setVisibility(View.GONE);
+		}
+		holder.editBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				holder.editText.setVisibility(View.VISIBLE);
+				holder.items[0].setVisibility(View.INVISIBLE);
+				holder.editText.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
+				
+				holder.editText.setText(holder.items[0].getText());
+				holder.editText.requestFocus();
+				holder.editText.setSelection(holder.editText.getText().length());
+				holder.clearBtn.setVisibility(View.VISIBLE);
+				holder.submitBtn.setVisibility(View.VISIBLE);
+				holder.editBtn.setVisibility(View.GONE);
 			}
 		});
 	}

@@ -20,6 +20,11 @@ public class SongsInPlaylistAdapter extends SongsInCateAdapter {
 		// TODO Auto-generated method stub
 		return PLAYLIST;
 	}
+	@Override
+	protected boolean setCanRemoveItem() {
+		// TODO Auto-generated method stub
+		return true;
+	}
 
 
 	

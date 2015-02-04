@@ -19,6 +19,11 @@ public class SongsInArtistsAdapter extends SongsInCateAdapter {
 		// TODO Auto-generated method stub
 		return ARTIST;
 	}
+	@Override
+	protected boolean setCanRemoveItem() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
 
 	
