@@ -171,6 +171,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
 		pager = (ViewPager) findViewById(R.id.pager);
+		pager.setOffscreenPageLimit(10);
 		FragmentPagerAdapter adapter;
 		switch (type){
 		case OFFLINE:
