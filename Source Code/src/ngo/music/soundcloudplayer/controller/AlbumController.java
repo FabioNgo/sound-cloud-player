@@ -7,11 +7,8 @@ import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 
-public class AlbumController extends CategoryController {
+public class AlbumController extends OfflinePlayListController {
 	static AlbumController instance = null;
-
-
-	
 
 	@Override
 	public ArrayList<Category> getCategories() {

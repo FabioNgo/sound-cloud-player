@@ -10,7 +10,9 @@ public abstract class UserController {
 		// TODO Auto-generated constructor stub
 	}
 
-	public abstract URI login();
+	public abstract void login();
 	
 	public abstract User validateLogin(String username, String password);
+	
+	public abstract void logout();
 }

@@ -62,7 +62,12 @@ public class MySCStreamFragment extends Fragment implements Constants{
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			SongController songController  = SongController.getInstance();
-			songController.loadMyStream();
+			try {
+				songController.loadMyStream();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			myStream = songController.getMyStream();
 			return null;

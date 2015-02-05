@@ -74,7 +74,12 @@ public class MySCFavoriteFragment extends Fragment implements Constants{
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			SongController songController  = SongController.getInstance();
-			songController.loadFavoriteSong();
+			try {
+				songController.loadFavoriteSong();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			favoriteSongs = songController.getFavoriteSong();
 			return null;
 		}

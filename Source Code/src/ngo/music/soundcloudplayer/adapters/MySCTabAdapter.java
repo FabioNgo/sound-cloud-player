@@ -8,6 +8,7 @@ import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.MySCFollowerFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.MySCFollowingFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.SCPlaylistFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -44,7 +45,7 @@ public class MySCTabAdapter extends FragmentPagerAdapter {
 			return new MySCFavoriteFragment();
 		
 		case 2:
-			return new MySCPlaylistFragment();
+			return new SCPlaylistFragment();
 		case 3:
 			return new MySCFollowingFragment();
 		

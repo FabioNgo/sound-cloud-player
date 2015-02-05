@@ -33,9 +33,16 @@ public abstract class CompositionListContentFragment extends
 	 * 
 	 */
 	public void update() {
-		CompositionListAdapter adapter = (CompositionListAdapter) listView
-				.getAdapter();
+		
+		CompositionListAdapter adapter = (CompositionListAdapter) listView.getAdapter();
+		//System.out.println (listView.get);
+		/**
+		 * ADAPTER BI TRA VE NULL
+		 */
+		if (adapter == null) return;
 		adapter.update();
+
+		
 		for (int i = 0; i <= listView.getLastVisiblePosition()
 				- listView.getFirstVisiblePosition(); i++) {
 			View v = listView.getChildAt(i);

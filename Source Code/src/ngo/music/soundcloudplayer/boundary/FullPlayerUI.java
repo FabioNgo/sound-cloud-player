@@ -410,9 +410,15 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				soundCloudUserController.setGuest(soundCloudAccount);
 				Intent i = new Intent(getActivity(),
 						MusicPlayerMainActivity.class);
-				Bundle bundle = soundCloudUserController
-						.getBundle(soundCloudUserController.getCurrentUser());
-				i.putExtra(Constants.UserContant.USER, bundle);
+				Bundle bundle;
+				try {
+					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+					i.putExtra(Constants.UserContant.USER, bundle);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				MusicPlayerMainActivity.getActivity().finish();
 				startActivity(i);
 			}

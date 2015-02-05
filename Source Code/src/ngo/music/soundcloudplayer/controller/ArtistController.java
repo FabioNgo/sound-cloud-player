@@ -7,7 +7,7 @@ import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 
-public class ArtistController extends CategoryController{
+public class ArtistController extends OfflinePlayListController{
 	static ArtistController instance = null;
 
 	

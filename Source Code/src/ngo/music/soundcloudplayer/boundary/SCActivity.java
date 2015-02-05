@@ -62,8 +62,15 @@ public class SCActivity extends MusicPlayerMainActivity {
 				Intent i = new Intent(getActivity(), SCActivity.class);
 				SCUserController soundCloudUserController = SCUserController.getInstance();
 				
-				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-				i.putExtra(USER, bundle);
+				Bundle bundle;
+				try {
+					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+					i.putExtra(USER, bundle);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				//i.putExtra(ME_FAVORITES,stringResponse);
 				SCActivity.getActivity().finish();
 				startActivity(i);
@@ -170,8 +177,15 @@ public class SCActivity extends MusicPlayerMainActivity {
 			Intent i = new Intent(getActivity(), SCActivity.class);
 			SCUserController soundCloudUserController = SCUserController.getInstance();
 			
-			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-			i.putExtra(USER, bundle);
+			Bundle bundle;
+			try {
+				bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				i.putExtra(USER, bundle);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			SCActivity.getActivity().finish();
 			startActivity(i);

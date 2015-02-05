@@ -80,8 +80,18 @@ public class SCUserController extends UserController implements Constants.UserCo
 	}
 
 	@Override
-	public URI login() {
-		return null;
+	public void login() {
+		try {
+			retrevieUserInfoOnline(getApiWrapper());
+			
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		// TODO Auto-generated method stub
 		
 	}
@@ -239,20 +249,29 @@ public class SCUserController extends UserController implements Constants.UserCo
 	/**
 	 * Get current viewing user
 	 * @return
+	 * @throws Exception 
 	 */
-	public User getUser(){
+	public User getUser() throws Exception{
 		
 		if (guest != null){
 			return guest;
+		}else if (currentUser != null){
+			return currentUser;
+		}else{
+			throw new Exception();
 		}
-		return currentUser;
+		
 	}
 	
 	/**
 	 * Get current login user
 	 * @return
+	 * @throws Exception 
 	 */
-	public User getCurrentUser(){
+	public User getCurrentUser() throws Exception{
+		if (currentUser == null){
+			throw new Exception();
+		}
 		return currentUser;
 	}
 	
@@ -262,6 +281,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 	
 	public void setToken(Token t){
 		this.t = t;
+		currentUser = new SCAccount();
 	}
 
 	/**

@@ -7,7 +7,7 @@ import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.AlbumController;
 import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
-import ngo.music.soundcloudplayer.controller.SCPlaylistController;
+import ngo.music.soundcloudplayer.controller.SCMyPlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
 

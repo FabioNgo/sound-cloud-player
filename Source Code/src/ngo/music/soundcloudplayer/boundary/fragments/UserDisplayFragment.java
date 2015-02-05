@@ -100,13 +100,20 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				SCUserController soundCloudUserController = SCUserController.getInstance();
 				soundCloudUserController.clearUserData();
 				soundCloudUserController.setGuest(null);
-				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
+				Bundle bundle;
+				try {
+					bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
+					i.putExtra(USER, bundle);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				SongController songController = SongController.getInstance();
 				songController.isLoadFavoriteSong = true;
 				songController.isLoadStream = true;
 				
 				//songController.loadFavoriteSong();
-				i.putExtra(USER, bundle);
+				
 				MusicPlayerMainActivity.getActivity().finish();
 				
 				startActivity(i);
@@ -170,8 +177,15 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 				SCUserController soundCloudUserController = SCUserController.getInstance();
 				
-				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-				i.putExtra(USER, bundle);
+				Bundle bundle;
+				try {
+					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+					i.putExtra(USER, bundle);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				//i.putExtra(ME_FAVORITES,stringResponse);
 				MusicPlayerMainActivity.getActivity().finish();
 				startActivity(i);
@@ -282,8 +296,15 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			Intent i = new Intent(getActivity(), SCActivity.class);
 			SCUserController soundCloudUserController = SCUserController.getInstance();
 			soundCloudUserController.setResponseString(stringResponse);
-			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-			i.putExtra(USER, bundle);
+			Bundle bundle;
+			try {
+				bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				i.putExtra(USER, bundle);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			MusicPlayerMainActivity.getActivity().finish();
 			startActivity(i);
@@ -340,8 +361,15 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 			SCUserController soundCloudUserController = SCUserController.getInstance();
 			soundCloudUserController.setResponseString(stringResponse);
-			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-			i.putExtra(USER, bundle);
+			Bundle bundle;
+			try {
+				bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				i.putExtra(USER, bundle);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			MusicPlayerMainActivity.getActivity().finish();
 			startActivity(i);

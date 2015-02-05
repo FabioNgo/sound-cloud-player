@@ -11,9 +11,9 @@ public class UserControllerFactory {
 	public static UserController createUserController(int TYPE_USER_TAG){
 		switch (TYPE_USER_TAG){
 		case Constants.FACEBOOK_USER:
-			return new FacebookUserController();
+			//return new FacebookUserController();
 		case Constants.GOOGLE_PLUS_USER:
-			return new GooglePlusUserController();
+			//return new GooglePlusUserController();
 		case Constants.SOUNDCLOUD_USER:
 			return  SCUserController.getInstance();
 		default:

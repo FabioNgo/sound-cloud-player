@@ -11,6 +11,7 @@ import ngo.music.soundcloudplayer.adapters.SCExploreAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.boundary.SCActivity;
 import ngo.music.soundcloudplayer.controller.ListViewOnItemClickHandler;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
@@ -105,7 +106,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 		try {
 			ArrayList<Song> songs;
 			SongController songController = SongController.getInstance();
-			System.out.println ("CATE = " + category);
+			
 			 songs = songController.getOnlineSongs(category); 
 			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
 			//System.out.println (songs.size() + "......" + category);
@@ -119,7 +120,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long id) {
 					ArrayList<Song> listSong =  adapter.getSongs();
-					System.out.println ("CAT " + category);
+					
 					MusicPlayerService.getInstance().playNewExploreSong(position,category, listSong);
 					// TODO Auto-generated method stub
 					
@@ -201,7 +202,7 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 			 int currentPosition = songsList.getFirstVisiblePosition();
 			 
              // Appending new data to menuItems ArrayList
-             adapter = new SCExploreAdapter(getActivity(),R.layout.list_view, songController.getOnlineSongs(category), wrapper);
+             adapter = new SCExploreAdapter(SCActivity.getActivity(),R.layout.list_view, songController.getOnlineSongs(category), wrapper);
 
              // Setting new scroll position
              songsList.setSelectionFromTop(currentPosition + 1, 0);

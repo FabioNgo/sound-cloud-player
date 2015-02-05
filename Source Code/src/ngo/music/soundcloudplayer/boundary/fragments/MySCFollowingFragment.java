@@ -153,9 +153,15 @@ public class MySCFollowingFragment extends Fragment {
 		Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 		MusicPlayerMainActivity.type = MusicPlayerMainActivity.MY_SOUNDCLOUD;
 		
-		Bundle bundle = userController.getBundle(userController
-				.getCurrentUser());
-		i.putExtra(Constants.UserContant.USER, bundle);
+		Bundle bundle;
+		try {
+			bundle = userController.getBundle(userController.getCurrentUser());
+			i.putExtra(Constants.UserContant.USER, bundle);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		MusicPlayerMainActivity.getActivity().finish();
 		startActivity(i);
 	}

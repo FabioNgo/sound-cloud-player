@@ -6,10 +6,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DatabaseTable {
 
-	public static final String FTS_VIRTUAL_TABLE = "FTS";
+	public static final String LOGIN_TABLE = "FTS";
 	public static final String COL_WORD = "WORD";
 	public static final String COL_DEFINITION = "DEFINITION";
-	private static final String DATABASE_NAME = "DICTIONARY";
+	private static final String DATABASE_NAME = "SOUNDCLOUD";
 	public static final int DATABASE_VERSION = 1;
 	
 	private final DatabaseOpenHelper mDatabaseOpenHelper;
@@ -25,7 +25,7 @@ public class DatabaseTable {
 		private SQLiteDatabase mDatabase;
 		
 		private static final String FTS_TABLE_CREATE = 
-				"CREATE VIRTUAL TABLE " + FTS_VIRTUAL_TABLE + 
+				"CREATE VIRTUAL TABLE " + LOGIN_TABLE + 
 				" USING fts3 ("
 				+ COL_WORD + ", " +
 				COL_DEFINITION + ")";
@@ -47,7 +47,7 @@ public class DatabaseTable {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			// TODO Auto-generated method stub
-			db.execSQL("DROP TABLE IF EXISTS " + FTS_VIRTUAL_TABLE);
+			db.execSQL("DROP TABLE IF EXISTS " + LOGIN_TABLE);
 			onCreate(db);
 			
 		}

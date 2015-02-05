@@ -17,7 +17,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class PlaylistController extends CategoryController {
+public class PlaylistController extends OfflinePlayListController {
 
 	static PlaylistController instance = null;
 	String filename ="";
@@ -106,6 +106,6 @@ public class PlaylistController extends CategoryController {
 		// TODO Auto-generated method stub
 		return PLAYLIST;
 	}
-	
+		
 
 }

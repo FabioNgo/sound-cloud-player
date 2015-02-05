@@ -73,7 +73,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 
 	public static CompositionListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
-		System.out.println("SC_PLAYLIST = " + type);
+		
 		switch (type) {
 		case PLAYLIST:
 			return new PlaylistAdapter(MusicPlayerMainActivity.getActivity()

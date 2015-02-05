@@ -123,7 +123,7 @@ public class SCUserSearchFragment extends Fragment {
 						currentPosition = listUsers.getFirstVisiblePosition();
 						// new loadMoreListView(songsList, adapter).execute();
 						// Setting new scroll position
-						new loadSCUserSearchBackground().execute();
+						//new loadSCUserSearchBackground().execute();
 
 						// adapter.notifyDataSetChanged();
 
@@ -156,9 +156,15 @@ public class SCUserSearchFragment extends Fragment {
 		Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
 		MusicPlayerMainActivity.type = MusicPlayerMainActivity.MY_SOUNDCLOUD;
 
-		Bundle bundle = userController.getBundle(userController
-				.getCurrentUser());
-		i.putExtra(Constants.UserContant.USER, bundle);
+		Bundle bundle;
+		try {
+			bundle = userController.getBundle(userController.getCurrentUser());
+			i.putExtra(Constants.UserContant.USER, bundle);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		MusicPlayerMainActivity.getActivity().finish();
 		startActivity(i);
 	}

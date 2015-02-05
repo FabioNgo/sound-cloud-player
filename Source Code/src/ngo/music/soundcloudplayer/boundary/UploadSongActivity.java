@@ -178,8 +178,15 @@ public class UploadSongActivity extends Activity implements Constants {
 				Intent i = new Intent(getApplicationContext(), MusicPlayerMainActivity.class);
 				SCUserController soundCloudUserController = SCUserController.getInstance();
 				
-				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
-				i.putExtra(UserContant.USER, bundle);
+				Bundle bundle;
+				try {
+					bundle = soundCloudUserController.getBundle(soundCloudUserController.getUser());
+					i.putExtra(UserContant.USER, bundle);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				
 				startActivity(i);
 			}

@@ -12,7 +12,6 @@ import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
 import android.annotation.SuppressLint;
-
 import android.content.Intent;
 import android.graphics.YuvImage;
 import android.net.Uri;
@@ -104,9 +103,16 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		protected void onPostExecute(String result) {
 			// TODO Auto-generated method stub
 			Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
-			Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+			Bundle bundle;
+			try {
+				bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				i.putExtra(USER, bundle);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			//System.out.println (bundle.getString(USERNAME));
-			i.putExtra(USER, bundle);
+			
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			//MusicPlayerMainActivity.getActivity().finish();
 			getActivity().finish();
@@ -126,6 +132,7 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 	        	wrapper.setToken(t);
 	        	SCUserController soundCloudUserController = SCUserController.getInstance();
 	        	soundCloudUserController.setToken(t);
+	        	
 	        	new retriveUserBackground().execute();
 	        }
 			return false;

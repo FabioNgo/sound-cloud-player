@@ -40,7 +40,7 @@ public abstract class ListContentFragment extends Fragment implements
 	protected int swipeRefreshLayoutId = -1;
 	protected View rootView;
 	protected ArrayAdapter<?> adapter;
-	protected ListView listView;
+	protected ListView listView = new ListView(MusicPlayerMainActivity.getActivity());
 
 	/**
 	 * Load fragment activity, often list view fragment
@@ -52,6 +52,7 @@ public abstract class ListContentFragment extends Fragment implements
 		adapter.notifyDataSetChanged();
 		UIController.getInstance().addAdapter(adapter);
 		listView.setAdapter((ListAdapter) adapter);
+		
 		listView.setOnItemClickListener(this);
 	}
 

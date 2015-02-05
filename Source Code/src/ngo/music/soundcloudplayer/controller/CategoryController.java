@@ -18,6 +18,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
+import java.util.concurrent.ExecutionException;
 
 import android.content.Context;
 import android.drm.DrmStore.ConstraintsColumns;
@@ -26,6 +27,7 @@ import android.support.v4.util.ArrayMap;
 import android.util.JsonReader;
 import android.util.JsonWriter;
 import android.util.Log;
+import android.widget.Toast;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
@@ -48,7 +50,17 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		// TODO Auto-generated constructor stub
 		// playlists = new ArrayMap<String, ArrayList<Song>>();
 
-		categories = getCategories();
+		try {
+			categories = getCategories();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			Toast.makeText(MusicPlayerMainActivity.getActivity(), "You need login to add song to playlist", Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			Toast.makeText(MusicPlayerMainActivity.getActivity(), "You need login to add song to playlist", Toast.LENGTH_LONG).show();
+			e.printStackTrace();
+		}
 //		new getCategoriesAsync().execute();
 		TAG_DATA_CHANGED = setTagDataChange();
 		TAG_ITEM_CHANGED = setTagItemChange();
@@ -76,30 +88,34 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	 * Get list of Categories
 	 * 
 	 * @return
+	 * @throws ExecutionException 
+	 * @throws InterruptedException 
 	 */
-	public abstract ArrayList<Category> getCategories();
+	public abstract ArrayList<Category> getCategories() throws InterruptedException, ExecutionException;
 
 	public abstract void storeCategories() throws IOException;
 
-	public void createCategory(String name) throws Exception {
-		for (Category category : categories) {
-			if (category.getTitle().equals(name)) {
-				throw new Exception("A playlist with the same name is existed");
-			}
-		}
-
-		if (name.equals("")) {
-			throw new Exception("A playlist cannot be created without a name");
-		}
-		categories.add(new Category(name, new ArrayList<Song>()));
-		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
-	}
+	public abstract void createCategory(String name) throws Exception;
+//	public void createCategory(String name) throws Exception {
+//		for (Category category : categories) {
+//			if (category.getTitle().equals(name)) {
+//				throw new Exception("A playlist with the same name is existed");
+//			}
+//		}
+//
+//		if (name.equals("")) {
+//			throw new Exception("A playlist cannot be created without a name");
+//		}
+//		categories.add(new Category(name, new ArrayList<Song>()));
+//		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+//	}
 
 	public abstract void addSongsToCategory(String categoryName,
 			ArrayList<Song> songs) throws Exception;
 
 	public ArrayList<String> getCategoryName() {
 		ArrayList<String> categoriesName = new ArrayList<String>();
+		System.out.println (categories);
 		for (Category cate : categories) {
 			categoriesName.add(cate.getTitle());
 		}
@@ -131,42 +147,50 @@ public abstract class CategoryController implements Constants.Data, Constants,
 
 	}
 
-	public void removeSongFromCate(Song song, String cate) {
-		// TODO Auto-generated method stub
-		for (Category category : categories) {
-			if (category.getTitle().equals(cate)) {
-				category.removeSong(song);
-			}
-		}
-		UIController.getInstance().updateUiWhenDataChanged(TAG_ITEM_CHANGED);
-		try {
-			storeCategories();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public void removeSongFromCate(Song song, String cate) {
+//		// TODO Auto-generated method stub
+//		for (Category category : categories) {
+//			if (category.getTitle().equals(cate)) {
+//				category.removeSong(song);
+//			}
+//		}
+//		UIController.getInstance().updateUiWhenDataChanged(TAG_ITEM_CHANGED);
+//		try {
+//			storeCategories();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	/**
+	 * Remove a song from a category
+	 * @param song song want to be removed
+	 * @param cate name of category
+	 */
+	abstract public void removeSongFromCate(Song song, String cate);
 
 	/**
 	 * In order to remove online category, need to override this function
 	 * 
-	 * @param cate
+	 * @param cate :name of category
 	 */
-	public void removeCategory(String cate) {
-		for (int i = 0; i < categories.size(); i++) {
-			if (categories.get(i).getTitle().equals(cate)) {
-				categories.remove(i);
-				break;
-			}
-		}
-		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
-		try {
-			storeCategories();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public void removeCategory(String cate) {
+//		for (int i = 0; i < categories.size(); i++) {
+//			if (categories.get(i).getTitle().equals(cate)) {
+//				categories.remove(i);
+//				break;
+//			}
+//		}
+//		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+//		try {
+//			storeCategories();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
+	
+	abstract public void removeCategory(String cate);
 
 	/**
 	 * 
@@ -186,7 +210,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			ArtistController.instance = new ArtistController();
 			return;
 		case SC_PLAYLIST:
-			SCPlaylistController.instance = new SCPlaylistController();
+			SCMyPlaylistController.instance = new SCMyPlaylistController();
 			return;
 		case SC_SEARCH_PLAYLIST:
 			SCPlaylistSearchController.instance = new SCPlaylistSearchController();
@@ -215,10 +239,10 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			}
 			return ArtistController.instance;
 		case SC_PLAYLIST:
-			if (SCPlaylistController.instance == null) {
+			if (SCMyPlaylistController.instance == null) {
 				createInstance(type);
 			}
-			return SCPlaylistController.instance;
+			return SCMyPlaylistController.instance;
 		case SC_SEARCH_PLAYLIST:
 			if (SCPlaylistSearchController.instance == null) {
 				createInstance(type);
@@ -229,35 +253,24 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		}
 	}
 
-	public void updateTitle(String oldName, String newName) throws Exception{
-		// TODO Auto-generated method stub
-		if("".equals(newName)){
-			throw new Exception("Playlist name cannot be empty");
-		}
-		for (Category category : categories) {
-			if(category.getTitle().equals(newName)){
-				throw new Exception("Playlist name exsited");
-			}
-		}
-		for (Category category : categories) {
-			if(category.getTitle().equals(oldName)){
-				category.setTitle(newName);
-				break;
-			}
-		}
-		storeCategories();
-		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
-	}
-
-//	private class getCategoriesAsync extends
-//			AsyncTask<String, String, String> {
-//
-//		@Override
-//		protected String doInBackground(String... params) {
-//			// TODO Auto-generated method stub
-//			categories = getCategories();
-//			return null;
+//	public void updateTitle(String oldName, String newName) throws Exception{
+//		// TODO Auto-generated method stub
+//		if("".equals(newName)){
+//			throw new Exception("Playlist name cannot be empty");
 //		}
-//
+//		for (Category category : categories) {
+//			if(category.getTitle().equals(newName)){
+//				throw new Exception("Playlist name exsited");
+//			}
+//		}
+//		for (Category category : categories) {
+//			if(category.getTitle().equals(oldName)){
+//				category.setTitle(newName);
+//				break;
+//			}
+//		}
+//		storeCategories();
+//		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
 //	}
+	public abstract void updateTitle(String oldName, String newName) throws Exception;
 }

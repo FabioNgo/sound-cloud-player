@@ -31,7 +31,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class SCPlaylistSearchController extends CategoryController implements Constants.Data, Constants, Constants.PlaylistConstant {
+public class SCPlaylistSearchController extends SCPlayListController implements Constants.Data, Constants, Constants.PlaylistConstant {
 
 	private static final int OFFSET = 5;
 	static SCPlaylistSearchController instance = null;
@@ -156,24 +156,8 @@ public class SCPlaylistSearchController extends CategoryController implements Co
 		}
 		return categories;
 	}
-	@Override
-	public  void storeCategories() throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	protected SCPlaylist addPlaylistInfomation(JSONObject jObject) throws JSONException{
-		SCPlaylist playlist = new SCPlaylist("");
-		playlist.setTitle(jObject.getString(PLAYLIST_TITLE));
-		System.out.println ("PLAYLIST TITLE  = " + jObject.getString(PLAYLIST_TITLE));
-		playlist.setId(jObject.getString(PLAYLIST_ID));
-		
-		playlist.setUserId(jObject.getInt(PLAYLIST_CREATOR_ID));
-		playlist.setDuration(jObject.getLong(PLAYLIST_DURATION));
-		playlist.setDescription(jObject.getString(PLAYLIST_DESCRIPTION));
-		playlist.setPermalinkUrl(jObject.getString(PLAYLIST_PERMALINK_URL));
-		return playlist;
-	}
+	
 
 	public void clearSearch() {
 		// TODO Auto-generated method stub
@@ -198,25 +182,7 @@ public class SCPlaylistSearchController extends CategoryController implements Co
 		return SC_SEARCH_PLAYLIST_CHANGED;
 	}
 
-	@Override
-	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
-			throws Exception {
-		// TODO Auto-generated method stub
-		//ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
-		for (Category cate : categories) {
-			if(cate.getTitle().equals(categoryName)){
-				cate.addSongs(songs);
-				BasicFunctions.makeToastTake("Songs were added successfully",
-						MusicPlayerMainActivity.getActivity());
-				storeCategories();
-				UIController.getInstance().updateUiWhenDataChanged(TAG_ITEM_CHANGED);
-				return;
-			}
-		}
-		throw new Exception("Playlist does not exsist");
 		
-	}
-	
 	
 	
 

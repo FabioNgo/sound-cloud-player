@@ -519,8 +519,9 @@ public class SongController implements Constants, Constants.SongConstants,
 
 	/**
 	 * Load list favorite of user
+	 * @throws Exception 
 	 */
-	public void loadFavoriteSong() {
+	public void loadFavoriteSong() throws Exception {
 		if (isLoadFavoriteSong
 				&& BasicFunctions
 						.isConnectingToInternet(MusicPlayerMainActivity
@@ -578,8 +579,9 @@ public class SongController implements Constants, Constants.SongConstants,
 
 	/**
 	 * Load list tracks uploaded by current user
+	 * @throws Exception 
 	 */
-	public void loadMyStream() {
+	public void loadMyStream() throws Exception {
 
 		// System.out.println (isLoadStream);
 		if (isLoadStream
