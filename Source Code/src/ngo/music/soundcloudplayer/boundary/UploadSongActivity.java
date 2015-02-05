@@ -324,7 +324,7 @@ public class UploadSongActivity extends Activity implements Constants {
 			/*
 			 * Set data to song
 			 */
-			OnlineSong song = new OnlineSong();
+			OnlineSong song = new OnlineSong("", title, "", "", "");
 			song.setTitle(title);
 			song.setDescription(desc);
 			song.setGenre(tag);

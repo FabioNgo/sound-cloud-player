@@ -13,6 +13,12 @@ import android.provider.MediaStore.Audio.Media;
 
 public class OnlineSong extends Song{
 
+	public OnlineSong(String id, String title, String artist, String album,
+			String link) {
+		super(id, title, artist, album, link);
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * timestamp of creation
 	 */
@@ -103,7 +109,7 @@ public class OnlineSong extends Song{
 			wrapper.setToken(new Token(Constants.DEFAULT_TOKEN,"refresh_token"));
 			
 			
-			stream = wrapper.resolveStreamUrl(streamUrl,false);
+			stream = wrapper.resolveStreamUrl(link,false);
 		}
 		return stream.streamUrl;
 		

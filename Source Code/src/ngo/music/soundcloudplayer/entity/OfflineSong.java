@@ -1,24 +1,22 @@
 package ngo.music.soundcloudplayer.entity;
 
-import java.io.File;
 
-import ngo.music.soundcloudplayer.api.Stream;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
 
-public class OfflineSong extends Song{
+public class OfflineSong extends Song {
 	public OfflineSong(Cursor c) {
-		super();
-		setTitle(c.getString(c.getColumnIndex(Media.TITLE)));
-		setId((c.getString(c.getColumnIndex(Media._ID))));
-		setLink(c.getString(c.getColumnIndex(Media.DATA)));
-		setArtist(c.getString(c.getColumnIndex(Media.ARTIST)));
-		setAlbum(c.getString(c.getColumnIndex(Media.ALBUM)));
+		super(c.getString(c.getColumnIndex(Media._ID)),
+				c.getString(c.getColumnIndex(Media.TITLE)),
+				c.getString(c.getColumnIndex(Media.ARTIST)),
+				c.getString(c.getColumnIndex(Media.ALBUM)),
+				c.getString(c.getColumnIndex(Media.DATA)));
+
 	}
 
 	public OfflineSong(String id, String title, String artist, String album,
 			String link) {
-		super(id,title,artist,album,link);
+		super(id, title, artist, album, link);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -33,5 +31,5 @@ public class OfflineSong extends Song{
 		// TODO Auto-generated method stub
 		return link;
 	}
-	
+
 }

@@ -880,10 +880,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			if (isShuffle) {
 				// TODO Auto-generated method stub
 				Random random = new Random(System.currentTimeMillis());
+				
 				size = songQueue.size();
 
 				nextPosition = currentSongPosition
-						+ (Math.abs(random.nextInt()) % (size - 1));
+						+ (Math.abs(random.nextInt()) % (size - 2))+1;
 				nextPosition = nextPosition % size;
 
 			} else {

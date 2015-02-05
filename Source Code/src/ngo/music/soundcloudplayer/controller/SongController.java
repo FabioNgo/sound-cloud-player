@@ -368,19 +368,21 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @throws IOException
 	 */
 	private Song addSongInformation(JSONObject me) throws IOException {
-		Song song = new OnlineSong();
-
+		Song song = null;
+		
 		try {
+			SCAccount soundCloudAccount = getUserInfoOfSong(me);
+			song = new OnlineSong(me.getString(ID), me.getString(TITLE),
+					soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
+		
 			((OnlineSong) song).setTagList(me.getString(TAG_LIST));
 
-			song.setTitle(me.getString(TITLE));
 			// song.setTrackType(me.getString(TRACK_TYPE));
 			// song.setUri(me.getString(URI));
 			// song.setUserId(me.getInt(USER_ID));
 			// song.setVideoUrl(me.getString(VIDEO_URL));
 			// song.setWaveformUrl(me.getString(WAVEFORM_URL));
 			song.setArtworkUrl(me.getString(ARTWORK_URL));
-			((OnlineSong) song).setStreamUrl(me.getString(STREAM_URL));
 			// song.setCommentable(me.getBoolean(COMMENTABLE));
 			// song.setCommentCount(me.getInt(COMMENT_COUNT));
 			// song.setContentSize(me.getLong(CONTENT_SIZE));
@@ -405,13 +407,12 @@ public class SongController implements Constants, Constants.SongConstants,
 			// song.setReleaseMonth(me.getInt(RELEASE_MONTH));
 			// song.setReleaseYear(me.getInt(RELEASE_YEAR));
 			// song.setSharing(me.getString(SHARING));
-			song.setId(me.getString(ID));
 
 			// song.setStreamable(me.getBoolean(STREAMABLE));
 
 			// song.setStreamable(me.getBoolean(STREAMABLE));
 
-			SCAccount soundCloudAccount = getUserInfoOfSong(me);
+			
 			((OnlineSong) song).setUser(soundCloudAccount);
 			((OnlineSong) song).setLikesCount(me.getInt(LIKES_COUNT));
 			((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
@@ -653,7 +654,15 @@ public class SongController implements Constants, Constants.SongConstants,
 	 */
 	private OnlineSong addSongInformationSimple(JSONObject me)
 			throws JSONException, IOException {
-		OnlineSong song = new OnlineSong();
+		OnlineSong song = null;
+		JSONObject jsonObjectUser = me.getJSONObject(USER);
+		SCAccount soundCloudAccount = SCUserController.getInstance().getUserbyId(jsonObjectUser.getString(ID));
+		
+//		soundCloudAccount.setFullName(jsonObjectUser.getString(Constants.UserContant.FULLNAME));
+		
+				
+		song = new OnlineSong(me.getString(ID), me.getString(TITLE),
+				soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
 
 		// song.setCommentable(me.getBoolean(COMMENTABLE));
 		// song.setCommentCount(me.getInt(COMMENT_COUNT));
@@ -682,30 +691,24 @@ public class SongController implements Constants, Constants.SongConstants,
 		// song.setReleaseMonth(me.getInt(RELEASE_MONTH));
 		// song.setReleaseYear(me.getInt(RELEASE_YEAR));
 		// song.setSharing(me.getString(SHARING));
-		song.setId(me.getString(ID));
 
 		// song.setStreamable(me.getBoolean(STREAMABLE));
 
 		// song.setStreamable(me.getBoolean(STREAMABLE));
 		song.setTagList(me.getString(TAG_LIST));
-		song.setTitle(me.getString(TITLE));
 		// song.setTrackType(me.getString(TRACK_TYPE));
 		// song.setUri(me.getString(URI));
 		// song.setUserId(me.getInt(USER_ID));
 		// song.setVideoUrl(me.getString(VIDEO_URL));
-		SCAccount soundCloudAccount = new SCAccount();
-		JSONObject jsonObjectUser = me.getJSONObject(USER);
-		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
-		// soundCloudAccount.setFullName(jsonObjectUser.getString(Constants.UserContant.FULLNAME));
-		soundCloudAccount.setUsername(jsonObjectUser
-				.getString(Constants.UserContant.USERNAME));
+		
+	
+		
 		((OnlineSong) song).setUser(soundCloudAccount);
 		((OnlineSong) song).setWaveformUrl(me.getString(WAVEFORM_URL));
 		song.setArtworkUrl(me.getString(ARTWORK_URL));
-		((OnlineSong) song).setStreamUrl(me.getString(STREAM_URL));
 		// SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
 		// song.setUser(soundCloudAccount);
-		
+
 		// Stream stream = wrapper.resolveStreamUrl(me.getString(STREAM_URL),
 		// true);
 		// song.setStreamUrl(stream.streamUrl);
@@ -772,7 +775,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	 */
 	public void clearSearch() {
 		onlineSongs.get(SEARCH).clear();
-		
+
 	}
 
 	/****************************************************
@@ -954,7 +957,7 @@ public class SongController implements Constants, Constants.SongConstants,
 					}
 					isAlbumExsited = true;
 					break;
-				}else{
+				} else {
 					isAlbumExsited = false;
 				}
 			}
@@ -986,7 +989,7 @@ public class SongController implements Constants, Constants.SongConstants,
 					}
 					isArtistExsited = true;
 					break;
-				}else{
+				} else {
 					isArtistExsited = false;
 				}
 			}
