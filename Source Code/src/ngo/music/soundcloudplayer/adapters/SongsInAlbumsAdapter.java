@@ -21,6 +21,12 @@ public class SongsInAlbumsAdapter extends SongsInCateAdapter {
 		return ALBUM;
 	}
 
+	@Override
+	protected boolean setCanRemoveItem() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 
 	
 

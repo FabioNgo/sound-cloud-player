@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -35,6 +36,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 	private int type = -1;
 	Context context;
 	int resource;
+	private boolean canRemoveItem;
 	String cat;
 
 	public static SongsInCateAdapter instance = null;
@@ -48,10 +50,17 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 		this.resource = resource;
 
 		type = setType();
+		canRemoveItem = setCanRemoveItem();
 		this.cat = cat;
 		songs = CompositionListAdapter.getInstance(type).getSongsFromCat(cat);
 		
 	}
+	/**
+	 * 
+	 * @return if the category can remove children item
+	 */
+	protected abstract boolean setCanRemoveItem();
+	
 	/**
 	 * 
 	 * @return the type of category in Constant.Categories
@@ -136,7 +145,10 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 				// Inflating the Popup using xml file
 				popup.getMenuInflater().inflate(R.menu.song_in_cate_menu,
 						popup.getMenu());
-
+				if (!canRemoveItem) {
+					popup.getMenu().findItem(R.id.song_cat_remove)
+							.setVisible(false);
+				}
 				// registering popup with OnMenuItemClickListener
 				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
 
@@ -148,6 +160,13 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 							CategoryController.getInstance(type)
 									.removeSongFromCate(song, cat);
 							break;
+						case R.id.song_cat_add:
+							ArrayList<Song> songs = new ArrayList<Song>();
+							songs.add(song);
+							CategoryAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
+							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
+							break;
+							
 						default:
 							break;
 						}

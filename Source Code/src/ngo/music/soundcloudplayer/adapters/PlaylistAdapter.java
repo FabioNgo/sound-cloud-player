@@ -32,4 +32,12 @@ public class PlaylistAdapter extends CompositionListAdapter {
 		return true;
 	}
 
+
+
+	@Override
+	protected boolean setCanEdit() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
 }

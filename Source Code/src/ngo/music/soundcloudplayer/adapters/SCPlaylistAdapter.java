@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.AlbumController;
+import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.controller.SCPlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -21,18 +22,6 @@ public class SCPlaylistAdapter extends CompositionListAdapter {
 		
 	}
 
-	@Override
-	protected ArrayList<String> getCategories() {
-		// TODO Auto-generated method stub
-		return SCPlaylistController.getInstance().getCategoryString();
-
-	}
-
-	@Override
-	protected ArrayList<Song> getSongsFromCat(String cat) {
-		// TODO Auto-generated method stub
-		return SCPlaylistController.getInstance().getSongFromCategory(cat);
-	}
 
 	@Override
 	protected int setType() {
@@ -42,6 +31,13 @@ public class SCPlaylistAdapter extends CompositionListAdapter {
 
 	@Override
 	protected boolean setCanDelete() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+
+	@Override
+	protected boolean setCanEdit() {
 		// TODO Auto-generated method stub
 		return true;
 	}

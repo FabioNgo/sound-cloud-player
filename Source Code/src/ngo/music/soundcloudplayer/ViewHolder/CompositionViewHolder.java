@@ -2,6 +2,7 @@ package ngo.music.soundcloudplayer.ViewHolder;
 
 import ngo.music.soundcloudplayer.R;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,6 +12,10 @@ public class CompositionViewHolder {
 
 	public TextView[] items;
 	public ImageView menu;
+	public EditText editText;
+	public ImageView editBtn;
+	public ImageView submitBtn;
+	public ImageView clearBtn;
 	public CompositionViewHolder(int size,View v) {
 		items = new TextView[size + 1];
 		items[0] = (TextView) v
@@ -21,6 +26,10 @@ public class CompositionViewHolder {
 		items[4] = (TextView) v.findViewById(R.id.item_4);
 		items[5] = (TextView) v.findViewById(R.id.item_5);
 		menu = (ImageView)v.findViewById(R.id.composition_view_menu);
+		editText = (EditText)v.findViewById(R.id.composition_view_cat_edit);
+		editBtn = (ImageView)v.findViewById(R.id.composition_view_edit);
+		submitBtn = (ImageView)v.findViewById(R.id.composition_view_submit);
+		clearBtn = (ImageView)v.findViewById(R.id.composition_view_cancel);
 	}
 
 }

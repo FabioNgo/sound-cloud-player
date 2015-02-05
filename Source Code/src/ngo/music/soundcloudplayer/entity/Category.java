@@ -106,4 +106,8 @@ public class Category {
 			}
 		}
 	}
+	public void setTitle(String newName) {
+		// TODO Auto-generated method stub
+		this.title = newName;
+	}
 }

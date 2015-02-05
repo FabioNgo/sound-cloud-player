@@ -21,6 +21,7 @@ import java.util.Queue;
 
 import android.content.Context;
 import android.drm.DrmStore.ConstraintsColumns;
+import android.os.AsyncTask;
 import android.support.v4.util.ArrayMap;
 import android.util.JsonReader;
 import android.util.JsonWriter;
@@ -48,6 +49,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		// playlists = new ArrayMap<String, ArrayList<Song>>();
 
 		categories = getCategories();
+//		new getCategoriesAsync().execute();
 		TAG_DATA_CHANGED = setTagDataChange();
 		TAG_ITEM_CHANGED = setTagItemChange();
 	}
@@ -178,16 +180,16 @@ public abstract class CategoryController implements Constants.Data, Constants,
 			PlaylistController.instance = new PlaylistController();
 			return;
 		case ALBUM:
-			AlbumController.instance =  new AlbumController();
+			AlbumController.instance = new AlbumController();
 			return;
 		case ARTIST:
-			ArtistController.instance =  new ArtistController();
+			ArtistController.instance = new ArtistController();
 			return;
 		case SC_PLAYLIST:
-			SCPlaylistController.instance =  new SCPlaylistController();
+			SCPlaylistController.instance = new SCPlaylistController();
 			return;
 		case SC_SEARCH_PLAYLIST:
-			SCPlaylistSearchController.instance =  new SCPlaylistSearchController();
+			SCPlaylistSearchController.instance = new SCPlaylistSearchController();
 			return;
 		default:
 			return;
@@ -227,4 +229,35 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		}
 	}
 
+	public void updateTitle(String oldName, String newName) throws Exception{
+		// TODO Auto-generated method stub
+		if("".equals(newName)){
+			throw new Exception("Playlist name cannot be empty");
+		}
+		for (Category category : categories) {
+			if(category.getTitle().equals(newName)){
+				throw new Exception("Playlist name exsited");
+			}
+		}
+		for (Category category : categories) {
+			if(category.getTitle().equals(oldName)){
+				category.setTitle(newName);
+				break;
+			}
+		}
+		storeCategories();
+		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+	}
+
+//	private class getCategoriesAsync extends
+//			AsyncTask<String, String, String> {
+//
+//		@Override
+//		protected String doInBackground(String... params) {
+//			// TODO Auto-generated method stub
+//			categories = getCategories();
+//			return null;
+//		}
+//
+//	}
 }

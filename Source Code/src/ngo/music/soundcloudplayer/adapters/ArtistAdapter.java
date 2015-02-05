@@ -33,4 +33,10 @@ public class ArtistAdapter extends CompositionListAdapter {
 		return false;
 	}
 
+	@Override
+	protected boolean setCanEdit() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
