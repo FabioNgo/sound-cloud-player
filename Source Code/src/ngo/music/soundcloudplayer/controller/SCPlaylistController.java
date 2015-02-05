@@ -227,4 +227,10 @@ public class SCPlaylistController extends CategoryController implements
 		return SC_PLAYLIST;
 	}
 
+	@Override
+	public void createCategory(String name) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

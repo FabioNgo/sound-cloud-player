@@ -216,6 +216,12 @@ public class SCPlaylistSearchController extends CategoryController implements Co
 		throw new Exception("Playlist does not exsist");
 		
 	}
+
+	@Override
+	public void createCategory(String name) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
