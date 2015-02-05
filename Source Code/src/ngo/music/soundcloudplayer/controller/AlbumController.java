@@ -47,4 +47,10 @@ public class AlbumController extends OfflinePlayListController {
 		// TODO Auto-generated method stub
 		return ALBUM;
 	}
+
+	@Override
+	public void createCategory(String name) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -183,7 +183,7 @@ public class SCPlaylistSearchController extends SCPlayListController implements 
 	}
 
 		
-	
+
 	
 
 }

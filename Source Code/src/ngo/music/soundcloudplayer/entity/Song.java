@@ -60,7 +60,7 @@ public abstract class Song implements Comparable <Song>{
 	
 	
 	
-	public Song() {
+	private Song() {
 		// TODO Auto-generated constructor stub
 	}
 	

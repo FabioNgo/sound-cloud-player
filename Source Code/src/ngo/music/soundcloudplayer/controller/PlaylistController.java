@@ -106,6 +106,23 @@ public class PlaylistController extends OfflinePlayListController {
 		// TODO Auto-generated method stub
 		return PLAYLIST;
 	}
-		
+
+	@Override
+	public void createCategory(String name) throws Exception {
+		// TODO Auto-generated method stub
+		for (Category category : categories) {
+			if (category.getTitle().equals(name)) {
+				throw new Exception("A playlist with the same name is existed");
+			}
+		}
+
+		if (name.equals("")) {
+			throw new Exception("A playlist cannot be created without a name");
+		}
+		categories.add(new Category(name, new ArrayList<Song>()));
+		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+	}
+	
+
 
 }

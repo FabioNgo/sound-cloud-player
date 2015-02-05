@@ -70,7 +70,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	}
 
 	/**
-	 * add an UI Fragment to the líst
+	 * add an UI Fragment to the lï¿½st
 	 * 
 	 * @param fragment
 	 */
@@ -188,11 +188,12 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			@Override
 			public void onTick(long millisUntilFinished) {
 				// TODO Auto-generated method stub
-
-				int ratio = (int) ((MusicPlayerService.getInstance()
-								.getCurrentTime()*100)
-						/ MusicPlayerService.getInstance().getDuration());
-				if (ratio == 50) {
+				long currentTime = MusicPlayerService.getInstance()
+						.getCurrentTime();
+				long duration = MusicPlayerService.getInstance()
+						.getDuration();
+				double ratio = (currentTime*100.0)/duration;
+				if ((currentTime*100)/duration == 50) {
 					String format = String.format("Next song: %s",
 							MusicPlayerService.getInstance().getNextSong()
 									.getTitle());
