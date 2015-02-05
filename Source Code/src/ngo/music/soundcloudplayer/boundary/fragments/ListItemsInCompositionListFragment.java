@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.adapters.CategoryTitlesListAdapter;
+
 import ngo.music.soundcloudplayer.adapters.SongsInCateAdapter;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
@@ -101,6 +101,10 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 			return new ListItemInAlbumFragment(songs, catTitle);
 		case ARTIST:
 			return new ListItemInArtistFragment(songs, catTitle);
+		case SC_PLAYLIST:
+			return new ListItemInSCPlaylistFragment (songs, catTitle);
+		case SC_SEARCH_PLAYLIST:
+			return new ListItemInSCPlaylistSearchFragment(songs, catTitle);
 		default:
 			return null;
 		}

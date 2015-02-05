@@ -1,5 +1,6 @@
 package ngo.music.soundcloudplayer.entity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -77,7 +78,7 @@ public class Category {
 		return songs;
 	}
 
-	public void addSongs(ArrayList<Song> songs) {
+	public void addSongs(ArrayList<Song> songs) throws NumberFormatException, IOException {
 		for (Song song1 : songs) {
 			if (!this.songs.contains(song1)) {
 				this.songs.add(song1);
@@ -85,7 +86,7 @@ public class Category {
 		}
 	}
 
-	public void addSong(Song song) {
+	public void addSong(Song song) throws NumberFormatException, IOException {
 
 		if (!this.songs.contains(song)) {
 			this.songs.add(song);

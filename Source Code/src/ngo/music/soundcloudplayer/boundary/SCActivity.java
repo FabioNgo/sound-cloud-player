@@ -55,17 +55,18 @@ public class SCActivity extends MusicPlayerMainActivity {
 				SCActivity.type = SCActivity.SOUNDCLOUD_SEARCH;
 				
 				SCPlaylistSearchController.getInstance().searchPlaylistSC(query, 0);
-				new searchBackground().execute(query);
+				
+				//new searchBackground().execute(query);
 //				SongController.getInstance().searchSongSC(query, 0);
 //				SCUserController.getInstance().searchUserSC(query, 0);
-//				Intent i = new Intent(getActivity(), SCActivity.class);
-//				SCUserController soundCloudUserController = SCUserController.getInstance();
-//				
-//				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-//				i.putExtra(USER, bundle);
-//				//i.putExtra(ME_FAVORITES,stringResponse);
-//				SCActivity.getActivity().finish();
-//				startActivity(i);
+				Intent i = new Intent(getActivity(), SCActivity.class);
+				SCUserController soundCloudUserController = SCUserController.getInstance();
+				
+				Bundle bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+				i.putExtra(USER, bundle);
+				//i.putExtra(ME_FAVORITES,stringResponse);
+				SCActivity.getActivity().finish();
+				startActivity(i);
 				return false;
 			}
 			
@@ -99,8 +100,9 @@ public class SCActivity extends MusicPlayerMainActivity {
 		@Override
 		protected String doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			SCActivity.type = SCActivity.SOUNDCLOUD_SEARCH;
-			MusicPlayerMainActivity.query = params[0];
+//			SCActivity.type = SCActivity.SOUNDCLOUD_SEARCH;
+//			MusicPlayerMainActivity.query = params[0];
+			//SCPlaylistSearchController.getInstance().searchPlaylistSC(query, 0);
 			//SongController.getInstance().searchSongSC(query, 0);
 			//SCUserController.getInstance().searchUserSC(query, 0);
 			//SCPlaylistSearchController.getInstance().searchPlaylistSC(params[0], 1);

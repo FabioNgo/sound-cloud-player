@@ -1,8 +1,17 @@
 package ngo.music.soundcloudplayer.entity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.HttpResponse;
+
+import android.text.style.ScaleXSpan;
+import ngo.music.soundcloudplayer.api.ApiWrapper;
+import ngo.music.soundcloudplayer.api.Endpoints;
+import ngo.music.soundcloudplayer.api.Request;
+import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.SongController;
+import ngo.music.soundcloudplayer.general.Constants;
 
 public class SCPlaylist extends Category{
 
@@ -764,5 +773,31 @@ public class SCPlaylist extends Category{
 		this.artworkData = artworkData;
 	}
 	
+	
+	@Override
+	public void addSong(Song song) throws NumberFormatException, IOException {
+		// TODO Auto-generated method stub
+		
+		ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
+		
+			HttpResponse resp = wrapper.put(Request.to(Constants.ME_PLAYLISTS + "/" + String.valueOf(getSoundcloudId()))
+													.with("playlist[tracks][][id]", Integer.parseInt(song.getId())));
+			
+		
+	}
+	
+	
+	@Override
+	public void addSongs(ArrayList<Song> songs) throws NumberFormatException, IOException {
+		// TODO Auto-generated method stub
+		ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
+		for (Song song : songs){
+			
+				HttpResponse resp = wrapper.put(Request.to(Constants.ME_PLAYLISTS + "/" + String.valueOf(getSoundcloudId()))
+						.with("playlist[tracks][][id]", Integer.parseInt(song.getId())));
+			
+		}
+		//super.addSongs(songs);
+	}
 
 }

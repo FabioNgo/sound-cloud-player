@@ -1,6 +1,10 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.SCUserController;
@@ -286,19 +290,33 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			AsyncTask<String, String, SCAccount> {
 
 		SCAccount soundCloudAccount = null;
-
+		
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-
+			System.out.println ("INSIDE GET USER BACKGROUND");
 		}
 
 		@Override
 		protected SCAccount doInBackground(String... params) {
 			// TODO Auto-generated method stub
+			System.out.println ("INSIDE GET USER BACKGROUND");
 			SCUserController soundCloudUserController = SCUserController
 					.getInstance();
-			soundCloudAccount = soundCloudUserController.getUserbyId(params[0]);
+			
+			try {
+				System.out.println ("INSIDE GET USER BACKGROUND 2");
+				soundCloudAccount = soundCloudUserController.getUserbyId(params[0]);
+				System.out.println ("INSIDE GET USER BACKGROUND 3");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				return null;
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				return null;
+				
+			}
 			return soundCloudAccount;
 		}
 
@@ -312,10 +330,11 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			RelativeLayout artisInfo = (RelativeLayout) rootView.findViewById(R.id.artist_info);
 			
 
+			if (soundCloudAccount != null){
+				artistFullname.setText(soundCloudAccount.getFullName());
 			
-			artistFullname.setText(soundCloudAccount.getFullName());
-			
-			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
+				artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
+					
 					AppController.getInstance().getImageLoader());
 //			BasicFunctions.setImageViewSize(
 //					MusicPlayerMainActivity.screenHeight / 10,
@@ -323,6 +342,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 			artistAvatar.setDefaultImageResId(R.drawable.ic_launcher);
 //
+			}
 //			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
 //					AppController.getInstance().getImageLoader());
 
@@ -336,6 +356,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		/*
 		 * Config artist of Song
 		 */
+		
 		if(song == null){
 			
 			return;
@@ -355,12 +376,15 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		OnlineSong onlineSong = null;
 
 		if (song instanceof OnlineSong) {
+			
 			artistInfo.setVisibility(View.VISIBLE);
 			onlineSong = (OnlineSong) song;
 			// artistInfo.setAlpha((float) 0.6);
 			try {
-				soundCloudAccount = new getUserbyIdBackground().execute(
-						String.valueOf(onlineSong.getUser().getId())).get();
+				String ID = String.valueOf(onlineSong.getUser().getId());
+				System.out.println ("FULL UI: SONG TITLE 1 = " + ID);
+				soundCloudAccount = new getUserbyIdBackground().execute(ID).get();
+				System.out.println ("FULL UI: SONG TITLE 2 = " + song.getTitle());
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

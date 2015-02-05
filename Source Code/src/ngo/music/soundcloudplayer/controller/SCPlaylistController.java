@@ -27,6 +27,7 @@ import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SCAccount;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
@@ -224,6 +225,17 @@ public class SCPlaylistController extends CategoryController implements Constant
 	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
 			throws Exception {
 		// TODO Auto-generated method stub
+		for (Category cate : categories) {
+			if(cate.getTitle().equals(categoryName)){
+				cate.addSongs(songs);
+				BasicFunctions.makeToastTake("Songs were added successfully",
+						MusicPlayerMainActivity.getActivity());
+				storeCategories();
+				UIController.getInstance().updateUiWhenDataChanged(TAG_ITEM_CHANGED);
+				return;
+			}
+		}
+		throw new Exception("Playlist does not exsist");
 		
 	}
 

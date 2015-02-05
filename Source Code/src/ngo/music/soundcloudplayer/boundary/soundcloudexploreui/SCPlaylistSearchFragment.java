@@ -61,48 +61,45 @@ public class SCPlaylistSearchFragment extends CompositionListContentFragment  {
 		//responseString = getArguments().getString(ME_FAVORITES) ;
 				
 		
-		try {
-			SCPlaylistSearchController.getInstance().searchPlaylistSC(query, current_page); 
-			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
-			//System.out.println (songs.size() + "......" + category);
-			
-			listView.setOnScrollListener(new OnScrollListener() {
-				
-				@Override
-				public void onScrollStateChanged(AbsListView view, int scrollState) {
-					// TODO Auto-generated method stub
-					
-				}
+//		try {
+//			//SCPlaylistSearchController.getInstance().searchPlaylistSC(query, current_page); 
+//			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
+//			//System.out.println (songs.size() + "......" + category);
+//			
+//			listView.setOnScrollListener(new OnScrollListener() {
 //				
-				@Override
-				public void onScroll(AbsListView view, int firstVisibleItem,
-						int visibleItemCount, int totalItemCount) {
-					
-					//what is the bottom iten that is visible
-					int lastInScreen = firstVisibleItem + visibleItemCount;
-					//adapter.notifyDataSetChanged();
-					//is the bottom item visible & not loading more already ? Load more !
-					if(lastInScreen >= totalItemCount-1 && !loadingMore){
-						loadingMore = true;
-
-						new loadMoreBackground().execute();
-						adapter.notifyDataSetChanged();
-
-					}
-					
-					// TODO Auto-generated method stub
-					
-				}
-			});
-		
-			
-			
-			
-			
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-			// TODO: handle exception
-		}
+//				@Override
+//				public void onScrollStateChanged(AbsListView view, int scrollState) {
+//					// TODO Auto-generated method stub
+//					
+//				}
+////				
+//				@Override
+//				public void onScroll(AbsListView view, int firstVisibleItem,
+//						int visibleItemCount, int totalItemCount) {
+//					
+//					//what is the bottom iten that is visible
+//					int lastInScreen = firstVisibleItem + visibleItemCount;
+//					//adapter.notifyDataSetChanged();
+//					//is the bottom item visible & not loading more already ? Load more !
+//					if(lastInScreen >= totalItemCount-1 && !loadingMore){
+//						loadingMore = true;
+//
+//						new loadMoreBackground().execute();
+//						adapter.notifyDataSetChanged();
+//
+//					}
+//					
+//					// TODO Auto-generated method stub
+//					
+//				}
+//			});
+//		
+//			
+//		} catch (IllegalStateException e) {
+//			e.printStackTrace();
+//			// TODO: handle exception
+//		}
 		  /*
          * Move to next page
          */

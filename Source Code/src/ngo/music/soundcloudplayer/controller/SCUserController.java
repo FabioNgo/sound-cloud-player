@@ -632,29 +632,21 @@ public class SCUserController extends UserController implements Constants.UserCo
 	 * Get info of soundclouduser by id
 	 * @param params
 	 * @return
+	 * @throws IOException 
+	 * @throws JSONException 
 	 */
-	public SCAccount getUserbyId(String params){
+	public SCAccount getUserbyId(String params) throws IOException, JSONException{
 		SCAccount soundCloudAccount = new SCAccount();
 		wrapper = getApiWrapper();
-		try {
-			
+		
+		System.out.println ("INSIDE GET USER BY ID");
 			HttpResponse resp  = wrapper.get(Request.to(Constants.USER_LINK + "/" + String.valueOf(params)));
 			
 			String respString = Http.getString(resp);
 			JSONObject me = new JSONObject(respString);
 			soundCloudAccount = (SCAccount) addSimpleUserInfo(me);
 			return soundCloudAccount;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
-		return soundCloudAccount;
-		
+
 	}
 
 	

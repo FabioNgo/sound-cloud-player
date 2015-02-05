@@ -693,11 +693,6 @@ public class SongController implements Constants, Constants.SongConstants,
 		// song.setUri(me.getString(URI));
 		// song.setUserId(me.getInt(USER_ID));
 		// song.setVideoUrl(me.getString(VIDEO_URL));
-		((OnlineSong) song).setWaveformUrl(me.getString(WAVEFORM_URL));
-		song.setArtworkUrl(me.getString(ARTWORK_URL));
-		((OnlineSong) song).setStreamUrl(me.getString(STREAM_URL));
-		// SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
-		// song.setUser(soundCloudAccount);
 		SCAccount soundCloudAccount = new SCAccount();
 		JSONObject jsonObjectUser = me.getJSONObject(USER);
 		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
@@ -705,6 +700,12 @@ public class SongController implements Constants, Constants.SongConstants,
 		soundCloudAccount.setUsername(jsonObjectUser
 				.getString(Constants.UserContant.USERNAME));
 		((OnlineSong) song).setUser(soundCloudAccount);
+		((OnlineSong) song).setWaveformUrl(me.getString(WAVEFORM_URL));
+		song.setArtworkUrl(me.getString(ARTWORK_URL));
+		((OnlineSong) song).setStreamUrl(me.getString(STREAM_URL));
+		// SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
+		// song.setUser(soundCloudAccount);
+		
 		// Stream stream = wrapper.resolveStreamUrl(me.getString(STREAM_URL),
 		// true);
 		// song.setStreamUrl(stream.streamUrl);
@@ -942,7 +943,15 @@ public class SongController implements Constants, Constants.SongConstants,
 			String album = song.getAlbum();
 			for (Category category : cate) {
 				if (category.getTitle().equals(album)) {
-					category.addSong(song);
+					try {
+						category.addSong(song);
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					isAlbumExsited = true;
 					break;
 				}else{
@@ -966,7 +975,15 @@ public class SongController implements Constants, Constants.SongConstants,
 			String artist = song.getArtist();
 			for (Category category : cate) {
 				if (category.getTitle().equals(artist)) {
-					category.addSong(song);
+					try {
+						category.addSong(song);
+					} catch (NumberFormatException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Autso-generated catch block
+						e.printStackTrace();
+					}
 					isArtistExsited = true;
 					break;
 				}else{

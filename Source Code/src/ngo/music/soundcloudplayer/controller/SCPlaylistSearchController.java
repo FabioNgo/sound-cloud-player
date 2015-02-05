@@ -27,10 +27,11 @@ import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SCAccount;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class SCPlaylistSearchController extends SCPlaylistController implements Constants.Data, Constants, Constants.PlaylistConstant {
+public class SCPlaylistSearchController extends CategoryController implements Constants.Data, Constants, Constants.PlaylistConstant {
 
 	private static final int OFFSET = 5;
 	static SCPlaylistSearchController instance = null;
@@ -63,38 +64,57 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 		SCUserController soundCloudUserController = SCUserController.getInstance();
 		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
 		
-		
+		HttpResponse resp;
+		String me = "";
 		
 		@Override
 		protected ArrayList<Category> doInBackground(String... params) {
 			// TODO Auto-generated method stub
 			
 			try {
-				HttpResponse resp = wrapper.get(Request.to(params[0]));
+				resp = wrapper.get(Request.to(params[0]));
 				//System.out.println (resp.getStatusLine());
-				String me =  Http.getString(resp);
-				JSONArray array =  new JSONArray(me);
-				//JSONObject object = array.getJSONObject(0);
-				//System.out.println (object.toString());
-				for (int i = 0; i < array.length(); i++) {
-					JSONObject object  = array.getJSONObject(i);
-			//		System.out.println (object.get(PLAYLIST_TITLE));
-			
-					categories.add(addPlaylistInfomation(object));
-				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				
+				me =  Http.getString(resp);
+//				JSONArray array =  new JSONArray(me);
+//				//JSONObject object = array.getJSONObject(0);
+//				//System.out.println (object.toString());
+//				for (int i = 0; i < array.length(); i++) {
+//					JSONObject object  = array.getJSONObject(i);
+//					
+//			
+//					categories.add(addPlaylistInfomation(object));
+//					System.out.println (object.get(PLAYLIST_TITLE));
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		//	System.out.println ("LOAD PLAYLIST DONE");
 			return categories;
 		}
 		
 		@Override
 		protected void onPostExecute(ArrayList<Category> result) {
 			// TODO Auto-generated method stub
+			
+			try {
+				
+				
+				JSONArray array =  new JSONArray(me);
+				//JSONObject object = array.getJSONObject(0);
+				//System.out.println (object.toString());
+				for (int i = 0; i < array.length(); i++) {
+					JSONObject object  = array.getJSONObject(i);
+					
+			
+					categories.add(addPlaylistInfomation(object));
+					System.out.println (object.get(PLAYLIST_TITLE));
+				}
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			
 			
 		}
@@ -123,37 +143,13 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//System.out.println (me);
-	//	JSONObject obj = Http.getJSON(resp);
-		//JSONArray a = obj.getJSONArray("errors");
-		//System.out.println (obj);
-//		try {
-//			HttpResponse resp = wrapper.get(Request.to(request));
-//			//System.out.println (resp.getStatusLine());
-//			String me =  Http.getString(resp);
-//			JSONArray array =  new JSONArray(me);
-//			//JSONObject object = array.getJSONObject(0);
-//			//System.out.println (object.toString());
-//			for (int i = 0; i < array.length(); i++) {
-//				JSONObject object  = array.getJSONObject(i);
-//				
-//				categories.add(addPlaylistInfomation(object));
-//			}
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
-		//return categories;
+
 	}
 
 	
 	@Override
 	public ArrayList<Category> getCategories() {
-		System.out.println (categories);
+		System.out.println ("CATE = " + categories);
 		if (categories == null){
 			
 			return new ArrayList<Category>();
@@ -182,6 +178,43 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 	public void clearSearch() {
 		// TODO Auto-generated method stub
 		categories.clear();
+	}
+
+	@Override
+	protected int setType() {
+		// TODO Auto-generated method stub
+		return SC_SEARCH_PLAYLIST;
+	}
+
+	@Override
+	protected int setTagItemChange() {
+		// TODO Auto-generated method stub
+		return ITEM_IN_SC_SEARCH_PLAYLIST_CHANGED;
+	}
+
+	@Override
+	protected int setTagDataChange() {
+		// TODO Auto-generated method stub
+		return SC_SEARCH_PLAYLIST_CHANGED;
+	}
+
+	@Override
+	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
+			throws Exception {
+		// TODO Auto-generated method stub
+		//ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
+		for (Category cate : categories) {
+			if(cate.getTitle().equals(categoryName)){
+				cate.addSongs(songs);
+				BasicFunctions.makeToastTake("Songs were added successfully",
+						MusicPlayerMainActivity.getActivity());
+				storeCategories();
+				UIController.getInstance().updateUiWhenDataChanged(TAG_ITEM_CHANGED);
+				return;
+			}
+		}
+		throw new Exception("Playlist does not exsist");
+		
 	}
 	
 	
