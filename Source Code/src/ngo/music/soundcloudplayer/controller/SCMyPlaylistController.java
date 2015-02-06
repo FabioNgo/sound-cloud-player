@@ -32,7 +32,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class SCMyPlaylistController extends SCPlayListController implements
+public class SCMyPlaylistController extends SCPlaylistController implements
 		Constants.PlaylistConstant {
 
 	private static final int OFFSET = 5;

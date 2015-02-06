@@ -20,7 +20,7 @@ import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 
-public abstract class SCPlayListController extends CategoryController implements Constants.PlaylistConstant {
+public abstract class SCPlaylistController extends CategoryController implements Constants.PlaylistConstant {
 
 
 
