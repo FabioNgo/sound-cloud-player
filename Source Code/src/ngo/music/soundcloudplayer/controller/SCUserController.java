@@ -26,7 +26,10 @@ import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Params;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
+import ngo.music.soundcloudplayer.boundary.LoginActivity;
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.database.DatabaseTable;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -80,18 +83,15 @@ public class SCUserController extends UserController implements Constants.UserCo
 	}
 
 	@Override
-	public void login() {
-		try {
+	public void login() throws IOException, JSONException {
+			System.out.println ("INSIDE LOGIN");
+	
+			DatabaseHandler db = DatabaseHandler.getInstance(LoginActivity.getActivity());
+			
+			db.addLoginInfo(getToken().access);
 			retrevieUserInfoOnline(getApiWrapper());
 			
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 		// TODO Auto-generated method stub
 		
 	}
@@ -133,6 +133,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 	}
 
 	/**
+	 * Get User Information from online database if logged in
 	 * @throws IOException
 	 * @throws JSONException
 	 */
@@ -202,13 +203,18 @@ public class SCUserController extends UserController implements Constants.UserCo
 		t  = null;
 		guest = null;
 		currentUser = null;
+		DatabaseHandler db = DatabaseHandler.getInstance(LoginActivity.getActivity());
+		
+		db.refreshDatabase();
 		SongController.getInstance().clear();
 		
 		
 	}
 
 	public boolean isLogin(){
-		if (t == null) return false;
+		if (t == null){
+			return false;
+		}
 		else return true;
 	}
 	
@@ -281,6 +287,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 	
 	public void setToken(Token t){
 		this.t = t;
+		getApiWrapper().setToken(t);
 		currentUser = new SCAccount();
 	}
 
@@ -481,7 +488,6 @@ public class SCUserController extends UserController implements Constants.UserCo
 //			offset = offset-getUser().getFollowingCount();
 //		}
 			
-		
 		int offset = page * 10;
 		String request = Constants.USER_LINK + "/" + "?q=" + query + "&limit=10&offset=" + offset;
 		System.out.println ("REQUEST USER = " + request);

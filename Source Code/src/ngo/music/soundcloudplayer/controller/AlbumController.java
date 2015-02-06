@@ -17,11 +17,7 @@ public class AlbumController extends OfflinePlayListController {
 		return cate;
 	}
 
-	@Override
-	public void storeCategories() throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	protected int setTagItemChange() {
@@ -35,12 +31,7 @@ public class AlbumController extends OfflinePlayListController {
 		return ALBUM_CHANGED;
 	}
 
-	@Override
-	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	protected int setType() {
@@ -48,9 +39,5 @@ public class AlbumController extends OfflinePlayListController {
 		return ALBUM;
 	}
 
-	@Override
-	public void createCategory(String name) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }

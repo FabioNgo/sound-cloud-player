@@ -23,7 +23,7 @@ public class SCSongSearchFragment extends SoundCloudExploreFragment {
 		query = MusicPlayerMainActivity.query;
 		
 		category  = Constants.SoundCloudExploreConstant.SEARCH;
-		current_page = 01;
+		current_page = 0;
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,

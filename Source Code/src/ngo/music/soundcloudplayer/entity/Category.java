@@ -46,7 +46,7 @@ public class Category {
 	public String toString() {
 		// TODO Auto-generated method stub
 
-		String titlePart = title;
+		String titlePart = getTitle();
 		String songsPart = "";
 		if (!songs.isEmpty()) {
 			for (int i = 0; i < songs.size(); i++) {

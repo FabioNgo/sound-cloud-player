@@ -10,6 +10,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.States;
 import android.support.v4.app.Fragment;
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -85,10 +86,9 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 		SCUserController soundCloudUserController = SCUserController.getInstance();
 		@Override
 		protected String doInBackground(String... params) {
-			// TODO Auto-generated method stub
+			//System.out.println (wrapper.resolve(params[0]));
 			try {
-				//System.out.println (wrapper.resolve(params[0]));
-				soundCloudUserController.retrevieUserInfoOnline(wrapper);
+				soundCloudUserController.login();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -127,12 +127,12 @@ public class FacebookLoginUI extends Fragment implements Constants, Constants.Us
 			
 	        if (url.contains("access_token")){
 	        	String result = url.substring(url.indexOf("access_token=") + 13, url.indexOf("&scope="));
-	        	System.out.println (result);
+	        	
 	        	Token t = new Token(result,"refresh_token");
 	        	wrapper.setToken(t);
 	        	SCUserController soundCloudUserController = SCUserController.getInstance();
 	        	soundCloudUserController.setToken(t);
-	        	
+	        	States.loginState = LOGGED_IN;
 	        	new retriveUserBackground().execute();
 	        }
 			return false;

@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHandler extends SQLiteOpenHelper {
 
 	// Database Version
-		private static final int DATABASE_VERSION= 1;
+		private static final int DATABASE_VERSION= 3;
 
 		
 		// Database Name
@@ -24,6 +24,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		// Contacts Table Columns names
 		private static final String KEY_ID = "id";
+		private static final String KEY_TOKEN  = "token";
 		private static final String KEY_USERNAME = "username";
 		private static final String KEY_PASSWORD = "password";
 
@@ -40,8 +41,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 			
 				String CREATE_RSS_TABLE = "CREATE TABLE " + TABLE_NAME + "("
-						+ KEY_ID + " INTEGER PRIMARY KEY, " + KEY_USERNAME + " TEXT, "
-						+ KEY_PASSWORD + " TEXT" + ");";
+						+ KEY_ID + " INTEGER PRIMARY KEY, " 
+						+ KEY_TOKEN + " TEXT" + ");";
 				db.execSQL(CREATE_RSS_TABLE);
 			
 
@@ -72,13 +73,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		/**
 		 * Adding a new username into database
 		 * */
-		public void addLoginInfo(String username, String password) {
+		public void addLoginInfo(String token) {
 			refreshDatabase();
 			SQLiteDatabase db = this.getWritableDatabase();
 
 			ContentValues values = new ContentValues();
-			values.put(KEY_USERNAME, username); // username
-			values.put(KEY_PASSWORD, password); // password
+			values.put(KEY_TOKEN, token); // username
+			
 			// Check if row already existed in database
 			if (!isUserLoggedIn()) {
 				// site not existed, create a new row
@@ -99,7 +100,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			Cursor cursor;
 			//has the same link
 			cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-			System.out.println ("CUSOR = " + cursor.getCount());
+			
 			if (cursor.getCount() > 0){
 				return true;
 			}else{
@@ -121,23 +122,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		/**
 		 * Reading a row (username) row is identified by row user
 		 * */
-		public String[] getUserInfo() {
+		public String getUserInfo() {
 			SQLiteDatabase db = this.getReadableDatabase();
-			String[] userInfo = new String[2];
+			String userInfo = new String();
 			Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
 			if (cursor != null) {
 				cursor.moveToFirst();
 			}
 			
 			/*
-			 * getUsername
+			 * getToken
 			 */
-			userInfo[0] = cursor.getString(1);
+			userInfo = cursor.getString(1);
+			System.out.println ("TOKEN INFO = " + userInfo);
 			
-			/*
-			 * get password
-			 */
-			userInfo[1] = cursor.getString(2);
 			cursor.close();
 			db.close();
 			return userInfo;

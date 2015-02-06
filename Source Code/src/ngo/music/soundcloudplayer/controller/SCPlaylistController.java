@@ -311,7 +311,8 @@ public abstract class SCPlaylistController extends CategoryController implements
 	
 	protected SCPlaylist addPlaylistInfomation(JSONObject jObject)
 			throws JSONException {
-		SCPlaylist playlist = new SCPlaylist("");
+		SCPlaylist playlist = new SCPlaylist(jObject.getString(PLAYLIST_TITLE));
+		System.out.println (jObject.getString(PLAYLIST_TITLE));
 		playlist.setTitle(jObject.getString(PLAYLIST_TITLE));
 		playlist.setId(jObject.getString(PLAYLIST_ID));
 
