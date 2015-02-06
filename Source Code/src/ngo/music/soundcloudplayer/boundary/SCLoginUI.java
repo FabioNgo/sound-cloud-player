@@ -69,8 +69,8 @@ public class SCLoginUI extends Fragment implements Constants.UserContant {
 				// TODO Auto-generated method stub
 				String usernameStr = username.getText().toString();
 				String passwordStr = password.getText().toString();
-				Background background = new  Background(usernameStr, passwordStr);
-				background.execute();
+				//Background background = new  Background(usernameStr, passwordStr);
+				//background.execute();
 
 				
 			}
@@ -117,7 +117,7 @@ public class SCLoginUI extends Fragment implements Constants.UserContant {
 						isLogin = false;
 					}else{
 						DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
-						databaseHandler.addLoginInfo(username, password);
+						//databaseHandler.addLoginInfo(token);
 						Bundle bundle  = userController.getBundle(currentUser);
 						Intent goToMainActivity  =  new Intent(getActivity(), MusicPlayerMainActivity.class);
 						goToMainActivity.putExtra(USER, bundle);

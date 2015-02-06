@@ -22,6 +22,8 @@ import android.widget.Toast;
 
 public class SCActivity extends MusicPlayerMainActivity {
 
+	ProgressDialog pDialog ;
+	
 	public SCActivity() {
 		// TODO Auto-generated constructor stub
 	}
@@ -31,6 +33,7 @@ public class SCActivity extends MusicPlayerMainActivity {
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
 	
+	    pDialog = new ProgressDialog(getActivity());
 	    // TODO Auto-generated method stub
 	}
 	@Override
@@ -54,26 +57,26 @@ public class SCActivity extends MusicPlayerMainActivity {
 				//new searchBackground().execute(query);
 				SCActivity.type = SCActivity.SOUNDCLOUD_SEARCH;
 				
-				SCPlaylistSearchController.getInstance().searchPlaylistSC(query, 0);
 				
-				//new searchBackground().execute(query);
+				
+				new searchBackground().execute(query);
 //				SongController.getInstance().searchSongSC(query, 0);
 //				SCUserController.getInstance().searchUserSC(query, 0);
-				Intent i = new Intent(getActivity(), SCActivity.class);
-				SCUserController soundCloudUserController = SCUserController.getInstance();
-				
-				Bundle bundle;
-				try {
-					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-					i.putExtra(USER, bundle);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				//i.putExtra(ME_FAVORITES,stringResponse);
-				SCActivity.getActivity().finish();
-				startActivity(i);
+//				Intent i = new Intent(getActivity(), SCActivity.class);
+//				SCUserController soundCloudUserController = SCUserController.getInstance();
+//				
+//				Bundle bundle;
+//				try {
+//					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+//					i.putExtra(USER, bundle);
+//				} catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				
+//				//i.putExtra(ME_FAVORITES,stringResponse);
+//				SCActivity.getActivity().finish();
+//				startActivity(i);
 				return false;
 			}
 			
@@ -89,7 +92,7 @@ public class SCActivity extends MusicPlayerMainActivity {
 	}
 	
 	private class searchBackground extends AsyncTask<String, String, String>{
-		ProgressDialog pDialog = new ProgressDialog(getActivity());
+		
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -97,8 +100,8 @@ public class SCActivity extends MusicPlayerMainActivity {
 			pDialog.setMessage("Searching......");
 			pDialog.setIndeterminate(false);
 			pDialog.setCancelable(false);
-			
-			//pDialog.show();
+			SCPlaylistSearchController.getInstance().searchPlaylistSC(query, 0);
+			pDialog.show();
 			
 			SongController.getInstance().clearSearch();
 			
@@ -110,7 +113,7 @@ public class SCActivity extends MusicPlayerMainActivity {
 //			SCActivity.type = SCActivity.SOUNDCLOUD_SEARCH;
 //			MusicPlayerMainActivity.query = params[0];
 			//SCPlaylistSearchController.getInstance().searchPlaylistSC(query, 0);
-			//SongController.getInstance().searchSongSC(query, 0);
+			SongController.getInstance().searchSongSC(query, 0);
 			//SCUserController.getInstance().searchUserSC(query, 0);
 			//SCPlaylistSearchController.getInstance().searchPlaylistSC(params[0], 1);
 			return null;
@@ -135,7 +138,7 @@ public class SCActivity extends MusicPlayerMainActivity {
 	}
 	
 	private class searchBackground2 extends AsyncTask<String, String, String>{
-		ProgressDialog pDialog = new ProgressDialog(getActivity());
+	//	ProgressDialog pDialog = new ProgressDialog(getActivity());
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
@@ -157,15 +160,17 @@ public class SCActivity extends MusicPlayerMainActivity {
 			SCActivity.type = SCActivity.SOUNDCLOUD_SEARCH;
 			MusicPlayerMainActivity.query = params[0];
 			//SongController.getInstance().searchSongSC(query, 0);
-//			try {
-//				SCUserController.getInstance().getSCUserSearch(query, 0);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			} catch (JSONException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			try {
+				SCUserController.getInstance().getSCUserSearch(query, 0);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
 //			//SCPlaylistSearchController.getInstance().searchPlaylistSC(params[0], 1);
 			return null;
 		}
@@ -176,7 +181,7 @@ public class SCActivity extends MusicPlayerMainActivity {
 			
 			Intent i = new Intent(getActivity(), SCActivity.class);
 			SCUserController soundCloudUserController = SCUserController.getInstance();
-			
+			pDialog.dismiss();
 			Bundle bundle;
 			try {
 				bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
@@ -187,6 +192,7 @@ public class SCActivity extends MusicPlayerMainActivity {
 			}
 			
 			//i.putExtra(ME_FAVORITES,stringResponse);
+			
 			SCActivity.getActivity().finish();
 			startActivity(i);
 			

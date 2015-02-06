@@ -202,50 +202,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		/**
 		 * Menu
 		 */
-		holder.menu.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
-						.getActivity(), holder.menu);
-				// Inflating the Popup using xml file
-				popup.getMenuInflater().inflate(
-						R.menu.composition_list_item_menu, popup.getMenu());
-				if (!canDelete) {
-					popup.getMenu().findItem(R.id.composition_list_item_delete)
-							.setVisible(false);
-				}
-				// registering popup with OnMenuItemClickListener
-				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-					@Override
-					public boolean onMenuItemClick(MenuItem arg0) {
-						String cat = (String) holder.items[0].getText();
-						// TODO Auto-generated method stub
-						switch (arg0.getItemId()) {
-						case R.id.composition_list_item_shows:
-
-							ListItemsInCompositionListFragment.createInstance(
-									getSongsFromCat(cat), cat, type).show(
-									MusicPlayerMainActivity.getActivity()
-											.getSupportFragmentManager(),
-									"Show songs in cate");
-							break;
-						case R.id.composition_list_item_delete:
-							CategoryController.getInstance(type)
-									.removeCategory(cat);
-						default:
-							break;
-						}
-
-						return false;
-					}
-				});
-
-				popup.show(); // showing popup menu
-			}
-		});
+		setMenuLayout(holder);
 		/**
 		 * Edit Text
 		 */
@@ -270,6 +227,13 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		/**
 		 * submit Button
 		 */
+		setSubmitButton(holder);
+	}
+
+	/**
+	 * @param holder
+	 */
+	private void setSubmitButton(final CompositionViewHolder holder) {
 		holder.submitBtn.setVisibility(View.INVISIBLE);
 		holder.submitBtn.setOnClickListener(new OnClickListener() {
 			
@@ -312,6 +276,56 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 				holder.clearBtn.setVisibility(View.VISIBLE);
 				holder.submitBtn.setVisibility(View.VISIBLE);
 				holder.editBtn.setVisibility(View.GONE);
+			}
+		});
+	}
+
+	/**
+	 * @param holder
+	 */
+	private void setMenuLayout(final CompositionViewHolder holder) {
+		holder.menu.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
+						.getActivity(), holder.menu);
+				// Inflating the Popup using xml file
+				popup.getMenuInflater().inflate(
+						R.menu.composition_list_item_menu, popup.getMenu());
+				if (!canDelete) {
+					popup.getMenu().findItem(R.id.composition_list_item_delete)
+							.setVisible(false);
+				}
+				// registering popup with OnMenuItemClickListener
+				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem arg0) {
+						String cat = (String) holder.items[0].getText();
+						// TODO Auto-generated method stub
+						switch (arg0.getItemId()) {
+						case R.id.composition_list_item_shows:
+
+							ListItemsInCompositionListFragment.createInstance(
+									getSongsFromCat(cat), cat, type).show(
+									MusicPlayerMainActivity.getActivity()
+											.getSupportFragmentManager(),
+									"Show songs in cate");
+							break;
+						case R.id.composition_list_item_delete:
+							CategoryController.getInstance(type)
+									.removeCategory(cat);
+						default:
+							break;
+						}
+
+						return false;
+					}
+				});
+
+				popup.show(); // showing popup menu
 			}
 		});
 	}

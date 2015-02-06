@@ -3,19 +3,26 @@
  */
 package ngo.music.soundcloudplayer.boundary;
 
+import java.io.IOException;
+
+import org.json.JSONException;
+
 import com.volley.api.AppController;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.SCLoginUI.Background;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.database.DatabaseTable;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -38,19 +45,23 @@ public class LoginActivity extends FragmentActivity implements
 	GoogleLoginUI googleLoginUI = null;
 	FacebookLoginUI facebookLoginUI = null;
 	GeneralLoginUI generalLoginUI = null;
-	public LoginActivity activity = this;
+	private static LoginActivity activity ;
 
+	public static Activity getActivity(){
+		return activity;
+	}
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		activity = this;
 		//AppController.printKeyHash(this);
 //		MusicPlayerService.getInstance();
 		DatabaseHandler databaseHandler = DatabaseHandler.getInstance(this);
 		if (BasicFunctions.isConnectingToInternet(activity)) {
 			if (databaseHandler.isUserLoggedIn()) {
-				String[] userInfo = databaseHandler.getUserInfo();
-				new Background(userInfo[0], userInfo[1]).execute();
+				String token = databaseHandler.getUserInfo();
+				new Background(token).execute();
 
 				return;
 			}
@@ -129,13 +140,14 @@ public class LoginActivity extends FragmentActivity implements
 		private static final String PASSWORD_LOGIN = "ngolebaoloc";
 
 		private ProgressDialog pDialog;
+		String token;
 		String username;
 		String password;
 		boolean isLogin = false;
 
-		public Background(String username, String password) {
-			this.username = username;
-			this.password = password;
+		public Background(String token) {
+			this.token = token;
+			
 		}
 
 		@Override
@@ -157,30 +169,53 @@ public class LoginActivity extends FragmentActivity implements
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					SCUserController userController = SCUserController
-							.getInstance();
-					username = USERNAME_LOGIN;
-					password = PASSWORD_LOGIN;
-					User currentUser = userController.validateLogin(username,password);
+//					SCUserController userController = SCUserController
+//							.getInstance();
+//					username = USERNAME_LOGIN;
+//					password = PASSWORD_LOGIN;
+//					User currentUser = userController.validateLogin(username,password);
 
 					// Cannot login
-					if (currentUser == null) {
-						pDialog.dismiss();
-						isLogin = false;
-					} else {
-						DatabaseHandler databaseHandler = DatabaseHandler
-								.getInstance(getApplicationContext());
-						databaseHandler.addLoginInfo(username, password);
-						Bundle bundle = userController.getBundle(currentUser);
-						Intent goToMainActivity = new Intent(
-								getApplicationContext(), MusicPlayerMainActivity.class);
-						goToMainActivity.putExtra(USER, bundle);
-						States.loginState = LOGGED_IN;
-						startActivity(goToMainActivity);
-						finish();
-					}
+//					if (currentUser == null) {
+//						pDialog.dismiss();
+//						isLogin = false;
+//					} else {
+//						DatabaseTable databaseHandler = DatabaseTable
+//								.getInstance(getApplicationContext());
+//						String token = databaseHandler.getToken();
+						if (token != null)
+							SCUserController.getInstance().setToken(new Token(token, "refresh-token"));
+							
+							try {
+								SCUserController.getInstance().login();
+								Bundle bundle = SCUserController.getInstance().getBundle(SCUserController.getInstance().getCurrentUser());
+								
+								Intent goToMainActivity = new Intent(
+										getApplicationContext(), MusicPlayerMainActivity.class);
+								goToMainActivity.putExtra(USER, bundle);
+								States.loginState = LOGGED_IN;
+								startActivity(goToMainActivity);
+								finish();
+							} catch (IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+								
+							}
+							
+							
+						}
+						
+//					}
 
-				}
+//				}
 			});
 
 			background.start();

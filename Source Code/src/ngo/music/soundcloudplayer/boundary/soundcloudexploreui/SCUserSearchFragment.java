@@ -42,12 +42,12 @@ public class SCUserSearchFragment extends Fragment {
 	SCUserController userController = SCUserController
 			.getInstance();
 	ArrayList<User> users = new ArrayList<User>();
-	int offset = 0;
+	//int offset = 0;
 	protected boolean loadingMore = false;
 	int currentPosition;
 	SCFollowAdapter adapter;
 	String query;
-	int current_page = 0;
+	int current_page = 1;
 	
 	public SCUserSearchFragment() {
 		// TODO Auto-generated constructor stub
@@ -61,23 +61,23 @@ public class SCUserSearchFragment extends Fragment {
 		rootView = inflater.inflate(R.layout.user_list_view, container, false);
 		listUsers = (ListView) rootView.findViewById(R.id.users_list);
 		
-		
-		try {
-			users = new loadSCUserSearchBackground().execute().get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		users = SCUserController.getInstance().getSCUserSearchs();
+//		try {
+//			users = new loadSCUserSearchBackground().execute().get();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (ExecutionException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		
 		if (users.size() == 0) {
 			/*
 			 * Display the notice
 			 */
 			TextView notification = new TextView(getActivity());
-			notification.setText("You are following no one");
+			notification.setText("No result");
 			notification.setLayoutParams(new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		} else {
@@ -118,16 +118,17 @@ public class SCUserSearchFragment extends Fragment {
 					// adapter.notifyDataSetChanged();
 					// is the bottom item visible & not loading more already ?
 					// Load more !
+					System.out.println ("LOADING MORE = " + lastInScreen + "   " + totalItemCount);
 					if (lastInScreen >= totalItemCount - 1 && !loadingMore) {
 						loadingMore = true;
 						currentPosition = listUsers.getFirstVisiblePosition();
 						// new loadMoreListView(songsList, adapter).execute();
 						// Setting new scroll position
-						//new loadSCUserSearchBackground().execute();
+						new loadSCUserSearchBackground().execute();
 
 						// adapter.notifyDataSetChanged();
 
-						// loadingMore = false;
+						 loadingMore = false;
 					}
 					// TODO Auto-generated method stub
 
@@ -202,7 +203,7 @@ public class SCUserSearchFragment extends Fragment {
 		@Override
 		protected void onPostExecute(ArrayList<User> result) {
 			// TODO Auto-generated method stub
-
+			
 			// Appending new data to menuItems ArrayList
 			adapter = new SCFollowAdapter(
 					MusicPlayerService.getInstance(), R.layout.user_list_view,
@@ -210,8 +211,8 @@ public class SCUserSearchFragment extends Fragment {
 
 			// Setting new scroll position
 			listUsers.setSelectionFromTop(currentPosition + 1, 0);
-			offset = offset + 50;
-			loadingMore = false;
+			
+			//loadingMore = false;
 		}
 
 	}

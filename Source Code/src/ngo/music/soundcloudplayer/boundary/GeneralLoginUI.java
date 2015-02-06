@@ -3,6 +3,8 @@ package ngo.music.soundcloudplayer.boundary;
 import java.io.IOException;
 import java.util.zip.Inflater;
 
+import org.json.JSONException;
+
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
@@ -76,7 +78,15 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (BasicFunctions.isConnectingToInternet(getActivity())){
-					UserControllerFactory.createUserController(Constants.GOOGLE_PLUS_USER).login();
+					try {
+						UserControllerFactory.createUserController(Constants.GOOGLE_PLUS_USER).login();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}else{
 					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
 					return;
@@ -88,23 +98,23 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 		/*
 		 * Login Sound Cloud
 		 */
-		Button loginSoundCloud = (Button) rootView.findViewById(R.id.login_soundcloud_button);
-		loginSoundCloud.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				if (BasicFunctions.isConnectingToInternet(getActivity())){
-					SCLoginUI soundCloudLoginUI =  new SCLoginUI();
-					((UserLoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
-				}else{
-					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
-					return;
-				}
-				
-				// TODO Auto-generated method stub
-
-			}
-		});
+//		Button loginSoundCloud = (Button) rootView.findViewById(R.id.login_soundcloud_button);
+//		loginSoundCloud.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				if (BasicFunctions.isConnectingToInternet(getActivity())){
+//					SCLoginUI soundCloudLoginUI =  new SCLoginUI();
+//					((UserLoginActivity)getActivity()).changeFragment(soundCloudLoginUI);
+//				}else{
+//					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+//					return;
+//				}
+//				
+//				// TODO Auto-generated method stub
+//
+//			}
+//		});
 		
 		/*
 		 * Login Facebook

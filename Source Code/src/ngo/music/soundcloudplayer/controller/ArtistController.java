@@ -10,10 +10,6 @@ import ngo.music.soundcloudplayer.general.Constants;
 public class ArtistController extends OfflinePlayListController{
 	static ArtistController instance = null;
 
-	
-
-	
-
 	@Override
 	public ArrayList<Category> getCategories() {
 		// TODO Auto-generated method stub
@@ -21,11 +17,6 @@ public class ArtistController extends OfflinePlayListController{
 		return cate;
 	}
 
-	@Override
-	public void storeCategories() throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	protected int setTagItemChange() {
@@ -39,12 +30,6 @@ public class ArtistController extends OfflinePlayListController{
 		return ARTIST_CHANGED;
 	}
 
-	@Override
-	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
-			throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	protected int setType() {
@@ -52,9 +37,5 @@ public class ArtistController extends OfflinePlayListController{
 		return ARTIST;
 	}
 
-	@Override
-	public void createCategory(String name) throws Exception {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }

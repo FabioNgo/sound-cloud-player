@@ -2,22 +2,8 @@ package ngo.music.soundcloudplayer.adapters;
 
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.AlternativeRockFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.AmbientFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.ClassicalFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.CountryFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.DanceFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.DeepHouseFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.DiscoFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.DrumBassFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.DubstepFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.ElectroFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.ElectronicFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.FolkFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.ScSearchFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.TrendingAudioFragment;
-import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.TrendingMusicFragment;
+import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.*;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -41,7 +27,7 @@ public class SCExploreTabAdater extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		return TITLES.length;
+		return TITLES.length-1;
 	}
 
 	@Override
@@ -77,8 +63,7 @@ public class SCExploreTabAdater extends FragmentPagerAdapter {
 			return new ElectronicFragment();
 		case 13:
 			return new FolkFragment();
-		case 14: 
-			return new ScSearchFragment();
+
 		default: 
 			return new TrendingMusicFragment();
 		}

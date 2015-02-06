@@ -84,6 +84,105 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 	private void configButton() {
 		
 		int constantLayoutHeight = MusicPlayerMainActivity.screenHeight/15;
+		configMySong(constantLayoutHeight);
+		configSCExplore(constantLayoutHeight);
+		
+		configLoginLogout(constantLayoutHeight);
+		
+		configMySC(constantLayoutHeight);
+
+	}
+
+	/**
+	 * @param constantLayoutHeight
+	 */
+	private void configMySC(int constantLayoutHeight) {
+		/*
+		 * My SoundCloud
+		 */
+		RelativeLayout mySoundCloudLayout = (RelativeLayout) rootView.findViewById(R.id.acc_soundcloud_field);
+		mySoundCloudLayout.getLayoutParams().height = constantLayoutHeight;
+		
+		mySoundCloudLayout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				MusicPlayerMainActivity.type = MusicPlayerMainActivity.MY_SOUNDCLOUD;
+				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
+				SCUserController soundCloudUserController = SCUserController.getInstance();
+				
+				Bundle bundle;
+				try {
+					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
+					i.putExtra(USER, bundle);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				//i.putExtra(ME_FAVORITES,stringResponse);
+				MusicPlayerMainActivity.getActivity().finish();
+				startActivity(i);
+			}
+		});
+	}
+
+	/**
+	 * @param constantLayoutHeight
+	 */
+	private void configLoginLogout(int constantLayoutHeight) {
+		/*
+		 * Login/Logut
+		 */
+		RelativeLayout logOut = (RelativeLayout) rootView.findViewById(R.id.log_out_field);
+		logOut.getLayoutParams().height =constantLayoutHeight;
+		SCUserController userController = SCUserController.getInstance();
+		
+		if (!userController.isLogin()){
+			((TextView) rootView.findViewById(R.id.logout_id)).setText("Log in");
+			
+		}
+		logOut.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				SCUserController soundCloudUserController = SCUserController.getInstance();
+				soundCloudUserController.logout();
+				DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
+				databaseHandler.refreshDatabase();
+				Intent loginAct = new Intent(getActivity(), UserLoginActivity.class);
+				startActivity(loginAct);
+			}
+		});
+	}
+
+	/**
+	 * @param constantLayoutHeight
+	 */
+	private void configSCExplore(int constantLayoutHeight) {
+		/*
+		 * Soundcloud explore
+		 */
+		RelativeLayout soundCloudExplore = (RelativeLayout) rootView.findViewById(R.id.soundcloud_explore_field);
+		soundCloudExplore.getLayoutParams().height =constantLayoutHeight;
+		soundCloudExplore.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				new loadSongBackground().execute();
+
+			}
+		});
+	}
+
+	/**
+	 * @param constantLayoutHeight
+	 */
+	private void configMySong(int constantLayoutHeight) {
 		/*
 		 * My Music
 		 */
@@ -121,77 +220,6 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				
 			}
 		});
-		/*
-		 * Soundcloud explore
-		 */
-		RelativeLayout soundCloudExplore = (RelativeLayout) rootView.findViewById(R.id.soundcloud_explore_field);
-		soundCloudExplore.getLayoutParams().height =constantLayoutHeight;
-		soundCloudExplore.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				new loadSongBackground().execute();
-
-			}
-		});
-		
-		/*
-		 * Login/Logut
-		 */
-		RelativeLayout logOut = (RelativeLayout) rootView.findViewById(R.id.log_out_field);
-		logOut.getLayoutParams().height =constantLayoutHeight;
-		SCUserController userController = SCUserController.getInstance();
-		
-		if (!userController.isLogin()){
-			((TextView) rootView.findViewById(R.id.logout_id)).setText("Log in");
-			
-		}
-		logOut.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				SCUserController soundCloudUserController = SCUserController.getInstance();
-				soundCloudUserController.logout();
-				DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
-				databaseHandler.refreshDatabase();
-				Intent loginAct = new Intent(getActivity(), UserLoginActivity.class);
-				startActivity(loginAct);
-			}
-		});
-		
-		/*
-		 * My SoundCloud
-		 */
-		RelativeLayout mySoundCloudLayout = (RelativeLayout) rootView.findViewById(R.id.acc_soundcloud_field);
-		mySoundCloudLayout.getLayoutParams().height = constantLayoutHeight;
-		
-		mySoundCloudLayout.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MusicPlayerMainActivity.type = MusicPlayerMainActivity.MY_SOUNDCLOUD;
-				Intent i = new Intent(getActivity(), MusicPlayerMainActivity.class);
-				SCUserController soundCloudUserController = SCUserController.getInstance();
-				
-				Bundle bundle;
-				try {
-					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-					i.putExtra(USER, bundle);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				//i.putExtra(ME_FAVORITES,stringResponse);
-				MusicPlayerMainActivity.getActivity().finish();
-				startActivity(i);
-			}
-		});
-
 	}
 
 	/**
@@ -276,15 +304,15 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			SongController songController = SongController.getInstance();
 			songController.initialSongCategory();
 			
-			SCUserController soundCloudUserController = SCUserController.getInstance();
-			ApiWrapper wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, soundCloudUserController.getToken());
-			try {
-				HttpResponse resp = wrapper.get(Request.to(ME_FAVORITES));
-				stringResponse = Http.getString(resp);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			SCUserController soundCloudUserController = SCUserController.getInstance();
+//			ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
+//			try {
+//				HttpResponse resp = wrapper.get(Request.to(ME_FAVORITES));
+//				stringResponse = Http.getString(resp);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
 			
 			return null;
 		}
@@ -295,7 +323,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			SCActivity.type = SCActivity.SOUNDCLOUD_EXPLORE;
 			Intent i = new Intent(getActivity(), SCActivity.class);
 			SCUserController soundCloudUserController = SCUserController.getInstance();
-			soundCloudUserController.setResponseString(stringResponse);
+	//		soundCloudUserController.setResponseString(stringResponse);
 			Bundle bundle;
 			try {
 				bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
