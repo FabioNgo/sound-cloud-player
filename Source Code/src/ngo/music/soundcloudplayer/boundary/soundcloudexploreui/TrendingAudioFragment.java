@@ -14,11 +14,7 @@ public class TrendingAudioFragment extends SoundCloudExploreFragment {
 	
 	private static TrendingAudioFragment instance = null; 
 
-	public TrendingAudioFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.TRENDING_AUDIO;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class TrendingAudioFragment extends SoundCloudExploreFragment {
 			instance = new TrendingAudioFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return TRENDING_AUDIO;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

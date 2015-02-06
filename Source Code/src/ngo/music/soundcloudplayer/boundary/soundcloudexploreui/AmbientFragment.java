@@ -14,11 +14,7 @@ public class AmbientFragment extends SoundCloudExploreFragment {
 	
 	private static AmbientFragment instance = null; 
 
-	public AmbientFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.AMBIENT;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class AmbientFragment extends SoundCloudExploreFragment {
 			instance = new AmbientFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return AMBIENT;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

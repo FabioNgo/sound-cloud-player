@@ -664,7 +664,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		
 				
 		song = new OnlineSong(me.getString(ID), me.getString(TITLE),
-				soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
+				soundCloudAccount.getFullName(), "soundcloud.com","" );
 
 		// song.setCommentable(me.getBoolean(COMMENTABLE));
 		// song.setCommentCount(me.getInt(COMMENT_COUNT));

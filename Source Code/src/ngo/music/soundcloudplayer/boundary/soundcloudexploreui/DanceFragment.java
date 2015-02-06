@@ -14,11 +14,7 @@ public class DanceFragment extends SoundCloudExploreFragment {
 	
 	private static DanceFragment instance = null; 
 
-	public DanceFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.DANCE;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class DanceFragment extends SoundCloudExploreFragment {
 			instance = new DanceFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return DANCE;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

@@ -14,11 +14,7 @@ public class CountryFragment extends SoundCloudExploreFragment {
 	
 	private static CountryFragment instance = null; 
 
-	public CountryFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.COUNTRY;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class CountryFragment extends SoundCloudExploreFragment {
 			instance = new CountryFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return COUNTRY;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

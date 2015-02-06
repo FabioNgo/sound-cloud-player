@@ -14,11 +14,7 @@ public class DiscoFragment extends SoundCloudExploreFragment {
 	
 	private static DiscoFragment instance = null; 
 
-	public DiscoFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.DISCO;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class DiscoFragment extends SoundCloudExploreFragment {
 			instance = new DiscoFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return DEEP_HOUSE;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

@@ -14,11 +14,6 @@ public class FolkFragment extends SoundCloudExploreFragment {
 	
 	private static FolkFragment instance = null; 
 
-	public FolkFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.FOLK;
-		current_page = 1;
-	}
 	
 	
 	
@@ -28,6 +23,24 @@ public class FolkFragment extends SoundCloudExploreFragment {
 			instance = new FolkFragment();
 		}
 		return instance;
+	}
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return FOLK;
+	}
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

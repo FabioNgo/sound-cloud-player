@@ -14,11 +14,7 @@ public class AlternativeRockFragment extends SoundCloudExploreFragment {
 	
 	private static AlternativeRockFragment instance = null; 
 
-	public AlternativeRockFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.ALTERNATIVE_ROCK;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class AlternativeRockFragment extends SoundCloudExploreFragment {
 			instance = new AlternativeRockFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return ALTERNATIVE_ROCK;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

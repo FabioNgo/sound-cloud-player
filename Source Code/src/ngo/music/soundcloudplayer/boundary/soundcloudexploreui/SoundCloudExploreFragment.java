@@ -25,6 +25,7 @@ import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.drm.DrmStore.ConstraintsColumns;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,7 +44,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public class SoundCloudExploreFragment extends Fragment  implements Constants{
+public abstract class SoundCloudExploreFragment extends Fragment  implements Constants, Constants.SoundCloudExploreConstant{
 	//public static SoundCloudExploreFragment instance = null;
 	
 	 // Flag for current page
@@ -67,7 +68,10 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 
 	protected ApiWrapper wrapper;
 	
-	
+	public SoundCloudExploreFragment(){
+		category  = setCategory();
+		current_page = setCurrentPage();
+	}
 //	public static SoundCloudExploreFragment getInstance() {
 //		// TODO Auto-generated method stub
 //		if(instance == null) {
@@ -75,7 +79,8 @@ public class SoundCloudExploreFragment extends Fragment  implements Constants{
 //		}
 //		return instance;
 //	}
-	
+	protected abstract int setCategory();
+	protected abstract int setCurrentPage();
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// TODO Auto-generated method stub

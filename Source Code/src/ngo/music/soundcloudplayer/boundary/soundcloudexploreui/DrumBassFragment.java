@@ -14,11 +14,7 @@ public class DrumBassFragment extends SoundCloudExploreFragment {
 	
 	private static DrumBassFragment instance = null; 
 
-	public DrumBassFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.DRUM_BASS;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class DrumBassFragment extends SoundCloudExploreFragment {
 			instance = new DrumBassFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return DRUM_BASS;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

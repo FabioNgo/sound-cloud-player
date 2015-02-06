@@ -14,12 +14,6 @@ public class ElectroFragment extends SoundCloudExploreFragment {
 	
 	private static ElectroFragment instance = null; 
 
-	public ElectroFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.ELECTRO;
-		current_page = 1;
-	}
-	
 	
 	
 	public static ElectroFragment getInstance() {
@@ -28,6 +22,22 @@ public class ElectroFragment extends SoundCloudExploreFragment {
 			instance = new ElectroFragment();
 		}
 		return instance;
+	}
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return ELECTRO;
+	}
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

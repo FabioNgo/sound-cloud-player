@@ -14,11 +14,7 @@ public class DeepHouseFragment extends SoundCloudExploreFragment {
 	
 	private static DeepHouseFragment instance = null; 
 
-	public DeepHouseFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.DEEP_HOUSE;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class DeepHouseFragment extends SoundCloudExploreFragment {
 			instance = new DeepHouseFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return DEEP_HOUSE;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

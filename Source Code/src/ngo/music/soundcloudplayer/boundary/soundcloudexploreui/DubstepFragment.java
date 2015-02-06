@@ -14,11 +14,7 @@ public class DubstepFragment extends SoundCloudExploreFragment {
 	
 	private static DubstepFragment instance = null; 
 
-	public DubstepFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.DUBSTEP;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class DubstepFragment extends SoundCloudExploreFragment {
 			instance = new DubstepFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return DUBSTEP;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

@@ -443,5 +443,6 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 			mShareActionProvider.setShareIntent(shareIntent);
 		}
 	}
+	
 
 }

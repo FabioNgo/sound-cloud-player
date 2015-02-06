@@ -14,11 +14,7 @@ public class ClassicalFragment extends SoundCloudExploreFragment {
 	
 	private static ClassicalFragment instance = null; 
 
-	public ClassicalFragment(){
-		super();
-		category  = Constants.SoundCloudExploreConstant.CLASSICAL;
-		current_page = 1;
-	}
+	
 	
 	
 	
@@ -28,6 +24,26 @@ public class ClassicalFragment extends SoundCloudExploreFragment {
 			instance = new ClassicalFragment();
 		}
 		return instance;
+	}
+
+
+
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return CLASSICAL;
+	}
+
+
+
+
+
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }

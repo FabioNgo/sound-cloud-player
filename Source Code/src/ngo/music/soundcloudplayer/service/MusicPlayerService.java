@@ -59,7 +59,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	private int loopState = 0;
-	private int explorecategory = -1;
+	public int explorecategory = -1;
 	private boolean isShuffle = true;
 	private ArrayList<Song> songQueue = new ArrayList<Song>();
 	private Stack<String> stackSongplayed;
@@ -108,7 +108,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		super.onStartCommand(intent, flags, startId);
 		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
-		
+
 		return START_STICKY;
 	}
 
@@ -132,16 +132,17 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 
 	}
+
 	/**
-	 * Get next song 
+	 * Get next song
 	 * 
 	 * @return
 	 */
 	public Song getNextSong() {
 
-		if(nextSongId.equals("")|| loopState == MODE_LOOP_ONE){
+		if (nextSongId.equals("") || loopState == MODE_LOOP_ONE) {
 			return getCurrentSong();
-		}else{
+		} else {
 			return SongController.getInstance().getSong(nextSongId);
 		}
 
@@ -158,6 +159,20 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 		}
 		songQueue.add(song);
+		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
+	}
+
+	public void addSongsToQueue(ArrayList<Song> songs) {
+		for (Song iSong : songs) {
+
+			for (Song mSong : songQueue) {
+				if (mSong.getId().equals(iSong.getId())) {
+					return;
+				}
+			}
+			songQueue.add(iSong);
+		}
+		
 		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 	}
 
@@ -248,7 +263,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	private void playMedia() {
 		// TODO Auto-generated method stub
-		
+
 		mediaPlayer.start();
 		States.musicPlayerState = MUSIC_PLAYING;
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_PLAYING);
@@ -275,7 +290,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
 
-		System.out.println ("SONG IN POS " + currentSongPosition + "  FINISHED");
+		System.out.println("SONG IN POS " + currentSongPosition + "  FINISHED");
 
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
@@ -374,8 +389,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNewSong(int position, ArrayList<Song> queue) {
 		// incase of the queue in put is songQueue itself
-		
-		System.out.println ("PLAY NEW SONG");
+
+		System.out.println("PLAY NEW SONG");
 		if (!this.songQueue.equals(queue)) {
 			this.songQueue.clear();
 			songQueue.addAll(queue);
@@ -388,7 +403,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void playNewExploreSong(int position, int category,
 			ArrayList<Song> listSongs) {
-		System.out.println (category);
+		System.out.println(category);
 		explorecategory = category;
 		playNewSong(position, listSongs);
 
@@ -397,9 +412,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void updateQueue(int category) {
 
 		if (category == explorecategory) {
-			this.songQueue.clear();
-			songQueue.addAll(SongController.getInstance().getOnlineSongs(
-					explorecategory));
+			ArrayList<Song> onlineSongs = SongController.getInstance()
+					.getOnlineSongs(explorecategory);
+			addSongsToQueue(onlineSongs);
 
 		}
 	}
@@ -412,11 +427,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            press start
 	 */
 	private void playNewSong(boolean startNow) {
-		
-		System.out.println ("PLAY NEW SONG 2");
+
+		System.out.println("PLAY NEW SONG 2");
 		Song song = getCurrentSong();
-		if(song == null){
-			BasicFunctions.makeToastTake("No song to play", getApplicationContext());
+		if (song == null) {
+			BasicFunctions.makeToastTake("No song to play",
+					getApplicationContext());
 			return;
 		}
 		if (startNow) {
@@ -426,7 +442,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
-			
+
 			if (song instanceof OnlineSong) {
 				Stream stream = ((OnlineSong) song).getStream();
 				if (stream != null) {
@@ -443,7 +459,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 
 		}
-		System.out.println ("END PLAY NEW SONG 2");
+		System.out.println("END PLAY NEW SONG 2");
 		updateNotification();
 
 	}
@@ -507,7 +523,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            : the id of icon
 	 */
 	private void updateNotification() {
-		System.out.println ("NOTIFICATION");
+		System.out.println("NOTIFICATION");
 		String title = "";
 		String subTitle = "";
 		Song song = getCurrentSong();
@@ -603,8 +619,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		notification.bigContentView = bigView;
 		notificationManager.notify(NOTIFICATION_ID, notification);
 		startForeground(NOTIFICATION_ID, notification);
-		
-		System.out.println ("END NOTIFICATION");
+
+		System.out.println("END NOTIFICATION");
 	}
 
 	private PendingIntent createPendingIntent(String action) {
@@ -819,7 +835,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setDataSource(link);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.prepare();
-			
+
 			playMedia();
 			if (song instanceof OfflineSong) {
 				SongController.getInstance().storePlayingSong();
@@ -827,10 +843,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		} catch (Exception e) {
 			Log.e("playsong", e.toString());
-			//stopSelf();
+			// stopSelf();
 			iniMediaPlayer();
 			playNextSong();
-			
 
 		}
 	}
@@ -880,11 +895,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			if (isShuffle) {
 				// TODO Auto-generated method stub
 				Random random = new Random(System.currentTimeMillis());
-				
+
 				size = songQueue.size();
 
 				nextPosition = currentSongPosition
-						+ (Math.abs(random.nextInt()) % (size - 2))+1;
+						+ (Math.abs(random.nextInt()) % (size - 2)) + 1;
 				nextPosition = nextPosition % size;
 
 			} else {
@@ -923,7 +938,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 					computeNextSong();
 				}
 				songQueue.remove(i);
-				if(i<currentSongPosition){
+				if (i < currentSongPosition) {
 					currentSongPosition--;
 				}
 				break;

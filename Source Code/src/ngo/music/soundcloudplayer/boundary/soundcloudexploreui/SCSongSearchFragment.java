@@ -22,8 +22,7 @@ public class SCSongSearchFragment extends SoundCloudExploreFragment {
 		super();
 		query = MusicPlayerMainActivity.query;
 		
-		category  = Constants.SoundCloudExploreConstant.SEARCH;
-		current_page = 01;
+		
 	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,6 +68,18 @@ public class SCSongSearchFragment extends SoundCloudExploreFragment {
              MusicPlayerService.getInstance().updateQueue(category);
              loadingMore = false;
 		}
+	}
+
+
+	@Override
+	protected int setCategory() {
+		// TODO Auto-generated method stub
+		return SEARCH;
+	}
+	@Override
+	protected int setCurrentPage() {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 
 }
