@@ -1,6 +1,5 @@
 package ngo.music.soundcloudplayer.boundary.soundcloudexploreui;
 
-
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -44,179 +43,196 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 
-public abstract class SoundCloudExploreFragment extends Fragment  implements Constants, Constants.SoundCloudExploreConstant{
-	//public static SoundCloudExploreFragment instance = null;
-	
-	 // Flag for current page
-    protected int current_page;
-    /**
-     * false : not loading
-     */
-    protected boolean loadingMore = false;
-    protected ListSongAdapter adapter;
-    protected ListView songsList;
-    
-    /*
-     * Category in Explore
-     */
-    protected int category;
-    
-//	private SoundCloudExploreFragment() {
-//		
-//	}
+public abstract class SoundCloudExploreFragment extends Fragment implements
+		Constants, Constants.SoundCloudExploreConstant {
+	// public static SoundCloudExploreFragment instance = null;
+
+	// Flag for current page
+	protected int current_page;
+	/**
+	 * false : not loading
+	 */
+	protected boolean loadingMore = false;
+	protected ListSongAdapter adapter;
+	protected ListView songsList;
+
+	/*
+	 * Category in Explore
+	 */
+	protected int category;
+
+	// private SoundCloudExploreFragment() {
+	//
+	// }
 	protected View rootView = null;
 
 	protected ApiWrapper wrapper;
-	
-	public SoundCloudExploreFragment(){
-		category  = setCategory();
+
+	public SoundCloudExploreFragment() {
+		category = setCategory();
 		current_page = setCurrentPage();
 	}
-//	public static SoundCloudExploreFragment getInstance() {
-//		// TODO Auto-generated method stub
-//		if(instance == null) {
-//			instance = new SoundCloudExploreFragment();
-//		}
-//		return instance;
-//	}
+
+	// public static SoundCloudExploreFragment getInstance() {
+	// // TODO Auto-generated method stub
+	// if(instance == null) {
+	// instance = new SoundCloudExploreFragment();
+	// }
+	// return instance;
+	// }
 	protected abstract int setCategory();
+
 	protected abstract int setCurrentPage();
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// TODO Auto-generated method stub
-		 //inflater = getActivity().getMenuInflater();
-		 //inflater.inflate(R.menu.options_menu, menu);
-		 
-		 //Associate searchable configuration with the SearchView
-		 SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-		 SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
-		 searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-		 
-		 
-		    
+		// inflater = getActivity().getMenuInflater();
+		// inflater.inflate(R.menu.options_menu, menu);
+
+		// Associate searchable configuration with the SearchView
+		SearchManager searchManager = (SearchManager) getActivity()
+				.getSystemService(Context.SEARCH_SERVICE);
+		SearchView searchView = (SearchView) menu.findItem(R.id.search)
+				.getActionView();
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getActivity().getComponentName()));
+
 	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		
-		rootView = inflater.inflate(R.layout.list_view, container,false);
+
+		rootView = inflater.inflate(R.layout.list_view, container, false);
 		songsList = (ListView) rootView.findViewById(R.id.items_list);
-		SCUserController soundCloudUserController = SCUserController.getInstance();
+		SCUserController soundCloudUserController = SCUserController
+				.getInstance();
 		Token t = soundCloudUserController.getToken();
 		wrapper = new ApiWrapper(CLIENT_ID, CLIENT_SECRET, null, t);
-		//responseString = getArguments().getString(ME_FAVORITES) ;
-				
-		
+		// responseString = getArguments().getString(ME_FAVORITES) ;
+
 		try {
 			ArrayList<Song> songs;
 			SongController songController = SongController.getInstance();
-			
-			 songs = songController.getOnlineSongs(category); 
-			//ArrayList<Song> songs = //new BackgroundLoadOnlineMusic().execute().get();
-			//System.out.println (songs.size() + "......" + category);
-			adapter = new SCExploreAdapter(MusicPlayerMainActivity.getActivity().getApplicationContext(),R.layout.list_view, songs,wrapper);
+
+			songs = songController.getOnlineSongs(category);
+			// ArrayList<Song> songs = //new
+			// BackgroundLoadOnlineMusic().execute().get();
+			// System.out.println (songs.size() + "......" + category);
+			adapter = new SCExploreAdapter(MusicPlayerMainActivity
+					.getActivity().getApplicationContext(), R.layout.list_view,
+					songs, wrapper);
 			adapter.notifyDataSetChanged();
 			songsList.setAdapter(adapter);
-			
+
 			songsList.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int position, long id) {
-					ArrayList<Song> listSong =  adapter.getSongs();
-					
-					MusicPlayerService.getInstance().playNewExploreSong(position,category, listSong);
+					ArrayList<Song> listSong = adapter.getSongs();
+
+					MusicPlayerService.getInstance().playNewExploreSong(
+							position, category, listSong);
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
-			
-			
-			 
+
 			songsList.setOnScrollListener(new OnScrollListener() {
-				
+
 				@Override
-				public void onScrollStateChanged(AbsListView view, int scrollState) {
+				public void onScrollStateChanged(AbsListView view,
+						int scrollState) {
 					// TODO Auto-generated method stub
-					
+
 				}
-//				
+
+				//
 				@Override
 				public void onScroll(AbsListView view, int firstVisibleItem,
 						int visibleItemCount, int totalItemCount) {
-					
-					//what is the bottom iten that is visible
+
+					// what is the bottom iten that is visible
 					int lastInScreen = firstVisibleItem + visibleItemCount;
-					//adapter.notifyDataSetChanged();
-					//is the bottom item visible & not loading more already ? Load more !
-					if(lastInScreen >= totalItemCount-1 && !loadingMore){
+					// adapter.notifyDataSetChanged();
+					// is the bottom item visible & not loading more already ?
+					// Load more !
+					if (lastInScreen >= totalItemCount - 1 && !loadingMore) {
 						loadingMore = true;
 
-						new loadMoreBackground().execute();
+						new loadMoreBackground().execute(Integer.valueOf(category));
 						adapter.notifyDataSetChanged();
 
 					}
-					
+
 					// TODO Auto-generated method stub
-					
+
 				}
 			});
-		
-			
-			
-			
-			
+
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
 			// TODO: handle exception
 		}
-		  /*
-         * Move to next page
-         */
-        
+		/*
+		 * Move to next page
+		 */
+
 		return rootView;
 	}
-	
+
 	@Override
 	public void onResume() {
 		// TODO Auto-generated method stub
-	
+
 		super.onResume();
 		adapter.notifyDataSetChanged();
 	}
-	
 
-	private class loadMoreBackground extends AsyncTask<String, String, String>{
-		
+	private class loadMoreBackground extends AsyncTask<Integer, String, String> {
+
 		SongController songController = SongController.getInstance();
-		
+		private int mCategory;
+
 		@Override
-		protected String doInBackground(String... params) {
+		protected String doInBackground(Integer... params) {
 			// TODO Auto-generated method stub
-				songController = SongController.getInstance();
-	           songController.loadMoreSong(current_page,category);
-	           current_page++;
-	           return null;
+			mCategory = params[0].intValue();
+			songController = SongController.getInstance();
+			songController.loadMoreSong(current_page, category);
+			current_page++;
+			return null;
 		}
-		
-		
+
 		@Override
 		protected void onPostExecute(String result) {
-		// TODO Auto-generated method stub
-			 int currentPosition = songsList.getFirstVisiblePosition();
-			 
-             // Appending new data to menuItems ArrayList
-             adapter = new SCExploreAdapter(SCActivity.getActivity(),R.layout.list_view, songController.getOnlineSongs(category), wrapper);
+			// TODO Auto-generated method stub
+			
+			// Appending new data to menuItems ArrayList
+			SCActivity.getActivity().runOnUiThread(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					int currentPosition = songsList.getFirstVisiblePosition();
 
-             // Setting new scroll position
-             songsList.setSelectionFromTop(currentPosition + 1, 0);
-             MusicPlayerService.getInstance().updateQueue(category);
-             loadingMore = false;
+					adapter.update(mCategory);	
+					songsList.setSelectionFromTop(currentPosition + 1, 0);
+					MusicPlayerService.getInstance().updateQueue(mCategory);
+					loadingMore = false;
+				}
+			});
+//			adapter = new SCExploreAdapter(SCActivity.getActivity(),
+//					R.layout.list_view,
+//					songController.getOnlineSongs(mCategory), wrapper);
+
+			// Setting new scroll position
+			
+			
 		}
 	}
 
-
-
-	
 }

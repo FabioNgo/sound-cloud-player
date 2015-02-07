@@ -7,7 +7,7 @@ import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 
-public class ArtistController extends OfflinePlayListController{
+public class ArtistController extends ReadOnlyOfflineCategoryController{
 	static ArtistController instance = null;
 
 	@Override
@@ -36,6 +36,7 @@ public class ArtistController extends OfflinePlayListController{
 		// TODO Auto-generated method stub
 		return ARTIST;
 	}
+
 
 	
 }

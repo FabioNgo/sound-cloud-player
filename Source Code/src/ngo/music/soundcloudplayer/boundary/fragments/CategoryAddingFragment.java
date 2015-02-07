@@ -101,7 +101,7 @@ public abstract class CategoryAddingFragment extends DialogFragment implements C
 							
 							try {
 								
-								CategoryController.getInstance(type).createCategory(editText.getText().toString());
+								CategoryController.getInstance(type).newCategory(editText.getText().toString());
 								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
 								newPlaylistGroup.setVisibility(View.GONE);
 							} catch (Exception e) {

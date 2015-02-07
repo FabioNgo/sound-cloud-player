@@ -443,6 +443,12 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 			mShareActionProvider.setShareIntent(shareIntent);
 		}
 	}
+
+	public void update(int mCategory) {
+		// TODO Auto-generated method stub
+		songs = SongController.getInstance().getOnlineSongs(mCategory);
+		notifyDataSetChanged();
+	}
 	
 
 }

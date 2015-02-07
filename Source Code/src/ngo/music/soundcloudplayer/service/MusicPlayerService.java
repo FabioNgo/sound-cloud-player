@@ -71,6 +71,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private int seekBackwardTime = 5 * 1000;
 	private static MusicPlayerService instance;
 	private String nextSongId = ""; // assign specific song played next
+	int percent = -1;
 
 	public static MusicPlayerService getInstance() {
 		if (instance == null) {
@@ -322,7 +323,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		// TODO Auto-generated method stub
-
+		this.percent = percent;
+		BasicFunctions.makeToastTake(""+percent, MusicPlayerService.getInstance());
+		if(mp.getDuration()*percent/100<mp.getCurrentPosition()+5000){
+			pause();
+		}else{
+			playMedia();
+		}
 	}
 
 	@Override
@@ -962,5 +969,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		computeNextSong();
 		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 
+	}
+	public int getPercent(){
+		return percent;
 	}
 }

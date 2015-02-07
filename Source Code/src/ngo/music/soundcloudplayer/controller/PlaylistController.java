@@ -17,7 +17,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class PlaylistController extends OfflinePlayListController {
+public class PlaylistController extends OfflineCategoryController {
 
 	static PlaylistController instance = null;
 	String filename ="";
@@ -85,43 +85,20 @@ public class PlaylistController extends OfflinePlayListController {
 		// TODO Auto-generated method stub
 		return PLAYLIST_CHANGED;
 	}
-	public void addSongsToCategory(String categoryName, ArrayList<Song> songs)
-			throws Exception {
-		
-		for (Category cate : categories) {
-			if(cate.getTitle().equals(categoryName)){
-				cate.addSongs(songs);
-				BasicFunctions.makeToastTake("Songs were added successfully",
-						MusicPlayerMainActivity.getActivity());
-				storeCategories();
-				UIController.getInstance().updateUiWhenDataChanged(TAG_ITEM_CHANGED);
-				return;
-			}
-		}
-		throw new Exception("Playlist does not exsist");
-		
-	}
+	
 	@Override
 	protected int setType() {
 		// TODO Auto-generated method stub
 		return PLAYLIST;
 	}
-
 	@Override
-	public void createCategory(String name) throws Exception {
+	public Category createCategory(String name) {
 		// TODO Auto-generated method stub
-		for (Category category : categories) {
-			if (category.getTitle().equals(name)) {
-				throw new Exception("A playlist with the same name is existed");
-			}
-		}
-
-		if (name.equals("")) {
-			throw new Exception("A playlist cannot be created without a name");
-		}
-		categories.add(new Category(name, new ArrayList<Song>()));
-		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+		return new Category(name, new ArrayList<Song>());
+		
 	}
+
+	
 	
 
 

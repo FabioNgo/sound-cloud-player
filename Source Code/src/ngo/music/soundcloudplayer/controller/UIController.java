@@ -456,7 +456,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 
 			break;
 		case SC_PLAYLIST_CHANGED:
-			
+			CategoryTitlesListAdapter.getInstance(SC_PLAYLIST).updateCategory();
 			CompositionListContentFragment.getInstance(SC_PLAYLIST).update();
 			break;
 		case ITEM_IN_SC_PLAYLIST_CHANGED:

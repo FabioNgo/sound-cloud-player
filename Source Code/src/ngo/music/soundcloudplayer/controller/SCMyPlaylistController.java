@@ -174,11 +174,6 @@ public class SCMyPlaylistController extends SCPlaylistController implements
 		// return categories;
 	}
 
-	@Override
-	public void storeCategories() throws IOException {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	protected int setTagItemChange() {
@@ -201,6 +196,8 @@ public class SCMyPlaylistController extends SCPlaylistController implements
 		// TODO Auto-generated method stub
 		return SC_PLAYLIST;
 	}
+
+	
 
 
 }
