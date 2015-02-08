@@ -57,17 +57,19 @@ public abstract class PlayerUI extends Fragment {
 	 * @param song
 	 */
 	public void updateSongInfo(Song song) {
-		System.out.println ("TITLE SONG : " + song.getTitle());
-		System.out.println ("BEGIN UPDATE SONG");
-		updateOtherInfo(song);
-		System.out.println ("AFTER OTHER INFO");
-		updateTitle(song);
-		System.out.println ("AFTER TITLE");
-		updateSubtitle(song);
-		System.out.println ("AFTER SUB TITLE");
-		
-		updateImage(song);
-		System.out.println ("END UPDATE SONG");
+		if (song != null) {
+//			System.out.println("TITLE SONG : " + song.getTitle());
+//			System.out.println("BEGIN UPDATE SONG");
+			updateOtherInfo(song);
+//			System.out.println("AFTER OTHER INFO");
+			updateTitle(song);
+//			System.out.println("AFTER TITLE");
+			updateSubtitle(song);
+//			System.out.println("AFTER SUB TITLE");
+
+			updateImage(song);
+//			System.out.println("END UPDATE SONG");
+		}
 	}
 
 	protected abstract void updateOtherInfo(Song song);
@@ -93,8 +95,9 @@ public abstract class PlayerUI extends Fragment {
 	protected void iniMusicProgressBar() {
 		musicProgressBar = (ProgressWheel) rootView
 				.findViewById(musicProgressBar_id);
-		
-		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+
+		musicProgressBar
+				.setBackgroundResource(R.drawable.ic_media_play_progress);
 		musicProgressBar.setOnClickListener(new OnClickListener() {
 
 			@Override
