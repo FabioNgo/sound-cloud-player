@@ -60,6 +60,16 @@ public class UserLoginActivity extends FragmentActivity implements
 
 				return;
 			}
+		}else{
+			
+			System.out.println ("NO INTERNET");
+			//Bundle bundle = userController.getBundle(currentUser);
+			Intent goToMainActivity = new Intent(
+					getApplicationContext(), MusicPlayerMainActivity.class);
+			//goToMainActivity.putExtra(USER, bundle);
+			
+			startActivity(goToMainActivity);
+			finish();
 		}
 		
 		/**

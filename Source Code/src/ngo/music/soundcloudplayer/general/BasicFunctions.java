@@ -1,5 +1,8 @@
 package ngo.music.soundcloudplayer.general;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import android.content.Context;
 import android.content.res.Resources;
@@ -158,19 +161,35 @@ public class BasicFunctions {
 	// CHECK IF IS CONNECTION TO INTERNET OR NOT
 	public static boolean isConnectingToInternet(Context context) {
 
-		ConnectivityManager connectivity = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
-		if (connectivity != null) {
-			NetworkInfo[] info = connectivity.getAllNetworkInfo();
-			if (info != null) {
-				for (NetworkInfo element : info) {
-					if (element.getState() == NetworkInfo.State.CONNECTED) {
-						return true;
-					}
+		try{
+			try{
+				URL url = new URL ("http://google.com");
+				System.out.println(url.getHost());
+				HttpURLConnection con  = (HttpURLConnection) url.openConnection();
+				con.connect();
+				if (con.getResponseCode() == 200){
+					return true;
 				}
+				
+			}catch(Exception e){
+				return false;
 			}
-
+		}catch (Exception e){
+			return false;
 		}
+//		ConnectivityManager connectivity = (ConnectivityManager) context
+//				.getSystemService(Context.CONNECTIVITY_SERVICE);
+//		if (connectivity != null) {
+//			NetworkInfo[] info = connectivity.getAllNetworkInfo();
+//			if (info != null) {
+//				for (NetworkInfo element : info) {
+//					if (element.getState() == NetworkInfo.State.CONNECTED) {
+//						return true;
+//					}
+//				}
+//			}
+//
+//		}
 		return false;
 	}
 

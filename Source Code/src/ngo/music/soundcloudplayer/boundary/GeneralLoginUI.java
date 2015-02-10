@@ -89,6 +89,7 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 					}
 				}else{
 					Toast.makeText(getActivity(), "No internet connection", Toast.LENGTH_LONG).show();
+					
 					return;
 				}
 				
@@ -240,13 +241,6 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 	    }
 	  
 	  
-	  private void handleLoginFacebook(){
-		  sessionStatusCallback = new Session.StatusCallback() {
-	          @Override
-	          public void call(Session session, SessionState state, Exception exception) {
-	              onSessionStateChange(session, state, exception);
-	          }
-	      };
 
 	          
 //
@@ -260,7 +254,7 @@ public class GeneralLoginUI extends Fragment implements Constants.UserContant {
 //	                  savedInstanceState);
 //	      
 //		  
-	  }
+
 	  
 	
 	
