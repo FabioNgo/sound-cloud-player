@@ -16,6 +16,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
@@ -59,7 +60,11 @@ public abstract class ListContentFragment extends Fragment implements
 	@Override
 	public void onItemClick(AdapterView<?> parent, View arg1, int position,
 			long id) {
+		
+		
+		
 		Adapter adapter = parent.getAdapter();
+		
 		if (adapter instanceof OfflineSongAdapter) {
 			ArrayList<Song> songs = ((OfflineSongAdapter) adapter).getSongs();
 			MusicPlayerService.getInstance().playNewSong(position, songs);
@@ -72,17 +77,59 @@ public abstract class ListContentFragment extends Fragment implements
 			return;
 		}
 		if (adapter instanceof CompositionListAdapter) {
-			int type = ((CompositionListAdapter)adapter).getAdapterType();
-			String category = CompositionListAdapter.getInstance(type).getItem(position);
-			ArrayList<Song> songs = CategoryController.getInstance(type)
-					.getSongFromCategory(category);
-			if (!songs.isEmpty()) {
-				MusicPlayerService.getInstance().playNewSong(0, songs);
+			System.out.println ("IS COMPOSITIONLISTADAPTER");
+			new getSongFromCategoryBackground(position).execute();
+			
+		}
+
+	}
+	
+	private class getSongFromCategoryBackground extends AsyncTask<String, String, ArrayList<Song>>{
+
+		int type;
+		int position;
+		String category;
+		
+		public getSongFromCategoryBackground(int position) {
+			// TODO Auto-generated constructor stub
+			this.position = position;
+		}
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			type = ((CompositionListAdapter)adapter).getAdapterType();
+			category = CompositionListAdapter.getInstance(type).getItem(position);
+		}
+		@Override
+		protected ArrayList<Song> doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			
+			ArrayList<Song> songs;
+			try {
+				
+				songs = CategoryController.getInstance(type).getSongFromCategory(category);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				
+				e.printStackTrace();
+				return new ArrayList<Song>();
+			}
+			
+			return songs;
+		}
+		
+		@Override
+		protected void onPostExecute(ArrayList<Song> result) {
+			// TODO Auto-generated method stub
+			if (!result.isEmpty() && result != null) {
+				
+				MusicPlayerService.getInstance().playNewSong(0, result);
 			}else{
 				BasicFunctions.makeToastTake("No song to play", MusicPlayerMainActivity.getActivity());
 			}
 		}
-
+		
 	}
+	
 
 }

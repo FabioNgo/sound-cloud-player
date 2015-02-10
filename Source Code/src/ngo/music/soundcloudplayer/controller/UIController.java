@@ -292,7 +292,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			// curSong.getArtist());
 			// BasicFunctions.makeToastTake(format,
 			// MusicPlayerService.getInstance());
-			System.out.println ("UI CONTROLLER = " + uiFragments);
+			//System.out.println ("UI CONTROLLER = " + uiFragments);
 			for (PlayerUI playerUI : uiFragments) {
 				
 				playerUI.updateSongInfo(curSong);

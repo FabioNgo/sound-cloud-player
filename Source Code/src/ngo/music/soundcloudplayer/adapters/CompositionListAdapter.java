@@ -1,6 +1,7 @@
 package ngo.music.soundcloudplayer.adapters;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
@@ -14,6 +15,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
@@ -152,7 +154,18 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 * @return list of songs
 	 */
 	protected ArrayList<Song> getSongsFromCat(String cat) {
-		return CategoryController.getInstance(type).getSongFromCategory(cat);
+		System.out.println ("GET SONGS FROM CATE");
+		try {
+			return new getSongFromCategoryBackground(cat, type).execute().get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<Song>();
+		//return CategoryController.getInstance(type).getSongFromCategory(cat);
 	}
 
 	@Override
@@ -379,5 +392,39 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		// TODO Auto-generated method stub
 		return type;
 	}
+	
+	private class getSongFromCategoryBackground extends AsyncTask<String, String, ArrayList<Song>>{
+
+		int type;
+		int position;
+		String category;
+		
+		
+		public getSongFromCategoryBackground(String cat, int type) {
+			// TODO Auto-generated constructor stub
+			this.type = type;
+			this.category = cat;
+		}
+		
+		@Override
+		protected ArrayList<Song> doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			
+			ArrayList<Song> songs = new ArrayList<Song>();
+			try {
+				songs = CategoryController.getInstance(type).getSongFromCategory(category);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return songs;
+			}
+			
+			return songs;
+		}
+		
+		
+		
+	}
+
 
 }

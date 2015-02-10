@@ -84,7 +84,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 
 	@Override
 	public void login() throws IOException, JSONException {
-			System.out.println ("INSIDE LOGIN");
+			
 	
 			DatabaseHandler db = DatabaseHandler.getInstance(LoginActivity.getActivity());
 			
@@ -140,7 +140,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 	public void retrevieUserInfoOnline(ApiWrapper wrapper) throws IOException, JSONException {
 		HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
 		//t = wrapper.clientCredentials();
-		System.out.println (resp.getStatusLine());
+		
 		JSONObject me = Http.getJSON(resp);
 		//set information of logged user
 		
@@ -490,7 +490,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 			
 		int offset = page * 10;
 		String request = Constants.USER_LINK + "/" + "?q=" + query + "&limit=10&offset=" + offset;
-		System.out.println ("REQUEST USER = " + request);
+		
 		HttpResponse response = wrapper.get(Request.to(request));
 		
 		String respString = Http.getString(response);
@@ -665,7 +665,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 		SCAccount soundCloudAccount = new SCAccount();
 		wrapper = getApiWrapper();
 		
-		System.out.println ("INSIDE GET USER BY ID");
+		
 			HttpResponse resp  = wrapper.get(Request.to(Constants.USER_LINK + "/" + String.valueOf(params)));
 			
 			String respString = Http.getString(resp);

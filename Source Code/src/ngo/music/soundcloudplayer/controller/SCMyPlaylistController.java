@@ -17,11 +17,13 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+
 import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
@@ -197,7 +199,237 @@ public class SCMyPlaylistController extends SCPlaylistController implements
 		return SC_PLAYLIST;
 	}
 
+	@Override
+	public void removeSongFromCate(Song song, String cate) {
+		// TODO Auto-generated method stub
+
+		for (Category category : categories) {
+			if (category.getTitle().equals(cate)) {
+				new removeSongFromSCPlaylistBackground(category, song)
+						.execute();
+			}
+		}
+
+		// try {
+		// //storeCategories();
+		// } catch (IOException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+
+	}
+
+	@Override
+	public void removeCategory(String cate) {
+		// TODO Auto-generated method stub
+		for (Category category : categories) {
+			if (category.getTitle().equals(cate)) {
+				new removeSCPlaylistBackground(category).execute();
+			}
+		}
+
+	}
 	
+	@Override
+	public void updateTitle(String oldName, String newName) throws Exception {
+		// TODO Auto-generated method stub
+		if ("".equals(newName)) {
+			throw new Exception("Playlist name cannot be empty");
+		}
+		for (Category category : categories) {
+			if (category.getTitle().equals(newName)) {
+				throw new Exception("Playlist name exsited");
+			}
+		}
+		for (Category category : categories) {
+			if (category.getTitle().equals(oldName)) {
+				new updateTitleSCPlaylistBackground(category).execute(newName);
+				break;
+			}
+		}
+		storeCategories();
+		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
+	}
+
+	/**
+	 * Update title of a playlist
+	 * @author LEBAO_000
+	 *
+	 */
+	private class updateTitleSCPlaylistBackground extends
+			AsyncTask<String, String, String> {
+
+		SCPlaylist playlist;
+
+		public updateTitleSCPlaylistBackground(Category category) {
+			// TODO Auto-generated constructor stub
+			playlist = (SCPlaylist) category;
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
+			try {
+				HttpResponse resp = wrapper.put(Request.to(
+						Constants.ME_PLAYLISTS + "/"
+								+ playlist.getId())
+						.with("playlist[title]", params[0]));
+				if (resp.getStatusLine().toString().contains("200")) {
+					return "Update successfully";
+				}
+				return "Update unsuccessfully";
+
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			if (result == null) {
+				Toast.makeText(MusicPlayerMainActivity.getActivity(),
+						"Cannot update playlist", Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(MusicPlayerMainActivity.getActivity(), result,
+						Toast.LENGTH_LONG).show();
+			}
+			UIController.getInstance()
+					.updateUiWhenDataChanged(TAG_ITEM_CHANGED);
+			super.onPostExecute(result);
+		}
+
+	}
+	
+	
+	/**
+	 * Remove a playlist in background
+	 * @author LEBAO_000
+	 *
+	 */
+	private class removeSCPlaylistBackground extends
+			AsyncTask<String, String, String> {
+
+		SCPlaylist playlist;
+
+		public removeSCPlaylistBackground(Category category) {
+			// TODO Auto-generated constructor stub
+			playlist = (SCPlaylist) category;
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
+			try {
+				HttpResponse resp = wrapper.delete(Request
+						.to(Constants.ME_PLAYLISTS + "/"
+								+ playlist.getId()));
+				if (resp.getStatusLine().toString().contains("200")) {
+					return "Remove successfully";
+				}
+				return "Remove unsuccessfully";
+
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			if (result == null) {
+				Toast.makeText(MusicPlayerMainActivity.getActivity(),
+						"Cannot change playlist title", Toast.LENGTH_LONG)
+						.show();
+			} else {
+				Toast.makeText(MusicPlayerMainActivity.getActivity(), result,
+						Toast.LENGTH_LONG).show();
+			}
+			UIController.getInstance()
+					.updateUiWhenDataChanged(TAG_ITEM_CHANGED);
+			super.onPostExecute(result);
+		}
+
+	}
+	
+	/**
+	 * Remove a Song from playlist
+	 * @author LEBAO_000
+	 *
+	 */
+	private class removeSongFromSCPlaylistBackground extends
+			AsyncTask<String, String, String> {
+
+		OnlineSong song;
+		SCPlaylist playlist;
+
+		public removeSongFromSCPlaylistBackground(Category category, Song song) {
+			// TODO Auto-generated constructor stub
+			this.song = (OnlineSong) song;
+			playlist = (SCPlaylist) category;
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
+			try {
+				HttpResponse resp = wrapper.put(Request.to(
+						Constants.ME_PLAYLISTS + "/"
+								+ playlist.getId())
+						.with("playlist[tracks][][id]",
+								Integer.parseInt(this.song.getId())));
+				if (resp.getStatusLine().toString().contains("200")) {
+					return "Remove successfully";
+				}
+				return "Remove unsuccessfully";
+
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			// TODO Auto-generated method stub
+			if (result == null) {
+				Toast.makeText(MusicPlayerMainActivity.getActivity(),
+						"Cannot remove playlist", Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(MusicPlayerMainActivity.getActivity(), result,
+						Toast.LENGTH_LONG).show();
+			}
+			UIController.getInstance()
+					.updateUiWhenDataChanged(TAG_ITEM_CHANGED);
+
+		}
+
+	}
+
+
 
 
 }

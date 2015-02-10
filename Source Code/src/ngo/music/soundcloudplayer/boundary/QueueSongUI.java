@@ -135,8 +135,8 @@ public class QueueSongUI extends ListContentFragment {
 				SongInQueueViewHolder holder = (SongInQueueViewHolder) v
 						.getTag();
 				try {
-					adapter.setLayoutInformation(i+
-							listView.getFirstVisiblePosition(), holder, v);
+					
+					adapter.setLayoutInformation(i + listView.getFirstVisiblePosition(), holder, v);
 				} catch (IndexOutOfBoundsException e) {
 					/**
 					 * When this exception occur, some item has been deleted in
@@ -149,5 +149,7 @@ public class QueueSongUI extends ListContentFragment {
 		}
 		
 	}
+	
+	
 
 }

@@ -367,10 +367,11 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	private Song addSongInformation(JSONObject me) throws IOException {
+	public Song addSongInformation(JSONObject me) throws IOException {
 		Song song = null;
 		
 		try {
+			//JSONObject userObject = me.getJSONObject(USER);
 			SCAccount soundCloudAccount = getUserInfoOfSong(me);
 			song = new OnlineSong(me.getString(ID), me.getString(TITLE),
 					soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
@@ -412,13 +413,14 @@ public class SongController implements Constants, Constants.SongConstants,
 
 			// song.setStreamable(me.getBoolean(STREAMABLE));
 
-			
+			song.setLink(me.getString(STREAM_URL));
 			((OnlineSong) song).setUser(soundCloudAccount);
-			((OnlineSong) song).setLikesCount(me.getInt(LIKES_COUNT));
-			((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
+//			((OnlineSong) song).setLikesCount(me.getInt(LIKES_COUNT));
+//			((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
 			// Stream stream =
 			// wrapper.resolveStreamUrl(me.getString(STREAM_URL), true);
 			// song.setStreamUrl(stream.streamUrl);
+			
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			return song;
@@ -435,8 +437,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		SCAccount soundCloudAccount = new SCAccount();
 		JSONObject jsonObjectUser = me.getJSONObject(USER);
 		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
-		soundCloudAccount.setFullName(jsonObjectUser
-				.getString(Constants.UserContant.FULLNAME));
+		
 		soundCloudAccount.setUsername(jsonObjectUser
 				.getString(Constants.UserContant.USERNAME));
 
@@ -684,9 +685,9 @@ public class SongController implements Constants, Constants.SongConstants,
 		// song.setLabelName(me.getString(LABEL_NAME));
 		// song.setLicense(me.getString(LICENSE));
 		// song.setPermalink(me.getString(PERMALINK));
-		((OnlineSong) song).setPermalinkUrl(me.getString(PERMALINK_URL));
+	//	((OnlineSong) song).setPermalinkUrl(me.getString(PERMALINK_URL));
 
-		((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
+		//((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
 
 		// song.setRelease(me.getString(RELEASE));
 		// song.setReleaseDay(me.getInt(RELEASE_DAY));

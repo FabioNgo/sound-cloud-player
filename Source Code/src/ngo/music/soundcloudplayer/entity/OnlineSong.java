@@ -13,6 +13,10 @@ import android.provider.MediaStore.Audio.Media;
 
 public class OnlineSong extends Song{
 
+	public OnlineSong(String id , String title, String albumn){
+		super (id, title,"",albumn,"");
+		
+	}
 	public OnlineSong(String id, String title, String artist, String album,
 			String link) {
 		super(id, title, artist, album, link);

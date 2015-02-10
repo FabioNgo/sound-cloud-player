@@ -41,10 +41,7 @@ public class SCPlaylist extends Category{
 	private String link;
 	private String title;
 	
-	/**
-	 * integer ID
-	 */
-	private int soundcloudId;
+	
 	
 	/**
 	 * timestamp of creation
@@ -103,6 +100,7 @@ public class SCPlaylist extends Category{
 	private String license;
 	private String uri;
 	private String permalinkUrl;
+	private String artworkUrl;
 	private String waveformUrl;
 	private String streamUrl;
 	private String downloadUrl;
@@ -166,20 +164,7 @@ public class SCPlaylist extends Category{
 	}
 
 
-	/**
-	 * @return the soundcloudId
-	 */
-	public int getSoundcloudId() {
-		return soundcloudId;
-	}
 
-
-	/**
-	 * @param soundcloudId the soundcloudId to set
-	 */
-	public void setSoundcloudId(int soundcloudId) {
-		this.soundcloudId = soundcloudId;
-	}
 
 
 	/**
@@ -780,7 +765,7 @@ public class SCPlaylist extends Category{
 		
 		ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
 		
-			HttpResponse resp = wrapper.put(Request.to(Constants.ME_PLAYLISTS + "/" + String.valueOf(getSoundcloudId()))
+			HttpResponse resp = wrapper.put(Request.to(Constants.ME_PLAYLISTS + "/" + getId())
 													.with("playlist[tracks][][id]", Integer.parseInt(song.getId())));
 			
 		
@@ -793,11 +778,23 @@ public class SCPlaylist extends Category{
 		ApiWrapper wrapper = SCUserController.getInstance().getApiWrapper();
 		for (Song song : songs){
 			
-				HttpResponse resp = wrapper.put(Request.to(Constants.ME_PLAYLISTS + "/" + String.valueOf(getSoundcloudId()))
+				HttpResponse resp = wrapper.put(Request.to(Constants.ME_PLAYLISTS + "/" + getId())
 						.with("playlist[tracks][][id]", Integer.parseInt(song.getId())));
 			
 		}
 		//super.addSongs(songs);
+	}
+	/**
+	 * @return the artworkUrl
+	 */
+	public String getArtworkUrl() {
+		return artworkUrl;
+	}
+	/**
+	 * @param artworkUrl the artworkUrl to set
+	 */
+	public void setArtworkUrl(String artworkUrl) {
+		this.artworkUrl = artworkUrl;
 	}
 
 }

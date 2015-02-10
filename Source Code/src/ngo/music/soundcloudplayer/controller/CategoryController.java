@@ -153,21 +153,22 @@ public abstract class CategoryController implements Constants.Data, Constants,
 
 	public ArrayList<String> getCategoryName() {
 		ArrayList<String> categoriesName = new ArrayList<String>();
-		System.out.println(categories);
+		//System.out.println(categories);
 		for (Category cate : categories) {
 			categoriesName.add(cate.getTitle());
 		}
 		return categoriesName;
 	}
 
-	public ArrayList<Song> getSongFromCategory(String categoryName) {
-		for (Category category : categories) {
-			if (category.getTitle().equals(categoryName)) {
-				return category.getSongs();
-			}
-		}
-		return null;
-	}
+	public abstract ArrayList<Song> getSongFromCategory(String categoryName) throws Exception;
+//	public ArrayList<Song> getSongFromCategory(String categoryName) {
+//		for (Category category : categories) {
+//			if (category.getTitle().equals(categoryName)) {
+//				return category.getSongs();
+//			}
+//		}
+//		return null;
+//	}
 
 	/**
 	 * get category Name and songs Titles
@@ -344,8 +345,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 
 						
 						categories.add(result);
-						System.out.println("PLAYLIST CREATED = "
-								+ TAG_ITEM_CHANGED);
+						
 						Toast.makeText(MusicPlayerMainActivity.getActivity(),
 								"Create successfully", Toast.LENGTH_LONG)
 								.show();

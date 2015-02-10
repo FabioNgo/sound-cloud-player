@@ -94,7 +94,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			// get song queue, last song play
 			getData();
 		} catch (Exception e) {
-			Log.w("getData", e.toString());
+			//Log.w("getData", e.toString());
 
 		} finally {
 			iniMediaPlayer();
@@ -291,7 +291,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
 
-		System.out.println("SONG IN POS " + currentSongPosition + "  FINISHED");
+		
 
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
@@ -397,7 +397,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void playNewSong(int position, ArrayList<Song> queue) {
 		// incase of the queue in put is songQueue itself
 
-		System.out.println("PLAY NEW SONG");
+		
 		if (!this.songQueue.equals(queue)) {
 			this.songQueue.clear();
 			songQueue.addAll(queue);
@@ -410,7 +410,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void playNewExploreSong(int position, int category,
 			ArrayList<Song> listSongs) {
-		System.out.println(category);
+		//System.out.println(category);
 		explorecategory = category;
 		playNewSong(position, listSongs);
 
@@ -435,7 +435,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	private void playNewSong(boolean startNow) {
 
-		System.out.println("PLAY NEW SONG 2");
+		//System.out.println("PLAY NEW SONG 2");
 		Song song = getCurrentSong();
 		if (song == null) {
 			BasicFunctions.makeToastTake("No song to play",
@@ -453,8 +453,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			if (song instanceof OnlineSong) {
 				Stream stream = ((OnlineSong) song).getStream();
 				if (stream != null) {
-					System.out.println("SERVICE STREAM NOT NULL");
-					System.out.println("SERVICE = " + stream.streamUrl);
+					//System.out.println("SERVICE STREAM NOT NULL");
+					//System.out.println("SERVICE = " + stream.streamUrl);
 					String link = stream.streamUrl;
 					playSong(song, link);
 				} else {
@@ -466,7 +466,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 
 		}
-		System.out.println("END PLAY NEW SONG 2");
+		//System.out.println("END PLAY NEW SONG 2");
 		updateNotification();
 
 	}
@@ -530,7 +530,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            : the id of icon
 	 */
 	private void updateNotification() {
-		System.out.println("NOTIFICATION");
+		//System.out.println("NOTIFICATION");
 		String title = "";
 		String subTitle = "";
 		Song song = getCurrentSong();
@@ -627,7 +627,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		notificationManager.notify(NOTIFICATION_ID, notification);
 		startForeground(NOTIFICATION_ID, notification);
 
-		System.out.println("END NOTIFICATION");
+		//System.out.println("END NOTIFICATION");
 	}
 
 	private PendingIntent createPendingIntent(String action) {

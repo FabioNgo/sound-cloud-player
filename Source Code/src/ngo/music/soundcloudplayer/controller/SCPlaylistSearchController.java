@@ -109,7 +109,7 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 					
 			
 					categories.add(addPlaylistInfomation(object));
-					System.out.println (object.get(PLAYLIST_TITLE));
+					//System.out.println (object.get(PLAYLIST_TITLE));
 				}
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
@@ -180,6 +180,24 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 	protected int setTagDataChange() {
 		// TODO Auto-generated method stub
 		return SC_SEARCH_PLAYLIST_CHANGED;
+	}
+
+	@Override
+	public void removeSongFromCate(Song song, String cate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeCategory(String cate) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateTitle(String oldName, String newName) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 
 		

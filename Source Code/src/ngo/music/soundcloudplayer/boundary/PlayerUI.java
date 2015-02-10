@@ -57,17 +57,17 @@ public abstract class PlayerUI extends Fragment {
 	 * @param song
 	 */
 	public void updateSongInfo(Song song) {
-		System.out.println ("TITLE SONG : " + song.getTitle());
-		System.out.println ("BEGIN UPDATE SONG");
+//		System.out.println ("TITLE SONG : " + song.getTitle());
+//		System.out.println ("BEGIN UPDATE SONG");
 		updateOtherInfo(song);
-		System.out.println ("AFTER OTHER INFO");
+		//System.out.println ("AFTER OTHER INFO");
 		updateTitle(song);
-		System.out.println ("AFTER TITLE");
+		//System.out.println ("AFTER TITLE");
 		updateSubtitle(song);
-		System.out.println ("AFTER SUB TITLE");
+		//System.out.println ("AFTER SUB TITLE");
 		
 		updateImage(song);
-		System.out.println ("END UPDATE SONG");
+		//System.out.println ("END UPDATE SONG");
 	}
 
 	protected abstract void updateOtherInfo(Song song);
