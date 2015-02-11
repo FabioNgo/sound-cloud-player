@@ -324,7 +324,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		// TODO Auto-generated method stub
 		this.percent = percent;
-		BasicFunctions.makeToastTake(""+percent, MusicPlayerService.getInstance());
+		//BasicFunctions.makeToastTake(""+percent, MusicPlayerService.getInstance());
 		if(mp.getDuration()*percent/100<mp.getCurrentPosition()+5000){
 			pause();
 		}else{
@@ -736,7 +736,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			String id = song.getId();
 			return id;
 		} catch (Exception e) {
-			Log.e("getCurrentSongID", e.toString());
+			//Log.e("getCurrentSongID", e.toString());
 			return "";
 		}
 
@@ -849,7 +849,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 
 		} catch (Exception e) {
-			Log.e("playsong", e.toString());
+			//Log.e("playsong", e.toString());
 			// stopSelf();
 			iniMediaPlayer();
 			playNextSong();

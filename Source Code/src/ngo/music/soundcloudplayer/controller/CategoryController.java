@@ -315,6 +315,12 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	// storeCategories();
 	// UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
 	// }
+	/**
+	 * Update title of a playlist
+	 * @param oldName old name
+	 * @param newName new name
+	 * @throws Exception
+	 */
 	public abstract void updateTitle(String oldName, String newName)
 			throws Exception;
 
@@ -343,7 +349,6 @@ public abstract class CategoryController implements Constants.Data, Constants,
 								.show();
 					} else {
 
-						
 						categories.add(result);
 						
 						Toast.makeText(MusicPlayerMainActivity.getActivity(),

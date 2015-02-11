@@ -73,8 +73,6 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 		toolbar.setTitle(cat);
 		toolbar.setSubtitle(songs.size()+" song(s)");
 		
-		
-		
 		final ListView listPlaylist = (ListView)rootView.findViewById(R.id.list_items_composition_list);
 		listPlaylist.setOnItemClickListener(new OnItemClickListener() {
 
