@@ -37,6 +37,7 @@ import ngo.music.soundcloudplayer.entity.SCAccount;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
+import ngo.music.soundcloudplayer.general.States;
 
 
 /**
@@ -85,7 +86,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 	@Override
 	public void login() throws IOException, JSONException {
 			
-	
+			States.loginState = LOGGED_IN;
 			DatabaseHandler db = DatabaseHandler.getInstance(LoginActivity.getActivity());
 			
 			db.addLoginInfo(getToken().access);
@@ -203,6 +204,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 		t  = null;
 		guest = null;
 		currentUser = null;
+		States.loginState = NOT_LOGGED_IN;
 		DatabaseHandler db = DatabaseHandler.getInstance(LoginActivity.getActivity());
 		
 		db.refreshDatabase();

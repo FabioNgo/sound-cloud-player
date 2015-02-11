@@ -53,16 +53,18 @@ public class UserLoginActivity extends FragmentActivity implements
 		MusicPlayerService.getInstance();
 		DatabaseHandler databaseHandler = DatabaseHandler.getInstance(this);
 		if (BasicFunctions.isConnectingToInternet(activity)) {
-			if (databaseHandler.isUserLoggedIn()) {
+			if (databaseHandler.isUserLoggedIn() || States.loginState == LOGGED_IN) {
 				String token = databaseHandler.getUserInfo();
 				
 				new Background(token).execute();
 
 				return;
 			}
+			
 		}else{
 			
 			System.out.println ("NO INTERNET");
+			States.loginState = NOT_LOGGED_IN;
 			//Bundle bundle = userController.getBundle(currentUser);
 			Intent goToMainActivity = new Intent(
 					getApplicationContext(), MusicPlayerMainActivity.class);

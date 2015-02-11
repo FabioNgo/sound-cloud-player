@@ -294,20 +294,20 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			System.out.println ("INSIDE GET USER BACKGROUND");
+			
 		}
 
 		@Override
 		protected SCAccount doInBackground(String... params) {
 			// TODO Auto-generated method stub
-			System.out.println ("INSIDE GET USER BACKGROUND");
+			
 			SCUserController soundCloudUserController = SCUserController
 					.getInstance();
 			
 			try {
-				System.out.println ("INSIDE GET USER BACKGROUND 2");
+				
 				soundCloudAccount = soundCloudUserController.getUserbyId(params[0]);
-				System.out.println ("INSIDE GET USER BACKGROUND 3");
+				
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				return null;
@@ -382,9 +382,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			// artistInfo.setAlpha((float) 0.6);
 			try {
 				String ID = String.valueOf(onlineSong.getUser().getId());
-				System.out.println ("FULL UI: SONG TITLE 1 = " + ID);
+				
 				soundCloudAccount = new getUserbyIdBackground().execute(ID).get();
-				System.out.println ("FULL UI: SONG TITLE 2 = " + song.getTitle());
+				
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
