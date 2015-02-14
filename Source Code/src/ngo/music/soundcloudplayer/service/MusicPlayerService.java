@@ -323,13 +323,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		// TODO Auto-generated method stub
-		this.percent = percent;
-		//BasicFunctions.makeToastTake(""+percent, MusicPlayerService.getInstance());
-		if(mp.getDuration()*percent/100<mp.getCurrentPosition()+5000){
-			pause();
-		}else{
-			playMedia();
-		}
+//		this.percent = percent;
+//		//BasicFunctions.makeToastTake(""+percent, MusicPlayerService.getInstance());
+//		if(mp.getDuration()*percent/100<mp.getCurrentPosition()+5000){
+//			pause();
+//		}else{
+//			playMedia();
+//		}
 	}
 
 	@Override
