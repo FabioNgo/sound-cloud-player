@@ -403,12 +403,17 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	}
 
 	/** Defines callbacks for service binding, passed to bindService() */
-
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+	}
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-
+		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		// if (isMyServiceRunning()) {
 		// UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		// }
@@ -434,7 +439,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-
+		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 
 	/**

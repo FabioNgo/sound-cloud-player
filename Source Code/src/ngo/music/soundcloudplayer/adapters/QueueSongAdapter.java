@@ -93,8 +93,9 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 				BasicFunctions.dpToPx(50, getContext()), viewHolder.avatar);
 		String artworkUrl = song.getArtworkUrl();
 		if (artworkUrl.equals("")) {
-			viewHolder.avatar.setImageResource(R.drawable.ic_launcher);
+//			viewHolder.avatar.setImageResource(R.drawable.ic_launcher);
 		} else {
+			
 			viewHolder.avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
 		}
 		/**
