@@ -14,6 +14,7 @@ import ngo.music.soundcloudplayer.boundary.UserLoginActivity;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExploreFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.database.DatabaseHandler;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
@@ -23,6 +24,7 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.drm.DrmStore.ConstraintsColumns;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -33,7 +35,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class UserDisplayFragment extends Fragment implements Constants,Constants.UserContant, Constants.UIContant, Constants.TabContant {
+public class UserDisplayFragment extends Fragment implements Constants,Constants.UserContant, Constants.UIContant, Constants.TabContant, Constants.Appplication{
 
 	int layoutWidth;
 	int layoutHeight;
@@ -336,7 +338,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			MusicPlayerMainActivity.getActivity().finish();
 			startActivity(i);
-
+			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 			pDialog.dismiss();
 		}
 		
@@ -401,7 +403,7 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 			//i.putExtra(ME_FAVORITES,stringResponse);
 			MusicPlayerMainActivity.getActivity().finish();
 			startActivity(i);
-
+			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 			pDialog.dismiss();
 		}
 		

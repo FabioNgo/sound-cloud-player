@@ -196,7 +196,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 						.getCurrentTime();
 				long duration = MusicPlayerService.getInstance().getDuration();
 				double ratio = (currentTime * 100.0) / duration;
-				if ((currentTime * 100) / duration == 50&& canAnnounceNextSong ) {
+				if ((currentTime * 100) / duration == 50 && canAnnounceNextSong) {
 					String format = String.format("Next song: %s",
 							MusicPlayerService.getInstance().getNextSong()
 									.getTitle());
@@ -375,47 +375,48 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		Song curSong = MusicPlayerService.getInstance().getCurrentSong();
 		switch (TAG) {
 		case APP_RUNNING:
+			if (States.appState != APP_RUNNING) {
+				if (MusicPlayerService.getInstance().isPlaying()) {
 
-			if (MusicPlayerService.getInstance().isPlaying()) {
+					startTimer();
+					for (ProgressWheel progressbar : musicProgressBars) {
 
-				startTimer();
-				for (ProgressWheel progressbar : musicProgressBars) {
-
-					progressbar
-							.setBackgroundResource(R.drawable.ic_media_pause_progress);
-				}
-			} else {
-				for (ProgressWheel progressbar : musicProgressBars) {
-					if (progressbar != null) {
-						int degree = (int) Math.round(360
-								* (double) MusicPlayerService.getInstance()
-										.getCurrentTime()
-								/ MusicPlayerService.getInstance()
-										.getDuration());
-						progressbar.setProgressDegree(degree);
 						progressbar
-								.setBackgroundResource(R.drawable.ic_media_play_progress);
+								.setBackgroundResource(R.drawable.ic_media_pause_progress);
+					}
+				} else {
+					for (ProgressWheel progressbar : musicProgressBars) {
+						if (progressbar != null) {
+							int degree = (int) Math.round(360
+									* (double) MusicPlayerService.getInstance()
+											.getCurrentTime()
+									/ MusicPlayerService.getInstance()
+											.getDuration());
+							progressbar.setProgressDegree(degree);
+							progressbar
+									.setBackgroundResource(R.drawable.ic_media_play_progress);
+						}
 					}
 				}
+				for (PlayerUI playerUI : uiFragments) {
+
+					playerUI.updateSongInfo(curSong);
+					playerUI.play();
+
+				}
+
+				for (ListContentFragment listContentFragment : listContentFragments) {
+					listContentFragment.load();
+				}
+				loaded = true;
+				States.appState = APP_RUNNING;
 			}
-			for (PlayerUI playerUI : uiFragments) {
-
-				playerUI.updateSongInfo(curSong);
-				playerUI.play();
-
-			}
-
-			for (ListContentFragment listContentFragment : listContentFragments) {
-				listContentFragment.load();
-			}
-			loaded = true;
-			States.appState = APP_RUNNING;
-
 			break;
 		case APP_STOPPED:
-//			BasicFunctions.makeToastTake("Stopped", MusicPlayerMainActivity.getActivity());
-			stopTimer();
-			States.appState = APP_STOPPED;
+			// BasicFunctions.makeToastTake("Stopped",
+			// MusicPlayerMainActivity.getActivity());
+//			stopTimer();
+//			States.appState = APP_STOPPED;
 		default:
 
 		}

@@ -1,12 +1,15 @@
 package ngo.music.soundcloudplayer.boundary;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ngo.music.soundcloudplayer.R;
+import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -21,7 +24,9 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -68,9 +73,13 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_current_time);
 		durationText = (TextView) rootView
 				.findViewById(R.id.full_player_duration);
-		Toolbar toolbar = (Toolbar) rootView
-				.findViewById(R.id.full_player_toolbar);
-		toolbar.setLogo(R.drawable.logo);
+		
+		
+		/**
+		 * Config Tool Bar
+		 * 
+		 */
+		configToolbar();
 		/*
 		 * Config buttons in UI
 		 */
@@ -84,6 +93,39 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		UIController.getInstance().addUiFragment(this);
 		return rootView;
 
+	}
+
+	private void configToolbar() {
+		// TODO Auto-generated method stub
+		Toolbar toolbar = (Toolbar) rootView
+				.findViewById(R.id.full_player_toolbar);
+		toolbar.setLogo(R.drawable.logo);
+		toolbar.inflateMenu(R.menu.full_player_menu);
+		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+			
+			@Override
+			public boolean onMenuItemClick(MenuItem arg0) {
+				// TODO Auto-generated method stub
+				switch (arg0.getItemId()) {
+				case R.id.full_player_add_playlist:
+					ArrayList<Song> songs = new ArrayList<Song>();
+					songs.add(MusicPlayerService.getInstance().getCurrentSong());
+					CategoryAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
+					playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
+					break;
+				case R.id.full_player_share:
+					/**
+					 * TU dien
+					 */
+					break;
+				case R.id.full_player_add_favorite:
+					
+				default:
+					break;
+				}
+				return false;
+			}
+		});
 	}
 
 	/**

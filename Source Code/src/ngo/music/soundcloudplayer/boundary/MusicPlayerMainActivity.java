@@ -20,6 +20,7 @@ import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -100,7 +101,9 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		activity = this;
 		States.appState = APP_STOPPED;
 		super.onCreate(savedInstanceState);
-
+		StrictMode.ThreadPolicy policy = new StrictMode.
+				ThreadPolicy.Builder().permitAll().build();
+				StrictMode.setThreadPolicy(policy); 
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -143,6 +146,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		 * Music Player Service must be at last
 		 */
 		configMusicPlayerService();
+		
 	}
 
 //	/**
@@ -423,7 +427,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-
+		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		// Bind to LocalService
 
 	}

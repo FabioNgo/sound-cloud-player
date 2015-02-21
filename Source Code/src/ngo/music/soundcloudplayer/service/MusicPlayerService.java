@@ -20,6 +20,7 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.MusicPlayerBroadcastReceiver;
 import ngo.music.soundcloudplayer.general.States;
+import ngo.music.soundcloudplayer.imageloader.ImageLoader;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -36,6 +37,7 @@ import android.media.MediaPlayer.OnBufferingUpdateListener;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -52,7 +54,7 @@ import android.widget.Toast;
 public class MusicPlayerService extends Service implements OnErrorListener,
 		OnCompletionListener, OnSeekCompleteListener, OnInfoListener,
 		OnBufferingUpdateListener, Constants.MusicService,
-		Constants.Appplication, Constants.Data {
+		Constants.Appplication, Constants.Data, OnPreparedListener {
 	public MusicPlayerService() {
 		instance = this;
 
@@ -108,6 +110,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		super.onStartCommand(intent, flags, startId);
+		States.appState = APP_STOPPED;
 		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 
 		return START_STICKY;
@@ -189,6 +192,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setOnBufferingUpdateListener(this);
 			mediaPlayer.setOnInfoListener(this);
 			mediaPlayer.setOnCompletionListener(this);
+			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.reset();
 
 		}
@@ -593,6 +598,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 					R.drawable.ic_launcher);
 		}
 		if (song instanceof OnlineSong) {
+//			ImageLoader imageLoader = new ImageLoader(this);
+//			imageLoader.DisplayImage(url, loader, imageView);
 			smallView.setImageViewUri(R.id.noti_icon,
 					Uri.parse(song.getArtworkUrl()));
 		}
@@ -841,9 +848,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 			mediaPlayer.setDataSource(link);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-			mediaPlayer.prepare();
+			mediaPlayer.prepareAsync();
 
-			playMedia();
+			
 			if (song instanceof OfflineSong) {
 				SongController.getInstance().storePlayingSong();
 			}
@@ -972,5 +979,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 	public int getPercent(){
 		return percent;
+	}
+
+	@Override
+	public void onPrepared(MediaPlayer mp) {
+		// TODO Auto-generated method stub
+		playMedia();
 	}
 }
