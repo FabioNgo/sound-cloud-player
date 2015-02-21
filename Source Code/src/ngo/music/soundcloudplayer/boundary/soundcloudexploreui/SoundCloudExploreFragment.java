@@ -217,12 +217,21 @@ public abstract class SoundCloudExploreFragment extends Fragment implements
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					int currentPosition = songsList.getFirstVisiblePosition();
+					
 
-					adapter.update(mCategory);	
-					songsList.setSelectionFromTop(currentPosition + 1, 0);
-					MusicPlayerService.getInstance().updateQueue(mCategory);
-					loadingMore = false;
+					MusicPlayerMainActivity.getActivity().runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							// TODO Auto-generated method stub
+							int currentPosition = songsList.getFirstVisiblePosition();
+							adapter.update(mCategory);	
+							songsList.setSelectionFromTop(currentPosition + 1, 0);
+							MusicPlayerService.getInstance().updateQueue(mCategory);
+							loadingMore = false;
+						}
+					});
+					
 				}
 			});
 //			adapter = new SCExploreAdapter(SCActivity.getActivity(),

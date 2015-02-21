@@ -216,7 +216,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNextSong() {
 
-		mediaPlayer.stop();
+		
 
 		if (!nextSongId.equals("")) {
 			stackSongplayed.push(nextSongId);
@@ -410,6 +410,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		currentSongPosition = position;
 		isShuffle = true;
 		playNewSong(true);
+		computeNextSong();
 		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 	}
 

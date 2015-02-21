@@ -146,7 +146,7 @@ public class BasicFunctions {
 	}
 
 	public static void makeToastTake(String text, Context context) {
-		Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
 		LinearLayout layout = (LinearLayout) toast.getView();
 		
 		if (layout.getChildCount() > 0) {
