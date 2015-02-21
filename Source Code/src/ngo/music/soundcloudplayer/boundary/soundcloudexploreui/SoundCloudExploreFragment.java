@@ -225,8 +225,10 @@ public abstract class SoundCloudExploreFragment extends Fragment implements
 						public void run() {
 							// TODO Auto-generated method stub
 							int currentPosition = songsList.getFirstVisiblePosition();
-							adapter.update(mCategory);	
+							adapter.update(mCategory);
+							adapter.notifyDataSetChanged();
 							songsList.setSelectionFromTop(currentPosition + 1, 0);
+							
 							MusicPlayerService.getInstance().updateQueue(mCategory);
 							loadingMore = false;
 						}

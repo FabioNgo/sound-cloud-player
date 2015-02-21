@@ -252,9 +252,12 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			switch (TAG) {
 
 			case MUSIC_PLAYING:
+				startTimer();
 				if (States.appState == APP_RUNNING) {
-					format = String.format("Song playing: %s ",
-							curSong.getTitle(), curSong.getArtist());
+
+					format = String.format("Song playing: %s \nNext song: %s",
+							curSong.getTitle(), MusicPlayerService
+									.getInstance().getNextSong().getTitle());
 					BasicFunctions.makeToastTake(format,
 							MusicPlayerService.getInstance());
 					for (ProgressWheel progressbar : musicProgressBars) {
@@ -262,7 +265,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 						progressbar
 								.setBackgroundResource(R.drawable.ic_media_pause_progress);
 					}
-					startTimer();
+					
 					for (PlayerUI playerUI : uiFragments) {
 
 						playerUI.updateSongInfo(curSong);
