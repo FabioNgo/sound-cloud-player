@@ -59,12 +59,12 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 * False: Display Fragment with tab : My music ......
 	 */
 	public static int type = 0;
-	
+
 	public static final int OFFLINE = 0;
 	public static final int SOUNDCLOUD_EXPLORE = 1;
 	public static final int MY_SOUNDCLOUD = 2;
 	public static final int SOUNDCLOUD_SEARCH = 3;
-	//private int type;
+	// private int type;
 
 	private int defaultTabPosition = 0;
 	protected Object mService;
@@ -79,31 +79,28 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 */
 	public static int screenHeight;
 	public static int screenWidth;
+	public static int notiHeight;
 
 	public static MusicPlayerMainActivity getActivity() {
 		return activity;
 	}
-	
+
 	Menu menu;
 
-//	public MusicPlayerMainActivity() {
-//		// TODO Auto-generated constructor stub
-//		activity = this;
-//
-//	}
-	
-	
-	
-	
+	// public MusicPlayerMainActivity() {
+	// // TODO Auto-generated constructor stub
+	// activity = this;
+	//
+	// }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		activity = this;
 		States.appState = APP_STOPPED;
 		super.onCreate(savedInstanceState);
-		StrictMode.ThreadPolicy policy = new StrictMode.
-				ThreadPolicy.Builder().permitAll().build();
-				StrictMode.setThreadPolicy(policy); 
+		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+				.permitAll().build();
+		StrictMode.setThreadPolicy(policy);
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -114,11 +111,11 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		}
-		
+
 		/*
 		 * Get data from other activity
 		 */
-//		getDataFromOtherActivity();
+		// getDataFromOtherActivity();
 		/*
 		 * get Screen size
 		 */
@@ -146,27 +143,28 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		 * Music Player Service must be at last
 		 */
 		configMusicPlayerService();
-		
+
 	}
 
-//	/**
-//	 * Get data which transfered from other activity
-//	 */
-//	private void getDataFromOtherActivity() {
-//		try {
-//			SoundCloudUserController soundCloudUserController = SoundCloudUserController
-//					.getInstance();
-//			
-//			
-//				
-//
-//			Bundle bundle = getIntent().getExtras();
-//			defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
-//
-//		} catch (NullPointerException e) {
-//
-//		}
-//	}
+	// /**
+	// * Get data which transfered from other activity
+	// */
+	// private void getDataFromOtherActivity() {
+	// try {
+	// SoundCloudUserController soundCloudUserController =
+	// SoundCloudUserController
+	// .getInstance();
+	//
+	//
+	//
+	//
+	// Bundle bundle = getIntent().getExtras();
+	// defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
+	//
+	// } catch (NullPointerException e) {
+	//
+	// }
+	// }
 
 	/**
 	 * Tab Sliding
@@ -177,26 +175,26 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		pager = (ViewPager) findViewById(R.id.pager);
 		pager.setOffscreenPageLimit(10);
 		FragmentPagerAdapter adapter;
-		switch (type){
+		switch (type) {
 		case OFFLINE:
 			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
 			break;
 		case SOUNDCLOUD_EXPLORE:
 			adapter = new SCExploreTabAdater(getSupportFragmentManager());
 			break;
-			
+
 		case MY_SOUNDCLOUD:
-			adapter =  new MySCTabAdapter(getSupportFragmentManager());
+			adapter = new MySCTabAdapter(getSupportFragmentManager());
 			break;
 		case SOUNDCLOUD_SEARCH:
-			adapter =  new SCSearchTabAdater(getSupportFragmentManager());
+			adapter = new SCSearchTabAdater(getSupportFragmentManager());
 			break;
 		default:
 			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
 			break;
-			
+
 		}
-		
+
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(defaultTabPosition, true);
 		pager.setOffscreenPageLimit(10);
@@ -257,8 +255,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, new QueueSongUI())
-				.commit();
+				.replace(R.id.play_queue_container, new QueueSongUI()).commit();
 	}
 
 	/**
@@ -319,47 +316,56 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 		screenHeight = displayMetrics.heightPixels;
 		screenWidth = displayMetrics.widthPixels;
+
+		int resourceId = getResources().getIdentifier("status_bar_height",
+				"dimen", "android");
+		if (resourceId > 0) {
+			notiHeight = getResources().getDimensionPixelSize(resourceId);
+		}
+
 	}
 
-//	@Override
-//	public boolean onPrepareOptionsMenu(Menu menu) {
-//		// TODO Auto-generated method stub
-//		
-//		//getMenuInflater().inflate(R.menu.main_menu, menu);
-//		System.out.println ("TYPE = " + type);
-//		if (type == SOUNDCLOUD_EXPLORE){
-//			View v = (View) menu.findItem(R.id.search);
-//			//v.setVisibility(View.VISIBLE);
-//		}
-//		return true;
-//	}	
+	// @Override
+	// public boolean onPrepareOptionsMenu(Menu menu) {
+	// // TODO Auto-generated method stub
+	//
+	// //getMenuInflater().inflate(R.menu.main_menu, menu);
+	// System.out.println ("TYPE = " + type);
+	// if (type == SOUNDCLOUD_EXPLORE){
+	// View v = (View) menu.findItem(R.id.search);
+	// //v.setVisibility(View.VISIBLE);
+	// }
+	// return true;
+	// }
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_menu, menu);
-//		if (type == SOUNDCLOUD_EXPLORE){
-//			View v = (View) menu.findItem(R.id.search);
-//			v.setVisibility(View.VISIBLE);
-//		}
+		// if (type == SOUNDCLOUD_EXPLORE){
+		// View v = (View) menu.findItem(R.id.search);
+		// v.setVisibility(View.VISIBLE);
+		// }
 		/** Get the action view of the menu item whose id is search */
-//        View v = (View) menu.findItem(R.id.search).getActionView();
-//        
-// 
-//        /** Get the edit text from the action view */
-//        EditText txtSearch = ( EditText ) v.findViewById(R.id.txt_search);
-// 
-//        /** Setting an action listener */
-//        txtSearch.setOnEditorActionListener(new OnEditorActionListener() {
-// 
-//            @Override
-//            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                Toast.makeText(getBaseContext(), "Search : " + v.getText(), Toast.LENGTH_SHORT).show();
-//                return false;
-//            }
-//
-//			
-//        });
-		
+		// View v = (View) menu.findItem(R.id.search).getActionView();
+		//
+		//
+		// /** Get the edit text from the action view */
+		// EditText txtSearch = ( EditText ) v.findViewById(R.id.txt_search);
+		//
+		// /** Setting an action listener */
+		// txtSearch.setOnEditorActionListener(new OnEditorActionListener() {
+		//
+		// @Override
+		// public boolean onEditorAction(TextView v, int actionId, KeyEvent
+		// event) {
+		// Toast.makeText(getBaseContext(), "Search : " + v.getText(),
+		// Toast.LENGTH_SHORT).show();
+		// return false;
+		// }
+		//
+		//
+		// });
+
 		return true;
 	}
 
@@ -372,14 +378,13 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 			Random random = new Random(System.currentTimeMillis());
 			int position = 0;
 			try {
-				position = Math.abs(random.nextInt())%MusicPlayerService.getInstance().getQueueSize();	
+				position = Math.abs(random.nextInt())
+						% MusicPlayerService.getInstance().getQueueSize();
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
-			
-			
-			
-			MusicPlayerService.getInstance().playNewSong(position,songs);
+
+			MusicPlayerService.getInstance().playNewSong(position, songs);
 			if (!MusicPlayerService.getInstance().isShuffle()) {
 				MusicPlayerService.getInstance().setShuffle();
 			}
@@ -413,6 +418,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		super.onPause();
 		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
+
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
