@@ -153,36 +153,49 @@ public abstract class CategoryController implements Constants.Data, Constants,
 
 	public ArrayList<String> getCategoryName() {
 		ArrayList<String> categoriesName = new ArrayList<String>();
-		//System.out.println(categories);
+		// System.out.println(categories);
 		for (Category cate : categories) {
 			categoriesName.add(cate.getTitle());
 		}
 		return categoriesName;
 	}
 
-	public abstract ArrayList<Song> getSongFromCategory(String categoryName) throws Exception;
-//	public ArrayList<Song> getSongFromCategory(String categoryName) {
-//		for (Category category : categories) {
-//			if (category.getTitle().equals(categoryName)) {
-//				return category.getSongs();
-//			}
-//		}
-//		return null;
-//	}
+	public abstract ArrayList<Song> getSongFromCategory(String categoryName)
+			throws Exception;
+
+	// public ArrayList<Song> getSongFromCategory(String categoryName) {
+	// for (Category category : categories) {
+	// if (category.getTitle().equals(categoryName)) {
+	// return category.getSongs();
+	// }
+	// }
+	// return null;
+	// }
 
 	/**
 	 * get category Name and songs Titles
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("finally")
 	public ArrayList<String> getCategoryString() {
 		// TODO Auto-generated method stub
-		ArrayList<String> categoriesString = new ArrayList<String>();
-		for (Category cate : categories) {
+		try {
+			categories = getCategories();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			ArrayList<String> categoriesString = new ArrayList<String>();
+			for (Category cate : categories) {
 
-			categoriesString.add(cate.toString());
+				categoriesString.add(cate.toString());
+			}
+			return categoriesString;
 		}
-		return categoriesString;
 
 	}
 
@@ -317,8 +330,11 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	// }
 	/**
 	 * Update title of a playlist
-	 * @param oldName old name
-	 * @param newName new name
+	 * 
+	 * @param oldName
+	 *            old name
+	 * @param newName
+	 *            new name
 	 * @throws Exception
 	 */
 	public abstract void updateTitle(String oldName, String newName)
@@ -350,7 +366,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 					} else {
 
 						categories.add(result);
-						
+
 						Toast.makeText(MusicPlayerMainActivity.getActivity(),
 								"Create successfully", Toast.LENGTH_LONG)
 								.show();
