@@ -11,7 +11,7 @@ import ngo.music.soundcloudplayer.controller.SCMyPlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
 
-public class SCPlaylistAdapter extends CompositionListAdapter {
+public class SCPlaylistAdapter extends CategoryListAdapter {
 
 	static SCPlaylistAdapter instance = null;
 

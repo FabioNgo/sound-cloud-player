@@ -9,7 +9,7 @@
 		android:layout_width="100dp"
 		android:layout_height="100dp"
 		android:scaleType="fitXY"
-		android:src="@drawable/ic_media_play"/>
+		android:src="@drawable/ic_launcher"/>
 
 	<TextView
 		android:id="@+id/noti_title"

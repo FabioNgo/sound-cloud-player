@@ -33,7 +33,7 @@ import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
-public abstract class CompositionListAdapter extends ArrayAdapter<String>
+public abstract class CategoryListAdapter extends ArrayAdapter<String>
 		implements Constants.Categories {
 	private View v;
 	private int type = -1;
@@ -44,7 +44,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	private boolean canDelete;
 	private boolean canEdit;
 
-	public CompositionListAdapter(Context context, int resource) {
+	public CategoryListAdapter(Context context, int resource) {
 		super(context, resource);
 		type = setType();
 		canDelete = setCanDelete();
@@ -73,7 +73,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 	 */
 	protected abstract int setType();
 
-	public static CompositionListAdapter createNewInstance(int type) {
+	public static CategoryListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
 		
 		switch (type) {
@@ -101,7 +101,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 
 	}
 
-	public static CompositionListAdapter getInstance(int type) {
+	public static CategoryListAdapter getInstance(int type) {
 
 		switch (type) {
 		case PLAYLIST:
@@ -176,7 +176,7 @@ public abstract class CompositionListAdapter extends ArrayAdapter<String>
 		if (v == null) {
 			LayoutInflater inflater = (LayoutInflater) getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.composition_view, parent, false);
+			v = inflater.inflate(R.layout.category_view, parent, false);
 
 			holder = new CompositionViewHolder(NUM_ITEM_IN_ONE_CATEGORY, v);
 			v.setTag(holder);

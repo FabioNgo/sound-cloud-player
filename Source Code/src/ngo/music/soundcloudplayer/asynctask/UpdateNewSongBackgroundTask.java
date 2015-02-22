@@ -3,13 +3,17 @@ package ngo.music.soundcloudplayer.asynctask;
 import java.util.ArrayList;
 import java.util.List;
 
+import ngo.music.soundcloudplayer.adapters.CategoryTitlesListAdapter;
 import ngo.music.soundcloudplayer.adapters.MySCStreamAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
+import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.SongController;
+import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.Constants;
 import android.os.AsyncTask;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.widget.Adapter;
@@ -18,7 +22,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 public class UpdateNewSongBackgroundTask extends
-		AsyncTask<ListView, Void, ArrayList<Song>> {
+		AsyncTask<ListView, Void, ArrayList<Song>> implements Constants.Categories, Constants.Data {
 
 	static final int TASK_DURATION = 3 * 1000; // 3 seconds
 	private Adapter adapter;
@@ -65,12 +69,8 @@ public class UpdateNewSongBackgroundTask extends
 	private void onRefreshComplete(ArrayList<Song> result) {
 		// TODO Auto-generated method stub
 		if (adapter instanceof OfflineSongAdapter) {
-			ArrayList<Song> songs = (ArrayList<Song>) result;
-			((OfflineSongAdapter) adapter).clear();
-			for (Song song : songs) {
-				((OfflineSongAdapter) adapter).add(song);
-			}
-			((OfflineSongAdapter) adapter).notifyDataSetChanged();
+			
+			UIController.getInstance().updateUiWhenDataChanged(OFFLINE_SONG_CHANGED);
 			mSwipeRefreshLayout.setRefreshing(false);
 		}
 	}

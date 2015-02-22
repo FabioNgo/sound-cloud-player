@@ -30,6 +30,8 @@ public abstract class CategoryTitlesListAdapter extends ArrayAdapter<String> imp
 				createInstance(type);
 			}
 			return SCPlaylistTitlesListAdapter.instance;
+		
+		
 		default:
 			return null;
 		}

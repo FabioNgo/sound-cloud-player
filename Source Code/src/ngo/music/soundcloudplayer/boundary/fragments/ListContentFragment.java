@@ -2,7 +2,7 @@ package ngo.music.soundcloudplayer.boundary.fragments;
 
 import java.util.ArrayList;
 
-import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
 import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
@@ -76,7 +76,7 @@ public abstract class ListContentFragment extends Fragment implements
 			MusicPlayerService.getInstance().playNewSong(position, songs);
 			return;
 		}
-		if (adapter instanceof CompositionListAdapter) {
+		if (adapter instanceof CategoryListAdapter) {
 			System.out.println ("IS COMPOSITIONLISTADAPTER");
 			new getSongFromCategoryBackground(position).execute();
 			
@@ -97,8 +97,8 @@ public abstract class ListContentFragment extends Fragment implements
 		@Override
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
-			type = ((CompositionListAdapter)adapter).getAdapterType();
-			category = CompositionListAdapter.getInstance(type).getItem(position);
+			type = ((CategoryListAdapter)adapter).getAdapterType();
+			category = CategoryListAdapter.getInstance(type).getItem(position);
 		}
 		@Override
 		protected ArrayList<Song> doInBackground(String... params) {

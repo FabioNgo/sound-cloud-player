@@ -15,12 +15,12 @@ import android.widget.ListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView.OnItemClickListener;
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
 import ngo.music.soundcloudplayer.adapters.SCExploreAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.boundary.fragments.CompositionListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.CategoryListContentFragment;
 
 import ngo.music.soundcloudplayer.controller.SCPlaylistSearchController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
@@ -30,7 +30,7 @@ import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class SCPlaylistSearchFragment extends CompositionListContentFragment  {
+public class SCPlaylistSearchFragment extends CategoryListContentFragment  {
 	public static SCPlaylistSearchFragment instance = null;
 	
 	String query;

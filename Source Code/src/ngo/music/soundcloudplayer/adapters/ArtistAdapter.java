@@ -10,7 +10,7 @@ import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
 
-public class ArtistAdapter extends CompositionListAdapter {
+public class ArtistAdapter extends CategoryListAdapter {
 
 	static ArtistAdapter instance = null;
 

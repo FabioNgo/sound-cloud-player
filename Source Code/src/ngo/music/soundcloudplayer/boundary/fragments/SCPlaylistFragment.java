@@ -1,7 +1,7 @@
 package ngo.music.soundcloudplayer.boundary.fragments;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
 import ngo.music.soundcloudplayer.controller.UIController;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class SCPlaylistFragment extends CompositionListContentFragment  {
+public class SCPlaylistFragment extends CategoryListContentFragment  {
 	static SCPlaylistFragment instance = null;
 	
 	@Override

@@ -52,7 +52,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 		type = setType();
 		canRemoveItem = setCanRemoveItem();
 		this.cat = cat;
-		songs = CompositionListAdapter.getInstance(type).getSongsFromCat(cat);
+		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(cat);
 		
 	}
 	/**
@@ -226,7 +226,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 
 	public void update() {
 		// TODO Auto-generated method stub
-		songs = CompositionListAdapter.getInstance(type).getSongsFromCat(cat);
+		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(cat);
 		this.notifyDataSetChanged();
 	}
 

@@ -2,7 +2,7 @@ package ngo.music.soundcloudplayer.adapters;
 
 import ngo.music.soundcloudplayer.boundary.fragments.AlbumsFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.ArtistsFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.CompositionListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.CategoryListContentFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.controller.AlbumController;
@@ -40,11 +40,11 @@ public class OfflineTabsAdapter extends FragmentPagerAdapter implements
 			return new OfflineSongsFragment();
 		case 1:
 
-			return CompositionListContentFragment.createInstance(PLAYLIST);
+			return CategoryListContentFragment.createInstance(PLAYLIST);
 		case 2:
-			return CompositionListContentFragment.createInstance(ALBUM);
+			return CategoryListContentFragment.createInstance(ALBUM);
 		case 3:
-			return CompositionListContentFragment.createInstance(ARTIST);
+			return CategoryListContentFragment.createInstance(ARTIST);
 		default:
 			return new Fragment();
 		}

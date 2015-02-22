@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.CategoryTitlesListAdapter;
+import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
@@ -15,7 +16,7 @@ import ngo.music.soundcloudplayer.boundary.LitePlayerUI;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
 import ngo.music.soundcloudplayer.boundary.QueueSongUI;
-import ngo.music.soundcloudplayer.boundary.fragments.CompositionListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragments.CategoryListContentFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -441,6 +442,8 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		switch (TAG) {
 		case OFFLINE_SONG_CHANGED:
 			OfflineSongAdapter.getInstance().updateSongs();
+			CategoryListAdapter.getInstance(ALBUM).update();
+			CategoryListAdapter.getInstance(ARTIST).update();
 			break;
 		case QUEUE_CHANGED:
 			for (ListAdapter arrayAdapter : adapters) {
@@ -454,40 +457,40 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			break;
 		case PLAYLIST_CHANGED:
 			CategoryTitlesListAdapter.getInstance(PLAYLIST).updateCategory();
-			CompositionListContentFragment.getInstance(PLAYLIST).update();
+			CategoryListContentFragment.getInstance(PLAYLIST).update();
 			break;
 		case ITEM_IN_PLAYLIST_CHANGED:
 			if (SongsInCateAdapter.getInstance(PLAYLIST) != null) {
 				SongsInCateAdapter.getInstance(PLAYLIST).update();
 			}
-			if (CompositionListContentFragment.getInstance(PLAYLIST) != null) {
-				CompositionListContentFragment.getInstance(PLAYLIST).update();
+			if (CategoryListContentFragment.getInstance(PLAYLIST) != null) {
+				CategoryListContentFragment.getInstance(PLAYLIST).update();
 			}
 
 			break;
 		case ALBUM_CHANGED:
 
-			CompositionListContentFragment.getInstance(ALBUM).update();
+			CategoryListContentFragment.getInstance(ALBUM).update();
 			break;
 		case ITEM_IN_ALBUM_CHANGED:
 			if (SongsInCateAdapter.getInstance(ALBUM) != null) {
 				SongsInCateAdapter.getInstance(ALBUM).update();
 			}
-			if (CompositionListContentFragment.getInstance(ALBUM) != null) {
-				CompositionListContentFragment.getInstance(ALBUM).update();
+			if (CategoryListContentFragment.getInstance(ALBUM) != null) {
+				CategoryListContentFragment.getInstance(ALBUM).update();
 			}
 
 			break;
 		case SC_PLAYLIST_CHANGED:
 			CategoryTitlesListAdapter.getInstance(SC_PLAYLIST).updateCategory();
-			CompositionListContentFragment.getInstance(SC_PLAYLIST).update();
+			CategoryListContentFragment.getInstance(SC_PLAYLIST).update();
 			break;
 		case ITEM_IN_SC_PLAYLIST_CHANGED:
 			if (SongsInCateAdapter.getInstance(SC_PLAYLIST) != null) {
 				SongsInCateAdapter.getInstance(SC_PLAYLIST).update();
 			}
-			if (CompositionListContentFragment.getInstance(SC_PLAYLIST) != null) {
-				CompositionListContentFragment.getInstance(SC_PLAYLIST)
+			if (CategoryListContentFragment.getInstance(SC_PLAYLIST) != null) {
+				CategoryListContentFragment.getInstance(SC_PLAYLIST)
 						.update();
 			}
 
@@ -495,15 +498,15 @@ public class UIController implements Constants.MusicService, Constants.Data,
 
 		case SC_SEARCH_PLAYLIST_CHANGED:
 
-			CompositionListContentFragment.getInstance(SC_SEARCH_PLAYLIST)
+			CategoryListContentFragment.getInstance(SC_SEARCH_PLAYLIST)
 					.update();
 			break;
 		case ITEM_IN_SC_SEARCH_PLAYLIST_CHANGED:
 			if (SongsInCateAdapter.getInstance(SC_SEARCH_PLAYLIST) != null) {
 				SongsInCateAdapter.getInstance(SC_SEARCH_PLAYLIST).update();
 			}
-			if (CompositionListContentFragment.getInstance(SC_SEARCH_PLAYLIST) != null) {
-				CompositionListContentFragment.getInstance(SC_SEARCH_PLAYLIST)
+			if (CategoryListContentFragment.getInstance(SC_SEARCH_PLAYLIST) != null) {
+				CategoryListContentFragment.getInstance(SC_SEARCH_PLAYLIST)
 						.update();
 			}
 

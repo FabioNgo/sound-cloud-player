@@ -1,7 +1,7 @@
 package ngo.music.soundcloudplayer.boundary.fragments;
 
 import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
-import ngo.music.soundcloudplayer.adapters.CompositionListAdapter;
+import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
 import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SCPlaylistSearchFragment;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.view.View;
@@ -12,15 +12,15 @@ import android.view.View;
  *         used to update list when necessary
  *
  */
-public abstract class CompositionListContentFragment extends
+public abstract class CategoryListContentFragment extends
 		ListContentFragment implements Constants.Categories {
 
 	int type = -1;
 
 
-	protected CompositionListContentFragment(){
+	protected CategoryListContentFragment(){
 		type = setType();
-		adapter = CompositionListAdapter.getInstance(type);
+		adapter = CategoryListAdapter.getInstance(type);
 	}
 	/**
 	 * 
@@ -34,7 +34,7 @@ public abstract class CompositionListContentFragment extends
 	 */
 	public void update() {
 		
-		CompositionListAdapter adapter = (CompositionListAdapter) listView.getAdapter();
+		CategoryListAdapter adapter = (CategoryListAdapter) listView.getAdapter();
 		//System.out.println (listView.get);
 		/**
 		 * ADAPTER BI TRA VE NULL
@@ -64,7 +64,7 @@ public abstract class CompositionListContentFragment extends
 		}
 		adapter.update();
 	}
-	public static CompositionListContentFragment createInstance(int type){
+	public static CategoryListContentFragment createInstance(int type){
 		switch (type) {
 		case PLAYLIST:
 			PlaylistFragment.instance =  new PlaylistFragment();
@@ -86,7 +86,7 @@ public abstract class CompositionListContentFragment extends
 		}
 		return null;
 	}
-	public static CompositionListContentFragment getInstance(int type){
+	public static CategoryListContentFragment getInstance(int type){
 		switch (type) {
 		case PLAYLIST:
 			if(PlaylistFragment.instance == null){
