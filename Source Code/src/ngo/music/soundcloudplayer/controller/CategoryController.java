@@ -366,7 +366,14 @@ public abstract class CategoryController implements Constants.Data, Constants,
 					} else {
 
 						categories.add(result);
-
+						try {
+							storeCategories();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							Toast.makeText(MusicPlayerMainActivity.getActivity(),
+									"Create unsuccessfully", Toast.LENGTH_LONG)
+									.show();
+						}
 						Toast.makeText(MusicPlayerMainActivity.getActivity(),
 								"Create successfully", Toast.LENGTH_LONG)
 								.show();

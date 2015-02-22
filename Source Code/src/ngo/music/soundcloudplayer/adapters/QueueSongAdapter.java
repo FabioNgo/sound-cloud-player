@@ -7,6 +7,7 @@ import ngo.music.soundcloudplayer.ViewHolder.SongInQueueViewHolder;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
+import ngo.music.soundcloudplayer.controller.MenuController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
@@ -130,11 +131,7 @@ public class QueueSongAdapter extends ArrayAdapter<Song> {
 						case R.id.queue_addToPlaylist:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							CategoryAddingFragment playlistAddingFragment = new PlaylistAddingFragment(
-									songs);
-							playlistAddingFragment.show(MusicPlayerMainActivity
-									.getActivity().getSupportFragmentManager(),
-									"New Playlist");
+							MenuController.getInstance().addToPlaylist(songs);
 							break;
 						case R.id.queue_delete:
 							SongController.getInstance().deleteSong(song);

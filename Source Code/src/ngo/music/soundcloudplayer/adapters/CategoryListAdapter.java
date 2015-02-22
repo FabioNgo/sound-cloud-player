@@ -274,6 +274,9 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 		} else {
 			holder.editBtn.setVisibility(View.GONE);
 		}
+		/**
+		 * Edit Btn
+		 */
 		holder.editBtn.setOnClickListener(new OnClickListener() {
 
 			@Override

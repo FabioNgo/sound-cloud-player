@@ -7,6 +7,7 @@ import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.CategoryController;
+import ngo.music.soundcloudplayer.controller.MenuController;
 import ngo.music.soundcloudplayer.controller.PlaylistController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
@@ -171,8 +172,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 						case R.id.song_cat_add:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							CategoryAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
-							playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
+							MenuController.getInstance().addToPlaylist(songs);
 							break;
 							
 						default:

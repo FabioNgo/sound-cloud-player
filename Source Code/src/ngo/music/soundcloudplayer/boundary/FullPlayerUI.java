@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
+import ngo.music.soundcloudplayer.controller.MenuController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OnlineSong;
@@ -110,8 +111,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				case R.id.full_player_add_playlist:
 					ArrayList<Song> songs = new ArrayList<Song>();
 					songs.add(MusicPlayerService.getInstance().getCurrentSong());
-					CategoryAddingFragment playlistAddingFragment = new PlaylistAddingFragment(songs);
-					playlistAddingFragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(), "New Playlist");
+					MenuController.getInstance().addToPlaylist(songs);
 					break;
 				case R.id.full_player_share:
 					/**

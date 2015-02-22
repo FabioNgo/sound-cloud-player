@@ -549,5 +549,5 @@ public class UIController implements Constants.MusicService, Constants.Data,
 						- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
 								.toMinutes(mTime)));
 	}
-
+	
 }
