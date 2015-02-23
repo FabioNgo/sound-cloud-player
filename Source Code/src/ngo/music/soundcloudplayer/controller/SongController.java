@@ -506,7 +506,7 @@ public class SongController implements Constants, Constants.SongConstants,
 				JSONArray array = new JSONArray(responseString);
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject jsonObject = array.getJSONObject(i);
-					System.out.println (jsonObject);
+					//System.out.println (jsonObject);
 					int position = searchId(favoriteIdList,
 							jsonObject.getInt(ID));
 					if (position < 0) {
