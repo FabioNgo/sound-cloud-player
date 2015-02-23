@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Layout of the single song in a list view of songs  -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:id = "@+id/song_background"
 	android:layout_height="50dp">
 
-	<ImageView
+	<com.android.volley.toolbox.NetworkImageView
 		android:id="@+id/song_image"
 		android:layout_width="50dp"
 		android:layout_height="50dp"
 		android:layout_alignParentStart="true"
-		
 		android:src="@drawable/ic_launcher"/>
 
 	<TextView
@@ -18,7 +18,8 @@
 		android:layout_height="wrap_content"
 		android:layout_marginStart="4dp"
 		android:layout_toEndOf="@+id/song_image"
-		android:layout_toStartOf="@+id/song_menu"
+		android:layout_toStartOf="@+id/song_duration"
+		
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
 		android:textColor="@color/primary_text">
@@ -31,12 +32,22 @@
 		android:layout_alignStart="@+id/song_title"
 		android:layout_below="@+id/song_title"
 		android:layout_toEndOf="@+id/song_image"
-		android:layout_toStartOf="@+id/song_menu"
+		android:layout_toStartOf="@+id/song_duration"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
 		android:textColor="@color/secondary_text"
 		android:textIsSelectable="false"/>
 
+
+    <TextView
+        android:id="@+id/song_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/song_menu"
+        android:layout_centerVertical="true"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+        android:textColor="@color/secondary_text"
+        android:textIsSelectable="false"/>
 	
 
 	<ImageView

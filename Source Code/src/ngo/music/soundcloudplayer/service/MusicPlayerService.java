@@ -96,7 +96,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			// get song queue, last song play
 			getData();
 		} catch (Exception e) {
-			//Log.w("getData", e.toString());
+			// Log.w("getData", e.toString());
 
 		} finally {
 			iniMediaPlayer();
@@ -153,7 +153,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	public ArrayList<Song> getQueue() {
-		return songQueue;
+		if(songQueue == null) {
+			return new ArrayList<Song>();
+		}else {
+			return songQueue;	
+		}
+		
 	}
 
 	public void addSongToQueue(Song song) {
@@ -176,7 +181,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 			songQueue.add(iSong);
 		}
-		
+
 		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 	}
 
@@ -215,8 +220,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play next Song when click to next button or at the end of current song
 	 */
 	public void playNextSong() {
-
-		
 
 		if (!nextSongId.equals("")) {
 			stackSongplayed.push(nextSongId);
@@ -296,8 +299,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
 
-		
-
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 
@@ -328,13 +329,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		// TODO Auto-generated method stub
-//		this.percent = percent;
-//		//BasicFunctions.makeToastTake(""+percent, MusicPlayerService.getInstance());
-//		if(mp.getDuration()*percent/100<mp.getCurrentPosition()+5000){
-//			pause();
-//		}else{
-//			playMedia();
-//		}
+		// this.percent = percent;
+		// //BasicFunctions.makeToastTake(""+percent,
+		// MusicPlayerService.getInstance());
+		// if(mp.getDuration()*percent/100<mp.getCurrentPosition()+5000){
+		// pause();
+		// }else{
+		// playMedia();
+		// }
 	}
 
 	@Override
@@ -402,7 +404,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void playNewSong(int position, ArrayList<Song> queue) {
 		// incase of the queue in put is songQueue itself
 
-		
 		if (!this.songQueue.equals(queue)) {
 			this.songQueue.clear();
 			songQueue.addAll(queue);
@@ -416,7 +417,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void playNewExploreSong(int position, int category,
 			ArrayList<Song> listSongs) {
-		//System.out.println(category);
+		// System.out.println(category);
 		explorecategory = category;
 		playNewSong(position, listSongs);
 
@@ -441,7 +442,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	private void playNewSong(boolean startNow) {
 
-		//System.out.println("PLAY NEW SONG 2");
+		// System.out.println("PLAY NEW SONG 2");
 		Song song = getCurrentSong();
 		if (song == null) {
 			BasicFunctions.makeToastTake("No song to play",
@@ -456,11 +457,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 
+
 			if (song instanceof SCSong) {
 				//String link = ((OnlineSong) song).getLink();
 	
 				new playNewSongBackground().execute((SCSong)song);
 				
+
 			} else {
 				playSong(song, ((OfflineSong) song).getLink());
 				updateNotification();
@@ -468,8 +471,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			}
 
 		}
-		//System.out.println("END PLAY NEW SONG 2");
-		
+
 
 	}
 
@@ -488,7 +490,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * 
 	 * @return current time in milisecond
 	 */
-	public int getCurrentTime() {
+	public long getCurrentTime() {
 		if (States.musicPlayerState == MUSIC_STOPPED) {
 			return timeLastStop;
 		}
@@ -504,11 +506,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * @return
 	 */
 	public long getDuration() {
-		if (mediaPlayer != null) {
-			int a = mediaPlayer.getDuration();
-			return a;
+		Song song = getCurrentSong();
+		if (song != null) {
+			return getCurrentSong().getDuration();
+		}else {
+			return 0;
 		}
-		return -1;
 	}
 
 	/**
@@ -532,7 +535,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            : the id of icon
 	 */
 	private void updateNotification() {
-		//System.out.println("NOTIFICATION");
+		// System.out.println("NOTIFICATION");
 		String title = "";
 		String subTitle = "";
 		Song song = getCurrentSong();
@@ -594,9 +597,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			smallView.setImageViewResource(R.id.noti_icon,
 					R.drawable.ic_launcher);
 		}
+
 		if (song instanceof SCSong) {
 //			ImageLoader imageLoader = new ImageLoader(this);
 //			imageLoader.DisplayImage(url, loader, imageView);
+
 			smallView.setImageViewUri(R.id.noti_icon,
 					Uri.parse(song.getArtworkUrl()));
 		}
@@ -631,7 +636,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		notificationManager.notify(NOTIFICATION_ID, notification);
 		startForeground(NOTIFICATION_ID, notification);
 
-		//System.out.println("END NOTIFICATION");
+		// System.out.println("END NOTIFICATION");
 	}
 
 	private PendingIntent createPendingIntent(String action) {
@@ -740,7 +745,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			String id = song.getId();
 			return id;
 		} catch (Exception e) {
-			//Log.e("getCurrentSongID", e.toString());
+			// Log.e("getCurrentSongID", e.toString());
 			return "";
 		}
 
@@ -851,13 +856,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.prepareAsync();
 
-			
 			if (song instanceof OfflineSong) {
 				SongController.getInstance().storePlayingSong();
 			}
 
 		} catch (Exception e) {
-			//Log.e("playsong", e.toString());
+			// Log.e("playsong", e.toString());
 			// stopSelf();
 			iniMediaPlayer();
 			playNextSong();
@@ -979,7 +983,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 
 	}
-	public int getPercent(){
+
+	public int getPercent() {
 		return percent;
 	}
 

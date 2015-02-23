@@ -5,7 +5,7 @@ import java.util.Random;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
-import ngo.music.soundcloudplayer.ViewHolder.SongInQueueViewHolder;
+import ngo.music.soundcloudplayer.ViewHolder.SongInListViewHolder;
 import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
@@ -132,7 +132,7 @@ public class QueueSongUI extends ListContentFragment {
 			View v = listView.getChildAt(i);
 			if (v != null) {
 
-				SongInQueueViewHolder holder = (SongInQueueViewHolder) v
+				SongInListViewHolder holder = (SongInListViewHolder) v
 						.getTag();
 				try {
 					

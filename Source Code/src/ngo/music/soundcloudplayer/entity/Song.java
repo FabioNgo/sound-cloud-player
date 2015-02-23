@@ -47,7 +47,22 @@ public abstract class Song implements Comparable <Song>{
 	 * TagList
 	 */
 	protected String tagList;
-	
+	/**
+	 * duration in milliseconds
+	 */
+	protected long duration =  0;
+	public long getDuration() {
+		return duration;
+	}
+
+	public void setDuration(long duration) {
+		this.duration = duration;
+	}
+
+	/**
+	 * 
+	 * @param artworkUrl
+	 */
 	public void setArtworkUrl (String artworkUrl){
 		this.artworkUrl = artworkUrl;
 	}
@@ -65,13 +80,14 @@ public abstract class Song implements Comparable <Song>{
 	}
 	
 
-	public Song(String id, String title, String artist,String album, String link) {
+	public Song(String id, String title, String artist,String album, String link, long duration) {
 		// TODO Auto-generated constructor stub
 		setId(id);
 		setTitle(title);
 		setArtist(artist);
 		setLink(link);
 		setAlbum(album);
+		setDuration(duration);
 	}
 	public String getTitle() {
 		return title;
@@ -158,4 +174,5 @@ public abstract class Song implements Comparable <Song>{
 	public void setTagList(String tagList) {
 		this.tagList = tagList;
 	}
+	
 }

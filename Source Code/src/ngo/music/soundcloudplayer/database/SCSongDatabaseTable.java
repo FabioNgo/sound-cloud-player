@@ -153,8 +153,9 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 				cursor.getString(cursor.getColumnIndex(SONG_KEY_TITLE)),
 				"",
 				"soundcloud.com",
-				cursor.getString(cursor.getColumnIndex(SONG_KEY_STREAM_URL)));
-		onlineSong.setDuration(Long.parseLong(cursor.getString(cursor.getColumnIndex(SONG_KEY_DURATION))));
+				cursor.getString(cursor.getColumnIndex(SONG_KEY_STREAM_URL)),
+				Long.parseLong(cursor.getString(cursor.getColumnIndex(SONG_KEY_DURATION))));
+		
 		onlineSong.setGenre(cursor.getString(cursor.getColumnIndex(SONG_KEY_GERNE)));
 		onlineSong.setTagList(cursor.getString(cursor.getColumnIndex(SONG_KEY_TAG)));
 		onlineSong.setUserId(cursor.getString(cursor.getColumnIndex(SONG_KEY_ARTIST)));

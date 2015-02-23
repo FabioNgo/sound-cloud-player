@@ -382,67 +382,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-//	public OnlineSong addSongInformation(JSONObject me) throws IOException {
-//		OnlineSong song = null;
-//		
-//		try {
-//			//JSONObject userObject = me.getJSONObject(USER);
-//			SCAccount soundCloudAccount = getUserInfoOfSong(me);
-//			song = new OnlineSong(me.getString(ID), me.getString(TITLE),
-//					soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
-//		
-//			((OnlineSong) song).setTagList(me.getString(TAG_LIST));
-//
-//			// song.setTrackType(me.getString(TRACK_TYPE));
-//			// song.setUri(me.getString(URI));
-//			// song.setUserId(me.getInt(USER_ID));
-//			// song.setVideoUrl(me.getString(VIDEO_URL));
-//			// song.setWaveformUrl(me.getString(WAVEFORM_URL));
-//			song.setArtworkUrl(me.getString(ARTWORK_URL));
-//			// song.setCommentable(me.getBoolean(COMMENTABLE));
-//			// song.setCommentCount(me.getInt(COMMENT_COUNT));
-//			// song.setContentSize(me.getLong(CONTENT_SIZE));
-//			// song.setCreatedAt(me.getString(CREATED_AT));
-//			// song.setDescription(me.getString(DESCRIPTION));
-//			// song.setDownloadable(me.getBoolean(DOWNLOADABLE));
-//			// song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
-//			// song.setDownloadUrl(me.getString(DOWNLOAD_URL));
-//			//((OnlineSong)song).setDuration(me.getLong(DURATION));
-//
-//			// song.setFormat(me.getString(FORMAT));
-//			song.setGenre(me.getString(GENRE));
-//			// song.setKeySignature(me.getString(KEY_SIGNATURE));
-//			// song.setLabelID(me.getInt(LABEL_ID));
-//			// song.setLabelName(me.getString(LABEL_NAME));
-//			// song.setLicense(me.getString(LICENSE));
-//			// song.setPermalink(me.getString(PERMALINK));
-//			// song.setPermalinkUrl(me.getString(PERMALINK_URL));
-//
-//			// song.setRelease(me.getString(RELEASE));
-//			// song.setReleaseDay(me.getInt(RELEASE_DAY));
-//			// song.setReleaseMonth(me.getInt(RELEASE_MONTH));
-//			// song.setReleaseYear(me.getInt(RELEASE_YEAR));
-//			// song.setSharing(me.getString(SHARING));
-//
-//			// song.setStreamable(me.getBoolean(STREAMABLE));
-//
-//			// song.setStreamable(me.getBoolean(STREAMABLE));
-//
-//			song.setLink(me.getString(STREAM_URL));
-//			((OnlineSong) song).setUser(soundCloudAccount);
-////			((OnlineSong) song).setLikesCount(me.getInt(LIKES_COUNT));
-////			((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
-//			// Stream stream =
-//			// wrapper.resolveStreamUrl(me.getString(STREAM_URL), true);
-//			// song.setStreamUrl(stream.streamUrl);
-//			
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			return song;
-//			// e.printStackTrace();
-//		}
-//		return song;
-//	}
+
 
 	/**
 	 * @param me
@@ -684,8 +624,10 @@ public class SongController implements Constants, Constants.SongConstants,
 //		soundCloudAccount.setFullName(jsonObjectUser.getString(Constants.UserContant.FULLNAME));
 		
 				
+
 		song = new SCSong(me.getString(ID), me.getString(TITLE),
-				soundCloudAccount.getFullName(), "soundcloud.com",me.getString(STREAM_URL) );
+				soundCloudAccount.getFullName(), "soundcloud.com",me.getString(STREAM_URL),me.getLong(DURATION) );
+
 
 		// song.setCommentable(me.getBoolean(COMMENTABLE));
 		// song.setCommentCount(me.getInt(COMMENT_COUNT));
@@ -916,7 +858,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		// TODO Auto-generated method stub
 		OfflineSong song = (OfflineSong) MusicPlayerService.getInstance()
 				.getCurrentSong();
-		int curTime = MusicPlayerService.getInstance().getCurrentTime();
+		long curTime = MusicPlayerService.getInstance().getCurrentTime();
 		ArrayList<Song> queue = MusicPlayerService.getInstance().getQueue();
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
@@ -932,7 +874,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	}
 
 	private void writePlayedSongs(Song playingSong, ArrayList<Song> queue,
-			JsonWriter jsonWriter, int currentTIme) throws IOException {
+			JsonWriter jsonWriter, long currentTIme) throws IOException {
 		// TODO Auto-generated method stub
 
 		jsonWriter.beginArray();

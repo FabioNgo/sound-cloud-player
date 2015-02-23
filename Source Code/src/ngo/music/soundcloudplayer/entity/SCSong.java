@@ -15,13 +15,15 @@ import android.provider.MediaStore.Audio.Media;
 
 public class SCSong extends Song{
 
-	public SCSong(String id , String title, String albumn){
-		super (id, title,"",albumn,"");
+
+	public SCSong(String id , String title, String album,long duration){
+		super (id, title,"",album,"",duration);
 		
 	}
 	public SCSong(String id, String title, String artist, String album,
-			String link) {
-		super(id, title, artist, album, link);
+			String link,long duration) {
+		super(id, title, artist, album, link,duration);
+
 		// TODO Auto-generated constructor stub
 	}
 
@@ -39,10 +41,7 @@ public class SCSong extends Song{
 	 */
 	private User user;
 	
-	/**
-	 * duration in milliseconds
-	 */
-	private long duration =  0;
+	
 	private boolean commentable;
 	private String sharing =  "";
 	/**
@@ -190,20 +189,7 @@ public class SCSong extends Song{
 	}
 
 
-	/**
-	 * @return the duration
-	 */
-	public long getDuration() {
-		return duration;
-	}
-
-
-	/**
-	 * @param duration the duration to set
-	 */
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+	
 
 
 	/**

@@ -331,8 +331,10 @@ public class UploadSongActivity extends Activity implements Constants {
 			/*
 			 * Set data to song
 			 */
-			SCSong song = new SCSong("", title, "", "", "");
-			song.setTitle(title);
+
+			SCSong song = new SCSong("", title, "", "", "",0);
+//			song.setTitle(title);
+
 			song.setDescription(desc);
 			song.setGenre(tag);
 			song.setPrivacy(privacyStr);
