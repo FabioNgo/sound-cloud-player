@@ -2,8 +2,9 @@ package ngo.music.soundcloudplayer.general;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-
+import java.util.concurrent.TimeUnit;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -161,22 +162,6 @@ public class BasicFunctions {
 	// CHECK IF IS CONNECTION TO INTERNET OR NOT
 	public static boolean isConnectingToInternet(Context context) {
 
-//		try{
-//			try{
-//				URL url = new URL ("http://google.com");
-//				System.out.println(url.getHost());
-//				HttpURLConnection con  = (HttpURLConnection) url.openConnection();
-//				con.connect();
-//				if (con.getResponseCode() == 200){
-//					return true;
-//				}
-//				
-//			}catch(Exception e){
-//				return false;
-//			}
-//		}catch (Exception e){
-//			return false;
-//		}
 		ConnectivityManager connectivity = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 		if (connectivity != null) {
@@ -192,5 +177,21 @@ public class BasicFunctions {
 		}
 		return false;
 	}
-
+	/**
+	 * From mSec to second in format hh:mm:ss
+	 */
+	@SuppressLint("DefaultLocale")
+	public static String milisecondToSecondOffset(long mSec) {
+		return String.format("%02d", TimeUnit.MILLISECONDS.toSeconds(mSec)
+				- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
+						.toMinutes(mSec)));
+	}
+	/**
+	 * From mSec to second in format hh:mm:ss
+	 */
+	@SuppressLint("DefaultLocale")
+	public static String milisecondToMinuteOffset(long mSec) {
+		return String.format("%02d", TimeUnit.MILLISECONDS.toMinutes(mSec));
+		
+	}
 }

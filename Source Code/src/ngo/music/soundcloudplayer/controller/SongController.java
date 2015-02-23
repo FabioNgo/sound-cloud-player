@@ -374,7 +374,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			//JSONObject userObject = me.getJSONObject(USER);
 			SCAccount soundCloudAccount = getUserInfoOfSong(me);
 			song = new OnlineSong(me.getString(ID), me.getString(TITLE),
-					soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
+					soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL),me.getLong(DURATION) );
 		
 			((OnlineSong) song).setTagList(me.getString(TAG_LIST));
 
@@ -392,7 +392,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			// song.setDownloadable(me.getBoolean(DOWNLOADABLE));
 			// song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
 			// song.setDownloadUrl(me.getString(DOWNLOAD_URL));
-			// song.setDuration(me.getLong(DURATION));
+//			 song.setDuration();
 
 			// song.setFormat(me.getString(FORMAT));
 			song.setGenre(me.getString(GENRE));
@@ -665,7 +665,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		
 				
 		song = new OnlineSong(me.getString(ID), me.getString(TITLE),
-				soundCloudAccount.getFullName(), "soundcloud.com",me.getString(STREAM_URL) );
+				soundCloudAccount.getFullName(), "soundcloud.com",me.getString(STREAM_URL),me.getLong(DURATION) );
 
 		// song.setCommentable(me.getBoolean(COMMENTABLE));
 		// song.setCommentCount(me.getInt(COMMENT_COUNT));
@@ -863,7 +863,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		// TODO Auto-generated method stub
 		OfflineSong song = (OfflineSong) MusicPlayerService.getInstance()
 				.getCurrentSong();
-		int curTime = MusicPlayerService.getInstance().getCurrentTime();
+		long curTime = MusicPlayerService.getInstance().getCurrentTime();
 		ArrayList<Song> queue = MusicPlayerService.getInstance().getQueue();
 		File file = new File(MusicPlayerService.getInstance()
 				.getApplicationContext()
@@ -879,7 +879,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	}
 
 	private void writePlayedSongs(Song playingSong, ArrayList<Song> queue,
-			JsonWriter jsonWriter, int currentTIme) throws IOException {
+			JsonWriter jsonWriter, long currentTIme) throws IOException {
 		// TODO Auto-generated method stub
 
 		jsonWriter.beginArray();

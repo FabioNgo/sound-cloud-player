@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.CategoryTitlesListAdapter;
 import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
+import ngo.music.soundcloudplayer.adapters.LiteListSongAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
@@ -28,6 +29,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.NetworkInfo.State;
 import android.os.CountDownTimer;
+import android.text.Html;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -266,7 +268,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 						progressbar
 								.setBackgroundResource(R.drawable.ic_media_pause_progress);
 					}
-					
+
 					for (PlayerUI playerUI : uiFragments) {
 
 						playerUI.updateSongInfo(curSong);
@@ -277,7 +279,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 					for (ArrayAdapter<?> arrayAdapter : adapters) {
 
 						if (arrayAdapter instanceof QueueSongAdapter) {
-							((QueueSongAdapter) arrayAdapter).updateQueue();
+							((QueueSongAdapter) arrayAdapter).updateSongs();
 						}
 
 						arrayAdapter.notifyDataSetChanged();
@@ -317,12 +319,8 @@ public class UIController implements Constants.MusicService, Constants.Data,
 
 					for (ListAdapter arrayAdapter : adapters) {
 
-						if (arrayAdapter instanceof QueueSongAdapter) {
-							((QueueSongAdapter) arrayAdapter).updateQueue();
-						}
-						if (arrayAdapter instanceof OfflineSongAdapter) {
-							((OfflineSongAdapter) arrayAdapter)
-									.notifyDataSetChanged();
+						if (arrayAdapter instanceof LiteListSongAdapter) {
+							((LiteListSongAdapter) arrayAdapter).updateSongs();
 						}
 
 					}
@@ -449,7 +447,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 			for (ListAdapter arrayAdapter : adapters) {
 
 				if (arrayAdapter instanceof QueueSongAdapter) {
-					((QueueSongAdapter) arrayAdapter).updateQueue();
+					((QueueSongAdapter) arrayAdapter).updateSongs();
 				}
 
 			}
@@ -490,8 +488,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 				SongsInCateAdapter.getInstance(SC_PLAYLIST).update();
 			}
 			if (CategoryListContentFragment.getInstance(SC_PLAYLIST) != null) {
-				CategoryListContentFragment.getInstance(SC_PLAYLIST)
-						.update();
+				CategoryListContentFragment.getInstance(SC_PLAYLIST).update();
 			}
 
 			break;
@@ -523,15 +520,12 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	 * @return
 	 */
 	@SuppressLint("DefaultLocale")
-	public String getCurrentTime() {
-		int mTime = MusicPlayerService.getInstance().getCurrentTime();
+	public CharSequence getCurrentTime() {
+		long mTime = MusicPlayerService.getInstance().getCurrentTime();
 
-		return String.format(
-				"%02d:%02d",
-				TimeUnit.MILLISECONDS.toMinutes(mTime),
-				TimeUnit.MILLISECONDS.toSeconds(mTime)
-						- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
-								.toMinutes(mTime)));
+		String html = "<b>" + BasicFunctions.milisecondToMinuteOffset(mTime)
+				+ "</b>" + ":" + BasicFunctions.milisecondToSecondOffset(mTime);
+		return Html.fromHtml(html);
 	}
 
 	/**
@@ -540,14 +534,10 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	 * @return
 	 */
 	@SuppressLint("DefaultLocale")
-	public String getDuration() {
+	public CharSequence getDuration() {
 		long mTime = MusicPlayerService.getInstance().getDuration();
-		return String.format(
-				"%02d:%02d",
-				TimeUnit.MILLISECONDS.toMinutes(mTime),
-				TimeUnit.MILLISECONDS.toSeconds(mTime)
-						- TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS
-								.toMinutes(mTime)));
+		String html = "<b>" + BasicFunctions.milisecondToMinuteOffset(mTime)
+				+ "</b>" + ":" + BasicFunctions.milisecondToSecondOffset(mTime);
+		return Html.fromHtml(html);
 	}
-	
 }

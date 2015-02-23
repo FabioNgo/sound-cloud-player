@@ -1,6 +1,7 @@
 package ngo.music.soundcloudplayer.entity;
 
 
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import android.database.Cursor;
 import android.provider.MediaStore.Audio.Media;
 
@@ -10,14 +11,16 @@ public class OfflineSong extends Song {
 				c.getString(c.getColumnIndex(Media.TITLE)),
 				c.getString(c.getColumnIndex(Media.ARTIST)),
 				c.getString(c.getColumnIndex(Media.ALBUM)),
-				c.getString(c.getColumnIndex(Media.DATA)));
+				c.getString(c.getColumnIndex(Media.DATA)),
+				c.getLong(c.getColumnIndex(Media.DURATION)));
 
 	}
 
 	public OfflineSong(String id, String title, String artist, String album,
-			String link) {
-		super(id, title, artist, album, link);
+			String link,long duration) {
+		super(id, title, artist, album, link,duration);
 		// TODO Auto-generated constructor stub
+		setArtworkUrl("");
 	}
 
 	@Override

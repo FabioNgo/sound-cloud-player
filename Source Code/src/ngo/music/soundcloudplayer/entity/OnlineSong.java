@@ -13,13 +13,13 @@ import android.provider.MediaStore.Audio.Media;
 
 public class OnlineSong extends Song{
 
-	public OnlineSong(String id , String title, String albumn){
-		super (id, title,"",albumn,"");
+	public OnlineSong(String id , String title, String album,long duration){
+		super (id, title,"",album,"",duration);
 		
 	}
 	public OnlineSong(String id, String title, String artist, String album,
-			String link) {
-		super(id, title, artist, album, link);
+			String link,long duration) {
+		super(id, title, artist, album, link,duration);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -37,10 +37,7 @@ public class OnlineSong extends Song{
 	 */
 	private User user;
 	
-	/**
-	 * duration in milliseconds
-	 */
-	private long duration =  0;
+	
 	private boolean commentable;
 	private String sharing =  "";
 	/**
@@ -169,20 +166,7 @@ public class OnlineSong extends Song{
 	}
 
 
-	/**
-	 * @return the duration
-	 */
-	public long getDuration() {
-		return duration;
-	}
-
-
-	/**
-	 * @param duration the duration to set
-	 */
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
+	
 
 
 	/**
