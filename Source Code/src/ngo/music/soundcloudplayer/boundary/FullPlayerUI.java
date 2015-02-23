@@ -13,7 +13,7 @@ import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.MenuController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SCAccount;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
@@ -415,12 +415,12 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		/*
 		 * If play online, load avatar of artist
 		 */
-		OnlineSong onlineSong = null;
+		SCSong onlineSong = null;
 
-		if (song instanceof OnlineSong) {
+		if (song instanceof SCSong) {
 			
 			artistInfo.setVisibility(View.VISIBLE);
-			onlineSong = (OnlineSong) song;
+			onlineSong = (SCSong) song;
 			// artistInfo.setAlpha((float) 0.6);
 			try {
 				String ID = String.valueOf(onlineSong.getUser().getId());

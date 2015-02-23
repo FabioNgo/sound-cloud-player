@@ -6,7 +6,7 @@ import java.util.zip.Inflater;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.controller.SCUserController;
-import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.database.DatabaseCreate;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;
@@ -116,7 +116,7 @@ public class SCLoginUI extends Fragment implements Constants.UserContant {
 						
 						isLogin = false;
 					}else{
-						DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
+						DatabaseCreate databaseHandler = DatabaseCreate.getInstance(getActivity());
 						//databaseHandler.addLoginInfo(token);
 						Bundle bundle  = userController.getBundle(currentUser);
 						Intent goToMainActivity  =  new Intent(getActivity(), MusicPlayerMainActivity.class);

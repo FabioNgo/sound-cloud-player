@@ -11,7 +11,7 @@ import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
 import ngo.music.soundcloudplayer.boundary.fragments.SCPlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.SongController;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
@@ -139,7 +139,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 		 * Like this song
 		 */
 
-		viewHolder.likeCount.setText(((OnlineSong) song).getLikeCountString());
+		viewHolder.likeCount.setText(((SCSong) song).getLikeCountString());
 
 		viewHolder.likeCountLayout.setOnClickListener(new OnClickListener() {
 
@@ -176,7 +176,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 		// likeIcon.setImageResource(R.drawable.like_button);
 		// }
 
-		viewHolder.playBack.setText(((OnlineSong) song)
+		viewHolder.playBack.setText(((SCSong) song)
 				.getPlaybackCountString());
 
 		/*
@@ -208,8 +208,8 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 						android.content.Intent.ACTION_SEND);
 				sharingIntent.setType("text/plain");
 				// if (song instanceof OnlineSong){
-				String shareBody = ((OnlineSong) song).getPermalinkUrl();
-				String shareSubject = ((OnlineSong) song).getTitle();
+				String shareBody = ((SCSong) song).getPermalinkUrl();
+				String shareSubject = ((SCSong) song).getTitle();
 				System.out.println(shareBody);
 				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 						shareSubject);

@@ -40,7 +40,7 @@ import ngo.music.soundcloudplayer.boundary.UserLoginActivity;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;

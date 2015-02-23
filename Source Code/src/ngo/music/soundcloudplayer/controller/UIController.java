@@ -256,11 +256,16 @@ public class UIController implements Constants.MusicService, Constants.Data,
 				startTimer();
 				if (States.appState == APP_RUNNING) {
 
-					format = String.format("Song playing: %s \nNext song: %s",
-							curSong.getTitle(), MusicPlayerService
-									.getInstance().getNextSong().getTitle());
-					BasicFunctions.makeToastTake(format,
-							MusicPlayerService.getInstance());
+					try{
+						
+					
+						format = String.format("Song playing: %s \nNext song: %s",
+								curSong.getTitle(), MusicPlayerService.getInstance().getNextSong().getTitle());
+						BasicFunctions.makeToastTake(format,
+								MusicPlayerService.getInstance());
+					}catch(Exception e){
+						
+					}
 					for (ProgressWheel progressbar : musicProgressBars) {
 
 						progressbar

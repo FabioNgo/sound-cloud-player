@@ -132,7 +132,7 @@ public class GoogleLoginUI extends Fragment implements Constants.UserContant {
 	public Bundle getBundle (User user){
 		Bundle bundle = new Bundle();
 		
-		bundle.putInt(ID, user.getId());
+		bundle.putString(ID, user.getId());
 		bundle.putString(USERNAME, user.getUsername());
 		bundle.putString(AVATAR_URL, user.getAvatarUrl());
 		bundle.putString(CITY, user.getCity());

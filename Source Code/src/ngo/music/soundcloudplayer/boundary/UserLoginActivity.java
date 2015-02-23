@@ -15,7 +15,8 @@ import ngo.music.soundcloudplayer.boundary.SCLoginUI.Background;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UserController;
 import ngo.music.soundcloudplayer.controller.UserControllerFactory;
-import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.database.DatabaseCreate;
+import ngo.music.soundcloudplayer.database.SCLoginDatabaseTable;
 import ngo.music.soundcloudplayer.entity.User;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -43,18 +44,27 @@ public class UserLoginActivity extends FragmentActivity implements
 	GoogleLoginUI googleLoginUI = null;
 	FacebookLoginUI facebookLoginUI = null;
 	GeneralLoginUI generalLoginUI = null;
-	public UserLoginActivity activity = this;
+	private static UserLoginActivity activity;
+	
+	public static UserLoginActivity getActivity() {
+		return activity;
+	}
+	
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		activity = this;
 		//AppController.printKeyHash(this);
+		System.out.println ("USER LOGIN ACTIVITY ON CREATE");
+		DatabaseCreate databaseCreate =  new DatabaseCreate(getActivity());
+		databaseCreate.createTables();
 		MusicPlayerService.getInstance();
-		DatabaseHandler databaseHandler = DatabaseHandler.getInstance(this);
+		SCLoginDatabaseTable databaseHandler = SCLoginDatabaseTable.getInstance(getActivity());
 		if (BasicFunctions.isConnectingToInternet(activity)) {
-			if (databaseHandler.isUserLoggedIn() || States.loginState == LOGGED_IN) {
-				String token = databaseHandler.getUserInfo();
+			if (databaseHandler.isLoggedIn() && States.loginState == LOGGED_IN) {
+				String token = databaseHandler.getToken();
 				
 				new Background(token).execute();
 

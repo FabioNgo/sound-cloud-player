@@ -9,12 +9,12 @@ import java.util.Stack;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.api.Stream;
-import ngo.music.soundcloudplayer.boundary.LoginActivity;
+
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -456,24 +456,20 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 
-			if (song instanceof OnlineSong) {
-				Stream stream = ((OnlineSong) song).getStream();
-				if (stream != null) {
-					//System.out.println("SERVICE STREAM NOT NULL");
-					//System.out.println("SERVICE = " + stream.streamUrl);
-					String link = stream.streamUrl;
-					playSong(song, link);
-				} else {
-					new playNewSongBackground().execute(song);
-				}
+			if (song instanceof SCSong) {
+				//String link = ((OnlineSong) song).getLink();
+	
+				new playNewSongBackground().execute((SCSong)song);
+				
 			} else {
 				playSong(song, ((OfflineSong) song).getLink());
+				updateNotification();
 
 			}
 
 		}
 		//System.out.println("END PLAY NEW SONG 2");
-		updateNotification();
+		
 
 	}
 
@@ -572,7 +568,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		if (song instanceof OfflineSong) {
 			bigView.setImageViewResource(R.id.noti_icon, R.drawable.ic_launcher);
 		}
-		if (song instanceof OnlineSong) {
+		if (song instanceof SCSong) {
 			bigView.setImageViewUri(R.id.noti_icon,
 					Uri.parse(song.getArtworkUrl()));
 		}
@@ -598,7 +594,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			smallView.setImageViewResource(R.id.noti_icon,
 					R.drawable.ic_launcher);
 		}
-		if (song instanceof OnlineSong) {
+		if (song instanceof SCSong) {
 //			ImageLoader imageLoader = new ImageLoader(this);
 //			imageLoader.DisplayImage(url, loader, imageView);
 			smallView.setImageViewUri(R.id.noti_icon,
@@ -804,17 +800,18 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		return null;
 	}
 
-	private class playNewSongBackground extends AsyncTask<Song, String, String> {
+	private class playNewSongBackground extends AsyncTask<SCSong, String, String> {
 
-		Song song;
+		SCSong onlineSong;
 
 		@Override
-		protected String doInBackground(Song... params) {
+		protected String doInBackground(SCSong... params) {
 			// TODO Auto-generated method stub
+			System.out.println ("PLAY NEW SONG BG");
 			String link = "";
-			song = params[0];
+			onlineSong = params[0];
 			try {
-				link = song.getLink();
+				link = onlineSong.getLink();
 			} catch (Exception e) {
 				e.printStackTrace();
 				link = null;
@@ -831,8 +828,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				Toast.makeText(getApplicationContext(),
 						"Cannot play this song", Toast.LENGTH_LONG).show();
 				return;
+			}else{
+				playSong(onlineSong, link);
+				updateNotification();
 			}
-			playSong(song, link);
+			
 		}
 
 	}
@@ -926,6 +926,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 			nextSongId = songQueue.get(nextPosition).getId();
 		} else {
+			System.out.println ("COMPUT NEXT SONG: " + size);
 			if (size == 2) {
 				nextSongId = songQueue.get((currentSongPosition + 1) % 2)
 						.getId();

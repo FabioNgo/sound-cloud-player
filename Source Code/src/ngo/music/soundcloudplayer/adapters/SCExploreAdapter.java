@@ -3,7 +3,7 @@ package ngo.music.soundcloudplayer.adapters;
 import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.api.ApiWrapper;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
 

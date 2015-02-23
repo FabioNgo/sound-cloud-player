@@ -26,11 +26,13 @@ import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Params;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.boundary.LoginActivity;
+
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.database.DatabaseHandler;
-import ngo.music.soundcloudplayer.database.DatabaseTable;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.boundary.UserLoginActivity;
+import ngo.music.soundcloudplayer.database.ArtistSCDatabaseTable;
+import ngo.music.soundcloudplayer.database.DatabaseCreate;
+import ngo.music.soundcloudplayer.database.SCLoginDatabaseTable;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SCAccount;
@@ -87,9 +89,9 @@ public class SCUserController extends UserController implements Constants.UserCo
 	public void login() throws IOException, JSONException {
 			
 			States.loginState = LOGGED_IN;
-			DatabaseHandler db = DatabaseHandler.getInstance(LoginActivity.getActivity());
+			SCLoginDatabaseTable db = SCLoginDatabaseTable.getInstance(UserLoginActivity.getActivity());
 			
-			db.addLoginInfo(getToken().access);
+			db.updateToken(getToken().access);
 			retrevieUserInfoOnline(getApiWrapper());
 			
 		
@@ -145,69 +147,60 @@ public class SCUserController extends UserController implements Constants.UserCo
 		JSONObject me = Http.getJSON(resp);
 		//set information of logged user
 		
-		currentUser  = addAllInformation(me);
+		currentUser  = addSimpleUserInfo(me);
 		
 	}
 	
-	private User addAllInformation(JSONObject me) throws JSONException{
-		SCAccount soundcloudAccount = new SCAccount();
-		soundcloudAccount.setAvatarUrl(me.getString(AVATAR_URL));
-		soundcloudAccount.setCity(me.getString(CITY));
-		soundcloudAccount.setCountry(me.getString(COUNTRY));
-		soundcloudAccount.setDescription(me.getString(DESCRIPTION));
-		//soundcloudAccount.setDiscogsName(me.getString(DISCOGS_NAME));
-		soundcloudAccount.setFollowersCount(me.getInt(FOLLOWERS_COUNT));
-		soundcloudAccount.setFollowingCount(me.getInt(FOLLOWINGS_COUNT));
-		soundcloudAccount.setFullName(me.getString(FULLNAME));
-		soundcloudAccount.setId(me.getInt(ID));
-		//soundcloudAccount.setMySpaceName(me.getString(MYSPACE_NAME));
-		//soundcloudAccount.setOnline(me.getBoolean(ONLINE));
-		soundcloudAccount.setPermalink(me.getString(PERMALINK));
-		soundcloudAccount.setPermalinkUrl(me.getString(PERMALINK_URL));
-		//soundcloudAccount.setPlan(me.getString(PLAN));
-		soundcloudAccount.setPlaylistCount(me.getInt(PLAYLIST_COUNT));
-		soundcloudAccount.setPrimaryEmailConfirmed(me.getBoolean(PRIMARY_EMAIL_CONFIRMED));
-		soundcloudAccount.setPrivatePlaylistsCount(me.getInt(PRIVATE_PLAYLISTS_COUNT));
-		soundcloudAccount.setPrivateTracksCount(me.getInt(PRIVATE_TRACK_COUNT));
-		soundcloudAccount.setPublicFavoriteCount(me.getInt(PUBLIC_FAVORITES_COUNT));
-		soundcloudAccount.setTrackCount(me.getInt(TRACK_COUNT));
-		soundcloudAccount.setUri(me.getString(URI_LINK));
-		soundcloudAccount.setUsername(me.getString(USERNAME));
-		soundcloudAccount.setWebsite(me.getString(WEBSITE));
-		soundcloudAccount.setWebsiteTitle(me.getString(WEBSITE_TITLE));
-		
-		
-		
-		return soundcloudAccount;
-		
-	}
-	
+
 	private User addSimpleUserInfo (JSONObject me) throws JSONException{
+		String userId = String.valueOf(me.getInt(ID));
 		SCAccount soundcloudAccount = new SCAccount();
-		soundcloudAccount.setAvatarUrl(me.getString(AVATAR_URL));
-		soundcloudAccount.setCountry(me.getString(COUNTRY));
-		soundcloudAccount.setFollowersCount(me.getInt(FOLLOWERS_COUNT));
-		soundcloudAccount.setFollowingCount(me.getInt(FOLLOWINGS_COUNT));
-		soundcloudAccount.setFullName(me.getString(FULLNAME));
-		soundcloudAccount.setId(me.getInt(ID));
-		soundcloudAccount.setPlaylistCount(me.getInt(PLAYLIST_COUNT));
-		soundcloudAccount.setTrackCount(me.getInt(TRACK_COUNT));
-		soundcloudAccount.setUri(me.getString(URI_LINK));
-		soundcloudAccount.setUsername(me.getString(USERNAME));
-		soundcloudAccount.setCity(me.getString(CITY));
+		soundcloudAccount = getSCArtistFromDatabase(userId);
+		//System.out.println ("USER INFO " + soundcloudAccount);
+		if (soundcloudAccount != null){
+			
+			return soundcloudAccount;
+		}else{
+			soundcloudAccount = new SCAccount();
 		
-		return soundcloudAccount;
+			soundcloudAccount.setId(String.valueOf(me.getInt(ID)));
+			
+			
+			soundcloudAccount.setAvatarUrl(me.getString(AVATAR_URL));
+			soundcloudAccount.setCountry(me.getString(COUNTRY));
+			//soundcloudAccount.setFollowersCount(me.getInt(FOLLOWERS_COUNT));
+			//soundcloudAccount.setFollowingCount(me.getInt(FOLLOWINGS_COUNT));
+			soundcloudAccount.setFullName(me.getString(FULLNAME));
+			
+			//soundcloudAccount.setPlaylistCount(me.getInt(PLAYLIST_COUNT));
+			//soundcloudAccount.setTrackCount(me.getInt(TRACK_COUNT));
+			//soundcloudAccount.setUri(me.getString(URI_LINK));
+			soundcloudAccount.setUsername(me.getString(USERNAME));
+			soundcloudAccount.setCity(me.getString(CITY));
+			
+			return soundcloudAccount;
+		}
 	}
 
+	/**
+	 * Get User information from Database
+	 *
+	 */
+	public SCAccount getSCArtistFromDatabase(String id){
+		SCAccount scAccount;
+		ArtistSCDatabaseTable artistSCDatabaseTable = ArtistSCDatabaseTable.getInstance(UserLoginActivity.getActivity());
+		scAccount = artistSCDatabaseTable.getArtist(id);
+		return scAccount;
+	}
 	public void logout() {
 		// TODO Auto-generated method stub
 		t  = null;
 		guest = null;
 		currentUser = null;
 		States.loginState = NOT_LOGGED_IN;
-		DatabaseHandler db = DatabaseHandler.getInstance(LoginActivity.getActivity());
+		SCLoginDatabaseTable db = SCLoginDatabaseTable.getInstance(UserLoginActivity.getActivity());
 		
-		db.refreshDatabase();
+		db.clearTable();
 		SongController.getInstance().clear();
 		
 		
@@ -230,23 +223,23 @@ public class SCUserController extends UserController implements Constants.UserCo
 		Bundle bundle = new Bundle();
 		
 		if (user == null) return bundle;
-		bundle.putInt(ID, user.getId());
+		bundle.putString(ID, user.getId());
 		bundle.putString(USERNAME, user.getUsername());
 		bundle.putString(AVATAR_URL, user.getAvatarUrl());
 		bundle.putString(CITY, user.getCity());
 		bundle.putString(COUNTRY, user.getCountry());
-		bundle.putString(DESCRIPTION, user.getDescription());
+		//bundle.putString(DESCRIPTION, user.getDescription());
 		bundle.putInt(FOLLOWERS_COUNT, user.getFollowersCount());
 		bundle.putInt(FOLLOWINGS_COUNT, user.getFollowingCount());
 		bundle.putString(FULLNAME, user.getFullName());
-		bundle.putBoolean(ONLINE, user.isOnline());
+		//bundle.putBoolean(ONLINE, user.isOnline());
 		bundle.putInt(PLAYLIST_COUNT, user.getPlaylistCount());
 		bundle.putString(PERMALINK, user.getPermalink());
 		bundle.putString(PERMALINK_URL, user.getPermalinkUrl());
 		bundle.putBoolean(PRIMARY_EMAIL_CONFIRMED, user.isPrimaryEmailConfirmed());
 		bundle.putInt(PRIVATE_PLAYLISTS_COUNT, user.getPlaylistCount());
 		bundle.putInt(PRIVATE_TRACK_COUNT, user.getPrivateTracksCount());
-		bundle.putInt(PUBLIC_FAVORITES_COUNT,user.getPublicFavoriteCount());
+		//bundle.putInt(PUBLIC_FAVORITES_COUNT,user.getPublicFavoriteCount());
 		bundle.putString(URI_LINK, user.getUri());
 		bundle.putInt(TRACK_COUNT, user.getTrackCount());
 		
@@ -471,7 +464,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 			
 		}else {
 			
-			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followings/?offset=" + String.valueOf(offset);
+			String request = Constants.USER_LINK + "/"+ guest.getId() +"/followings/?offset=" + String.valueOf(offset);
 
 			response = wrapper.get(Request.to(request));
 		}
@@ -522,7 +515,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 			response = wrapper.get(Request.to(ME_FOLLOWERS + "/?offset=" + String.valueOf(offset)));
 		}else{
 		
-			String request = Constants.USER_LINK + "/"+ String.valueOf(guest.getId()) +"/followers/?offset=" + String.valueOf(offset);
+			String request = Constants.USER_LINK + "/"+ guest.getId() +"/followers/?offset=" + String.valueOf(offset);
 			response = wrapper.get(Request.to(request));
 		}
 		String respString = Http.getString(response);
@@ -575,7 +568,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 	public boolean isFollowing (SCAccount user){
 		ApiWrapper wrapper = getApiWrapper();
 		
-		String request = Constants.ME_FOLLOWINGS + "/"+String.valueOf(user.getId());
+		String request = Constants.ME_FOLLOWINGS + "/"+user.getId();
 	
 		
 		//System.out.println (resp.getStatusLine());
@@ -619,7 +612,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 		// TODO Auto-generated method stub
 		ApiWrapper wrapper = getApiWrapper();
 		
-		String request = Constants.ME_FOLLOWINGS + "/"+String.valueOf(soundCloudAccount.getId());
+		String request = Constants.ME_FOLLOWINGS + "/"+soundCloudAccount.getId();
 	
 		try {
 			 wrapper.put(Request.to(request));
@@ -642,7 +635,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 		// TODO Auto-generated method stub
 		ApiWrapper wrapper = getApiWrapper();
 		
-		String request = Constants.ME_FOLLOWINGS + "/"+String.valueOf(soundCloudAccount.getId());
+		String request = Constants.ME_FOLLOWINGS + "/"+soundCloudAccount.getId();
 	
 		try {
 			 wrapper.delete(Request.to(request));
@@ -668,7 +661,7 @@ public class SCUserController extends UserController implements Constants.UserCo
 		wrapper = getApiWrapper();
 		
 		
-			HttpResponse resp  = wrapper.get(Request.to(Constants.USER_LINK + "/" + String.valueOf(params)));
+			HttpResponse resp  = wrapper.get(Request.to(Constants.USER_LINK + "/" + params));
 			
 			String respString = Http.getString(resp);
 			JSONObject me = new JSONObject(respString);

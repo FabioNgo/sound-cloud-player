@@ -2,6 +2,8 @@ package ngo.music.soundcloudplayer.general;
 
 import java.net.URI;
 
+import ngo.music.soundcloudplayer.database.DatabaseCreate;
+
 /**
  * Store the contants of app
  * @author LEBAO_000
@@ -247,5 +249,48 @@ public interface Constants {
 		
 				
 		
+	}
+	
+	interface DatabaseConstant{
+		int DATABASE_VERSION = 1;
+		 String DATABASE_NAME = "musicplayer";
+		// Contacts table name
+				String LOGIN_TABLE_NAME = "login";
+				 String SONG_TABLE_NAME = "song";
+				 String ARTIST_TABLE_NAME = "artist";
+				
+				
+
+				// Contacts Table Columns names
+				 String LOGIN_KEY_ID = "id";
+				 String LOGIN_KEY_TOKEN  = "token";
+				
+				
+				/*
+				 * User table columns names
+				 */
+				 String SONG_KEY_ID = "id";
+				 String SONG_KEY_TITLE = "title";
+				 String SONG_KEY_ARTWORK_URL = "artwork_url";
+				 String SONG_KEY_STREAM_URL = "stream_url";
+
+				 String SONG_KEY_TAG = "tag";
+				 String SONG_KEY_ARTIST = "artist";
+				 String SONG_KEY_GERNE = "gerne";
+				 String SONG_KEY_DURATION = "duration";
+
+
+				
+				
+				
+
+				// Artist Table Columns names
+				 String ARTIST_KEY_ID = "id";
+				 String ARTIST_KEY_USERNAME = "username";
+				 String ARTIST_KEY_FULLNAME = "fullname";
+				 String ARTIST_KEY_ARTWORK_URL = "artwork";
+				 String ARTIST_KEY_CITY = "city";
+				 String ARTIST_KEY_COUNTRY = "country";
+				
 	}
 }

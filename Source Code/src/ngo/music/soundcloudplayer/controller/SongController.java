@@ -29,9 +29,12 @@ import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
+import ngo.music.soundcloudplayer.database.ArtistSCDatabaseTable;
+import ngo.music.soundcloudplayer.database.SCSongDatabaseTable;
 import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SCAccount;
@@ -190,11 +193,23 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * 
 	 * @param id
 	 *            of a song
-	 * @return the link stream (.mp3) of that song
+	 * @return song
+	 * @throws IOException 
+	 * @throws JSONException 
 	 */
-	public Song getSongFromID(long id) {
+	public Song getSongFromID(long id) throws IOException, JSONException {
 
-		Song currentSong = null;
+		SCSong onlineSong = null;
+		/*
+		 * If song already in local database
+		 * 
+		 */
+		SCSongDatabaseTable songDb = SCSongDatabaseTable.getInstance(MusicPlayerMainActivity.getActivity());
+//		onlineSong = songDb.getSong(String.valueOf(id));
+//		if (onlineSong != null){
+//			return onlineSong;
+//		}
+		//Song currentSong = null;
 		SCUserController userController = SCUserController.getInstance();
 		ApiWrapper wrapper = userController.getApiWrapper();
 		/*
@@ -202,18 +217,16 @@ public class SongController implements Constants, Constants.SongConstants,
 		 */
 		String uri = TRACK_LINK + id;
 
-		try {
-			HttpResponse resp = wrapper.get(Request.to(uri));
-			JSONObject me = Http.getJSON(resp);
-			// set information of logged user
-			currentSong = addSongInformation(me);
+	
+		HttpResponse resp = wrapper.get(Request.to(uri));
+		JSONObject me = Http.getJSON(resp);
+		// set information of logged user
+		onlineSong = addSongInformationSimple(me);
+		//songDb.addSong(onlineSong);
 
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 
-		return currentSong;
+		return onlineSong;
 	}
 
 	/**
@@ -222,20 +235,22 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @param url
 	 *            : url of the song
 	 * @return Stream
+	 * @throws IOException 
+	 * @throws JSONException 
 	 */
-	public Song getSongFromUrl(String url) {
-		Stream stream = null;
+	public Song getSongFromUrl(String url) throws IOException, JSONException {
+		//Stream stream = null;
 		SCUserController userController = SCUserController.getInstance();
 
 		ApiWrapper wrapper = userController.getApiWrapper();
 
 		long id = -1;
-		try {
+		//try {
 			id = wrapper.resolve(url);
-		} catch (IOException e) {
+		//} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//	e.printStackTrace();
+		//}
 		if (id == -1) {
 			return null;
 		}
@@ -346,7 +361,7 @@ public class SongController implements Constants, Constants.SongConstants,
 				JSONObject jsonObject = listSong.getJSONObject(i);
 				int position = searchId(idList, jsonObject.getInt(ID));
 				if (position < 0) {
-					song.add((Song) addSongInformation(jsonObject));
+					song.add((Song) addSongInformationSimple(jsonObject));
 					idList.add(-(position + 1), jsonObject.getInt(ID));
 				}
 
@@ -367,67 +382,67 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public Song addSongInformation(JSONObject me) throws IOException {
-		Song song = null;
-		
-		try {
-			//JSONObject userObject = me.getJSONObject(USER);
-			SCAccount soundCloudAccount = getUserInfoOfSong(me);
-			song = new OnlineSong(me.getString(ID), me.getString(TITLE),
-					soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
-		
-			((OnlineSong) song).setTagList(me.getString(TAG_LIST));
-
-			// song.setTrackType(me.getString(TRACK_TYPE));
-			// song.setUri(me.getString(URI));
-			// song.setUserId(me.getInt(USER_ID));
-			// song.setVideoUrl(me.getString(VIDEO_URL));
-			// song.setWaveformUrl(me.getString(WAVEFORM_URL));
-			song.setArtworkUrl(me.getString(ARTWORK_URL));
-			// song.setCommentable(me.getBoolean(COMMENTABLE));
-			// song.setCommentCount(me.getInt(COMMENT_COUNT));
-			// song.setContentSize(me.getLong(CONTENT_SIZE));
-			// song.setCreatedAt(me.getString(CREATED_AT));
-			// song.setDescription(me.getString(DESCRIPTION));
-			// song.setDownloadable(me.getBoolean(DOWNLOADABLE));
-			// song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
-			// song.setDownloadUrl(me.getString(DOWNLOAD_URL));
-			// song.setDuration(me.getLong(DURATION));
-
-			// song.setFormat(me.getString(FORMAT));
-			song.setGenre(me.getString(GENRE));
-			// song.setKeySignature(me.getString(KEY_SIGNATURE));
-			// song.setLabelID(me.getInt(LABEL_ID));
-			// song.setLabelName(me.getString(LABEL_NAME));
-			// song.setLicense(me.getString(LICENSE));
-			// song.setPermalink(me.getString(PERMALINK));
-			// song.setPermalinkUrl(me.getString(PERMALINK_URL));
-
-			// song.setRelease(me.getString(RELEASE));
-			// song.setReleaseDay(me.getInt(RELEASE_DAY));
-			// song.setReleaseMonth(me.getInt(RELEASE_MONTH));
-			// song.setReleaseYear(me.getInt(RELEASE_YEAR));
-			// song.setSharing(me.getString(SHARING));
-
-			// song.setStreamable(me.getBoolean(STREAMABLE));
-
-			// song.setStreamable(me.getBoolean(STREAMABLE));
-
-			song.setLink(me.getString(STREAM_URL));
-			((OnlineSong) song).setUser(soundCloudAccount);
-//			((OnlineSong) song).setLikesCount(me.getInt(LIKES_COUNT));
-//			((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
-			// Stream stream =
-			// wrapper.resolveStreamUrl(me.getString(STREAM_URL), true);
-			// song.setStreamUrl(stream.streamUrl);
-			
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			return song;
-			// e.printStackTrace();
-		}
-		return song;
-	}
+//	public OnlineSong addSongInformation(JSONObject me) throws IOException {
+//		OnlineSong song = null;
+//		
+//		try {
+//			//JSONObject userObject = me.getJSONObject(USER);
+//			SCAccount soundCloudAccount = getUserInfoOfSong(me);
+//			song = new OnlineSong(me.getString(ID), me.getString(TITLE),
+//					soundCloudAccount.getFullName(), "soundcloud.com", me.getString(STREAM_URL) );
+//		
+//			((OnlineSong) song).setTagList(me.getString(TAG_LIST));
+//
+//			// song.setTrackType(me.getString(TRACK_TYPE));
+//			// song.setUri(me.getString(URI));
+//			// song.setUserId(me.getInt(USER_ID));
+//			// song.setVideoUrl(me.getString(VIDEO_URL));
+//			// song.setWaveformUrl(me.getString(WAVEFORM_URL));
+//			song.setArtworkUrl(me.getString(ARTWORK_URL));
+//			// song.setCommentable(me.getBoolean(COMMENTABLE));
+//			// song.setCommentCount(me.getInt(COMMENT_COUNT));
+//			// song.setContentSize(me.getLong(CONTENT_SIZE));
+//			// song.setCreatedAt(me.getString(CREATED_AT));
+//			// song.setDescription(me.getString(DESCRIPTION));
+//			// song.setDownloadable(me.getBoolean(DOWNLOADABLE));
+//			// song.setDownloadCount(me.getInt(DOWNLOAD_COUNT));
+//			// song.setDownloadUrl(me.getString(DOWNLOAD_URL));
+//			//((OnlineSong)song).setDuration(me.getLong(DURATION));
+//
+//			// song.setFormat(me.getString(FORMAT));
+//			song.setGenre(me.getString(GENRE));
+//			// song.setKeySignature(me.getString(KEY_SIGNATURE));
+//			// song.setLabelID(me.getInt(LABEL_ID));
+//			// song.setLabelName(me.getString(LABEL_NAME));
+//			// song.setLicense(me.getString(LICENSE));
+//			// song.setPermalink(me.getString(PERMALINK));
+//			// song.setPermalinkUrl(me.getString(PERMALINK_URL));
+//
+//			// song.setRelease(me.getString(RELEASE));
+//			// song.setReleaseDay(me.getInt(RELEASE_DAY));
+//			// song.setReleaseMonth(me.getInt(RELEASE_MONTH));
+//			// song.setReleaseYear(me.getInt(RELEASE_YEAR));
+//			// song.setSharing(me.getString(SHARING));
+//
+//			// song.setStreamable(me.getBoolean(STREAMABLE));
+//
+//			// song.setStreamable(me.getBoolean(STREAMABLE));
+//
+//			song.setLink(me.getString(STREAM_URL));
+//			((OnlineSong) song).setUser(soundCloudAccount);
+////			((OnlineSong) song).setLikesCount(me.getInt(LIKES_COUNT));
+////			((OnlineSong) song).setPlaybackCount(me.getInt(PLAYBACK_COUNT));
+//			// Stream stream =
+//			// wrapper.resolveStreamUrl(me.getString(STREAM_URL), true);
+//			// song.setStreamUrl(stream.streamUrl);
+//			
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			return song;
+//			// e.printStackTrace();
+//		}
+//		return song;
+//	}
 
 	/**
 	 * @param me
@@ -436,7 +451,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	private SCAccount getUserInfoOfSong(JSONObject me) throws JSONException {
 		SCAccount soundCloudAccount = new SCAccount();
 		JSONObject jsonObjectUser = me.getJSONObject(USER);
-		soundCloudAccount.setId(jsonObjectUser.getInt(ID));
+		soundCloudAccount.setId(String.valueOf(jsonObjectUser.getInt(ID)));
 		
 		soundCloudAccount.setUsername(jsonObjectUser
 				.getString(Constants.UserContant.USERNAME));
@@ -621,8 +636,7 @@ public class SongController implements Constants, Constants.SongConstants,
 							jsonObject.getInt(ID));
 					if (position < 0) {
 						try {
-							streamList
-									.add(addSongInformationSimple(jsonObject));
+							streamList.add(addSongInformationSimple(jsonObject));
 							myStreamIdList.add(-(position + 1),
 									jsonObject.getInt(ID));
 						} catch (JSONException e) {
@@ -655,16 +669,22 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	private OnlineSong addSongInformationSimple(JSONObject me)
-			throws JSONException, IOException {
-		OnlineSong song = null;
+	public SCSong addSongInformationSimple(JSONObject me)throws JSONException, IOException {
+		SCSong song = null;
+		
+		String id = me.getString(ID);
+		song = getSCSongFromDatabase(id);
+		
+		if (song != null ){
+			return song;
+		}
+		
 		JSONObject jsonObjectUser = me.getJSONObject(USER);
 		SCAccount soundCloudAccount = SCUserController.getInstance().getUserbyId(jsonObjectUser.getString(ID));
-		
 //		soundCloudAccount.setFullName(jsonObjectUser.getString(Constants.UserContant.FULLNAME));
 		
 				
-		song = new OnlineSong(me.getString(ID), me.getString(TITLE),
+		song = new SCSong(me.getString(ID), me.getString(TITLE),
 				soundCloudAccount.getFullName(), "soundcloud.com",me.getString(STREAM_URL) );
 
 		// song.setCommentable(me.getBoolean(COMMENTABLE));
@@ -706,16 +726,16 @@ public class SongController implements Constants, Constants.SongConstants,
 		
 	
 		
-		((OnlineSong) song).setUser(soundCloudAccount);
-		((OnlineSong) song).setWaveformUrl(me.getString(WAVEFORM_URL));
+		((SCSong) song).setUser(soundCloudAccount);
+		//((OnlineSong) song).setWaveformUrl(me.getString(WAVEFORM_URL));
 		song.setArtworkUrl(me.getString(ARTWORK_URL));
 		// SoundCloudAccount soundCloudAccount = getUserInfoOfSong(me);
 		// song.setUser(soundCloudAccount);
-
+		//addOnlineSongToDatabase(song);
 		// Stream stream = wrapper.resolveStreamUrl(me.getString(STREAM_URL),
 		// true);
 		// song.setStreamUrl(stream.streamUrl);
-
+		
 		return song;
 	}
 
@@ -747,7 +767,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		String request = "http://api.soundcloud.com/tracks.json?q=" + query
 				+ "&limit=10&offset=" + String.valueOf(offset);
 
-		System.out.println(request);
+		//System.out.println(request);
 		// System.out.println (me);
 		// JSONObject obj = Http.getJSON(resp);
 		// JSONArray a = obj.getJSONArray("errors");
@@ -780,6 +800,39 @@ public class SongController implements Constants, Constants.SongConstants,
 		onlineSongs.get(SEARCH).clear();
 
 	}
+	
+	/**
+	 * Get online song
+	 * @param id
+	 * @return
+	 */
+	private SCSong getSCSongFromDatabase(String id){
+		SCSong onlineSong ;
+		SCSongDatabaseTable songDb = SCSongDatabaseTable.getInstance(MusicPlayerMainActivity.getActivity());
+			
+		onlineSong = songDb.getSong(id);
+		if (onlineSong == null){
+			return null;
+		}else{
+			
+			SCAccount scAccount = SCUserController.getInstance().getSCArtistFromDatabase(onlineSong.getUserId());
+			onlineSong.setUser(scAccount);
+			onlineSong.setArtist(scAccount.getFullName());
+			return onlineSong;
+		}
+	}
+	
+	/**
+	 * Add a online song to Database
+	 * @param song
+	 * @throws IOException
+	 */
+	private void addOnlineSongToDatabase(SCSong song) throws IOException{
+		SCSongDatabaseTable songDb = SCSongDatabaseTable.getInstance(MusicPlayerMainActivity.getActivity());
+		songDb.addSong(song);
+	}
+	
+	
 
 	/****************************************************
 	 * ****************Offline Song Part*****************
@@ -973,6 +1026,10 @@ public class SongController implements Constants, Constants.SongConstants,
 		return cate;
 	}
 
+	/**
+	 * Get the artists of offline song
+	 * @return
+	 */
 	public ArrayList<Category> getOfflineArtists() {
 		// TODO Auto-generated method stub
 		boolean isArtistExsited = false;

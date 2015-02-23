@@ -15,7 +15,8 @@ import ngo.music.soundcloudplayer.boundary.soundcloudexploreui.SoundCloudExplore
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
-import ngo.music.soundcloudplayer.database.DatabaseHandler;
+import ngo.music.soundcloudplayer.database.DatabaseCreate;
+import ngo.music.soundcloudplayer.database.SCLoginDatabaseTable;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.CircularImageView;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -152,8 +153,8 @@ public class UserDisplayFragment extends Fragment implements Constants,Constants
 				// TODO Auto-generated method stub
 				SCUserController soundCloudUserController = SCUserController.getInstance();
 				soundCloudUserController.logout();
-				DatabaseHandler databaseHandler = DatabaseHandler.getInstance(getActivity());
-				databaseHandler.refreshDatabase();
+				SCLoginDatabaseTable databaseHandler = SCLoginDatabaseTable.getInstance(getActivity());
+				databaseHandler.clearTable();
 				Intent loginAct = new Intent(getActivity(), UserLoginActivity.class);
 				startActivity(loginAct);
 			}

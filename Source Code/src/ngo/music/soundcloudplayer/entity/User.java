@@ -10,7 +10,7 @@ public abstract class User {
 	/*
 	 * Interger ID
 	 */
-	protected int id;
+	protected String id;
 	
 	/*
 	 *Permalink of resource 
@@ -148,15 +148,15 @@ public abstract class User {
 	/**
 	 * @return the id
 	 */
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param string the id to set
 	 */
-	public void setId(int id) {
-		this.id = id;
+	public void setId(String string) {
+		this.id = string;
 	}
 
 	/**

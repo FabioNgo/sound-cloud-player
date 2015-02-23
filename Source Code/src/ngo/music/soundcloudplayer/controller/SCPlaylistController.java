@@ -16,7 +16,7 @@ import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.entity.Category;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -75,7 +75,7 @@ public abstract class SCPlaylistController extends CategoryController implements
 						for (int i = 0 ; i < songsJson.length(); i++){
 							JSONObject object = songsJson.getJSONObject(i);
 							
-							songs.add(SongController.getInstance().addSongInformation(object));
+							songs.add(SongController.getInstance().addSongInformationSimple(object));
 						}
 					}
 			
@@ -163,7 +163,7 @@ public abstract class SCPlaylistController extends CategoryController implements
 				for (Song onlineSong : songs){	
 						resp = wrapper.put(Request
 							.to(Constants.ME_PLAYLISTS + "/" + playlist.getId())
-							.with("playlist[tracks][][id]", (Integer.parseInt(((OnlineSong)onlineSong).getId()))));
+							.with("playlist[tracks][][id]", (Integer.parseInt(((SCSong)onlineSong).getId()))));
 						
 				}
 				
@@ -235,7 +235,7 @@ public abstract class SCPlaylistController extends CategoryController implements
 					JSONArray songsJson =  playlistObject.getJSONArray("tracks");
 					for (int i = 0 ; i < songsJson.length(); i++){
 						JSONObject object = songsJson.getJSONObject(i);
-						songs.add(SongController.getInstance().addSongInformation(object));
+						songs.add(SongController.getInstance().addSongInformationSimple(object));
 					}
 				}
 				
@@ -252,7 +252,7 @@ public abstract class SCPlaylistController extends CategoryController implements
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return null;
-			}
+			} 
 			return songs;
 		
 		}

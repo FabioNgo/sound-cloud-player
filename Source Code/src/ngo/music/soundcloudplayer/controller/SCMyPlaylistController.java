@@ -25,7 +25,7 @@ import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 
 import ngo.music.soundcloudplayer.entity.Category;
-import ngo.music.soundcloudplayer.entity.OnlineSong;
+import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.entity.SCAccount;
@@ -376,12 +376,12 @@ public class SCMyPlaylistController extends SCPlaylistController implements
 	private class removeSongFromSCPlaylistBackground extends
 			AsyncTask<String, String, String> {
 
-		OnlineSong song;
+		SCSong song;
 		SCPlaylist playlist;
 
 		public removeSongFromSCPlaylistBackground(Category category, Song song) {
 			// TODO Auto-generated constructor stub
-			this.song = (OnlineSong) song;
+			this.song = (SCSong) song;
 			playlist = (SCPlaylist) category;
 		}
 
