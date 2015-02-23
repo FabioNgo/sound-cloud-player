@@ -145,10 +145,11 @@ public class ArtistSCDatabaseTable implements Constants.DatabaseConstant{
 		//System.out.println ("DATABASE GET ARTIST" );
 		SQLiteDatabase db = DatabaseCreate.getInstance(context).getReadableDatabase();
 		
-		Cursor cursor = db.query(ARTIST_TABLE_NAME, new String[] { ARTIST_KEY_ID, ARTIST_KEY_USERNAME, ARTIST_KEY_FULLNAME, ARTIST_KEY_ARTWORK_URL, ARTIST_KEY_CITY, ARTIST_KEY_COUNTRY },
-				ARTIST_KEY_ID + "=?", new String[] { }, null, null,
-				null, null);
-		
+//		Cursor cursor = db.query(ARTIST_TABLE_NAME, new String[] { ARTIST_KEY_ID, ARTIST_KEY_USERNAME, ARTIST_KEY_FULLNAME, ARTIST_KEY_ARTWORK_URL, ARTIST_KEY_CITY, ARTIST_KEY_COUNTRY },
+//				ARTIST_KEY_ID + "=?", new String[] { }, null, null,
+//				null, null);
+		String query = "SELECT * FROM " + ARTIST_TABLE_NAME + " WHERE " +  ARTIST_KEY_ID + "=" + id;
+		Cursor cursor = db.rawQuery(query, new String[]{});
 		if (cursor == null || cursor.getCount() == 0){
 			db.close();
 			return null;

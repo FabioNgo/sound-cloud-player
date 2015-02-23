@@ -506,7 +506,7 @@ public class SongController implements Constants, Constants.SongConstants,
 				JSONArray array = new JSONArray(responseString);
 				for (int i = 0; i < array.length(); i++) {
 					JSONObject jsonObject = array.getJSONObject(i);
-
+					System.out.println (jsonObject);
 					int position = searchId(favoriteIdList,
 							jsonObject.getInt(ID));
 					if (position < 0) {
@@ -756,7 +756,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		if (onlineSong == null){
 			return null;
 		}else{
-			System.out.println ("USER ID " + onlineSong.getUserId());
+			//System.out.println ("USER ID " + onlineSong.getUserId());
 			SCAccount scAccount = SCUserController.getInstance().getSCArtistFromDatabase(onlineSong.getUserId());
 			onlineSong.setUser(scAccount);
 			onlineSong.setArtist(scAccount.getFullName());

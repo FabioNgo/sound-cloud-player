@@ -119,7 +119,7 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 		values.put(SONG_KEY_TITLE, song.getTitle()); // song title
 		values.put(SONG_KEY_STREAM_URL, song.getStream().streamUrl); // song stream url
 		values.put(SONG_KEY_ARTWORK_URL, song.getArtworkUrl()); // song artwork img
-		values.put(SONG_KEY_ARTIST, song.getUser().getId()); // song ID OF ARTIST
+		values.put(SONG_KEY_ARTIST, song.getUserId()); // song ID OF ARTIST
 		values.put(SONG_KEY_DURATION, song.getDuration());
 		values.put(SONG_KEY_GERNE, song.getGenre()); // song gerne
 		values.put(SONG_KEY_TAG, song.getTagList()); // song tag list
