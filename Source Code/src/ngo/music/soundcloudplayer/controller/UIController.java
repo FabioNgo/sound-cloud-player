@@ -201,8 +201,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 				double ratio = (currentTime * 100.0) / duration;
 				if ((currentTime * 100) / duration == 50 && canAnnounceNextSong) {
 					String format = String.format("Next song: %s",
-							MusicPlayerService.getInstance().getNextSong()
-									.getTitle());
+							MusicPlayerService.getInstance().getNextSong().getTitle());
 					BasicFunctions.makeToastTake(format,
 							MusicPlayerService.getInstance());
 					canAnnounceNextSong = false;

@@ -8,6 +8,7 @@ import ngo.music.soundcloudplayer.api.Stream;
 import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SCUserController;
+import ngo.music.soundcloudplayer.database.ArtistSCDatabaseTable;
 import ngo.music.soundcloudplayer.database.SCSongDatabaseTable;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.database.Cursor;
@@ -109,7 +110,11 @@ public class SCSong extends Song{
 		 */
 		//System.out.println ("GET LINK");
 		SCSongDatabaseTable songDb = SCSongDatabaseTable.getInstance(MusicPlayerMainActivity.getActivity());
-//		String link = songDb.getSong(String.valueOf(id));
+		SCSong song = songDb.getSong(id);
+		if (song != null){
+			return songDb.getLink(id);
+		}
+		//String link = songDb.getSong(String.valueOf(id));
 //		if (onlineSong != null){
 //			return onlineSong;
 //		}
@@ -131,11 +136,13 @@ public class SCSong extends Song{
 			
 			
 			stream = wrapper.resolveStreamUrl(link,false);
-			link = stream.streamUrl;
-			//songDb.addSong(this);
+			//link = stream.streamUrl;
+			songDb.addSong(this);
+			
+			
 		}
 		//System.out.println(stream.streamUrl);
-		return link;
+		return stream.streamUrl;
 		
 		
 	}
@@ -176,8 +183,8 @@ public class SCSong extends Song{
 	/**
 	 * @return the user
 	 */
-	public User getUser() {
-		return user;
+	public SCAccount getUser() {
+		return (SCAccount)user;
 	}
 
 

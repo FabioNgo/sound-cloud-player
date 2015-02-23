@@ -86,7 +86,7 @@ public class ArtistSCDatabaseTable implements Constants.DatabaseConstant{
 		 * creates a new row
 		 * @throws IOException 
 		 * */
-	public void addSong(SCAccount scAccount) throws IOException {
+	public void addArtist(SCAccount scAccount) throws IOException {
 		//TABLE_RSS = getTableName();
 		SQLiteDatabase db = DatabaseCreate.getInstance(context).getWritableDatabase();
 

@@ -231,7 +231,7 @@ public class SCLoginDatabaseTable extends SQLiteOpenHelper implements Constants.
 
 		String query = "SELECT * FROM " + LOGIN_TABLE_NAME;
 		Cursor cursor = db.rawQuery(query, new String[]{});
-		System.out.println (cursor.getCount());
+		//System.out.println (cursor.getCount());
 		if (cursor == null || cursor.getCount() == 0) {
 			db.close();
 			return null;
@@ -254,7 +254,7 @@ public class SCLoginDatabaseTable extends SQLiteOpenHelper implements Constants.
 
 		String query = "SELECT * FROM " + LOGIN_TABLE_NAME;
 		Cursor cursor = db.rawQuery(query, new String[]{});
-		System.out.println (cursor.getCount());
+		//System.out.println (cursor.getCount());
 		if (cursor == null || cursor.getCount() == 0) {
 			//cursor.close();
 			db.close();

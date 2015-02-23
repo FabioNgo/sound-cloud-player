@@ -756,7 +756,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		if (onlineSong == null){
 			return null;
 		}else{
-			
+			System.out.println ("USER ID " + onlineSong.getUserId());
 			SCAccount scAccount = SCUserController.getInstance().getSCArtistFromDatabase(onlineSong.getUserId());
 			onlineSong.setUser(scAccount);
 			onlineSong.setArtist(scAccount.getFullName());

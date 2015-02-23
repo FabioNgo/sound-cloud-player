@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.content.ContentValues;
@@ -83,10 +84,10 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 		ContentValues values = new ContentValues();
 		values.put(SONG_KEY_ID, song.getId()); //song ID
 		values.put(SONG_KEY_TITLE, song.getTitle()); // song title
-		values.put(SONG_KEY_STREAM_URL, song.getLink()); // song stream url
+		values.put(SONG_KEY_STREAM_URL, song.getStream().streamUrl); // song stream url
 		values.put(SONG_KEY_ARTWORK_URL, song.getArtworkUrl()); // song artwork img
 		values.put(SONG_KEY_ARTIST, song.getUser().getId()); // song ID OF ARTIST
-
+		values.put(SONG_KEY_DURATION, song.getDuration());
 		values.put(SONG_KEY_GERNE, song.getGenre()); // song gerne
 		values.put(SONG_KEY_TAG, song.getTagList()); // song tag list
 		// Check if row already existed in database
@@ -99,6 +100,9 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 			updateSong(song);
 			db.close();
 		}
+		
+		ArtistSCDatabaseTable artistSCDatabaseTable = ArtistSCDatabaseTable.getInstance(MusicPlayerMainActivity.getActivity());
+		artistSCDatabaseTable.addArtist(song.getUser());
 	}
 
 
@@ -113,10 +117,10 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 		ContentValues values = new ContentValues();
 		values.put(SONG_KEY_ID, song.getId()); //song ID
 		values.put(SONG_KEY_TITLE, song.getTitle()); // song title
-		values.put(SONG_KEY_STREAM_URL, song.getStreamUrl()); // song stream url
+		values.put(SONG_KEY_STREAM_URL, song.getStream().streamUrl); // song stream url
 		values.put(SONG_KEY_ARTWORK_URL, song.getArtworkUrl()); // song artwork img
 		values.put(SONG_KEY_ARTIST, song.getUser().getId()); // song ID OF ARTIST
-
+		values.put(SONG_KEY_DURATION, song.getDuration());
 		values.put(SONG_KEY_GERNE, song.getGenre()); // song gerne
 		values.put(SONG_KEY_TAG, song.getTagList()); // song tag list
 //		
@@ -137,10 +141,11 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(SONG_TABLE_NAME, new String[] { SONG_KEY_ID, SONG_KEY_TITLE, SONG_KEY_ARTIST, SONG_KEY_ARTWORK_URL, SONG_KEY_DURATION, SONG_KEY_GERNE, SONG_KEY_STREAM_URL, SONG_KEY_TAG },
-				SONG_KEY_ID + "=?", new String[] { }, null, null,
-				null, null);
-		
+//		Cursor cursor = db.query(SONG_TABLE_NAME, new String[] { SONG_KEY_ID, SONG_KEY_TITLE, SONG_KEY_ARTIST, SONG_KEY_ARTWORK_URL, SONG_KEY_DURATION, SONG_KEY_GERNE, SONG_KEY_STREAM_URL, SONG_KEY_TAG },
+//				SONG_KEY_ID + "=?", new String[] { id}, null, null,
+//				null, null);
+		String query = "SELECT * FROM " + SONG_TABLE_NAME + " WHERE " + SONG_KEY_ID + "=" + id;
+		Cursor cursor = db.rawQuery(query, new String[]{});
 		if (cursor == null || cursor.getCount() == 0){
 			db.close();
 			return null;
@@ -172,11 +177,17 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(SONG_TABLE_NAME, new String[] { SONG_KEY_STREAM_URL },
-				SONG_KEY_ID + "=?", new String[] { }, null, null,
-				null, null);
+//		Cursor cursor = db.query(SONG_TABLE_NAME, new String[] { SONG_KEY_STREAM_URL },
+//				SONG_KEY_ID + "=?", new String[] { }, null, null,
+//				null, null);
 		
-		if (cursor == null) return null;
+		String query = "SELECT " + SONG_KEY_STREAM_URL + " FROM " + SONG_TABLE_NAME + " WHERE " + SONG_KEY_ID + "=" + id;
+		Cursor cursor = db.rawQuery(query, new String[]{});
+		
+		if (cursor == null || cursor.getCount() == 0){
+			db.close();
+			return null;
+		}
 		if (cursor != null) {
 			cursor.moveToFirst();
 		}
