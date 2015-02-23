@@ -1,50 +1,15 @@
 package ngo.music.soundcloudplayer.controller;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
 import java.util.concurrent.ExecutionException;
 
-import org.apache.http.HttpResponse;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import android.content.Context;
-import android.drm.DrmStore.ConstraintsColumns;
-import android.os.AsyncTask;
-import android.support.v4.util.ArrayMap;
-import android.util.JsonReader;
-import android.util.JsonWriter;
-import android.util.Log;
-import android.widget.Toast;
-import ngo.music.soundcloudplayer.api.ApiWrapper;
-import ngo.music.soundcloudplayer.api.Http;
-import ngo.music.soundcloudplayer.api.Request;
-import ngo.music.soundcloudplayer.api.Stream;
-import ngo.music.soundcloudplayer.api.Token;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.entity.Category;
-import ngo.music.soundcloudplayer.entity.OfflineSong;
-import ngo.music.soundcloudplayer.entity.SCPlaylist;
 import ngo.music.soundcloudplayer.entity.Song;
-import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
-import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import android.os.AsyncTask;
+import android.widget.Toast;
 
 public abstract class CategoryController implements Constants.Data, Constants,
 		Constants.Categories {
@@ -58,7 +23,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		// playlists = new ArrayMap<String, ArrayList<Song>>();
 
 		try {
-			categories = getCategories();
+			categories = getCategories(true);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			Toast.makeText(MusicPlayerMainActivity.getActivity(),
@@ -102,8 +67,21 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	 * @throws ExecutionException
 	 * @throws InterruptedException
 	 */
-	public abstract ArrayList<Category> getCategories()
-			throws InterruptedException, ExecutionException;
+
+	protected abstract ArrayList<Category> getCategoriesInBackGround(
+			String... params);
+
+	protected abstract void getCategoriesPostExcecute(
+			ArrayList<Category> categories);
+
+	private ArrayList<Category> getCategories(boolean needUpdate)
+			throws InterruptedException, ExecutionException {
+		if (needUpdate) {
+			categories = new loadCategoryBackground().execute().get();
+		}
+		return categories;
+
+	}
 
 	/**
 	 * Store categories, called when any data change in category
@@ -160,8 +138,14 @@ public abstract class CategoryController implements Constants.Data, Constants,
 		return categoriesName;
 	}
 
-	public abstract ArrayList<Song> getSongFromCategory(String categoryName)
-			throws Exception;
+	public ArrayList<Song> getSongFromCategory(String categoryName){
+		for (Category category : categories) {
+			if (category.getTitle().equals(categoryName)) {
+				return category.getSongs();
+			}
+		}
+		return new ArrayList<Song>();
+	}
 
 	// public ArrayList<Song> getSongFromCategory(String categoryName) {
 	// for (Category category : categories) {
@@ -181,7 +165,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	public ArrayList<String> getCategoryString() {
 		// TODO Auto-generated method stub
 		try {
-			categories = getCategories();
+			categories = getCategories(false);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -370,7 +354,8 @@ public abstract class CategoryController implements Constants.Data, Constants,
 							storeCategories();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
-							Toast.makeText(MusicPlayerMainActivity.getActivity(),
+							Toast.makeText(
+									MusicPlayerMainActivity.getActivity(),
 									"Create unsuccessfully", Toast.LENGTH_LONG)
 									.show();
 						}
@@ -385,6 +370,31 @@ public abstract class CategoryController implements Constants.Data, Constants,
 				}
 			});
 
+		}
+
+	}
+
+	protected class loadCategoryBackground extends
+			AsyncTask<String, String, ArrayList<Category>> {
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			categories.clear();
+		}
+
+		@Override
+		protected ArrayList<Category> doInBackground(String... params) {
+			// TODO Auto-generated method stub
+			return getCategoriesInBackGround(params);
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<Category> categories) {
+			// TODO Auto-generated method stub
+			getCategoriesPostExcecute(categories);
+			return;
 		}
 
 	}

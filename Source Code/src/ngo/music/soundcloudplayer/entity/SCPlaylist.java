@@ -25,10 +25,7 @@ public class SCPlaylist extends Category{
 		// TODO Auto-generated constructor stub
 		super(title, song);
 	}
-	public SCPlaylist(String string) {
-
-		super(string);
-	}
+	
 
 
 	/**

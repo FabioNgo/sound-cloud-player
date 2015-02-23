@@ -23,41 +23,23 @@ public class PlaylistController extends OfflineCategoryController {
 	String filename ="";
 	
 
-	
-	@Override
-	public ArrayList<Category> getCategories() {
+	public Category getPlaylist(String string) {
+		String separator = "\1";
+		String[] temp = string.split(separator);
 
-		filename = "playlists";
-		ArrayList<Category> categories = new ArrayList<Category>();
-		File file = new File(MusicPlayerMainActivity.getActivity()
-
-		.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
-		if (!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		String title = temp[0];
+		ArrayList<Song> songs = new ArrayList<Song>();
+		for (int i = 1; i < temp.length; i++) {
+			if (!temp[i].equals("")) {
+				Song song = SongController.getInstance().getSong(temp[i]);
+				if (song != null) {
+					songs.add(song);
+				}
 			}
-			return categories;
 		}
-
-		try {
-			FileReader reader = new FileReader(file);
-			BufferedReader bufferedReader = new BufferedReader(reader);
-			String line = "";
-			while ((line = bufferedReader.readLine()) != null) {
-				categories.add(new Category(line));
-			}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return categories;
+		return new Category(title, songs);
 	}
+	
 	@Override
 	public  void storeCategories() throws IOException {
 		// TODO Auto-generated method stub
@@ -95,6 +77,46 @@ public class PlaylistController extends OfflineCategoryController {
 	public Category createCategory(String name) {
 		// TODO Auto-generated method stub
 		return new Category(name, new ArrayList<Song>());
+		
+	}
+	@Override
+	protected ArrayList<Category> getCategoriesInBackGround(String ...params) {
+		// TODO Auto-generated method stub
+		filename = "playlists";
+		ArrayList<Category> categories = new ArrayList<Category>();
+		File file = new File(MusicPlayerMainActivity.getActivity()
+
+		.getExternalFilesDir(Context.ACCESSIBILITY_SERVICE), filename);
+		if (!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return categories;
+		}
+
+		try {
+			FileReader reader = new FileReader(file);
+			BufferedReader bufferedReader = new BufferedReader(reader);
+			String line = "";
+			while ((line = bufferedReader.readLine()) != null) {
+				categories.add(getPlaylist(line));
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return categories;
+	}
+	
+	@Override
+	protected void getCategoriesPostExcecute(ArrayList<Category> categories) {
+		// TODO Auto-generated method stub
 		
 	}
 

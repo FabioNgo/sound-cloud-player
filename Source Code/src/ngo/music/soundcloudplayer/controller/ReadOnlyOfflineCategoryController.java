@@ -20,5 +20,9 @@ public abstract class ReadOnlyOfflineCategoryController extends
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	@Override
+	protected void getCategoriesPostExcecute(ArrayList<Category> categories) {
+		// TODO Auto-generated method stub
+		
+	}
 }

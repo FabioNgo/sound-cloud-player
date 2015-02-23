@@ -90,18 +90,7 @@ public abstract class OfflineCategoryController extends CategoryController {
 		UIController.getInstance().updateUiWhenDataChanged(TAG_DATA_CHANGED);
 	}
 
-	@Override
-	public ArrayList<Song> getSongFromCategory(String categoryName) {
-		// TODO Auto-generated method stub
-		for (Category category : categories) {
-			if (category.getTitle().equals(categoryName)) {
-				return category.getSongs();
-			}
-		}
-		return new ArrayList<Song>();
-		
 	
-	}
 	
 
 }

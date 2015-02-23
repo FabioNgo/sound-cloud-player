@@ -23,7 +23,6 @@ import ngo.music.soundcloudplayer.api.Endpoints;
 import ngo.music.soundcloudplayer.api.Http;
 import ngo.music.soundcloudplayer.api.Request;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-
 import ngo.music.soundcloudplayer.entity.Category;
 import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.SCPlaylist;
@@ -158,23 +157,7 @@ public class SCMyPlaylistController extends SCPlaylistController implements
 	// return playlists;
 	// }
 
-	@Override
-	public ArrayList<Category> getCategories() throws InterruptedException, ExecutionException {
-
-		//ArrayList<Category> categories = new ArrayList<Category>();
-		//try {
-			return new loadUserPlaylistBackground().execute().get();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return categories;
-//		} catch (ExecutionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//			return categories;
-//		}
-		// return categories;
-	}
+	
 
 
 	@Override
@@ -427,6 +410,52 @@ public class SCMyPlaylistController extends SCPlaylistController implements
 
 		}
 
+	}
+
+
+	@Override
+	protected ArrayList<Category> getCategoriesInBackGround(String ...params) {
+		// TODO Auto-generated method stub
+		try {
+
+			ApiWrapper wrapper = SCUserController.getInstance()
+					.getApiWrapper();
+			User user = SCUserController.getInstance().getUser();
+
+			String currentViewUserId = String.valueOf(user.getId());
+
+			String request = Constants.USER_LINK + "/" + currentViewUserId
+					+ "/playlists";
+			HttpResponse resp = wrapper.get(Request.to(request));
+			String resposeStr = Http.getString(resp);
+			JSONArray JArray = new JSONArray(resposeStr);
+			for (int i = 0; i < JArray.length(); i++) {
+				JSONObject jObject = JArray.getJSONObject(i);
+				categories.add(addPlaylistInfomation(jObject));
+				// params[0].add(jObject.getString(PLAYLIST_TITLE));
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return categories;
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return categories;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return categories;
+		}
+		return categories;
+		
+	}
+
+	@Override
+	protected void getCategoriesPostExcecute(ArrayList<Category> categories) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

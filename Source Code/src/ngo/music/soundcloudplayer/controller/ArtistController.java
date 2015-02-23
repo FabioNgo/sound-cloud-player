@@ -10,12 +10,6 @@ import ngo.music.soundcloudplayer.general.Constants;
 public class ArtistController extends ReadOnlyOfflineCategoryController{
 	static ArtistController instance = null;
 
-	@Override
-	public ArrayList<Category> getCategories() {
-		// TODO Auto-generated method stub
-		ArrayList<Category> cate = SongController.getInstance().getOfflineArtists();
-		return cate;
-	}
 
 
 	@Override
@@ -35,6 +29,13 @@ public class ArtistController extends ReadOnlyOfflineCategoryController{
 	protected int setType() {
 		// TODO Auto-generated method stub
 		return ARTIST;
+	}
+
+
+	@Override
+	protected ArrayList<Category> getCategoriesInBackGround(String... params) {
+		// TODO Auto-generated method stub
+		return SongController.getInstance().getOfflineArtists();
 	}
 
 

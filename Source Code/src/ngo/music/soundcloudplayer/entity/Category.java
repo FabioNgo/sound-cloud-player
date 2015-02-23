@@ -26,21 +26,7 @@ public class Category {
 		this.songs = new ArrayList<Song>();
 		songs.add(song);
 	}
-	public Category(String string) {
-
-		String[] temp = string.split(separator);
-
-		this.title = temp[0];
-		this.songs = new ArrayList<Song>();
-		for (int i = 1; i < temp.length; i++) {
-			if (!temp[i].equals("")) {
-				Song song = SongController.getInstance().getSong(temp[i]);
-				if (song != null) {
-					songs.add(song);
-				}
-			}
-		}
-	}
+	
 
 	@Override
 	public String toString() {

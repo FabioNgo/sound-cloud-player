@@ -31,26 +31,16 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 
-public class SCPlaylistSearchController extends SCPlaylistController implements Constants.Data, Constants, Constants.PlaylistConstant {
+public class SCPlaylistSearchController extends SCPlaylistController implements
+		Constants.Data, Constants, Constants.PlaylistConstant {
 
 	private static final int OFFSET = 5;
 	static SCPlaylistSearchController instance = null;
-	ArrayList<SCPlaylist> playlists =  new ArrayList<SCPlaylist>();
-	
-	
-	SCPlaylistSearchController() {
-		// TODO Auto-generated constructor stub
-		// playlists = new ArrayMap<String, ArrayList<Song>>();
-		System.out.println ("SOUND CLOUD PLAYLIST CREATED");
-		instance = this;
-		categories = getCategories();
-		System.out.println("categories  = " + categories);
-		TAG_DATA_CHANGED = SC_SEARCH_PLAYLIST_CHANGED;
-		TAG_ITEM_CHANGED = ITEM_IN_SC_SEARCH_PLAYLIST_CHANGED;
-	}
+	ArrayList<SCPlaylist> playlists = new ArrayList<SCPlaylist>();
+	String me = "";
 
 	public static SCPlaylistSearchController getInstance() {
-		
+
 		if (instance == null) {
 			new SCPlaylistSearchController();
 		}
@@ -59,83 +49,27 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 
 	}
 
-
-	private class loadSearchPlaylistBackground extends AsyncTask<String, String, ArrayList<Category>>{
-		SCUserController soundCloudUserController = SCUserController.getInstance();
-		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
-		
-		HttpResponse resp;
-		String me = "";
-		
-		@Override
-		protected ArrayList<Category> doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			
-			try {
-				resp = wrapper.get(Request.to(params[0]));
-				//System.out.println (resp.getStatusLine());
-				
-				me =  Http.getString(resp);
-//				JSONArray array =  new JSONArray(me);
-//				//JSONObject object = array.getJSONObject(0);
-//				//System.out.println (object.toString());
-//				for (int i = 0; i < array.length(); i++) {
-//					JSONObject object  = array.getJSONObject(i);
-//					
-//			
-//					categories.add(addPlaylistInfomation(object));
-//					System.out.println (object.get(PLAYLIST_TITLE));
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		//	System.out.println ("LOAD PLAYLIST DONE");
-			return categories;
-		}
-		
-		@Override
-		protected void onPostExecute(ArrayList<Category> result) {
-			// TODO Auto-generated method stub
-			
-			try {
-				
-				
-				JSONArray array =  new JSONArray(me);
-				//JSONObject object = array.getJSONObject(0);
-				//System.out.println (object.toString());
-				for (int i = 0; i < array.length(); i++) {
-					JSONObject object  = array.getJSONObject(i);
-					
-			
-					categories.add(addPlaylistInfomation(object));
-					//System.out.println (object.get(PLAYLIST_TITLE));
-				}
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			
-		}
-	}
-		
 	
+
 	/**
 	 * Search User from Soundcloud
+	 * 
 	 * @param query
 	 * @param page
 	 */
 	public void searchPlaylistSC(String query, int page) {
 		// TODO Auto-generated method stub
-		SCUserController soundCloudUserController = SCUserController.getInstance();
+		SCUserController soundCloudUserController = SCUserController
+				.getInstance();
 		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
-		//ArrayList<Category> categories = new ArrayList<Category>(); 
-		int offset = page*OFFSET;
-		
-		String request =  "http://api.soundcloud.com/playlists.json?q=" + query + "&limit="+ String.valueOf(offset);
+		// ArrayList<Category> categories = new ArrayList<Category>();
+		int offset = page * OFFSET;
+
+		String request = "http://api.soundcloud.com/playlists.json?q=" + query
+				+ "&limit=" + String.valueOf(offset);
 		try {
-			categories = new loadSearchPlaylistBackground().execute(request).get();
+			categories = new loadCategoryBackground().execute(request)
+					.get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -145,19 +79,6 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 		}
 
 	}
-
-	
-	@Override
-	public ArrayList<Category> getCategories() {
-		System.out.println ("CATE = " + categories);
-		if (categories == null){
-			
-			return new ArrayList<Category>();
-		}
-		return categories;
-	}
-	
-	
 
 	public void clearSearch() {
 		// TODO Auto-generated method stub
@@ -185,23 +106,71 @@ public class SCPlaylistSearchController extends SCPlaylistController implements 
 	@Override
 	public void removeSongFromCate(Song song, String cate) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void removeCategory(String cate) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void updateTitle(String oldName, String newName) throws Exception {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-		
+	@Override
+	protected ArrayList<Category> getCategoriesInBackGround(String... params) {
+		// TODO Auto-generated method stub
+		SCUserController soundCloudUserController = SCUserController
+				.getInstance();
+		ApiWrapper wrapper = soundCloudUserController.getApiWrapper();
 
-	
+		HttpResponse resp;
+
+		try {
+			resp = wrapper.get(Request.to(params[0]));
+			// System.out.println (resp.getStatusLine());
+
+			me = Http.getString(resp);
+			// JSONArray array = new JSONArray(me);
+			// //JSONObject object = array.getJSONObject(0);
+			// //System.out.println (object.toString());
+			// for (int i = 0; i < array.length(); i++) {
+			// JSONObject object = array.getJSONObject(i);
+			//
+			//
+			// categories.add(addPlaylistInfomation(object));
+			// System.out.println (object.get(PLAYLIST_TITLE));
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		// System.out.println ("LOAD PLAYLIST DONE");
+		return categories;
+	}
+
+	@Override
+	protected void getCategoriesPostExcecute(ArrayList<Category> categories) {
+		// TODO Auto-generated method stub
+		try {
+
+			JSONArray array = new JSONArray(me);
+			// JSONObject object = array.getJSONObject(0);
+			// System.out.println (object.toString());
+			for (int i = 0; i < array.length(); i++) {
+				JSONObject object = array.getJSONObject(i);
+
+				categories.add(addPlaylistInfomation(object));
+				// System.out.println (object.get(PLAYLIST_TITLE));
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }
