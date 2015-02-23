@@ -69,7 +69,7 @@ public abstract class SCPlaylistController extends CategoryController implements
 				for (int i = 0; i < songsJson.length(); i++) {
 					JSONObject object = songsJson.getJSONObject(i);
 
-					songs.add(SongController.getInstance().addSongInformation(
+					songs.add(SongController.getInstance().addSongInformationSimple(
 							object));
 				}
 			}
