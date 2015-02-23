@@ -57,12 +57,13 @@ public class UserLoginActivity extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		activity = this;
 		//AppController.printKeyHash(this);
-		System.out.println ("USER LOGIN ACTIVITY ON CREATE");
+		//System.out.println ("USER LOGIN ACTIVITY ON CREATE");
 		DatabaseCreate databaseCreate =  new DatabaseCreate(getActivity());
 		databaseCreate.createTables();
 		MusicPlayerService.getInstance();
 		SCLoginDatabaseTable databaseHandler = SCLoginDatabaseTable.getInstance(getActivity());
 		if (BasicFunctions.isConnectingToInternet(activity)) {
+			System.out.println ("LOGIN STAT " + States.loginState);
 			if (databaseHandler.isLoggedIn() && States.loginState == LOGGED_IN) {
 				String token = databaseHandler.getToken();
 				
@@ -73,7 +74,7 @@ public class UserLoginActivity extends FragmentActivity implements
 			
 		}else{
 			
-			System.out.println ("NO INTERNET");
+			//System.out.println ("NO INTERNET");
 			States.loginState = NOT_LOGGED_IN;
 			//Bundle bundle = userController.getBundle(currentUser);
 			Intent goToMainActivity = new Intent(
@@ -190,6 +191,7 @@ public class UserLoginActivity extends FragmentActivity implements
 							.getInstance();
 					User currentUser = null;
 					try {
+						System.out.println (token);
 						userController.setToken(new Token(token, "refresh-token"));
 						userController.login();
 						

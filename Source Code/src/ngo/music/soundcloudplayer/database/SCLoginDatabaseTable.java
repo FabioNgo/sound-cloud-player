@@ -206,14 +206,18 @@ public class SCLoginDatabaseTable extends SQLiteOpenHelper implements Constants.
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
+		values.put(LOGIN_KEY_ID, 0);
 		values.put(LOGIN_KEY_TOKEN, token);
 //		
 
 		// updating row return
-//		int update = db.update(TABLE_LOGIN, values, KEY_TOKEN + " = ?",
+//		int update = db.update(LOGIN_TABLE_NAME, values, LOGIN_KEY_TOKEN + " = ?",
 //				new String[] { token });
+		db.execSQL("DELETE FROM " + LOGIN_TABLE_NAME);
+		
 		int insert = (int) db.insert(LOGIN_TABLE_NAME, null, values);
 		db.close();
+		//System.out.println ("INSERT = " + insert);
 		return insert;
 
 	}
@@ -225,13 +229,14 @@ public class SCLoginDatabaseTable extends SQLiteOpenHelper implements Constants.
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(LOGIN_TABLE_NAME, new String[] { LOGIN_KEY_ID, LOGIN_KEY_TOKEN },
-				LOGIN_KEY_ID + "=?", new String[] { }, null, null,
-				null, null);
-		if (cursor != null) {
-			cursor.moveToFirst();
-		}else{
+		String query = "SELECT * FROM " + LOGIN_TABLE_NAME;
+		Cursor cursor = db.rawQuery(query, new String[]{});
+		System.out.println (cursor.getCount());
+		if (cursor == null || cursor.getCount() == 0) {
+			db.close();
 			return null;
+		}else{
+			cursor.moveToFirst();
 		}
 
 		String token = cursor.getString(cursor.getColumnIndex(LOGIN_KEY_TOKEN));
@@ -247,17 +252,17 @@ public class SCLoginDatabaseTable extends SQLiteOpenHelper implements Constants.
 		
 		SQLiteDatabase db = this.getReadableDatabase();
 
-		Cursor cursor = db.query(LOGIN_TABLE_NAME, new String[] { LOGIN_KEY_ID, LOGIN_KEY_TOKEN },
-				LOGIN_KEY_ID + "=?", new String[] { }, null, null,
-				null, null);
-		if (cursor != null) {
-			cursor.close();
-			db.close();
-			return true;
-		}else{
+		String query = "SELECT * FROM " + LOGIN_TABLE_NAME;
+		Cursor cursor = db.rawQuery(query, new String[]{});
+		System.out.println (cursor.getCount());
+		if (cursor == null || cursor.getCount() == 0) {
 			//cursor.close();
 			db.close();
 			return false;
+		}else{
+			cursor.close();
+			db.close();
+			return true;
 		}
 
 		//String token = cursor.getString(1);

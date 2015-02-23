@@ -141,7 +141,9 @@ public class SCUserController extends UserController implements Constants.UserCo
 	 * @throws JSONException
 	 */
 	public void retrevieUserInfoOnline(ApiWrapper wrapper) throws IOException, JSONException {
-		HttpResponse resp = wrapper.get(Request.to(Endpoints.MY_DETAILS));
+		wrapper.setToken(getToken());
+		System.out.println (getToken());
+		HttpResponse resp = wrapper.get(Request.to("/me"));
 		//t = wrapper.clientCredentials();
 		
 		JSONObject me = Http.getJSON(resp);
