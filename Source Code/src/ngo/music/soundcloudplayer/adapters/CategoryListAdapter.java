@@ -6,7 +6,7 @@ import java.util.concurrent.ExecutionException;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.ViewHolder.CompositionViewHolder;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.boundary.fragments.ListItemsInCompositionListFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.ListItemsInCompositionListFragment;
 import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.OfflineSong;
@@ -138,7 +138,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 	}
 
 	/**
-	 * get categories in list of item sets
+	 * get categories (songs and title) in list of item sets
 	 * 
 	 * @return categories
 	 */

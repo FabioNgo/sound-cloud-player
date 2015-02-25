@@ -16,10 +16,10 @@ import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
 import ngo.music.soundcloudplayer.boundary.LitePlayerUI;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.PlayerUI;
-import ngo.music.soundcloudplayer.boundary.QueueSongUI;
-import ngo.music.soundcloudplayer.boundary.fragments.CategoryListContentFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.CategoryListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.ListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.PlaylistFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.QueueFragment;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
@@ -30,6 +30,7 @@ import android.content.Context;
 import android.net.NetworkInfo.State;
 import android.os.CountDownTimer;
 import android.text.Html;
+import android.util.Log;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
@@ -101,7 +102,11 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	 * @param input
 	 *            : a listContentFragment to add
 	 */
-	public void addListContentFragements(ListContentFragment input) {
+	public void addListContentFragments(ListContentFragment input) {
+		if(input == null){
+			Log.e("Add ContentFragments",input.getClass().toString());
+			return;
+		}
 		/**
 		 * Remove old one
 		 */
@@ -118,11 +123,17 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		/**
 		 * try to load new fragment
 		 */
-		if (States.appState == APP_RUNNING) {
-
-			input.load();
-
-		}
+		
+//		if (States.appState == APP_RUNNING) {
+//			try {
+//				input.load();
+//			} catch (Exception e) {
+//				// TODO: handle exception
+//			}
+//			
+//
+//		}
+		
 
 	}
 
@@ -160,6 +171,12 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	 * @param adapter
 	 */
 	public void addAdapter(ArrayAdapter<?> adapter) {
+		if(adapter == null){
+			Log.e("Add Adapter",adapter.getClass().toString());
+			return;
+		}else{
+			Log.i("Add Adapter",adapter.getClass().toString());
+		}
 		for (int i = 0; i < adapters.size(); i++) {
 			if (adapters.get(i).getClass().equals(adapter.getClass())) {
 				adapters.remove(i);
@@ -383,6 +400,9 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		Song curSong = MusicPlayerService.getInstance().getCurrentSong();
 		switch (TAG) {
 		case APP_RUNNING:
+			if(!MusicPlayerService.isLoaded){
+				return;
+			}
 			if (States.appState != APP_RUNNING) {
 				if (MusicPlayerService.getInstance().isPlaying()) {
 
@@ -416,7 +436,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 				for (ListContentFragment listContentFragment : listContentFragments) {
 					listContentFragment.load();
 				}
-				loaded = true;
+//				loaded = true;
 				States.appState = APP_RUNNING;
 			}
 			break;
@@ -455,7 +475,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 				}
 
 			}
-			QueueSongUI.getInstance().update();
+			QueueFragment.getInstance().update();
 			break;
 		case PLAYLIST_CHANGED:
 			CategoryTitlesListAdapter.getInstance(PLAYLIST).updateCategory();

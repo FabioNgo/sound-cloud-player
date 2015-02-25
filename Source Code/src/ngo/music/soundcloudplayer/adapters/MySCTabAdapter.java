@@ -2,13 +2,13 @@ package ngo.music.soundcloudplayer.adapters;
 
 
 import ngo.music.soundcloudplayer.boundary.FullPlayerUI;
-import ngo.music.soundcloudplayer.boundary.fragments.MySCFavoriteFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.MySCStreamFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.MySCFollowerFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.MySCFollowingFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.SCPlaylistFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.MySCFavoriteFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.MySCFollowerFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.MySCFollowingFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.MySCStreamFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.OfflineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.PlaylistFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.SCPlaylistFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;

@@ -8,8 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.PlaylistAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.CategoryAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.PlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.MenuController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
@@ -50,19 +50,12 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	SCAccount soundCloudAccount = null;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		hasTextTime = true;
-		musicProgressBar_id = R.id.full_player_progress_bar;
-	}
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		super.onCreateView(inflater, container, savedInstanceState);
+		numberPlayerLoading++;
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
 		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
@@ -92,6 +85,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		updateShuffle();
 		updateLoop();
 		UIController.getInstance().addUiFragment(this);
+		numberPlayerLoading--;
 		return rootView;
 
 	}
@@ -469,6 +463,12 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	public void resetProgress() {
 
+	}
+
+	@Override
+	protected boolean hasTextTime() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 	

@@ -19,7 +19,7 @@
 		android:layout_marginStart="4dp"
 		android:layout_marginTop="10dp"
 		android:layout_toEndOf="@+id/lite_player_image"
-		android:layout_toStartOf="@+id/lite_player_progress_bar"
+		android:layout_toStartOf="@+id/player_progress_bar"
 		
 		android:singleLine="true"
 		
@@ -35,14 +35,14 @@
 		android:layout_alignStart="@+id/lite_player_title"
 		android:layout_below="@+id/lite_player_title"
 		android:layout_toEndOf="@+id/lite_player_image"
-		android:layout_toStartOf="@+id/lite_player_progress_bar"
+		android:layout_toStartOf="@+id/player_progress_bar"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
 		android:textColor="@color/secondary_text"
 		android:textIsSelectable="false"/>
 
 	<com.todddavies.components.progressbar.ProgressWheel
-		android:id="@+id/lite_player_progress_bar"
+		android:id="@+id/player_progress_bar"
 		android:layout_width="50dp"
 		android:layout_height="50dp"
 		android:layout_alignParentEnd="true"

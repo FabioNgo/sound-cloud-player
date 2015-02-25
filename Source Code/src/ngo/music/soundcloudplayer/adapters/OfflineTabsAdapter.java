@@ -1,10 +1,10 @@
 package ngo.music.soundcloudplayer.adapters;
 
-import ngo.music.soundcloudplayer.boundary.fragments.AlbumsFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.ArtistsFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.CategoryListContentFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.OfflineSongsFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.PlaylistFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.CategoryListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.AlbumsFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.ArtistsFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.OfflineSongsFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.PlaylistFragment;
 import ngo.music.soundcloudplayer.controller.AlbumController;
 import ngo.music.soundcloudplayer.general.Constants;
 import android.support.v4.app.Fragment;

@@ -202,23 +202,28 @@ public interface Constants {
 		int SC_PLAYLIST = 3;
 		int SC_SEARCH_PLAYLIST = 4;
 		int NUM_ITEM_IN_ONE_CATEGORY = 5;
+		int TRENDING_MUSIC = 6;
+		int TRENDING_AUDIO = 7;
+		int ALTERNATIVE_ROCK = 8;
+		int AMBIENT = 9;
+		int CLASSICAL = 10;
+		int COUNTRY  = 11;
+		int DANCE_EDM = 12;
+		int DEEP_HOUSE = 13;
+		int DISCO = 14;
+		int DRUM_BASS = 15;
+		int DUBSTEP = 16;
+		int DANCE_HALL = 17;
+		int ELECTRONIC = 18;
+		int FOLK = 19;
+		int SEARCH = 20;
+		int OFFLINE = 21;
+		int QUEUE = 22;
+		int STREAM = 23;
+		int FAVOURITE = 24;
 	}
 	interface SoundCloudExploreConstant{
-		int TRENDING_MUSIC = 0;
-		int TRENDING_AUDIO = 1;
-		int ALTERNATIVE_ROCK = 2;
-		int AMBIENT = 3;
-		int CLASSICAL = 4;
-		int COUNTRY  = 5;
-		int DANCE_EDM = 6;
-		int DEEP_HOUSE = 7;
-		int DISCO = 8;
-		int DRUM_BASS = 9;
-		int DUBSTEP = 10;
-		int DANCE_HALL = 11;
-		int ELECTRONIC = 12;
-		int FOLK = 13;
-		int SEARCH = 14;
+		
 		
 		String TRENDING_MUSIC_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
 		String TRENDING_AUDIO_LINK = "https://api-v2.soundcloud.com/explore/popular%2Baudio?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";

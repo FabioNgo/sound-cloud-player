@@ -4,6 +4,7 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,16 +14,15 @@ import com.todddavies.components.progressbar.ProgressWheel;
 
 public abstract class PlayerUI extends Fragment {
 	protected ProgressWheel musicProgressBar;
-
+	public static int numberPlayerLoading= 0;
 	TextView currentTimeText;
 	TextView durationText;
 	Runnable runnable;
-	protected int musicProgressBar_id = -1;
-	protected boolean hasTextTime = false;
 	protected View rootView = null;
-
+	
 	public PlayerUI() {
 		// TODO Auto-generated constructor stub
+		
 		/**
 		 * Runnable for timer
 		 */
@@ -31,7 +31,7 @@ public abstract class PlayerUI extends Fragment {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				if (hasTextTime) {
+				if (hasTextTime()) {
 					currentTimeText.setText(UIController.getInstance()
 							.getCurrentTime());
 					durationText.setText(UIController.getInstance()
@@ -40,7 +40,12 @@ public abstract class PlayerUI extends Fragment {
 			}
 		};
 	}
-
+	
+	/**
+	 * Player UI has text time or not
+	 * @return
+	 */
+	protected abstract boolean hasTextTime();
 	/**
 	 * update Title of the song
 	 */
@@ -96,7 +101,7 @@ public abstract class PlayerUI extends Fragment {
 
 	protected void iniMusicProgressBar() {
 		musicProgressBar = (ProgressWheel) rootView
-				.findViewById(musicProgressBar_id);
+				.findViewById(R.id.player_progress_bar);
 
 		musicProgressBar
 				.setBackgroundResource(R.drawable.ic_media_play_progress);
@@ -128,7 +133,7 @@ public abstract class PlayerUI extends Fragment {
 
 	public void stop() {
 		// TODO Auto-generated method stub
-		if (hasTextTime) {
+		if (hasTextTime()) {
 			currentTimeText.setText("00:00");
 			durationText.setText("00:00");
 		}

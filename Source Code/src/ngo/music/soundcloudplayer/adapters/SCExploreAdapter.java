@@ -6,6 +6,7 @@ import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
+import android.view.MenuItem;
 
 public class SCExploreAdapter extends ListSongAdapter {
 
@@ -19,4 +20,6 @@ public class SCExploreAdapter extends ListSongAdapter {
 		// TODO Auto-generated constructor stub
 	}
 
+
+	
 }

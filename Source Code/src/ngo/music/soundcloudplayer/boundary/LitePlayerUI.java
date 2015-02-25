@@ -20,22 +20,14 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 	NetworkImageView image;
 
-	public LitePlayerUI() {
-		// TODO Auto-generated constructor stub
-	}
+	
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
-		super.onCreate(savedInstanceState);
-		hasTextTime = false;
-		musicProgressBar_id = R.id.lite_player_progress_bar;
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
+		numberPlayerLoading++;
 		rootView = inflater.inflate(R.layout.liteplayer, container, false);
 		iniMusicProgressBar();
 
@@ -45,6 +37,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 				container.getLayoutParams().height, image);
 
 		UIController.getInstance().addUiFragment(this);
+		numberPlayerLoading--;
 		return rootView;
 	}
 
@@ -93,6 +86,12 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 	public void update() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	protected boolean hasTextTime() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

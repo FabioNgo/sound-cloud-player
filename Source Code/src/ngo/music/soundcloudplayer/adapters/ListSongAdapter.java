@@ -7,8 +7,8 @@ import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.ViewHolder.SCSongViewHolder;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
-import ngo.music.soundcloudplayer.boundary.fragments.CategoryAddingFragment;
-import ngo.music.soundcloudplayer.boundary.fragments.SCPlaylistAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.CategoryAddingFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.SCPlaylistAddingFragment;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.entity.SCSong;
@@ -37,7 +37,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
-public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
+public abstract class ListSongAdapter extends LiteListSongAdapter implements
 		Constants {
 
 	protected ApiWrapper wrapper;
@@ -71,23 +71,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 	// return instance;
 	// }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		View v = convertView;
-		if (v == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext()
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.song_view, parent, false);
-			viewHolder = new SCSongViewHolder(v);
-			v.setTag(viewHolder);
-		} else {
-			viewHolder = (SCSongViewHolder) v.getTag();
-		}
-
-		setLayoutInfomation(position, viewHolder);
-		return v;
-	}
+	
 
 	/**
 	 * Set layout infomation
@@ -282,29 +266,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 					@Override
 					public boolean onMenuItemClick(MenuItem arg0) {
 						// TODO Auto-generated method stub
-						switch (arg0.getItemId()) {
-						case R.id.list_addQueue:
-							MusicPlayerService.getInstance().addSongToQueue(
-									song);
-							break;
-						case R.id.list_playNext:
-							MusicPlayerService.getInstance().addToNext(song);
-							break;
-						case R.id.list_addToPlaylist:
-							ArrayList<Song> songs = new ArrayList<Song>();
-							songs.add(song);
-							CategoryAddingFragment playlistAddingFragment = new SCPlaylistAddingFragment(
-									songs);
-							playlistAddingFragment.show(MusicPlayerMainActivity
-									.getActivity().getSupportFragmentManager(),
-									"New Playlist");
-							break;
-						case R.id.list_delete:
-							SongController.getInstance().deleteSong(song);
-							break;
-						default:
-							break;
-						}
+						
 
 						return false;
 					}
@@ -450,6 +412,34 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 		songs = SongController.getInstance().getOnlineSongs(mCategory);
 		//System.out.println ("LIST SONG ADAPTER = " + songs.get(0).getId());
 		//notifyDataSetChanged();
+	}
+	@Override
+	public boolean onMenuItemClick(MenuItem arg0) {
+		// TODO Auto-generated method stub
+		switch (arg0.getItemId()) {
+		case R.id.list_addQueue:
+			MusicPlayerService.getInstance().addSongToQueue(
+					song);
+			break;
+		case R.id.list_playNext:
+			MusicPlayerService.getInstance().addToNext(song);
+			break;
+		case R.id.list_addToPlaylist:
+			ArrayList<Song> songs = new ArrayList<Song>();
+			songs.add(song);
+			CategoryAddingFragment playlistAddingFragment = new SCPlaylistAddingFragment(
+					songs);
+			playlistAddingFragment.show(MusicPlayerMainActivity
+					.getActivity().getSupportFragmentManager(),
+					"New Playlist");
+			break;
+		case R.id.list_delete:
+			SongController.getInstance().deleteSong(song);
+			break;
+		default:
+			break;
+		}
+		return false;
 	}
 	
 

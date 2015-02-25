@@ -9,7 +9,9 @@ import ngo.music.soundcloudplayer.adapters.OfflineTabsAdapter;
 import ngo.music.soundcloudplayer.adapters.SCExploreTabAdater;
 import ngo.music.soundcloudplayer.adapters.SCSearchTabAdater;
 import ngo.music.soundcloudplayer.api.Token;
-import ngo.music.soundcloudplayer.boundary.fragments.UserDisplayFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.ListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.QueueFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.real.UserDisplayFragment;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.SCUserController;
 import ngo.music.soundcloudplayer.controller.UIController;
@@ -18,9 +20,11 @@ import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.general.Constants;
 import ngo.music.soundcloudplayer.general.States;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
@@ -255,7 +259,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, new QueueSongUI()).commit();
+				.replace(R.id.play_queue_container, new QueueFragment()).commit();
 	}
 
 	/**
@@ -263,13 +267,18 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 */
 	private void configMusicPlayerService() {
 		// if (!isMyServiceRunning()) {
+		while(ListContentFragment.numFragmentsLoading!=0||PlayerUI.numberPlayerLoading!=0);
+//		ProgressDialog dialog = new ProgressDialog(this);
+//		dialog.setTitle("Loading...");
+//		SystemClock.sleep(1000);
 		Intent musicPlayerServiceIntent = new Intent(this,
 				MusicPlayerService.class);
 		// bindService(musicPlayerServiceIntent, mConnection,
 		// Context.BIND_AUTO_CREATE);
 		startService(musicPlayerServiceIntent);
+//		dialog.dismiss();
 		// } else {
-
+		
 		// }
 	}
 
@@ -384,7 +393,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				// TODO: handle exception
 			}
 
-			MusicPlayerService.getInstance().playNewSong(position, songs);
+			MusicPlayerService.getInstance().playNewSong(position,-1, songs);
 			if (!MusicPlayerService.getInstance().isShuffle()) {
 				MusicPlayerService.getInstance().setShuffle();
 			}
@@ -416,7 +425,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+//		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 
 	@Override
@@ -449,7 +458,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+//		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 
 	/**

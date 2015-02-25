@@ -6,7 +6,7 @@ import java.util.List;
 import ngo.music.soundcloudplayer.adapters.CategoryTitlesListAdapter;
 import ngo.music.soundcloudplayer.adapters.MySCStreamAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
-import ngo.music.soundcloudplayer.boundary.fragments.ListContentFragment;
+import ngo.music.soundcloudplayer.boundary.fragment.abstracts.ListContentFragment;
 import ngo.music.soundcloudplayer.controller.CategoryController;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
