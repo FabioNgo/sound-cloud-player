@@ -100,6 +100,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 	 */
 	private void setLayoutInfomation(int position, SCSongViewHolder viewHolder) {
 		final Song song = songs.get(position);
+		//System.out.println ("SET LAYOUT = " + song.getId());
 		NetworkImageView avatar = configLayoutAvatar(viewHolder, song);
 
 		configTitleSong(viewHolder, song);
@@ -200,7 +201,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 			@Override
 			public void onClick(View v) {
 
-				System.out.println("SHARE");
+				//System.out.println("SHARE");
 				// MenuItem item = menu.findItem(R.id.menu_item_share);
 				// mShareActionProvider = (ShareActionProvider)
 				// item.getActionProvider();
@@ -210,7 +211,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 				// if (song instanceof OnlineSong){
 				String shareBody = ((SCSong) song).getPermalinkUrl();
 				String shareSubject = ((SCSong) song).getTitle();
-				System.out.println(shareBody);
+				//System.out.println(shareBody);
 				sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
 						shareSubject);
 				sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT,
@@ -334,7 +335,7 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 		if (song.getArtworkUrl() != null) {
 			viewHolder.avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
 		}
-		notifyDataSetChanged();
+		//notifyDataSetChanged();
 		return viewHolder.avatar;
 	}
 
@@ -447,7 +448,8 @@ public abstract class ListSongAdapter extends ArrayAdapter<Song> implements
 	public void update(int mCategory) {
 		// TODO Auto-generated method stub
 		songs = SongController.getInstance().getOnlineSongs(mCategory);
-		notifyDataSetChanged();
+		//System.out.println ("LIST SONG ADAPTER = " + songs.get(0).getId());
+		//notifyDataSetChanged();
 	}
 	
 

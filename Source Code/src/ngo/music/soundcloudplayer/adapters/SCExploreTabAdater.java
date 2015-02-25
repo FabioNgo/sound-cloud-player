@@ -10,8 +10,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class SCExploreTabAdater extends FragmentPagerAdapter {
 	private final String[] TITLES = {
-			"Trending Music", "Trending Audio", "Alternative Rock","Ambient", "Classical", "Country", "Dance", "Deep House",
-			"Disco", "Drum & Bass", "Dubstep","Electro", "Electronic", "Folk", "Search"};
+			"Trending Music", "Trending Audio", "Alternative Rock","Ambient", "Classical", "Country", "Dance&EDM", "Deep House",
+			"Disco", "Drum & Bass", "Dubstep","Dance Hall", "Electronic", "Folk", "Search"};
 
 	public SCExploreTabAdater(FragmentManager fm) {
 		super(fm);

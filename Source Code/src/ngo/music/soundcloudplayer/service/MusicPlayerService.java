@@ -444,11 +444,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		// System.out.println("PLAY NEW SONG 2");
 		Song song = getCurrentSong();
+		
 		if (song == null) {
 			BasicFunctions.makeToastTake("No song to play",
 					getApplicationContext());
 			return;
 		}
+		//System.out.println ("PLAY NEW SONG = " + song.getId());
 		if (startNow) {
 
 			States.musicPlayerState = MUSIC_PLAYING;
@@ -812,10 +814,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		@Override
 		protected String doInBackground(SCSong... params) {
 			// TODO Auto-generated method stub
-			System.out.println ("PLAY NEW SONG BG");
+			//System.out.println ("PLAY NEW SONG BG");
 			String link = "";
 			onlineSong = params[0];
 			try {
+				//System.out.println ("ONLINE SONG GET LINK = " + onlineSong.getId());
 				link = onlineSong.getLink();
 			} catch (Exception e) {
 				e.printStackTrace();

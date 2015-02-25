@@ -80,7 +80,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		Constants.SoundCloudExploreConstant, Constants.MusicService,
 		Constants.Data {
 
-	private static final int OFFSET = 5;
+	private static final int OFFSET = 10;
 
 	private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 
@@ -132,7 +132,7 @@ public class SongController implements Constants, Constants.SongConstants,
 				dir = new File(Environment.getExternalStorageDirectory()
 						+ ROOT_DIRECTORY);
 				if (!(dir.exists() && dir.isDirectory())) {
-					System.out.println("CREATE FOLDER: " + dir.mkdir());
+					//System.out.println("CREATE FOLDER: " + dir.mkdir());
 
 				}
 				offlineSongs = getSongsFromSDCard();
@@ -320,16 +320,22 @@ public class SongController implements Constants, Constants.SongConstants,
 
 	private ArrayList<Song> getSongsFromSoundCloud(int currentPage, int category) {
 
+		//System.out.println ("CP  = " + currentPage + "   " + category);
+		if (currentPage == 0 ){
+			return onlineSongs.get(category);
+		}
 		/*
 		 * category = Search
 		 */
 		if (category == SEARCH) {
 			return searchSongSC(MusicPlayerMainActivity.query, currentPage);
 		}
+
 		if (currentPage <= categoryCurrentPage[category]
 				|| !(BasicFunctions
 						.isConnectingToInternet(MusicPlayerMainActivity
 								.getActivity()))) {
+			//System.out.println (currentPage);
 			return onlineSongs.get(category);
 		}
 
@@ -437,8 +443,8 @@ public class SongController implements Constants, Constants.SongConstants,
 	public void initialCategoryListLink() {
 		exploreLinkList = new String[] { TRENDING_MUSIC_LINK,
 				TRENDING_AUDIO_LINK, ALTERNATIVE_ROCK_LINK, AMBIENT_LINK,
-				CLASSICAL_LINK, COUNTRY_LINK, DANCE_LINK, DEEP_HOUSE_LINK,
-				DISCO_LINK, DRUM_BASS_LINK, DUBSTEP_LINK, ELECTRO_LINK,
+				CLASSICAL_LINK, COUNTRY_LINK, DANCE_EDM_LINK, DEEP_HOUSE_LINK,
+				DISCO_LINK, DRUM_BASS_LINK, DUBSTEP_LINK, DANCE_HALL_LINK,
 				ELECTRONIC_LINK, FOLK_LINK };
 
 	}
@@ -452,7 +458,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			for (int i = 0; i < NUMBER_CATEGORY; i++) {
 				// System.out.println ("CATEGORY  = " +i);
 				categoryCurrentPage[i] = 0;
-				getSongsFromSoundCloud(1, i);
+				getSongsFromSoundCloud(0, i);
 			}
 			isInitialSongCategory = false;
 		}
@@ -641,7 +647,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		// song.setFavoriteCount(me.getInt(FOVORITINGS_COUNT));
 		// song.setLikesCount(me.getInt(LIKES_COUNT));
 		// song.setFormat(me.getString(FORMAT));
-		song.setGenre(me.getString(GENRE));
+		//song.setGenre(me.getString(GENRE));
 		// song.setKeySignature(me.getString(KEY_SIGNATURE));
 		// song.setLabelID(me.getInt(LABEL_ID));
 		// song.setLabelName(me.getString(LABEL_NAME));
@@ -660,7 +666,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		// song.setStreamable(me.getBoolean(STREAMABLE));
 
 		// song.setStreamable(me.getBoolean(STREAMABLE));
-		song.setTagList(me.getString(TAG_LIST));
+		//song.setTagList(me.getString(TAG_LIST));
 		// song.setTrackType(me.getString(TRACK_TYPE));
 		// song.setUri(me.getString(URI));
 		// song.setUserId(me.getInt(USER_ID));
@@ -752,11 +758,12 @@ public class SongController implements Constants, Constants.SongConstants,
 		SCSong onlineSong ;
 		SCSongDatabaseTable songDb = SCSongDatabaseTable.getInstance(MusicPlayerMainActivity.getActivity());
 			
+		//System.out.println ("USER ID " + id);
 		onlineSong = songDb.getSong(id);
 		if (onlineSong == null){
 			return null;
 		}else{
-			//System.out.println ("USER ID " + onlineSong.getUserId());
+			
 			SCAccount scAccount = SCUserController.getInstance().getSCArtistFromDatabase(onlineSong.getUserId());
 			onlineSong.setUser(scAccount);
 			onlineSong.setArtist(scAccount.getFullName());

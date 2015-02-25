@@ -33,7 +33,7 @@ public class DiscoFragment extends SoundCloudExploreFragment {
 	@Override
 	protected int setCategory() {
 		// TODO Auto-generated method stub
-		return DEEP_HOUSE;
+		return DISCO;
 	}
 
 

@@ -23,7 +23,9 @@ public class SCSong extends Song{
 	}
 	public SCSong(String id, String title, String artist, String album,
 			String link,long duration) {
+		
 		super(id, title, artist, album, link,duration);
+		//System.out.println (id + " " + title + " " );
 
 		// TODO Auto-generated constructor stub
 	}
@@ -108,7 +110,7 @@ public class SCSong extends Song{
 		/*
 		 * If song is already in database
 		 */
-		//System.out.println ("GET LINK");
+		System.out.println ("GET LINK ID = " + id) ;
 		SCSongDatabaseTable songDb = SCSongDatabaseTable.getInstance(MusicPlayerMainActivity.getActivity());
 		SCSong song = songDb.getSong(id);
 		if (song != null){

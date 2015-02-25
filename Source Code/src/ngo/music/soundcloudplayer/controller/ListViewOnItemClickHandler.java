@@ -25,6 +25,7 @@ public class ListViewOnItemClickHandler implements OnItemClickListener  {
 		//System.out.println ("ON CLICK");
 		//Song songSelected = (Song) songsList.getAdapter().getItem(position);
 		ArrayList<Song> songs = adapter.getSongs();
+		//System.out.println ("ADATPER = " + songs.get(0).getId());
 		//SongController songController = SongController.getInstance();
 		//songs = songController.resolvedPlaylist(songs);
 		//String streamUrl = songController.getStreamUrl(songs.get(position));

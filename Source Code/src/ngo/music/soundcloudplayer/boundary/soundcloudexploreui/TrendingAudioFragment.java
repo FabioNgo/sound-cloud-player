@@ -43,7 +43,7 @@ public class TrendingAudioFragment extends SoundCloudExploreFragment {
 	@Override
 	protected int setCurrentPage() {
 		// TODO Auto-generated method stub
-		return 1;
+		return 0;
 	}
 
 }

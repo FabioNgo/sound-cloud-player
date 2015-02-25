@@ -90,6 +90,7 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 		values.put(SONG_KEY_DURATION, song.getDuration());
 		values.put(SONG_KEY_GERNE, song.getGenre()); // song gerne
 		values.put(SONG_KEY_TAG, song.getTagList()); // song tag list
+		System.out.println ("DATABASE = " + song.getId() );
 		// Check if row already existed in database
 		if (!isSongExists(db, song.getId())) {
 			// site not existed, create a new row
@@ -144,6 +145,7 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 //		Cursor cursor = db.query(SONG_TABLE_NAME, new String[] { SONG_KEY_ID, SONG_KEY_TITLE, SONG_KEY_ARTIST, SONG_KEY_ARTWORK_URL, SONG_KEY_DURATION, SONG_KEY_GERNE, SONG_KEY_STREAM_URL, SONG_KEY_TAG },
 //				SONG_KEY_ID + "=?", new String[] { id}, null, null,
 //				null, null);
+		
 		String query = "SELECT * FROM " + SONG_TABLE_NAME + " WHERE " + SONG_KEY_ID + "=" + id;
 		Cursor cursor = db.rawQuery(query, new String[]{});
 		if (cursor == null || cursor.getCount() == 0){
@@ -154,7 +156,7 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 			cursor.moveToFirst();
 		}
 		SCSong onlineSong = new SCSong(
-				cursor.getString(cursor.getColumnIndex(SONG_KEY_TITLE)),
+				cursor.getString(cursor.getColumnIndex(SONG_KEY_ID)),
 				cursor.getString(cursor.getColumnIndex(SONG_KEY_TITLE)),
 				"",
 				"soundcloud.com",
@@ -174,30 +176,33 @@ public class SCSongDatabaseTable extends SQLiteOpenHelper implements Constants.D
 	 * Reading a song (row) 
 	 * */
 	public String getLink(String id) {
-		
-		SQLiteDatabase db = this.getReadableDatabase();
-
-//		Cursor cursor = db.query(SONG_TABLE_NAME, new String[] { SONG_KEY_STREAM_URL },
-//				SONG_KEY_ID + "=?", new String[] { }, null, null,
-//				null, null);
-		
-		String query = "SELECT " + SONG_KEY_STREAM_URL + " FROM " + SONG_TABLE_NAME + " WHERE " + SONG_KEY_ID + "=" + id;
-		Cursor cursor = db.rawQuery(query, new String[]{});
-		
-		if (cursor == null || cursor.getCount() == 0){
+		try{
+			SQLiteDatabase db = this.getReadableDatabase();
+	
+	//		Cursor cursor = db.query(SONG_TABLE_NAME, new String[] { SONG_KEY_STREAM_URL },
+	//				SONG_KEY_ID + "=?", new String[] { }, null, null,
+	//				null, null);
+			//System.out.println ("GET LINK DATABASE = " + id);
+			String query = "SELECT " + SONG_KEY_STREAM_URL + " FROM " + SONG_TABLE_NAME + " WHERE " + SONG_KEY_ID + "=" + id;
+			Cursor cursor = db.rawQuery(query, new String[]{});
+			
+			if (cursor == null || cursor.getCount() == 0){
+				db.close();
+				return null;
+			}
+			if (cursor != null) {
+				cursor.moveToFirst();
+			}
+			
+			String link = cursor.getString(cursor.getColumnIndex(SONG_KEY_STREAM_URL));
+			
+			
+			cursor.close();
 			db.close();
+			return link;
+		}catch(Exception e){
 			return null;
 		}
-		if (cursor != null) {
-			cursor.moveToFirst();
-		}
-		
-		String link = cursor.getString(cursor.getColumnIndex(SONG_KEY_STREAM_URL));
-		
-		
-		cursor.close();
-		db.close();
-		return link;
 	}
 
 

@@ -29,7 +29,7 @@ public class ElectroFragment extends SoundCloudExploreFragment {
 	@Override
 	protected int setCategory() {
 		// TODO Auto-generated method stub
-		return ELECTRO;
+		return DANCE_HALL;
 	}
 
 
@@ -37,7 +37,7 @@ public class ElectroFragment extends SoundCloudExploreFragment {
 	@Override
 	protected int setCurrentPage() {
 		// TODO Auto-generated method stub
-		return 1;
+		return 0;
 	}
 
 }

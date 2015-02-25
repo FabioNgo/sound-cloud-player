@@ -33,7 +33,7 @@ public class DanceFragment extends SoundCloudExploreFragment {
 	@Override
 	protected int setCategory() {
 		// TODO Auto-generated method stub
-		return DANCE;
+		return DANCE_EDM;
 	}
 
 

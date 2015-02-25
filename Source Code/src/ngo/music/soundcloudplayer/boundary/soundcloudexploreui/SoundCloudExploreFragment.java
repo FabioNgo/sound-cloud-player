@@ -70,7 +70,8 @@ public abstract class SoundCloudExploreFragment extends Fragment implements
 
 	public SoundCloudExploreFragment() {
 		category = setCategory();
-		current_page = setCurrentPage();
+		//current_page = setCurrentPage();
+		current_page = 0;
 	}
 
 	// public static SoundCloudExploreFragment getInstance() {
@@ -189,7 +190,7 @@ public abstract class SoundCloudExploreFragment extends Fragment implements
 		// TODO Auto-generated method stub
 
 		super.onResume();
-		adapter.notifyDataSetChanged();
+		//adapter.notifyDataSetChanged();
 	}
 
 	private class loadMoreBackground extends AsyncTask<Integer, String, String> {
