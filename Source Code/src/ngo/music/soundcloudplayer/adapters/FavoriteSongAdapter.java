@@ -12,7 +12,7 @@ import ngo.music.soundcloudplayer.general.Constants;
 import android.content.Context;
 
 
-public class FavoriteSongAdapter extends ListSongAdapter implements Constants {
+public class FavoriteSongAdapter extends SCSongAdapter implements Constants {
 	
 	
 	

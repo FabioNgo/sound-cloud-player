@@ -84,8 +84,6 @@ public class SongController implements Constants, Constants.SongConstants,
 
 	private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 
-	private static final int NUMBER_CATEGORY = 15;
-
 	private String[] exploreLinkList;
 	private static final String TAG_NEXT_LINK_EXPLORE = "next_herf";
 	private static final String TAG_TRACKS_EXPLORE = "tracks";
@@ -99,7 +97,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	public boolean isLoadStream = true;
 
 	private ArrayList<ArrayList<Song>> onlineSongs = new ArrayList<ArrayList<Song>>();
-	private int[] categoryCurrentPage = new int[NUMBER_CATEGORY];
+	private int[] categoryCurrentPage;
 
 	private ArrayList<Integer> idList = new ArrayList<Integer>();
 	private ArrayList<Integer> favoriteIdList = new ArrayList<Integer>();
@@ -111,6 +109,8 @@ public class SongController implements Constants, Constants.SongConstants,
 	 */
 	private String filename = "stackSong.xml";
 	private ArrayList<Song> offlineSongs = null;
+
+	private int[] categoriesList;
 	private static SongController instance = null;
 
 	/*
@@ -126,9 +126,11 @@ public class SongController implements Constants, Constants.SongConstants,
 				instance = this;
 				// instance.loadFavoriteSong();
 				// instance.loadMyStream();
-				instance.initialOnlineSongsList();
+
 				instance.initialCategoryListLink();
 
+				instance.initialOnlineSongsList();
+				categoryCurrentPage = new int[categoriesList.length];
 				dir = new File(Environment.getExternalStorageDirectory()
 						+ ROOT_DIRECTORY);
 				if (!(dir.exists() && dir.isDirectory())) {
@@ -184,10 +186,16 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * @return
 	 */
 	public ArrayList<Song> getOnlineSongs(int category) {
-
-		return onlineSongs.get(category);
+		return onlineSongs.get(indexCategory(category));
 	}
-
+	private int indexCategory(int category){
+		for (int i = 0; i < categoriesList.length; i++) {
+			if (categoriesList[i] == category) {
+				return i;
+			}
+		}
+		return -1;
+	}
 	/**
 	 * Get the stream of the song by id
 	 * 
@@ -319,7 +327,7 @@ public class SongController implements Constants, Constants.SongConstants,
 
 		// System.out.println ("CP  = " + currentPage + "   " + category);
 		if (currentPage == 0) {
-			return onlineSongs.get(category);
+			return getOnlineSongs(category);
 		}
 		/*
 		 * category = Search
@@ -328,15 +336,15 @@ public class SongController implements Constants, Constants.SongConstants,
 			return searchSongSC(MusicPlayerMainActivity.query, currentPage);
 		}
 
-		if (currentPage <= categoryCurrentPage[category]
+		if (currentPage <= categoryCurrentPage[indexCategory(category)]
 				|| !(BasicFunctions
 						.isConnectingToInternet(MusicPlayerMainActivity
 								.getActivity()))) {
 			// System.out.println (currentPage);
-			return onlineSongs.get(category);
+			return getOnlineSongs(category);
 		}
 
-		String urlLink = exploreLinkList[category];
+		String urlLink = exploreLinkList[indexCategory(category)];
 		String offset = "offset=" + String.valueOf((currentPage - 1) * OFFSET);
 
 		urlLink = urlLink.replace("offset=0", offset);
@@ -359,7 +367,7 @@ public class SongController implements Constants, Constants.SongConstants,
 			JSONObject track = new JSONObject(inputLine);
 			JSONArray listSong = track.getJSONArray(TAG_TRACKS_EXPLORE);
 			// System.out.println ("SIZE = " + listSong.length());
-			ArrayList<Song> song = onlineSongs.get(category);
+			ArrayList<Song> song = getOnlineSongs(category);
 			for (int i = 0; i < listSong.length(); i++) {
 				JSONObject jsonObject = listSong.getJSONObject(i);
 				int position = searchId(idList, jsonObject.getInt(ID));
@@ -373,7 +381,7 @@ public class SongController implements Constants, Constants.SongConstants,
 
 		}
 
-		return onlineSongs.get(category);
+		return getOnlineSongs(category);
 	}
 
 	/**
@@ -432,7 +440,7 @@ public class SongController implements Constants, Constants.SongConstants,
 	 * Initialize onlineSong list
 	 */
 	private void initialOnlineSongsList() {
-		for (int i = 0; i < NUMBER_CATEGORY; i++) {
+		for (int i = 0; i < categoriesList.length; i++) {
 			onlineSongs.add(new ArrayList<Song>());
 		}
 	}
@@ -446,7 +454,10 @@ public class SongController implements Constants, Constants.SongConstants,
 				CLASSICAL_LINK, COUNTRY_LINK, DANCE_EDM_LINK, DEEP_HOUSE_LINK,
 				DISCO_LINK, DRUM_BASS_LINK, DUBSTEP_LINK, DANCE_HALL_LINK,
 				ELECTRONIC_LINK, FOLK_LINK };
-
+		categoriesList = new int[] { TRENDING_MUSIC, TRENDING_AUDIO,
+				ALTERNATIVE_ROCK, AMBIENT, CLASSICAL, COUNTRY, DANCE_EDM,
+				DEEP_HOUSE, DISCO, DRUM_BASS, DUBSTEP, DANCE_HALL, ELECTRONIC,
+				FOLK };
 	}
 
 	/**
@@ -455,10 +466,10 @@ public class SongController implements Constants, Constants.SongConstants,
 	public void initialSongCategory() {
 		if (isInitialSongCategory) {
 			// System.out.println ("TEST INITIAL");
-			for (int i = 0; i < NUMBER_CATEGORY; i++) {
+			for (int i = 0; i < categoriesList.length; i++) {
 				// System.out.println ("CATEGORY  = " +i);
 				categoryCurrentPage[i] = 0;
-				getSongsFromSoundCloud(0, i);
+				getSongsFromSoundCloud(0, categoriesList[i]);
 			}
 			isInitialSongCategory = false;
 		}

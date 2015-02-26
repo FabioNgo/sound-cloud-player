@@ -8,7 +8,7 @@ import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
 import android.view.MenuItem;
 
-public class SCExploreAdapter extends ListSongAdapter {
+public class SCExploreAdapter extends SCSongAdapter {
 
 	public static SCExploreAdapter instance = null;
 	

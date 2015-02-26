@@ -37,7 +37,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
-public abstract class ListSongAdapter extends LiteListSongAdapter implements
+public abstract class SCSongAdapter extends LiteListSongAdapter implements
 		Constants {
 
 	protected ApiWrapper wrapper;
@@ -47,12 +47,11 @@ public abstract class ListSongAdapter extends LiteListSongAdapter implements
 
 	private static final String ROOT_DIRECTORY = "/SoundCloudApp";
 
-	public static ListSongAdapter instance = null;
-	protected ArrayList<Song> songs;
+	public static SCSongAdapter instance = null;
 
 	private ShareActionProvider mShareActionProvider;
 
-	protected ListSongAdapter(Context context, int resource,
+	protected SCSongAdapter(Context context, int resource,
 			ArrayList<Song> songs2, ApiWrapper wrapper) {
 		super(context, resource);
 		songs = songs2;

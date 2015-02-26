@@ -7,7 +7,7 @@ import ngo.music.soundcloudplayer.entity.SCSong;
 import ngo.music.soundcloudplayer.entity.Song;
 import android.content.Context;
 
-public class SCSearchSongAdapter extends ListSongAdapter {
+public class SCSearchSongAdapter extends SCSongAdapter {
 
 	public static SCSearchSongAdapter instance = null;
 	

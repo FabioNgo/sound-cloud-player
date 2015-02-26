@@ -5,7 +5,7 @@ import java.util.List;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.FavoriteSongAdapter;
-import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SCSongAdapter;
 import ngo.music.soundcloudplayer.adapters.MySCStreamAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;

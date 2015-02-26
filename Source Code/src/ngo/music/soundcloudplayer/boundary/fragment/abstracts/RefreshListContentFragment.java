@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
-import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SCSongAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.asynctask.UpdateNewSongBackgroundTask;

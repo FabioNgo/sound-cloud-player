@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SCSongAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.SCExploreAdapter;
 import ngo.music.soundcloudplayer.api.ApiWrapper;
@@ -183,7 +183,7 @@ public abstract class SoundCloudExploreFragment extends
 									// TODO Auto-generated method stub
 									int currentPosition = listView
 											.getFirstVisiblePosition();
-									((ListSongAdapter) adapter)
+									((SCSongAdapter) adapter)
 											.update(mCategory);
 									adapter.notifyDataSetChanged();
 									listView.setSelectionFromTop(

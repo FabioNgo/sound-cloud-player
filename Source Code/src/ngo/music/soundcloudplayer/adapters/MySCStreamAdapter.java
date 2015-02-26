@@ -61,7 +61,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MySCStreamAdapter extends ListSongAdapter implements Constants {
+public class MySCStreamAdapter extends SCSongAdapter implements Constants {
 	
 	
 	

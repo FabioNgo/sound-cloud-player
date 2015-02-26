@@ -9,7 +9,7 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SCSongAdapter;
 import ngo.music.soundcloudplayer.adapters.SCSearchSongAdapter;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.fragment.abstracts.SoundCloudExploreFragment;

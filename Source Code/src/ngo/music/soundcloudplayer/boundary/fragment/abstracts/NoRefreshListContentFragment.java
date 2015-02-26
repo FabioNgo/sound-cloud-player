@@ -1,7 +1,7 @@
 package ngo.music.soundcloudplayer.boundary.fragment.abstracts;
 
 import ngo.music.soundcloudplayer.R;
-import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SCSongAdapter;
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.boundary.SCActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
@@ -41,6 +41,8 @@ public abstract class NoRefreshListContentFragment extends ListContentFragment
 		rootView = inflater.inflate(R.layout.list_view, container, false);
 		listView = (ListView) rootView.findViewById(R.id.items_list);
 		toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+		adapter = getAdapter();
+		load();
 		if (hasLoadMore()) {
 			setUpLoadMore();
 		}
@@ -52,7 +54,7 @@ public abstract class NoRefreshListContentFragment extends ListContentFragment
 		}
 		// rootView = childrenOnCreateView(inflater, container,
 		// savedInstanceState);
-		adapter = getAdapter();
+		
 		load();
 		numFragmentsLoading--;
 		UIController.getInstance().addListContentFragments(this);

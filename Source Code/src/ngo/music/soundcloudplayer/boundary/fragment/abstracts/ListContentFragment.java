@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
-import ngo.music.soundcloudplayer.adapters.ListSongAdapter;
+import ngo.music.soundcloudplayer.adapters.SCSongAdapter;
 import ngo.music.soundcloudplayer.adapters.OfflineSongAdapter;
 import ngo.music.soundcloudplayer.adapters.PlaylistAdapter;
 import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
@@ -92,9 +92,9 @@ public abstract class ListContentFragment extends Fragment implements
 
 		Adapter adapter = parent.getAdapter();
 
-		if (adapter instanceof ListSongAdapter) {
+		if (adapter instanceof SCSongAdapter) {
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
-			ArrayList<Song> songs = ((ListSongAdapter) adapter).getSongs();
+			ArrayList<Song> songs = ((SCSongAdapter) adapter).getSongs();
 			MusicPlayerService.getInstance().playNewSong(position, category,
 					songs);
 			return;
