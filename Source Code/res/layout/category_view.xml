@@ -8,6 +8,7 @@
 		android:id="@+id/composition_view_cat"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:singleLine="true"
 		android:textColor="@color/primary_text"
 		android:textSize="20dp">
 	</TextView>
@@ -73,6 +74,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="20dp"
 			android:text="1. "
+			android:singleLine="true"
 			android:textColor="@color/secondary_text"
 			android:textSize="15dp"/>
 
@@ -81,6 +83,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="20dp"
 			android:text="2. "
+			android:singleLine="true"
 			android:textColor="@color/secondary_text"
 			android:textSize="15dp"/>
 
@@ -89,6 +92,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="20dp"
 			android:text="3. "
+			android:singleLine="true"
 			android:textColor="@color/secondary_text"
 			android:textSize="15dp"/>
 
@@ -97,6 +101,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="20dp"
 			android:text="4. "
+			android:singleLine="true"
 			android:textColor="@color/secondary_text"
 			android:textSize="15dp"/>
 
@@ -105,6 +110,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="20dp"
 			android:text="5. "
+			android:singleLine="true"
 			android:textColor="@color/secondary_text"
 			android:textSize="15dp"/>
 	</LinearLayout>

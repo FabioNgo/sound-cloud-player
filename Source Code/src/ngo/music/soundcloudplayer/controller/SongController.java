@@ -350,7 +350,7 @@ public class SongController implements Constants, Constants.SongConstants,
 		urlLink = urlLink.replace("offset=0", offset);
 
 		// update current page of this category
-		categoryCurrentPage[category] = currentPage;
+		categoryCurrentPage[indexCategory(category)] = currentPage;
 		try {
 
 			/*

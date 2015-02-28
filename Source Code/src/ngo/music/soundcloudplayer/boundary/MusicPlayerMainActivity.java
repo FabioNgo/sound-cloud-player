@@ -1,5 +1,7 @@
 package ngo.music.soundcloudplayer.boundary;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -102,9 +104,23 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		activity = this;
 		States.appState = APP_STOPPED;
 		super.onCreate(savedInstanceState);
-		StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-				.permitAll().build();
-		StrictMode.setThreadPolicy(policy);
+		if (Integer.valueOf(android.os.Build.VERSION.SDK_INT) >= 9) {
+			try {
+				// StrictMode.setThreadPolicy(StrictMode.ThreadPolicy.LAX);
+				Class<?> strictModeClass = Class.forName(
+						"android.os.StrictMode", true, Thread.currentThread()
+								.getContextClassLoader());
+				Class<?> threadPolicyClass = Class.forName(
+						"android.os.StrictMode$ThreadPolicy", true, Thread
+								.currentThread().getContextClassLoader());
+				Field laxField = threadPolicyClass.getField("LAX");
+				Method setThreadPolicyMethod = strictModeClass.getMethod(
+						"setThreadPolicy", threadPolicyClass);
+				setThreadPolicyMethod.invoke(strictModeClass,
+						laxField.get(null));
+			} catch (Exception e) {
+			}
+		}
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
@@ -259,7 +275,8 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				.replace(R.id.full_player_container, new FullPlayerUI())
 				.commit();
 		getSupportFragmentManager().beginTransaction()
-				.replace(R.id.play_queue_container, new QueueFragment()).commit();
+				.replace(R.id.play_queue_container, new QueueFragment())
+				.commit();
 	}
 
 	/**
@@ -267,18 +284,22 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 */
 	private void configMusicPlayerService() {
 		// if (!isMyServiceRunning()) {
-		while(ListContentFragment.numFragmentsLoading!=0||PlayerUI.numberPlayerLoading!=0);
-//		ProgressDialog dialog = new ProgressDialog(this);
-//		dialog.setTitle("Loading...");
-//		SystemClock.sleep(1000);
-		Intent musicPlayerServiceIntent = new Intent(this,
-				MusicPlayerService.class);
-		// bindService(musicPlayerServiceIntent, mConnection,
-		// Context.BIND_AUTO_CREATE);
-		startService(musicPlayerServiceIntent);
-//		dialog.dismiss();
+		while (ListContentFragment.numFragmentsLoading != 0
+				|| PlayerUI.numberPlayerLoading != 0)
+			;
+		// ProgressDialog dialog = new ProgressDialog(this);
+		// dialog.setTitle("Loading...");
+		// SystemClock.sleep(1000);
+		if (!MusicPlayerService.isLoaded) {
+			Intent musicPlayerServiceIntent = new Intent(this,
+					MusicPlayerService.class);
+			// bindService(musicPlayerServiceIntent, mConnection,
+			// Context.BIND_AUTO_CREATE);
+			startService(musicPlayerServiceIntent);
+		}
+		// dialog.dismiss();
 		// } else {
-		
+
 		// }
 	}
 
@@ -393,7 +414,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				// TODO: handle exception
 			}
 
-			MusicPlayerService.getInstance().playNewSong(position,-1, songs);
+			MusicPlayerService.getInstance().playNewSong(position, -1, songs);
 			if (!MusicPlayerService.getInstance().isShuffle()) {
 				MusicPlayerService.getInstance().setShuffle();
 			}
@@ -425,7 +446,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-//		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 
 	@Override
@@ -458,7 +479,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-//		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 
 	/**

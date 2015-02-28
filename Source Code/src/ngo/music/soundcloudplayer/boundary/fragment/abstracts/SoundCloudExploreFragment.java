@@ -174,26 +174,14 @@ public abstract class SoundCloudExploreFragment extends
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
+					// TODO Auto-generated method stub
+					int currentPosition = listView.getFirstVisiblePosition();
+					((SCSongAdapter) adapter).update(mCategory);
+					adapter.notifyDataSetChanged();
+					listView.setSelectionFromTop(currentPosition + 1, 0);
 
-					MusicPlayerMainActivity.getActivity().runOnUiThread(
-							new Runnable() {
-
-								@Override
-								public void run() {
-									// TODO Auto-generated method stub
-									int currentPosition = listView
-											.getFirstVisiblePosition();
-									((SCSongAdapter) adapter)
-											.update(mCategory);
-									adapter.notifyDataSetChanged();
-									listView.setSelectionFromTop(
-											currentPosition + 1, 0);
-
-									MusicPlayerService.getInstance()
-											.updateQueue(mCategory);
-									loadingMore = false;
-								}
-							});
+					MusicPlayerService.getInstance().updateQueue(mCategory);
+					loadingMore = false;
 
 				}
 			});

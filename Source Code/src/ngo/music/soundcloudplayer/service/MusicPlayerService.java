@@ -9,7 +9,6 @@ import java.util.Stack;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.QueueSongAdapter;
 import ngo.music.soundcloudplayer.api.Stream;
-
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import ngo.music.soundcloudplayer.controller.SongController;
 import ngo.music.soundcloudplayer.controller.UIController;
@@ -60,6 +59,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		instance = this;
 
 	}
+
 	public static boolean isLoaded;
 	private int loopState = 0;
 	public int explorecategory = -1;
@@ -191,9 +191,16 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.reset();
+			try {
+				mediaPlayer.setDataSource(getCurrentSong().getLink());
+				mediaPlayer.prepareAsync();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 		}
-		
+
 	}
 
 	/**
@@ -417,7 +424,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            press start
 	 */
 	private void playNewSong(boolean startNow) {
-
+		mediaPlayer.stop();
 		// System.out.println("PLAY NEW SONG 2");
 		Song song = getCurrentSong();
 
@@ -431,7 +438,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 			States.musicPlayerState = MUSIC_PLAYING;
 		}
-
+		updateNotification();
 		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 
@@ -442,7 +449,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 			} else {
 				playSong(song, ((OfflineSong) song).getLink());
-				updateNotification();
 
 			}
 
@@ -969,6 +975,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		playMedia();
+		if (States.musicPlayerState == MUSIC_PLAYING) {
+			playMedia();
+		}
 	}
 }

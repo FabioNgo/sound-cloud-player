@@ -13,10 +13,11 @@ import android.view.MenuItem;
 
 public class QueueSongAdapter extends LiteListSongAdapter {
 
+	
+
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
-		songs = getSongs();
-
+		// TODO Auto-generated constructor stub
 	}
 
 	public static QueueSongAdapter instance = null;
