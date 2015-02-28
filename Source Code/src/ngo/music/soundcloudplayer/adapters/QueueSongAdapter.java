@@ -37,29 +37,6 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 		return MusicPlayerService.getInstance().getQueue();
 	}
 
-	@Override
-	public boolean onMenuItemClick(MenuItem arg0) {
-		// TODO Auto-generated method stub
-		switch (arg0.getItemId()) {
-		case R.id.queue_removeFromQueue:
-			MusicPlayerService.getInstance().removeFromQueue(song, true);
-			break;
-		case R.id.queue_playNext:
-			MusicPlayerService.getInstance().addToNext(song);
-			break;
-		case R.id.queue_addToPlaylist:
-			ArrayList<Song> songs = new ArrayList<Song>();
-			songs.add(song);
-			MenuController.getInstance().addToPlaylist(songs);
-			break;
-		case R.id.queue_delete:
-			SongController.getInstance().deleteSong(song);
-			break;
-		default:
-			break;
-		}
 
-		return false;
-	}
 
 }

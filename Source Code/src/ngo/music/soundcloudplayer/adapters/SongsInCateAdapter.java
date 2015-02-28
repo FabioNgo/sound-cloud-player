@@ -172,7 +172,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 						case R.id.song_cat_add:
 							ArrayList<Song> songs = new ArrayList<Song>();
 							songs.add(song);
-							MenuController.getInstance().addToPlaylist(songs);
+							MenuController.getInstance(songs).addToPlaylist();
 							break;
 							
 						default:

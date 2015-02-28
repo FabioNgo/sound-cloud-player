@@ -412,34 +412,7 @@ public abstract class SCSongAdapter extends LiteListSongAdapter implements
 		//System.out.println ("LIST SONG ADAPTER = " + songs.get(0).getId());
 		//notifyDataSetChanged();
 	}
-	@Override
-	public boolean onMenuItemClick(MenuItem arg0) {
-		// TODO Auto-generated method stub
-		switch (arg0.getItemId()) {
-		case R.id.list_addQueue:
-			MusicPlayerService.getInstance().addSongToQueue(
-					song);
-			break;
-		case R.id.list_playNext:
-			MusicPlayerService.getInstance().addToNext(song);
-			break;
-		case R.id.list_addToPlaylist:
-			ArrayList<Song> songs = new ArrayList<Song>();
-			songs.add(song);
-			CategoryAddingFragment playlistAddingFragment = new SCPlaylistAddingFragment(
-					songs);
-			playlistAddingFragment.show(MusicPlayerMainActivity
-					.getActivity().getSupportFragmentManager(),
-					"New Playlist");
-			break;
-		case R.id.list_delete:
-			SongController.getInstance().deleteSong(song);
-			break;
-		default:
-			break;
-		}
-		return false;
-	}
+	
 	
 
 }

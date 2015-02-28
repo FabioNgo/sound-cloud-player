@@ -105,7 +105,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				case R.id.full_player_add_playlist:
 					ArrayList<Song> songs = new ArrayList<Song>();
 					songs.add(MusicPlayerService.getInstance().getCurrentSong());
-					MenuController.getInstance().addToPlaylist(songs);
+					MenuController.getInstance(songs).addToPlaylist();
 					break;
 				case R.id.full_player_share:
 					/**

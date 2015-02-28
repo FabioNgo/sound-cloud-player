@@ -74,28 +74,6 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 		// TODO Auto-generated method stub
 		return SongController.getInstance().getOfflineSongs(true);
 	}
-	@Override
-	public boolean onMenuItemClick(MenuItem arg0) {
-		switch (arg0.getItemId()) {
-		case R.id.list_addQueue:
-			MusicPlayerService.getInstance().addSongToQueue(song);
-			break;
-		case R.id.list_playNext:
-			MusicPlayerService.getInstance().addToNext(song);
-			break;
-		case R.id.list_addToPlaylist:
-			ArrayList<Song> songs = new ArrayList<Song>();
-			songs.add(song);
-			MenuController.getInstance().addToPlaylist(songs);
-			break;
-		case R.id.list_delete:
-			SongController.getInstance().deleteSong(song);
-			break;
-		default:
-			break;
-		}
-		
-		return false;
-	}
+	
 	
 }

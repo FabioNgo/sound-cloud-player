@@ -174,5 +174,14 @@ public abstract class Song implements Comparable <Song>{
 	public void setTagList(String tagList) {
 		this.tagList = tagList;
 	}
-	
+	@Override
+	public boolean equals(Object o) {
+		// TODO Auto-generated method stub
+		if(o instanceof Song){
+			if(((Song) o).getId() ==  this.getId()){
+				return true;
+			}
+		}
+		return false;
+	}
 }

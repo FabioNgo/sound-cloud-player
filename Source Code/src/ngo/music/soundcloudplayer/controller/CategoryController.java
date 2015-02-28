@@ -165,7 +165,7 @@ public abstract class CategoryController implements Constants.Data, Constants,
 	public ArrayList<String> getCategoryString() {
 		// TODO Auto-generated method stub
 		try {
-			categories = getCategories(false);
+			categories = getCategories(true);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
