@@ -37,6 +37,12 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 		return MusicPlayerService.getInstance().getQueue();
 	}
 
+	@Override
+	public int getSongMenuId() {
+		// TODO Auto-generated method stub
+		return R.menu.song_queue_menu;
+	}
+
 
 
 }

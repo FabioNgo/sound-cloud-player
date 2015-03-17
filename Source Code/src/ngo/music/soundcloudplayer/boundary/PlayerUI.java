@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.boundary;
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.controller.UIController;
 import ngo.music.soundcloudplayer.entity.Song;
+import ngo.music.soundcloudplayer.general.BasicFunctions;
 import ngo.music.soundcloudplayer.service.MusicPlayerService;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
-public abstract class PlayerUI extends Fragment {
+public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
 	protected ProgressWheel musicProgressBar;
 	public static int numberPlayerLoading= 0;
 	TextView currentTimeText;
@@ -32,10 +33,10 @@ public abstract class PlayerUI extends Fragment {
 			public void run() {
 				// TODO Auto-generated method stub
 				if (hasTextTime()) {
-					currentTimeText.setText(UIController.getInstance()
-							.getCurrentTime());
-					durationText.setText(UIController.getInstance()
-							.getDuration());
+					currentTimeText.setText(BasicFunctions.toFormatedTime(MusicPlayerService.getInstance()
+							.getCurrentTime()));
+					durationText.setText(BasicFunctions.toFormatedTime(MusicPlayerService.getInstance()
+							.getDuration()));
 				}
 			}
 		};
@@ -133,10 +134,16 @@ public abstract class PlayerUI extends Fragment {
 
 	public void stop() {
 		// TODO Auto-generated method stub
+		
 		if (hasTextTime()) {
-			currentTimeText.setText("00:00");
-			durationText.setText("00:00");
+			currentTimeText.setText(BasicFunctions.toFormatedTime(0));
+			durationText.setText(BasicFunctions.toFormatedTime(0));
 		}
 
+	}
+	@Override
+	public int compareTo(PlayerUI another) {
+		// TODO Auto-generated method stub
+		return this.getClass().toString().compareTo(another.getClass().toString());
 	}
 }

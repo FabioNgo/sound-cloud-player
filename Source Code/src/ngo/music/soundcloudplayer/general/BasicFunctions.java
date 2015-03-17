@@ -3,6 +3,7 @@ package ngo.music.soundcloudplayer.general;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+
 import ngo.music.soundcloudplayer.boundary.MusicPlayerMainActivity;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,6 +14,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.text.Html;
+import android.text.Spanned;
 import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -193,5 +196,12 @@ public class BasicFunctions {
 	public static String milisecondToMinuteOffset(long mSec) {
 		return String.format("%02d", TimeUnit.MILLISECONDS.toMinutes(mSec));
 		
+	}
+	public static Spanned toFormatedTime(long mSec){
+		String html = "<b>"
+				+ BasicFunctions.milisecondToMinuteOffset(mSec)
+				+ "</b>" + "<br>"
+				+ BasicFunctions.milisecondToSecondOffset(mSec);
+		return Html.fromHtml(html);
 	}
 }

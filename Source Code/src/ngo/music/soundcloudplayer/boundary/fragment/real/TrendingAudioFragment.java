@@ -12,15 +12,7 @@ import ngo.music.soundcloudplayer.general.Constants;
  */
 public class TrendingAudioFragment extends SoundCloudExploreFragment {
 
-	private static TrendingAudioFragment instance = null;
-
-	public static TrendingAudioFragment getInstance() {
-		// TODO Auto-generated method stub
-		if (instance == null) {
-			instance = new TrendingAudioFragment();
-		}
-		return instance;
-	}
+	
 
 	@Override
 	protected int getCategory() {

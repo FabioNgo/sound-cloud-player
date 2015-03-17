@@ -54,9 +54,13 @@
 		android:src="@android:drawable/ic_menu_close_clear_cancel"/>
 
 	<ImageView
+		
+		
 		android:id="@+id/composition_view_image"
 		android:layout_width="100dp"
 		android:layout_height="100dp"
+		android:scaleType="fitXY"
+		android:layout_marginTop="10dp"
 		android:layout_below="@+id/composition_view_cat_edit"
 		android:src="@drawable/ic_launcher"/>
 

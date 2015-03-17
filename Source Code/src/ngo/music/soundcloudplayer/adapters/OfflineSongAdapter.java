@@ -74,6 +74,11 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 		// TODO Auto-generated method stub
 		return SongController.getInstance().getOfflineSongs(true);
 	}
+	@Override
+	public int getSongMenuId() {
+		// TODO Auto-generated method stub
+		return R.menu.song_list_menu;
+	}
 	
 	
 }

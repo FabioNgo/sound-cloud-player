@@ -100,7 +100,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
 						.getActivity(), v);
 				// Inflating the Popup using xml file
-				popup.getMenuInflater().inflate(R.menu.song_list_menu,
+				popup.getMenuInflater().inflate(getSongMenuId(),
 						popup.getMenu());
 
 				// registering popup with OnMenuItemClickListener
@@ -139,11 +139,8 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set time
 		 */
-		String html = "<b>"
-				+ BasicFunctions.milisecondToMinuteOffset(song.getDuration())
-				+ "</b>" + "<br>"
-				+ BasicFunctions.milisecondToSecondOffset(song.getDuration());
-		viewHolder.duration.setText(Html.fromHtml(html));
+		
+		viewHolder.duration.setText(BasicFunctions.toFormatedTime(MusicPlayerService.getInstance().getDuration()));
 
 	}
 
@@ -179,5 +176,5 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 	}
 
 	public abstract ArrayList<Song> getSongs();
-
+	public abstract int getSongMenuId();
 }

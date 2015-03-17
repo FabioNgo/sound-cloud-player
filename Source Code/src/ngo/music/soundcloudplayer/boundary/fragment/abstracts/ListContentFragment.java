@@ -1,6 +1,7 @@
 package ngo.music.soundcloudplayer.boundary.fragment.abstracts;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import ngo.music.soundcloudplayer.R;
 import ngo.music.soundcloudplayer.adapters.CategoryListAdapter;
@@ -34,6 +35,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.support.v7.widget.Toolbar;
+
 /**
  * 
  * @author Fabio Ngo Every fragments having list view to list songs. This is
@@ -42,7 +44,7 @@ import android.support.v7.widget.Toolbar;
  */
 public abstract class ListContentFragment extends Fragment implements
 		Constants.MusicService, Constants.Categories, Constants.Appplication,
-		OnItemClickListener {
+		OnItemClickListener, Comparable<ListContentFragment> {
 	public static int numFragmentsLoading = 0;
 	protected View rootView;
 	protected ArrayAdapter<?> adapter;
@@ -52,19 +54,20 @@ public abstract class ListContentFragment extends Fragment implements
 
 	public ListContentFragment() {
 		// TODO Auto-generated constructor stub
-		
+
 		category = getCategory();
 	}
 
 	protected abstract boolean hasLoadMore();
-	
+
 	protected abstract boolean hasToolbar();
+
 	/**
 	 * if no toolbar, just return
 	 */
 	protected abstract void setUpToolBar(Toolbar toolbar);
-	protected abstract void updateToolbar(Toolbar toolbar);
 
+	protected abstract void updateToolbar(Toolbar toolbar);
 
 	protected abstract int getCategory();
 
@@ -84,7 +87,7 @@ public abstract class ListContentFragment extends Fragment implements
 		listView.setOnItemClickListener(this);
 		UIController.getInstance().addAdapter(adapter);
 		updateToolbar(toolbar);
-		
+
 	}
 
 	@Override
@@ -107,8 +110,8 @@ public abstract class ListContentFragment extends Fragment implements
 		}
 
 	}
+
 	public void update() {
-		 
 
 		adapter.notifyDataSetChanged();
 		updateToolbar(toolbar);
@@ -134,6 +137,7 @@ public abstract class ListContentFragment extends Fragment implements
 		// }
 
 	}
+
 	private class getSongFromCategoryBackground extends
 			AsyncTask<String, String, ArrayList<Song>> {
 
@@ -187,6 +191,11 @@ public abstract class ListContentFragment extends Fragment implements
 		}
 
 	}
-	
+
+	@Override
+	public int compareTo(ListContentFragment another) {
+		// TODO Auto-generated method stub
+		return this.getClass().toString().compareTo(another.getClass().toString());
+	}
 
 }

@@ -439,7 +439,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			States.musicPlayerState = MUSIC_PLAYING;
 		}
 		updateNotification();
-		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
+//		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_NEW_SONG);
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 
 			if (song instanceof SCSong) {
@@ -680,6 +680,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 
 		stackSongplayed.push(getCurrentSongId());
+		UIController.getInstance().updateUiWhenDataChanged(QUEUE_CHANGED);
 		computeNextSong();
 	}
 

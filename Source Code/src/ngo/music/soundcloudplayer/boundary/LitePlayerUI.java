@@ -36,7 +36,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		BasicFunctions.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
 
-		UIController.getInstance().addUiFragment(this);
+		UIController.getInstance().addPlayerUiFragment(this);
 		numberPlayerLoading--;
 		return rootView;
 	}

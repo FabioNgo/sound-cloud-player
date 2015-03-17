@@ -32,6 +32,7 @@
 		android:layout_height="wrap_content"
 		android:layout_below="@+id/noti_title"
 		android:layout_toEndOf="@+id/noti_icon"
+		android:singleLine="true"
 		android:layout_toStartOf="@+id/noti_cancel"
 		android:textColor="@color/secondary_text"/>
 

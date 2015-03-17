@@ -84,7 +84,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 */
 		updateShuffle();
 		updateLoop();
-		UIController.getInstance().addUiFragment(this);
+		UIController.getInstance().addPlayerUiFragment(this);
 		numberPlayerLoading--;
 		return rootView;
 

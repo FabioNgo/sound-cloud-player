@@ -47,17 +47,16 @@
 			<!-- AVATAR OF Artist -->
 
 			<com.android.volley.toolbox.NetworkImageView
-			    android:layout_marginLeft="10dp"
 				android:id="@+id/artist_image"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_marginLeft="10dp"
 				android:src="@drawable/ic_launcher"/>
 
 			<!-- Artist INFO -->
 
 			<RelativeLayout
 				android:layout_width="wrap_content"
-				
 				android:layout_height="wrap_content"
 				android:layout_marginStart="4dp"
 				android:layout_marginTop="10dp"
@@ -109,8 +108,8 @@
 			android:layout_centerVertical="true"
 			android:layout_toStartOf="@+id/player_progress_bar"
 			android:text="00:00"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textColor="@color/primary_text"/>
+			android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+			android:textColor="@color/secondary_text"/>
 
 		<TextView
 			android:id="@+id/full_player_duration"
@@ -119,8 +118,8 @@
 			android:layout_centerVertical="true"
 			android:layout_toEndOf="@+id/player_progress_bar"
 			android:text="00:00"
-			android:textAppearance="?android:attr/textAppearanceSmall"
-			android:textColor="@color/primary_text"/>
+			android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+			android:textColor="@color/secondary_text"/>
 
 		<ImageView
 			android:id="@+id/full_player_ff"
