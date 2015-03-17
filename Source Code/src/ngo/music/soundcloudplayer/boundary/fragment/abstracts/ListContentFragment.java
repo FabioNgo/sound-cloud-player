@@ -104,7 +104,7 @@ public abstract class ListContentFragment extends Fragment implements
 			return;
 		}
 		if (adapter instanceof CategoryListAdapter) {
-			System.out.println("IS COMPOSITIONLISTADAPTER");
+			
 			new getSongFromCategoryBackground(position).execute();
 
 		}
