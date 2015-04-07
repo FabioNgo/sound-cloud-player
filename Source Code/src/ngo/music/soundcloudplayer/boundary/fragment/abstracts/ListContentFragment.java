@@ -38,7 +38,7 @@ import android.support.v7.widget.Toolbar;
 
 /**
  * 
- * @author Fabio Ngo Every fragments having list view to list songs. This is
+ * @author Fabio Ngo Every fragments having list view of songs. This is
  *         used to update list when necessary
  *
  */
@@ -57,20 +57,38 @@ public abstract class ListContentFragment extends Fragment implements
 
 		category = getCategory();
 	}
-
+	/**
+	 * 
+	 * @return true if list song need to load more when scroll to the bottom of the list
+	 * else @return false
+	 */
 	protected abstract boolean hasLoadMore();
-
+	/**
+	 * 
+	 * @return true if list song fragment has toolbar
+	 * else @return false
+	 */
 	protected abstract boolean hasToolbar();
 
 	/**
+	 * Initialize toolbar
 	 * if no toolbar, just return
 	 */
 	protected abstract void setUpToolBar(Toolbar toolbar);
-
+	/**
+	 * Update Toolbar when data changed 
+	 * @param toolbar
+	 */
 	protected abstract void updateToolbar(Toolbar toolbar);
-
+	/**
+	 * get category type in Contants.Categories (e.g: OFFLINE_SONG, AMBIENT...)
+	 * @return
+	 */
 	protected abstract int getCategory();
-
+	/**
+	 * getAdapter of the list (E.g: OfflineSongAdapter, SCSongAdapter....)
+	 * @return
+	 */
 	protected abstract ArrayAdapter<?> getAdapter();
 
 	/**
@@ -110,7 +128,9 @@ public abstract class ListContentFragment extends Fragment implements
 		}
 
 	}
-
+	/**
+	 * Update content in list
+	 */
 	public void update() {
 
 		adapter.notifyDataSetChanged();
@@ -137,7 +157,11 @@ public abstract class ListContentFragment extends Fragment implements
 		// }
 
 	}
-
+	/**
+	 * Get Song from Categrory in Background task
+	 * @author Fabio Ngo
+	 *
+	 */
 	private class getSongFromCategoryBackground extends
 			AsyncTask<String, String, ArrayList<Song>> {
 
@@ -191,7 +215,10 @@ public abstract class ListContentFragment extends Fragment implements
 		}
 
 	}
-
+	
+	/**
+	 * compare Song, use in sorting and filtering
+	 */
 	@Override
 	public int compareTo(ListContentFragment another) {
 		// TODO Auto-generated method stub

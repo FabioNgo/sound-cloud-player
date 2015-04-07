@@ -1,3 +1,6 @@
+/**
+ * Display Single song in song list view
+ */
 package ngo.music.soundcloudplayer.adapters;
 
 import java.util.ArrayList;
@@ -140,7 +143,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 		 * Set time
 		 */
 		
-		viewHolder.duration.setText(BasicFunctions.toFormatedTime(MusicPlayerService.getInstance().getDuration()));
+		viewHolder.duration.setText(BasicFunctions.toFormatedTime(songs.get(position).getDuration()));
 
 	}
 

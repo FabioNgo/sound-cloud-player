@@ -57,11 +57,14 @@ public abstract class NoRefreshListContentFragment extends ListContentFragment
 		
 		load();
 		numFragmentsLoading--;
+		//add this fragment to UIController to update UI when data changed
 		UIController.getInstance().addListContentFragments(this);
 		return rootView;
 	}
 
-
+	/**
+	 * setUp loadmore method
+	 */
 	protected abstract void setUpLoadMore();
 	
 }
