@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+        
+
+    
+	<item
+		android:id="@+id/full_player_share"
+		android:title="Share"/>
+	<item
+		android:id="@+id/full_player_add_playlist"
+		android:title="Add To Playlist"/>
+	<item
+		android:id="@+id/full_player_add_favorite"
+		
+		
+		android:title="Add To Favorite"/>
+
+</menu>

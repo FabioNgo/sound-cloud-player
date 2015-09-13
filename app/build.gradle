@@ -1,0 +1,40 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion '23.0.1'
+
+    defaultConfig {
+        applicationId "ngo.music.player"
+        minSdkVersion 19
+        targetSdkVersion 22
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile files('libs/androidasync-2.0.5.jar')
+    compile files('libs/jsoup-1.7.3.jar')
+    compile files('libs/kxml-2.1.7.jar')
+    compile files('libs/MyID3_for_Android.jar')
+    compile files('libs/org.urbanstew.soundcloudapi-0.9.3.jar')
+    compile files('libs/picasso-2.3.2.jar')
+    compile files('libs/volley.jar')
+    compile project(':slidingup')
+    compile project(':apache_lib')
+    compile project(':facebook')
+    compile project(':pagersliding')
+    compile project(':progresswheel')
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.google.android.gms:play-services-ads:7.3.0'
+    compile 'com.google.android.gms:play-services-identity:7.3.0'
+    compile project(':slidingmenu')
+}

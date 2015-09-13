@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/queue_shuffle_all"
+		android:title="Shuffle All"/>
+	<item
+		android:id="@+id/queue_save_queue"
+		android:title="Save Queue"/>
+	<item
+		android:id="@+id/queue_clear"
+		android:title="Clear Queue"/>
+	<item
+		android:id="@+id/queue_settings"
+		android:title="Settings"/>
+
+</menu>

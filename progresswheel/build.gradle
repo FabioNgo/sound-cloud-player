@@ -20,6 +20,4 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile files('libs/bolts-android-1.1.2.jar')
-    compile 'com.android.support:support-v4:23.0.1'
 }
