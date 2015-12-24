@@ -5,7 +5,7 @@ import org.json.JSONObject;
 public abstract class User extends Model {
 
 
-	public User(JSONObject object) {
-		super(object);
-	}
+    public User(JSONObject object) {
+        super(object);
+    }
 }

@@ -4,10 +4,10 @@ import org.json.JSONObject;
 
 public class Category extends Model {
 
-	public Category(JSONObject object) {
-		super(object);
+    public Category(JSONObject object) {
+        super(object);
 
-	}
+    }
 
 
 }

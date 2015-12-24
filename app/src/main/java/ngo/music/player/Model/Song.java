@@ -4,18 +4,15 @@ import org.json.JSONObject;
 
 public abstract class Song extends Model {
 
-	public Song(JSONObject jsonObject) {
-		super(jsonObject);
-	}
+    public Song(JSONObject jsonObject) {
+        super(jsonObject);
+    }
 
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return this.object.optString("title");
-	}
-
-
-
+    @Override
+    public String toString() {
+        // TODO Auto-generated method stub
+        return this.object.optString("title");
+    }
 
 
 }
