@@ -9,7 +9,7 @@ import ngo.music.player.boundary.fragment.real.OfflineSongsFragment;
 import ngo.music.player.helper.Constants;
 
 public class OfflineTabsAdapter extends FragmentPagerAdapter implements
-		Constants.Categories {
+		Constants.Models {
 
 	private final String[] TITLES = { "Songs", "Playlists", "Albums",
 			"Artists", "About Us" };

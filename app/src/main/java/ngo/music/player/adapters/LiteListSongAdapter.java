@@ -18,19 +18,20 @@ import com.volley.api.AppController;
 
 import java.util.ArrayList;
 
+import ngo.music.player.Controller.MenuController;
+import ngo.music.player.Model.Song;
+import ngo.music.player.R;
 import ngo.music.player.ViewHolder.SongInListViewHolder;
 import ngo.music.player.boundary.MusicPlayerMainActivity;
-import ngo.music.player.controller.MenuController;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.BasicFunctions;
+import ngo.music.player.helper.Constants;
+import ngo.music.player.helper.Helper;
 import ngo.music.player.service.MusicPlayerService;
-import ngo.music.player.R;
 
-public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
+public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements Constants.Models {
 	protected View rootView;
 	protected Context context;
 	protected int resource;
-	protected ArrayList<Song> songs;
+	protected Song[] songs;
 	SongInListViewHolder viewHolder = null;
 
 	public LiteListSongAdapter(Context context, int resource) {
@@ -65,7 +66,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 	 */
 	public void setLayoutInformation(int position,
 			final SongInListViewHolder viewHolder, View v) {
-		final Song song = songs.get(position);
+		final Song song = songs[position];
 		this.viewHolder = viewHolder;
 		/**
 		 * Set avatar for song
@@ -73,19 +74,16 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 
-		BasicFunctions.setImageViewSize(
-				BasicFunctions.dpToPx(50, getContext()),
-				BasicFunctions.dpToPx(50, getContext()), viewHolder.avatar);
-		String artworkUrl = song.getArtworkUrl();
+		Helper.setImageViewSize(
+				Helper.dpToPx(50, getContext()),
+				Helper.dpToPx(50, getContext()), viewHolder.avatar);
+		String artworkUrl = "";
 		if (artworkUrl.equals("")) {
 			Log.i("AVA", "no image url");
 			Drawable drawable = context.getResources().getDrawable(
 					R.drawable.ic_launcher);
 
 			viewHolder.avatar.setImageDrawable(drawable);
-		} else {
-
-			viewHolder.avatar.setImageUrl(song.getArtworkUrl(), mImageLoader);
 		}
 		/**
 		 * set menu
@@ -103,8 +101,8 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 						popup.getMenu());
 
 				// registering popup with OnMenuItemClickListener
-				ArrayList<Song> songs = new ArrayList<Song>();
-				songs.add(song);
+				Song[] songs = new Song[1];
+				songs[0] = song;
 				popup.setOnMenuItemClickListener(MenuController
 						.getInstance(songs));
 
@@ -115,18 +113,18 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 		 * Set title
 		 */
 
-		viewHolder.title.setText(song.getTitle());
+		viewHolder.title.setText(song.getAttribute("title"));
 
 		/*
 		 * Set sub title
 		 */
 
-		viewHolder.subtitle.setText(song.getArtist());
+		viewHolder.subtitle.setText(song.getAttribute("artist"));
 		/**
 		 * Set background , to indicate which song is playing
 		 */
 		if (MusicPlayerService.getInstance().getCurrentSongId()
-				.compareTo(songs.get(position).getId()) == 0) {
+				.compareTo(songs[position].getId()) == 0) {
 
 			viewHolder.background.setBackgroundResource(R.color.primary_light);
 		} else {
@@ -138,19 +136,19 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 		/**
 		 * Set time
 		 */
-		
-		viewHolder.duration.setText(BasicFunctions.toFormatedTime(songs.get(position).getDuration()));
+
+		viewHolder.duration.setText(Helper.toFormatedTime(Long.parseLong(songs[position].getAttribute("duration"))));
 
 	}
 
 	@Override
 	public Song getItem(int position) {
-		return songs.get(position);
+		return songs[position];
 	}
 
 	@Override
 	public int getCount() {
-		return songs.size();
+		return songs.length;
 	}
 
 	public void updateSongs() {
@@ -162,7 +160,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		songs.clear();
+		songs = new Song[0];
 	}
 
 	public ArrayList<String> getSongIds() {
@@ -174,6 +172,6 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> {
 
 	}
 
-	public abstract ArrayList<Song> getSongs();
+	public abstract Song[] getSongs();
 	public abstract int getSongMenuId();
 }

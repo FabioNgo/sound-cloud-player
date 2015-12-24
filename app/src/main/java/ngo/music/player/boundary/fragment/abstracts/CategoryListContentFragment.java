@@ -9,8 +9,6 @@ import ngo.music.player.adapters.CategoryListAdapter;
 import ngo.music.player.boundary.fragment.real.AlbumsFragment;
 import ngo.music.player.boundary.fragment.real.ArtistsFragment;
 import ngo.music.player.boundary.fragment.real.PlaylistFragment;
-import ngo.music.player.boundary.fragment.real.SCPlaylistFragment;
-import ngo.music.player.boundary.fragment.real.SCPlaylistSearchFragment;
 import ngo.music.player.helper.Constants;
 
 /**
@@ -20,9 +18,52 @@ import ngo.music.player.helper.Constants;
  *
  */
 public abstract class CategoryListContentFragment extends
-		NoRefreshListContentFragment implements Constants.Categories {
+		NoRefreshListContentFragment implements Constants.Models {
 
 	int type = -1;
+
+	public static CategoryListContentFragment createInstance(int type) {
+		switch (type) {
+			case PLAYLIST:
+				PlaylistFragment.instance = new PlaylistFragment();
+				return PlaylistFragment.instance;
+			case ALBUM:
+				AlbumsFragment.instance = new AlbumsFragment();
+				return AlbumsFragment.instance;
+			case ARTIST:
+				ArtistsFragment.instance = new ArtistsFragment();
+				return ArtistsFragment.instance;
+
+			default:
+				break;
+		}
+		return null;
+	}
+
+	public static CategoryListContentFragment getInstance(int type) {
+		switch (type) {
+			case PLAYLIST:
+				if (PlaylistFragment.instance == null) {
+					createInstance(type);
+				}
+				return PlaylistFragment.instance;
+			case ALBUM:
+				if (AlbumsFragment.instance == null) {
+					createInstance(type);
+				}
+				return AlbumsFragment.instance;
+			case ARTIST:
+				if (ArtistsFragment.instance == null) {
+					createInstance(type);
+				}
+				return ArtistsFragment.instance;
+
+
+			default:
+				break;
+		}
+		return null;
+	}
 
 	@Override
 	protected boolean hasLoadMore() {
@@ -55,14 +96,14 @@ public abstract class CategoryListContentFragment extends
 	}
 
 	/**
-	 * 
-	 * @return type of category in Constants.Categories
+	 *
+	 * @return type of category in Constants.Models
 	 */
 	protected abstract int getCategory();
 
 	/**
 	 * Update UI when playlist change (Update Single exsited view in list View)
-	 * 
+	 *
 	 */
 	public void update() {
 
@@ -99,63 +140,6 @@ public abstract class CategoryListContentFragment extends
 			}
 		}
 		adapter.update();
-	}
-
-	public static CategoryListContentFragment createInstance(int type) {
-		switch (type) {
-		case PLAYLIST:
-			PlaylistFragment.instance = new PlaylistFragment();
-			return PlaylistFragment.instance;
-		case ALBUM:
-			AlbumsFragment.instance = new AlbumsFragment();
-			return AlbumsFragment.instance;
-		case ARTIST:
-			ArtistsFragment.instance = new ArtistsFragment();
-			return ArtistsFragment.instance;
-		case SC_PLAYLIST:
-			SCPlaylistFragment.instance = new SCPlaylistFragment();
-			return SCPlaylistFragment.instance;
-		case SC_SEARCH_PLAYLIST:
-			SCPlaylistSearchFragment.instance = new SCPlaylistSearchFragment();
-			return SCPlaylistSearchFragment.instance;
-		default:
-			break;
-		}
-		return null;
-	}
-
-	public static CategoryListContentFragment getInstance(int type) {
-		switch (type) {
-		case PLAYLIST:
-			if (PlaylistFragment.instance == null) {
-				createInstance(type);
-			}
-			return PlaylistFragment.instance;
-		case ALBUM:
-			if (AlbumsFragment.instance == null) {
-				createInstance(type);
-			}
-			return AlbumsFragment.instance;
-		case ARTIST:
-			if (ArtistsFragment.instance == null) {
-				createInstance(type);
-			}
-			return ArtistsFragment.instance;
-
-		case SC_PLAYLIST:
-			if (SCPlaylistFragment.instance == null) {
-				createInstance(type);
-			}
-			return SCPlaylistFragment.instance;
-		case SC_SEARCH_PLAYLIST:
-			if (SCPlaylistSearchFragment.instance == null) {
-				createInstance(type);
-			}
-			return SCPlaylistSearchFragment.instance;
-		default:
-			break;
-		}
-		return null;
 	}
 
 	@Override

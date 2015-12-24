@@ -193,32 +193,16 @@ public interface Constants {
 		int ABOUT_US = 7;
 		String DEFAULT_ID = "deafault_id";
 	}
-	interface Categories{
+
+	interface Models {
+
 		int ARTIST = 0;
 		int PLAYLIST = 1;
 		int ALBUM = 2;
-		int SC_PLAYLIST = 3;
-		int SC_SEARCH_PLAYLIST = 4;
-		int NUM_ITEM_IN_ONE_CATEGORY = 5;
-		int TRENDING_MUSIC = 6;
-		int TRENDING_AUDIO = 7;
-		int ALTERNATIVE_ROCK = 8;
-		int AMBIENT = 9;
-		int CLASSICAL = 10;
-		int COUNTRY  = 11;
-		int DANCE_EDM = 12;
-		int DEEP_HOUSE = 13;
-		int DISCO = 14;
-		int DRUM_BASS = 15;
-		int DUBSTEP = 16;
-		int DANCE_HALL = 17;
-		int ELECTRONIC = 18;
-		int FOLK = 19;
-		int SEARCH = 20;
-		int OFFLINE = 21;
-		int QUEUE = 22;
-		int STREAM = 23;
-		int FAVOURITE = 24;
+		int OFFLINE = 3;
+		int QUEUE = 4;
+		//		int FAVORITE = 5;
+		int SIZE = 5;
 	}
 	interface SoundCloudExploreConstant{
 		

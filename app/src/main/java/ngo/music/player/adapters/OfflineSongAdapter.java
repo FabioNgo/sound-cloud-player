@@ -2,17 +2,20 @@ package ngo.music.player.adapters;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-
-import ngo.music.player.boundary.MusicPlayerMainActivity;
-import ngo.music.player.controller.SongController;
-import ngo.music.player.entity.OfflineSong;
-import ngo.music.player.entity.Song;
+import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
+import ngo.music.player.boundary.MusicPlayerMainActivity;
 
 public class OfflineSongAdapter extends LiteListSongAdapter {
 	
 	public static OfflineSongAdapter instance = null;
+
+	public OfflineSongAdapter(Context context, int resource) {
+		super(context, resource);
+
+
+	}
 
 	public static OfflineSongAdapter getInstance() {
 
@@ -21,11 +24,7 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 		}
 		return instance;
 	}
-	public OfflineSongAdapter(Context context, int resource) {
-		super(context, resource);
 
-
-	}
 	public static OfflineSongAdapter createNewInstance() {
 		// TODO Auto-generated method stub
 		instance = new OfflineSongAdapter(MusicPlayerMainActivity.getActivity()
@@ -36,11 +35,11 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 	@Override
 	public void add(Song song) {
 		// TODO Auto-generated method stub
-		if (!(song instanceof OfflineSong)) {
-
-		} else {
-			songs.add(song);
-		}
+//		if (!(song instanceof OfflineSong)) {
+//
+//		} else {
+//			songs.add(song);
+//		}
 
 	}
 
@@ -48,9 +47,9 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 
 	
 	@Override
-	public ArrayList<Song> getSongs() {
+	public Song[] getSongs() {
 		// TODO Auto-generated method stub
-		return SongController.getInstance().getOfflineSongs(true);
+		return (Song[]) ModelManager.getInstance(OFFLINE).getAll();
 	}
 	@Override
 	public int getSongMenuId() {

@@ -5,14 +5,18 @@ import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Random;
 
+import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.CategoryManager;
+import ngo.music.player.ModelManager.ModelManager;
+import ngo.music.player.R;
 import ngo.music.player.adapters.QueueSongAdapter;
 import ngo.music.player.boundary.fragment.abstracts.NoRefreshListContentFragment;
-import ngo.music.player.entity.Song;
 import ngo.music.player.service.MusicPlayerService;
-import ngo.music.player.R;
 
 public class QueueFragment extends NoRefreshListContentFragment {
 	
@@ -70,13 +74,19 @@ public class QueueFragment extends NoRefreshListContentFragment {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
 				case R.id.queue_shuffle_all:
-					ArrayList<Song> songs = MusicPlayerService.getInstance()
-							.getQueue();
+					JSONObject[] array = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
+					Song[] songs = new Song[array.length];
+					for (int i = 0; i < songs.length; i++) {
+						try {
+							songs[i] = (Song) ModelManager.getInstance(OFFLINE).get(array[i].getString("id"));
+						} catch (JSONException e) {
+							continue;
+						}
+					}
 					Random random = new Random(System.currentTimeMillis());
 					int position = Math.abs(random.nextInt())
 							% MusicPlayerService.getInstance().getQueueSize();
-					MusicPlayerService.getInstance().playNewSong(position,
-							category, songs);
+					MusicPlayerService.getInstance().playNewSong(position, songs);
 					if (!MusicPlayerService.getInstance().isShuffle()) {
 						MusicPlayerService.getInstance().setShuffle();
 					}

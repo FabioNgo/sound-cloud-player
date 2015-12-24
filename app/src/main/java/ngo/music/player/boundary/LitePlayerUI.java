@@ -10,11 +10,11 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
-import ngo.music.player.controller.UIController;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.BasicFunctions;
-import ngo.music.player.helper.Constants;
+import ngo.music.player.Controller.UIController;
+import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.helper.Constants;
+import ngo.music.player.helper.Helper;
 
 public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
@@ -33,7 +33,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 		image = (NetworkImageView) rootView
 				.findViewById(R.id.lite_player_image);
-		BasicFunctions.setImageViewSize(container.getLayoutParams().height,
+		Helper.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
 
 		UIController.getInstance().addPlayerUiFragment(this);
@@ -46,7 +46,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		String title = "";
 		if (song != null) {
-			title = song.getTitle();
+			title = song.getAttribute("title");
 		}
 		TextView title_text = (TextView) rootView
 				.findViewById(R.id.lite_player_title);
@@ -59,7 +59,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		String subtitle = "";
 		if (song != null) {
 
-			subtitle = song.getArtist() + " | " + song.getAlbum();
+			subtitle = song.getAttribute("artist") + " | " + song.getAttribute("album");
 		}
 		TextView subtitle_text = (TextView) rootView
 				.findViewById(R.id.lite_player_subtitle);
@@ -73,7 +73,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
 		image.setDefaultImageResId(R.drawable.ic_launcher);
 		if (song != null) {
-			image.setImageUrl(song.getArtworkUrl(), mImageLoader);
+//			image.setImageUrl(song.getArtworkUrl(), mImageLoader);
 		}
 	}
 

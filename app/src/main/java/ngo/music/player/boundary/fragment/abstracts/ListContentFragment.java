@@ -1,6 +1,5 @@
 package ngo.music.player.boundary.fragment.abstracts;
 
-import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -10,18 +9,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
-import ngo.music.player.adapters.CategoryListAdapter;
+import ngo.music.player.Controller.UIController;
+import ngo.music.player.Model.Song;
+import ngo.music.player.R;
 import ngo.music.player.adapters.LiteListSongAdapter;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
-import ngo.music.player.controller.CategoryController;
-import ngo.music.player.controller.UIController;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.BasicFunctions;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.service.MusicPlayerService;
-import ngo.music.player.R;
 
 /**
  * 
@@ -30,7 +23,7 @@ import ngo.music.player.R;
  *
  */
 public abstract class ListContentFragment extends Fragment implements
-		Constants.MusicService, Constants.Categories, Constants.Appplication,
+		Constants.MusicService, Constants.Models, Constants.Appplication,
 		OnItemClickListener, Comparable<ListContentFragment> {
 	public static int numFragmentsLoading = 0;
 	protected View rootView;
@@ -68,7 +61,7 @@ public abstract class ListContentFragment extends Fragment implements
 	 */
 	protected abstract void updateToolbar(Toolbar toolbar);
 	/**
-	 * get category type in Contants.Categories (e.g: OFFLINE_SONG, AMBIENT...)
+	 * get category type in Contants.Models (e.g: OFFLINE_SONG, AMBIENT...)
 	 * @return
 	 */
 	protected abstract int getCategory();
@@ -80,9 +73,8 @@ public abstract class ListContentFragment extends Fragment implements
 
 	/**
 	 * Load fragment activity, often list view fragment
-	 * 
-	 * @param firstTime
-	 *            : is the first time loading or not
+	 *
+	 *
 	 */
 	public void load() {
 		adapter.notifyDataSetChanged();
@@ -103,16 +95,12 @@ public abstract class ListContentFragment extends Fragment implements
 
 		if (adapter instanceof LiteListSongAdapter) {
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
-			ArrayList<Song> songs = ((LiteListSongAdapter) adapter).getSongs();
-			MusicPlayerService.getInstance().playNewSong(position, category,
+			Song[] songs = ((LiteListSongAdapter) adapter).getSongs();
+			MusicPlayerService.getInstance().playNewSong(position,
 					songs);
 			return;
 		}
-		if (adapter instanceof CategoryListAdapter) {
-			
-			new getSongFromCategoryBackground(position).execute();
 
-		}
 
 	}
 	/**
@@ -144,64 +132,7 @@ public abstract class ListContentFragment extends Fragment implements
 		// }
 
 	}
-	/**
-	 * Get Song from Categrory in Background task
-	 * @author Fabio Ngo
-	 *
-	 */
-	private class getSongFromCategoryBackground extends
-			AsyncTask<String, String, ArrayList<Song>> {
 
-		int type;
-		int position;
-		String categoryTitle;
-
-		public getSongFromCategoryBackground(int position) {
-			// TODO Auto-generated constructor stub
-			this.position = position;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			type = ((CategoryListAdapter) adapter).getAdapterType();
-			categoryTitle = CategoryListAdapter.getInstance(type).getItem(
-					position);
-		}
-
-		@Override
-		protected ArrayList<Song> doInBackground(String... params) {
-			// TODO Auto-generated method stub
-
-			ArrayList<Song> songs;
-			try {
-
-				songs = CategoryController.getInstance(type)
-						.getSongFromCategory(categoryTitle);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-
-				e.printStackTrace();
-				return new ArrayList<Song>();
-			}
-
-			return songs;
-		}
-
-		@Override
-		protected void onPostExecute(ArrayList<Song> result) {
-			// TODO Auto-generated method stub
-			if (!result.isEmpty() && result != null) {
-
-				MusicPlayerService.getInstance().playNewSong(0, category,
-						result);
-			} else {
-				BasicFunctions.makeToastTake("No song to play",
-						MusicPlayerMainActivity.getActivity());
-			}
-		}
-
-	}
 	
 	/**
 	 * compare Song, use in sorting and filtering

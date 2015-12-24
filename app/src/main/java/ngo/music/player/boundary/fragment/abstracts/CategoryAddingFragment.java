@@ -20,29 +20,30 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import ngo.music.player.adapters.CategoryTitlesListAdapter;
-import ngo.music.player.controller.CategoryController;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.Constants;
+import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.CategoryManager;
+import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
+import ngo.music.player.adapters.CategoryTitlesListAdapter;
+import ngo.music.player.helper.Constants;
 
-public abstract class CategoryAddingFragment extends DialogFragment implements Constants.Categories{
-	
-	private int type;
-	ArrayList<Song> songs;
+public abstract class CategoryAddingFragment extends DialogFragment implements Constants.Models {
+
+	Song[] songs;
 	CategoryAddingFragment instance = null;
+	private int type;
 	/**
 	 * 
 	 * @param songs
 	 */
-	public CategoryAddingFragment(ArrayList<Song> songs) {
+	public CategoryAddingFragment(Song[] songs) {
 		// TODO Auto-generated constructor stub
 		this.songs = songs;
 		this.type = setType();
 		instance = this;
 	}
+
+
 	protected abstract int setType();
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -100,8 +101,8 @@ public abstract class CategoryAddingFragment extends DialogFragment implements C
 							// TODO Auto-generated method stub
 							
 							try {
-								
-								CategoryController.getInstance(type).newCategory(editText.getText().toString());
+
+								((CategoryManager) ModelManager.getInstance(type)).newCategory(editText.getText().toString());
 								rootView.findViewById(R.id.new_playlist_error_text).setVisibility(View.GONE);
 								newPlaylistGroup.setVisibility(View.GONE);
 							} catch (Exception e) {
@@ -137,7 +138,7 @@ public abstract class CategoryAddingFragment extends DialogFragment implements C
 				// TODO Auto-generated method stub
 				String categoryName = CategoryTitlesListAdapter.getInstance(type).getItem(position);
 				try {
-					CategoryController.getInstance(type).addSongsToCategory(categoryName, songs);
+//					CategoryController.getInstance(type).addSongsToCategory(categoryName, songs);
 					
 				} catch (Exception e) {
 					// TODO Auto-generated catch block

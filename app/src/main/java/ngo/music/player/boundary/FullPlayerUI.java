@@ -1,7 +1,5 @@
 package ngo.music.player.boundary;
 
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
@@ -16,26 +14,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.volley.api.AppController;
 
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
-
-import ngo.music.player.controller.MenuController;
-import ngo.music.player.controller.SCUserController;
-import ngo.music.player.controller.UIController;
-import ngo.music.player.entity.SCAccount;
-import ngo.music.player.entity.SCSong;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.BasicFunctions;
-import ngo.music.player.helper.Constants;
-import ngo.music.player.service.MusicPlayerService;
+import ngo.music.player.Controller.MenuController;
+import ngo.music.player.Controller.UIController;
+import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.helper.Constants;
+import ngo.music.player.helper.Helper;
+import ngo.music.player.service.MusicPlayerService;
 
 
 public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
@@ -44,7 +31,6 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private NetworkImageView songImage;
 	private RelativeLayout artistInfo;
 
-	SCAccount soundCloudAccount = null;
 
 	
 	@Override
@@ -56,7 +42,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
 				.findViewById(R.id.full_player_song_image);
-		BasicFunctions.setImageViewSize(MusicPlayerMainActivity.screenWidth,
+		Helper.setImageViewSize(MusicPlayerMainActivity.screenWidth,
 				MusicPlayerMainActivity.screenWidth, songImage);
 
 		currentTimeText = (TextView) rootView
@@ -99,8 +85,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				// TODO Auto-generated method stub
 				switch (arg0.getItemId()) {
 				case R.id.full_player_add_playlist:
-					ArrayList<Song> songs = new ArrayList<Song>();
-					songs.add(MusicPlayerService.getInstance().getCurrentSong());
+					Song[] songs = new Song[1];
+					songs[0] = MusicPlayerService.getInstance().getCurrentSong();
 					MenuController.getInstance(songs).addToPlaylist();
 					break;
 				case R.id.full_player_share:
@@ -147,7 +133,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		ImageView loop = (ImageView) rootView
 				.findViewById(R.id.full_player_loop);
 
-		BasicFunctions.setImageViewSize(
+		Helper.setImageViewSize(
 				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, loop);
 		updateLoop();
@@ -166,7 +152,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	private void configShuffleButton() {
 		shuffle = (ImageView) rootView.findViewById(R.id.full_player_shuffle);
-		BasicFunctions.setImageViewSize(
+		Helper.setImageViewSize(
 				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, shuffle);
 
@@ -187,7 +173,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	private void configFastForwardButton() {
 		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
-		BasicFunctions.setImageViewSize(
+		Helper.setImageViewSize(
 				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, ff);
 		ff.setOnClickListener(new OnClickListener() {
@@ -214,8 +200,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	private void configRewindButton() {
 		ImageView rew = (ImageView) rootView.findViewById(R.id.full_player_rew);
-		// BasicFunctions.ScaleImageViewW(MainActivity.screenWidth / 10, rew);
-		BasicFunctions.setImageViewSize(
+		// Helper.ScaleImageViewW(MainActivity.screenWidth / 10, rew);
+		Helper.setImageViewSize(
 				MusicPlayerMainActivity.screenWidth / 10,
 				MusicPlayerMainActivity.screenWidth / 10, rew);
 
@@ -248,7 +234,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		if (song == null)
 			return;
-		String title = song.getTitle();
+		String title = song.getAttribute("title");
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setTitle(title);
@@ -259,7 +245,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		if (song == null)
 			return;
-		String subtitle = song.getArtist() + " | " + song.getAlbum();
+		String subtitle = song.getAttribute("artist") + " | " + song.getAttribute("album");
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setSubtitle(subtitle);
@@ -303,83 +289,21 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	@Override
 	public void updateImage(Song currentSong) {
-		// TODO Auto-generated method stub
-		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-		songImage.setDefaultImageResId(R.drawable.ic_launcher);
-
-		if (currentSong != null) {
-			// System.out.println (currentSong.getArtworkUrl());
-			songImage.setImageUrl(currentSong.getArtworkUrl(), mImageLoader);
-
-		}
-
-		// /songImage.setVisibility(View.GONE);
-
-	}
-
-	private class getUserbyIdBackground extends
-			AsyncTask<String, String, SCAccount> {
-
-		SCAccount soundCloudAccount = null;
-		
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		protected SCAccount doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			
-			SCUserController soundCloudUserController = SCUserController
-					.getInstance();
-			
-			try {
-				
-				soundCloudAccount = soundCloudUserController.getUserbyId(params[0]);
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				return null;
-				
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				return null;
-				
-			}
-			return soundCloudAccount;
-		}
-
-		@Override
-		protected void onPostExecute(SCAccount result) {
-			// TODO Auto-generated method stub
-			TextView artistFullname = (TextView) rootView
-					.findViewById(R.id.artist_fullname);
-			NetworkImageView artistAvatar = (NetworkImageView) rootView
-					.findViewById(R.id.artist_image);
-			RelativeLayout artisInfo = (RelativeLayout) rootView.findViewById(R.id.artist_info);
-			
-
-			if (soundCloudAccount != null){
-				artistFullname.setText(soundCloudAccount.getFullName());
-			
-				artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
-					
-					AppController.getInstance().getImageLoader());
-//			BasicFunctions.setImageViewSize(
-//					MusicPlayerMainActivity.screenHeight / 10,
-//					MusicPlayerMainActivity.screenHeight / 10, artistAvatar);
-
-			artistAvatar.setDefaultImageResId(R.drawable.ic_launcher);
+//		// TODO Auto-generated method stub
+//		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
+//		songImage.setDefaultImageResId(R.drawable.ic_launcher);
 //
-			}
-//			artistAvatar.setImageUrl(soundCloudAccount.getAvatarUrl(),
-//					AppController.getInstance().getImageLoader());
-
-		}
+//		if (currentSong != null) {
+//			// System.out.println (currentSong.getArtworkUrl());
+//			songImage.setImageUrl(currentSong.getArtworkUrl(), mImageLoader);
+//
+//		}
+//
+//		// /songImage.setVisibility(View.GONE);
 
 	}
+
+
 
 	@Override
 	protected void updateOtherInfo(Song song) {
@@ -404,61 +328,16 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		/*
 		 * If play online, load avatar of artist
 		 */
-		SCSong onlineSong = null;
 
-		if (song instanceof SCSong) {
-			
-			artistInfo.setVisibility(View.VISIBLE);
-			onlineSong = (SCSong) song;
-			// artistInfo.setAlpha((float) 0.6);
-			try {
-				String ID = String.valueOf(onlineSong.getUser().getId());
-				
-				soundCloudAccount = new getUserbyIdBackground().execute(ID).get();
-				
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ExecutionException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
 
-		} else {
 			// artistInfo.setAlpha((float) 1);
-			songImage.setImageResource(R.drawable.ic_launcher);
-			artistInfo.setVisibility(View.INVISIBLE);
-		}
+		songImage.setImageResource(R.drawable.ic_launcher);
+		artistInfo.setVisibility(View.INVISIBLE);
 
-		artistInfo.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				SCUserController soundCloudUserController = SCUserController
-						.getInstance();
-
-				soundCloudUserController.setGuest(soundCloudAccount);
-				Intent i = new Intent(getActivity(),
-						MusicPlayerMainActivity.class);
-				Bundle bundle;
-				try {
-					bundle = soundCloudUserController.getBundle(soundCloudUserController.getCurrentUser());
-					i.putExtra(Constants.UserContant.USER, bundle);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				MusicPlayerMainActivity.getActivity().finish();
-				startActivity(i);
-			}
-		});
-	}
-
-	public void resetProgress() {
 
 	}
+
 
 	@Override
 	protected boolean hasTextTime() {

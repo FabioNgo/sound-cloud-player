@@ -7,8 +7,8 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
-import ngo.music.player.boundary.MusicPlayerMainActivity;
 import ngo.music.player.R;
+import ngo.music.player.boundary.MusicPlayerMainActivity;
 
 public class SCSongViewHolder {
 	public RelativeLayout songDetail;

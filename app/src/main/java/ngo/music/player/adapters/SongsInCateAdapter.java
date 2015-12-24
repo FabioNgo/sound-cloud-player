@@ -11,26 +11,22 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import ngo.music.player.boundary.MusicPlayerMainActivity;
-import ngo.music.player.controller.CategoryController;
-import ngo.music.player.controller.MenuController;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.Constants;
+import ngo.music.player.Controller.MenuController;
+import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.helper.Constants;
 
 public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
-		Constants.Categories {
-	private View v;
-	private int type = -1;
+		Constants.Models {
+	public static SongsInCateAdapter instance = null;
 	Context context;
 	int resource;
-	private boolean canRemoveItem;
 	String cat;
-
-	public static SongsInCateAdapter instance = null;
-	private ArrayList<Song> songs;
+	private View v;
+	private int type = -1;
+	private boolean canRemoveItem;
+	private Song[] songs;
 
 	public SongsInCateAdapter(Context context, int resource,
 			 String cat) {
@@ -45,23 +41,11 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(cat);
 		
 	}
+
 	/**
-	 * 
-	 * @return if the category can remove children item
-	 */
-	protected abstract boolean setCanRemoveItem();
-	
-	/**
-	 * 
-	 * @return the type of category in Constant.Categories
-	 */
-	protected abstract int setType();
-	
-	
-	/**
-	 * 
+	 *
 	 * @param type
-	 *            in Constants.Categories
+	 *            in Constants.Models
 	 * @param resource
 	 * @param
 	 * @param cate
@@ -82,18 +66,33 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 			return new SongsInArtistsAdapter(
 					MusicPlayerMainActivity.getActivity(), resource,
 					cate);
-		case SC_PLAYLIST:
-			return new SongsInMySCPlaylistAdapter(
-					MusicPlayerMainActivity.getActivity(), resource,
-					cate);
-		case SC_SEARCH_PLAYLIST:
-			return new SongsInSCSearchPlaylistAdapter(
-					MusicPlayerMainActivity.getActivity(), resource,
-					cate);
 		default:
 			return null;
 		}
 	}
+
+	public static SongsInCateAdapter getInstance(int type) {
+		// TODO Auto-generated method stub
+		switch (type) {
+			case PLAYLIST:
+
+				return SongsInPlaylistAdapter.instance;
+
+			default:
+				break;
+		}
+		return null;
+	}
+
+	/**
+	 * @return if the category can remove children item
+	 */
+	protected abstract boolean setCanRemoveItem();
+
+	/**
+	 * @return the type of category in Constant.Models
+	 */
+	protected abstract int setType();
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -116,7 +115,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 	 */
 	private void setLayoutInformation(int position, View v) {
 
-		final Song song = songs.get(position);
+		final Song song = songs[position];
 		/**
 		 * Set avatar for song
 		 */
@@ -155,15 +154,15 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.song_cat_remove:
-							CategoryController.getInstance(type)
-									.removeSongFromCate(song, cat);
+//							((CategoryManager)ModelManager.getInstance(type))
+//									.removeSongFromCate(song, cat);
 							break;
 						case R.id.song_cat_add:
-							ArrayList<Song> songs = new ArrayList<Song>();
-							songs.add(song);
+							Song[] songs = new Song[1];
+							songs[0] = song;
 							MenuController.getInstance(songs).addToPlaylist();
 							break;
-							
+
 						default:
 							break;
 						}
@@ -179,38 +178,25 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 		 * Set title
 		 */
 		TextView title = (TextView) v.findViewById(R.id.song_cate_title);
-		title.setText(song.getTitle());
+		title.setText(song.getAttribute("title"));
 
 		/*
 		 * Set sub title
 		 */
 		TextView subtitle = (TextView) v.findViewById(R.id.song_cate_subtitle);
-		subtitle.setText(song.getArtist() + " | " + song.getAlbum());
+		subtitle.setText(song.getAttribute("artist") + " | " + song.getAttribute("artist"));
 
 	}
 
 	@Override
 	public Song getItem(int position) {
-		
-		return songs.get(position);
+
+		return songs[position];
 	}
 
 	@Override
 	public int getCount() {
-		return songs.size();
-	}
-
-	public static SongsInCateAdapter getInstance(int type) {
-		// TODO Auto-generated method stub
-		switch (type) {
-		case PLAYLIST:
-			
-			return SongsInPlaylistAdapter.instance;
-
-		default:
-			break;
-		}
-		return null;
+		return songs.length;
 	}
 
 	public void update() {

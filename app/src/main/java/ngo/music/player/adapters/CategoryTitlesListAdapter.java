@@ -7,16 +7,24 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import ngo.music.player.boundary.MusicPlayerMainActivity;
-import ngo.music.player.controller.CategoryController;
-import ngo.music.player.helper.Constants;
+import ngo.music.player.ModelManager.CategoryManager;
+import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
+import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.helper.Constants;
 
-public abstract class CategoryTitlesListAdapter extends ArrayAdapter<String> implements Constants.Categories {
+public abstract class CategoryTitlesListAdapter extends ArrayAdapter<String> implements Constants.Models {
 	
 	private int type;
+	private String[] titles;
+
+	protected CategoryTitlesListAdapter() {
+		super(MusicPlayerMainActivity.getActivity(), R.layout.single_playlist_list_adding);
+		// TODO Auto-generated constructor stub
+		type = setType();
+		titles = ((CategoryManager) ModelManager.getInstance(type)).getCategoryNames();
+	}
+
 	public static CategoryTitlesListAdapter getInstance(int type){
 		switch (type) {
 		case PLAYLIST:
@@ -24,38 +32,25 @@ public abstract class CategoryTitlesListAdapter extends ArrayAdapter<String> imp
 				createInstance(type);
 			}
 			return PlaylistTitlesListAdapter.instance;
-		case SC_PLAYLIST:
-			if(SCPlaylistTitlesListAdapter.instance == null){
-				createInstance(type);
-			}
-			return SCPlaylistTitlesListAdapter.instance;
-		
-		
-		default:
+
+
+			default:
 			return null;
 		}
 	}
+
 	public static void createInstance(int type){
 		switch (type) {
 		case PLAYLIST:
 			PlaylistTitlesListAdapter.instance = new PlaylistTitlesListAdapter();
 			break;
-		case SC_PLAYLIST:
-			SCPlaylistTitlesListAdapter.instance = new SCPlaylistTitlesListAdapter();
-			break;
+
 		default:
 			break;
 		}
 	}
-	protected abstract int setType();
-	private ArrayList<String> titles = new ArrayList<String>();
 
-	protected CategoryTitlesListAdapter() {
-		super(MusicPlayerMainActivity.getActivity(), R.layout.single_playlist_list_adding);
-		// TODO Auto-generated constructor stub
-		type = setType();
-		titles = CategoryController.getInstance(type).getCategoryName();
-	}
+	protected abstract int setType();
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -75,21 +70,21 @@ public abstract class CategoryTitlesListAdapter extends ArrayAdapter<String> imp
 	private void setLayoutInformation(int position, View v) {
 		// TODO Auto-generated method stub
 		TextView tv = (TextView) v.findViewById(R.id.single_playlist_title);
-		tv.setText(titles.get(position));
+		tv.setText(titles[position]);
 	}
 
 	public void updateCategory() {
 		// TODO Auto-generated method stub
-		titles = CategoryController.getInstance(type).getCategoryName();
+		titles = ((CategoryManager) ModelManager.getInstance(type)).getCategoryNames();
 		this.notifyDataSetChanged();
 	}
 	@Override
 	public String getItem(int position) {
-		return titles.get(position);
+		return titles[position];
 	}
 
 	@Override
 	public int getCount() {
-		return titles.size();
+		return titles.length;
 	}
 }

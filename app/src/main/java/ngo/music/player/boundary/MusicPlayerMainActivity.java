@@ -2,9 +2,10 @@ package ngo.music.player.boundary;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.FileObserver;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -23,22 +24,18 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.Random;
 
+import ngo.music.player.Controller.UIController;
+import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.ModelManager;
+import ngo.music.player.ModelManager.OfflineSongManager;
 import ngo.music.player.R;
-import ngo.music.player.adapters.MySCTabAdapter;
 import ngo.music.player.adapters.OfflineTabsAdapter;
-import ngo.music.player.adapters.SCExploreTabAdater;
-import ngo.music.player.adapters.SCSearchTabAdater;
 import ngo.music.player.boundary.fragment.abstracts.ListContentFragment;
 import ngo.music.player.boundary.fragment.real.QueueFragment;
-import ngo.music.player.boundary.fragment.real.UserDisplayFragment;
-import ngo.music.player.controller.SongController;
-import ngo.music.player.controller.UIController;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.BasicFunctions;
 import ngo.music.player.helper.Constants;
+import ngo.music.player.helper.Helper;
 import ngo.music.player.helper.States;
 import ngo.music.player.service.MusicPlayerService;
 
@@ -46,27 +43,15 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		Constants.UIContant, Constants.UserContant, Constants.MusicService,
 		Constants.Appplication {
 
-	protected Fragment mFrag;
-	private SlidingUpPanelLayout mLayout;
-	private static MusicPlayerMainActivity activity;
-	private PagerSlidingTabStrip tabs;
-	private ViewPager pager;
+	public static final int OFFLINE = 0;
+	public static final int SOUNDCLOUD_EXPLORE = 1;
+	public static final int MY_SOUNDCLOUD = 2;
+	public static final int SOUNDCLOUD_SEARCH = 3;
 	/*
 	 * If true : Display Fragment with tab : Trending Music, Audio...... If
 	 * False: Display Fragment with tab : My music ......
 	 */
 	public static int type = 0;
-
-	public static final int OFFLINE = 0;
-	public static final int SOUNDCLOUD_EXPLORE = 1;
-	public static final int MY_SOUNDCLOUD = 2;
-	public static final int SOUNDCLOUD_SEARCH = 3;
-	// private int type;
-
-	private int defaultTabPosition = 0;
-	protected Object mService;
-	protected boolean mBound;
-
 	/**
 	 * Search Query
 	 */
@@ -77,18 +62,33 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	public static int screenHeight;
 	public static int screenWidth;
 	public static int notiHeight;
-
-	public static MusicPlayerMainActivity getActivity() {
-		return activity;
-	}
-
+	private static MusicPlayerMainActivity activity;
+	// private int type;
+	protected Fragment mFrag;
+	protected Object mService;
+	protected boolean mBound;
 	Menu menu;
-
+	private SlidingUpPanelLayout mLayout;
+	private PagerSlidingTabStrip tabs;
+	private ViewPager pager;
+	private int defaultTabPosition = 0;
 	// public MusicPlayerMainActivity() {
 	// // TODO Auto-generated constructor stub
 	// activity = this;
 	//
 	// }
+	private FileObserver fileObserver = new FileObserver(Environment.getExternalStorageDirectory().getPath()) {
+		@Override
+		public void onEvent(int event, String path) {
+			if (event == FileObserver.ALL_EVENTS) {
+				((OfflineSongManager) ModelManager.getInstance(OFFLINE)).getSongsFromSDCard();
+			}
+		}
+	};
+
+	public static MusicPlayerMainActivity getActivity() {
+		return activity;
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -190,16 +190,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		case OFFLINE:
 			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
 			break;
-		case SOUNDCLOUD_EXPLORE:
-			adapter = new SCExploreTabAdater(getSupportFragmentManager());
-			break;
 
-		case MY_SOUNDCLOUD:
-			adapter = new MySCTabAdapter(getSupportFragmentManager());
-			break;
-		case SOUNDCLOUD_SEARCH:
-			adapter = new SCSearchTabAdater(getSupportFragmentManager());
-			break;
 		default:
 			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
 			break;
@@ -257,7 +248,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		play_queue_container.getLayoutParams().height = screenHeight;
 
 		dragview.getLayoutParams().height = screenHeight * 2
-				+ BasicFunctions.dpToPx(68, this);
+				+ Helper.dpToPx(68, this);
 
 		getSupportFragmentManager().beginTransaction()
 				.replace(R.id.lite_player_container, new LitePlayerUI())
@@ -306,7 +297,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		sm.setShadowWidthRes(R.dimen.shadow_width);
 //		sm.setShadowDrawable(R.drawable.shadow);
 
-		sm.setBehindOffset((int) (BasicFunctions.pxTodp(screenWidth, this)));
+		sm.setBehindOffset(Helper.pxTodp(screenWidth, this));
 		sm.setFadeDegree(0.35f);
 		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
 		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -314,18 +305,18 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		toolbar.setLogo(R.drawable.logo);
 //		setSupportActionBar(toolbar);
 
-		if (savedInstanceState == null) {
-
-			FragmentTransaction t = this.getSupportFragmentManager()
-					.beginTransaction();
-			mFrag = new UserDisplayFragment();
-
-			t.replace(R.id.menu_frame, mFrag);
-			t.commit();
-		} else {
-			mFrag = (Fragment) this.getSupportFragmentManager()
-					.findFragmentById(R.id.menu_frame);
-		}
+//		if (savedInstanceState == null) {
+//
+//			FragmentTransaction t = this.getSupportFragmentManager()
+//					.beginTransaction();
+//			mFrag = new UserDisplayFragment();
+//
+//			t.replace(R.id.menu_frame, mFrag);
+//			t.commit();
+//		} else {
+//			mFrag = (Fragment) this.getSupportFragmentManager()
+//					.findFragmentById(R.id.menu_frame);
+//		}
 	}
 
 	/**
@@ -394,8 +385,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.main_shuffle_all:
-			ArrayList<Song> songs = SongController.getInstance()
-					.getOfflineSongs(false);
+			Song[] songs = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
 			Random random = new Random(System.currentTimeMillis());
 			int position = 0;
 			try {
@@ -405,7 +395,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 				// TODO: handle exception
 			}
 
-			MusicPlayerService.getInstance().playNewSong(position, -1, songs);
+			MusicPlayerService.getInstance().playNewSong(position, songs);
 			if (!MusicPlayerService.getInstance().isShuffle()) {
 				MusicPlayerService.getInstance().setShuffle();
 			}
@@ -445,6 +435,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
+		fileObserver.startWatching();
 		// if (isMyServiceRunning()) {
 		// UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		// }
@@ -470,6 +461,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
+		fileObserver.stopWatching();
 		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 

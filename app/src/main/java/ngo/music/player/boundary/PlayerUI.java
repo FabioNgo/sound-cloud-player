@@ -7,18 +7,18 @@ import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.BasicFunctions;
-import ngo.music.player.service.MusicPlayerService;
+import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.helper.Helper;
+import ngo.music.player.service.MusicPlayerService;
 
-public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
-	protected ProgressWheel musicProgressBar;
+public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>, PlayUIInterface {
 	public static int numberPlayerLoading= 0;
+	protected ProgressWheel musicProgressBar;
+	protected View rootView = null;
 	TextView currentTimeText;
 	TextView durationText;
 	Runnable runnable;
-	protected View rootView = null;
 	
 	public PlayerUI() {
 		// TODO Auto-generated constructor stub
@@ -32,9 +32,9 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
 			public void run() {
 				// TODO Auto-generated method stub
 				if (hasTextTime()) {
-					currentTimeText.setText(BasicFunctions.toFormatedTime(MusicPlayerService.getInstance()
+					currentTimeText.setText(Helper.toFormatedTime(MusicPlayerService.getInstance()
 							.getCurrentTime()));
-					durationText.setText(BasicFunctions.toFormatedTime(MusicPlayerService.getInstance()
+					durationText.setText(Helper.toFormatedTime(MusicPlayerService.getInstance()
 							.getDuration()));
 				}
 			}
@@ -56,11 +56,8 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
 	 */
 	protected abstract void updateSubtitle(Song song);
 
-	/**
-	 * update info of song: Artist, Image, Description....
-	 * 
-	 * @param song
-	 */
+
+	@Override
 	public void updateSongInfo(Song song) {
 
 		if (song != null) {
@@ -84,6 +81,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
 	/**
 	 * update music progress Bar and Displayed Time
 	 */
+	@Override
 	public void updateMusicProgress() {
 		if (MusicPlayerService.getInstance().isPlaying()) {
 			play();
@@ -91,10 +89,12 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
 		runnable.run();
 	}
 
+	@Override
 	public void pause() {
 
 	}
 
+	@Override
 	public void play() {
 		runnable.run();
 	}
@@ -119,9 +119,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
 		return musicProgressBar;
 	}
 
-	/**
-	 * Implement other update
-	 */
+	@Override
 	public abstract void update();
 
 	/**
@@ -131,12 +129,13 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>{
 	 */
 	protected abstract void updateImage(Song song);
 
+	@Override
 	public void stop() {
 		// TODO Auto-generated method stub
 		
 		if (hasTextTime()) {
-			currentTimeText.setText(BasicFunctions.toFormatedTime(0));
-			durationText.setText(BasicFunctions.toFormatedTime(0));
+			currentTimeText.setText(Helper.toFormatedTime(0));
+			durationText.setText(Helper.toFormatedTime(0));
 		}
 
 	}

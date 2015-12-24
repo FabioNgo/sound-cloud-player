@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import ngo.music.player.controller.UIController;
-import ngo.music.player.helper.Constants;
+import ngo.music.player.Controller.UIController;
 import ngo.music.player.R;
+import ngo.music.player.helper.Constants;
 
 /**
  * 
@@ -19,7 +19,7 @@ import ngo.music.player.R;
  *
  */
 public abstract class NoRefreshListContentFragment extends ListContentFragment
-		implements Constants.MusicService, Constants.Categories,
+		implements Constants.MusicService, Constants.Models,
 		Constants.Appplication, OnItemClickListener {
 	protected boolean loadingMore = false;
 	protected int current_page;

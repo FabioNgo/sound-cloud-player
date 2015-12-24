@@ -1,7 +1,6 @@
 package ngo.music.player.adapters;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.support.v7.widget.PopupMenu;
 import android.view.LayoutInflater;
@@ -11,26 +10,30 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
-import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.CategoryManager;
+import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
 import ngo.music.player.ViewHolder.CompositionViewHolder;
 import ngo.music.player.boundary.MusicPlayerMainActivity;
 import ngo.music.player.boundary.fragment.abstracts.ListItemsInCompositionListFragment;
-import ngo.music.player.controller.CategoryController;
-import ngo.music.player.entity.Song;
-import ngo.music.player.helper.BasicFunctions;
 import ngo.music.player.helper.Constants;
+import ngo.music.player.helper.Helper;
 
 public abstract class CategoryListAdapter extends ArrayAdapter<String>
-		implements Constants.Categories {
-	private View v;
-	private int type = -1;
+		implements Constants.Models {
+	private static final int NUM_ITEM_IN_ONE_CATEGORY = 5;
+	protected ArrayList<String> categories;
 	Context context;
 	int resource;
-	protected ArrayList<String> categories;
 	CompositionViewHolder holder = null;
+	private View v;
+	private int type = -1;
 	private boolean canDelete;
 	private boolean canEdit;
 
@@ -45,27 +48,9 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 
 	}
 
-	/**
-	 * 
-	 * @return if the category can be editted or not
-	 */
-	protected abstract boolean setCanEdit();
-
-	/**
-	 * 
-	 * @return if the category item can be delete or not
-	 */
-	protected abstract boolean setCanDelete();
-
-	/**
-	 * 
-	 * @return type of Category in Constant.Category
-	 */
-	protected abstract int setType();
-
 	public static CategoryListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
-		
+
 		switch (type) {
 		case PLAYLIST:
 			return new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
@@ -76,14 +61,6 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 		case ARTIST:
 			return new ArtistAdapter(MusicPlayerMainActivity.getActivity()
 					.getApplicationContext(), R.layout.list_view);
-		case SC_PLAYLIST:
-
-			return new SCPlaylistAdapter(MusicPlayerMainActivity.getActivity()
-					.getApplicationContext(), R.layout.list_view);
-
-		case SC_SEARCH_PLAYLIST:
-			return new SCPlaylistSearchAdapter(MusicPlayerMainActivity
-					.getActivity().getApplicationContext(), R.layout.list_view);
 
 		default:
 			return null;
@@ -105,16 +82,6 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 			}
 			return AlbumAdapter.instance;
 
-		case SC_PLAYLIST:
-			if (SCPlaylistAdapter.instance == null) {
-				createNewInstance(type);
-			}
-			return SCPlaylistAdapter.instance;
-		case SC_SEARCH_PLAYLIST:
-			if (SCPlaylistSearchAdapter.instance == null) {
-				createNewInstance(type);
-			}
-			return SCPlaylistSearchAdapter.instance;
 
 		case ARTIST:
 			if (ArtistAdapter.instance == null) {
@@ -128,12 +95,29 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 	}
 
 	/**
+	 *
+	 * @return if the category can be editted or not
+	 */
+	protected abstract boolean setCanEdit();
+
+	/**
+	 * @return if the category item can be delete or not
+	 */
+	protected abstract boolean setCanDelete();
+
+	/**
+	 * @return type of Category in Constant.Category
+	 */
+	protected abstract int setType();
+
+	/**
 	 * get categories (songs and title) in list of item sets
 	 * 
 	 * @return categories
 	 */
 	protected ArrayList<String> getCategories() {
-		return CategoryController.getInstance(type).getCategoryString();
+		return new ArrayList<String>();
+//		return CategoryController.getInstance(type).getCategoryString();
 	}
 
 	/**
@@ -143,19 +127,20 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 	 *            : category
 	 * @return list of songs
 	 */
-	protected ArrayList<Song> getSongsFromCat(String cat) {
+	protected Song[] getSongsFromCat(String cat) {
 		System.out.println ("GET SONGS FROM CATE");
-		try {
-			return new getSongFromCategoryBackground(cat, type).execute().get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+//		return new ArrayList<Song>();
+		JSONObject[] array = ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(cat);
+		Song[] result = new Song[array.length];
+		for (int i = 0; i < result.length; i++) {
+			try {
+				result[i] = (Song) ModelManager.getInstance(OFFLINE).get(array[i].getString("id"));
+			} catch (JSONException e) {
+				continue;
+			}
 		}
-		return new ArrayList<Song>();
-		//return CategoryController.getInstance(type).getSongFromCategory(cat);
+		return result;
 	}
 
 	@Override
@@ -180,7 +165,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 	}
 
 	/**
-	 * @param position
+	 * @param
 	 * @param v
 	 */
 	public void setLayoutInformation(final CompositionViewHolder holder,
@@ -221,7 +206,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 				// TODO Auto-generated method stub
 				holder.items[0].setVisibility(View.VISIBLE);
 				holder.editText.setVisibility(View.INVISIBLE);
-				holder.editText.getLayoutParams().height = BasicFunctions.dpToPx(20, context);
+				holder.editText.getLayoutParams().height = Helper.dpToPx(20, context);
 				holder.editBtn.setVisibility(View.VISIBLE);
 				holder.clearBtn.setVisibility(View.INVISIBLE);
 				holder.submitBtn.setVisibility(View.INVISIBLE);
@@ -244,14 +229,14 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				try {
-					CategoryController.getInstance(type).updateTitle((String) holder.items[0].getText(),holder.editText.getText().toString());
+//					ModelManager.getInstance(type).updateTitle((String) holder.items[0].getText(),holder.editText.getText().toString());
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					BasicFunctions.makeToastTake(e.getMessage(), context);
+					Helper.makeToastTake(e.getMessage(), context);
 					return;
 				}
 				holder.items[0].setVisibility(View.VISIBLE);
-				holder.editText.getLayoutParams().height = BasicFunctions.dpToPx(20, context);
+				holder.editText.getLayoutParams().height = Helper.dpToPx(20, context);
 				holder.editText.setVisibility(View.VISIBLE);
 				holder.editBtn.setVisibility(View.VISIBLE);
 				holder.clearBtn.setVisibility(View.INVISIBLE);
@@ -321,10 +306,11 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 									"Show songs in cate");
 							break;
 						case R.id.composition_list_item_delete:
-							CategoryController.getInstance(type)
-									.removeCategory(cat);
-						default:
+//							CategoryController.getInstance(type)
+//									.removeCategory(cat);
 							break;
+							default:
+								break;
 						}
 
 						return false;
@@ -386,38 +372,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 		return type;
 	}
 	
-	private class getSongFromCategoryBackground extends AsyncTask<String, String, ArrayList<Song>>{
 
-		int type;
-		int position;
-		String category;
-		
-		
-		public getSongFromCategoryBackground(String cat, int type) {
-			// TODO Auto-generated constructor stub
-			this.type = type;
-			this.category = cat;
-		}
-		
-		@Override
-		protected ArrayList<Song> doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			
-			ArrayList<Song> songs = new ArrayList<Song>();
-			try {
-				songs = CategoryController.getInstance(type).getSongFromCategory(category);
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return songs;
-			}
-			
-			return songs;
-		}
-		
-		
-		
-	}
 
 
 }
