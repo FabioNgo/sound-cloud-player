@@ -369,7 +369,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNewSong(int position, Song[] queue) {
 		// incase of the queue in put is songQueue itself
-		this.songQueue = (ArrayList<Song>) Arrays.asList(queue);
+
+		this.songQueue = new ArrayList<>(Arrays.asList(queue));
 		currentSongPosition = position;
 		isShuffle = true;
 		playNewSong(true);
