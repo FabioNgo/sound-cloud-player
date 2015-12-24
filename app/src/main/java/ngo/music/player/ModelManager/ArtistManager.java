@@ -1,5 +1,9 @@
 package ngo.music.player.ModelManager;
 
+import ngo.music.player.Model.Artist;
+import ngo.music.player.Model.Model;
+import ngo.music.player.Model.ModelInterface;
+
 public class ArtistManager extends ReadOnlyOfflineCategoryManager {
 
 
@@ -14,5 +18,11 @@ public class ArtistManager extends ReadOnlyOfflineCategoryManager {
         return "artists.json";
     }
 
+    @Override
+    public ModelInterface[] getAll() {
+        Model[] models = new Artist[this.models.size()];
+
+        return this.models.toArray(models);
+    }
 
 }

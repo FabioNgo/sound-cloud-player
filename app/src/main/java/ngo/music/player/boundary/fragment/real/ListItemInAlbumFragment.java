@@ -1,8 +1,11 @@
 package ngo.music.player.boundary.fragment.real;
 
+import android.annotation.SuppressLint;
+
 import ngo.music.player.Model.Song;
 import ngo.music.player.boundary.fragment.abstracts.ListItemsInCompositionListFragment;
 
+@SuppressLint("ValidFragment")
 public class ListItemInAlbumFragment extends
 		ListItemsInCompositionListFragment {
 

@@ -13,5 +13,4 @@ public class AlbumsFragment extends CategoryListContentFragment  {
 	}
 
 
-	
 }

@@ -6,7 +6,9 @@ import android.provider.MediaStore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
+import ngo.music.player.Model.OfflineSong;
 import ngo.music.player.boundary.MusicPlayerMainActivity;
 
 /**
@@ -37,7 +39,8 @@ public class OfflineSongManager extends SongManager {
             object.put("artist", c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
             object.put("album", c.getString(c.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
             object.put("link", c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA)));
-            object.put("duration", c.getString(c.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+            object.put("duration", c.getString(c.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+            System.out.println(object.toString());
             return object;
         } catch (JSONException e) {
             return null;
@@ -63,5 +66,12 @@ public class OfflineSongManager extends SongManager {
         }
         storeData();
         c.close();
+    }
+
+    @Override
+    public ModelInterface[] getAll() {
+        Model[] models = new OfflineSong[this.models.size()];
+
+        return this.models.toArray(models);
     }
 }

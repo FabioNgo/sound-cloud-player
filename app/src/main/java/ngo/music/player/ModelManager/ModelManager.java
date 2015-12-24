@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import ngo.music.player.Model.Album;
 import ngo.music.player.Model.Artist;
@@ -26,7 +27,7 @@ import ngo.music.player.helper.Constants;
 /**
  * Created by fabiongo on 12/24/2015.
  */
-public abstract class ModelManager implements ModelManagerInterface {
+public abstract class ModelManager extends Observable implements ModelManagerInterface {
     private static ModelManager[] managers;
     /**
      * models to control
@@ -71,7 +72,7 @@ public abstract class ModelManager implements ModelManagerInterface {
      */
     private static ModelManager createNewInstance(int type) {
         // TODO Auto-generated method stub
-
+        System.out.println(type);
         switch (type) {
             case Constants.Models.OFFLINE:
                 return new OfflineSongManager();
@@ -82,7 +83,6 @@ public abstract class ModelManager implements ModelManagerInterface {
             case Constants.Models.ARTIST:
                 return new ArtistManager();
             case Constants.Models.QUEUE:
-//                System.out.println(type);
                 return new QueueManager();
             default:
                 return null;
@@ -103,6 +103,7 @@ public abstract class ModelManager implements ModelManagerInterface {
         }
         if (managers[type] == null) {
             ModelManager a = createNewInstance(type);
+            System.out.println(a.toString());
             managers[type] = a;
         }
 
@@ -196,7 +197,7 @@ public abstract class ModelManager implements ModelManagerInterface {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        this.notifyObservers(this.models);
     }
 
     @Override
@@ -335,7 +336,17 @@ public abstract class ModelManager implements ModelManagerInterface {
 
         Model model = null;
         switch (type) {
-            case 1:
+            case Constants.Models.OFFLINE:
+                model = new OfflineSong(object);
+                break;
+            case Constants.Models.QUEUE:
+                model = new Queue(object);
+                break;
+            case Constants.Models.PLAYLIST:
+                model = new Playlist(object);
+                break;
+            case Constants.Models.ALBUM:
+                model = new Album(object);
                 break;
             default:
                 return null;
@@ -346,10 +357,5 @@ public abstract class ModelManager implements ModelManagerInterface {
         return model;
     }
 
-    @Override
-    public ModelInterface[] getAll() {
-        Model[] models = new Model[this.models.size()];
-        return this.models.toArray(models);
-    }
 
 }

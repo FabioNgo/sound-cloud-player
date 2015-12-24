@@ -13,8 +13,7 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
-
-
+		ModelManager.getInstance(OFFLINE).addObserver(this);
 	}
 
 	public static OfflineSongAdapter getInstance() {

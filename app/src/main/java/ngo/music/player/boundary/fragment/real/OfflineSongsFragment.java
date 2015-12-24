@@ -4,9 +4,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 
 import ngo.music.player.adapters.OfflineSongAdapter;
-import ngo.music.player.boundary.fragment.abstracts.ListContentFragment;
+import ngo.music.player.boundary.fragment.abstracts.NoRefreshListContentFragment;
 
-public class OfflineSongsFragment extends ListContentFragment {
+public class OfflineSongsFragment extends NoRefreshListContentFragment {
 
 	public ArrayAdapter<?> getAdapter() {
 		// TODO Auto-generated method stub
@@ -33,12 +33,18 @@ public class OfflineSongsFragment extends ListContentFragment {
 
 	}
 
+
 	@Override
 	protected int getCategory() {
 		// TODO Auto-generated method stub
 		return OFFLINE;
 	}
 
-	
+
+    @Override
+    protected void setUpLoadMore() {
+
+    }
+
 
 }

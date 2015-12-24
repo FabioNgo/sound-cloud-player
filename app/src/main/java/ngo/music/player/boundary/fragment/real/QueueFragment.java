@@ -29,17 +29,6 @@ public class QueueFragment extends NoRefreshListContentFragment {
 		return false;
 	}
 
-//	@Override
-//	public void load() {
-//		// TODO Auto-generated method stub
-//		super.load();
-//		if (toolbar == null)
-//			return;
-//		toolbar.setTitle("Playing Queue");
-//		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance()
-//				.getQueueSize()) + " songs");
-//
-//	}
 
 	
 
@@ -73,33 +62,33 @@ public class QueueFragment extends NoRefreshListContentFragment {
 			public boolean onMenuItemClick(MenuItem item) {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
-				case R.id.queue_shuffle_all:
-					JSONObject[] array = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
-					Song[] songs = new Song[array.length];
-					for (int i = 0; i < songs.length; i++) {
-						try {
-							songs[i] = (Song) ModelManager.getInstance(OFFLINE).get(array[i].getString("id"));
-						} catch (JSONException e) {
-							continue;
+					case R.id.queue_shuffle_all:
+						JSONObject[] array = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
+						Song[] songs = new Song[array.length];
+						for (int i = 0; i < songs.length; i++) {
+							try {
+								songs[i] = (Song) ModelManager.getInstance(OFFLINE).get(array[i].getString("id"));
+							} catch (JSONException e) {
+								continue;
+							}
 						}
-					}
-					Random random = new Random(System.currentTimeMillis());
-					int position = Math.abs(random.nextInt())
-							% MusicPlayerService.getInstance().getQueueSize();
-					MusicPlayerService.getInstance().playNewSong(position, songs);
-					if (!MusicPlayerService.getInstance().isShuffle()) {
-						MusicPlayerService.getInstance().setShuffle();
-					}
-					break;
+						Random random = new Random(System.currentTimeMillis());
+						int position = Math.abs(random.nextInt())
+								% MusicPlayerService.getInstance().getQueueSize();
+						MusicPlayerService.getInstance().playNewSong(position, songs);
+						if (!MusicPlayerService.getInstance().isShuffle()) {
+							MusicPlayerService.getInstance().setShuffle();
+						}
+						break;
 
-				case R.id.queue_clear:
-					MusicPlayerService.getInstance().clearQueue();
-					break;
+					case R.id.queue_clear:
+						MusicPlayerService.getInstance().clearQueue();
+						break;
 
-				case R.id.queue_settings:
-					break;
-				default:
-					break;
+					case R.id.queue_settings:
+						break;
+					default:
+						break;
 				}
 				return false;
 			}
@@ -118,5 +107,6 @@ public class QueueFragment extends NoRefreshListContentFragment {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }

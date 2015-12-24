@@ -40,13 +40,10 @@ import ngo.music.player.helper.States;
 import ngo.music.player.service.MusicPlayerService;
 
 public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
-		Constants.UIContant, Constants.UserContant, Constants.MusicService,
+		Constants.UIContant, Constants.UserContant, Constants.MusicService, Constants.Models,
 		Constants.Appplication {
 
-	public static final int OFFLINE = 0;
-	public static final int SOUNDCLOUD_EXPLORE = 1;
-	public static final int MY_SOUNDCLOUD = 2;
-	public static final int SOUNDCLOUD_SEARCH = 3;
+
 	/*
 	 * If true : Display Fragment with tab : Trending Music, Audio...... If
 	 * False: Display Fragment with tab : My music ......
@@ -187,11 +184,9 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		pager.setOffscreenPageLimit(10);
 		FragmentPagerAdapter adapter;
 		switch (type) {
-		case OFFLINE:
-			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
-			break;
 
-		default:
+
+			default:
 			adapter = new OfflineTabsAdapter(getSupportFragmentManager());
 			break;
 
@@ -435,6 +430,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
+		((OfflineSongManager) ModelManager.getInstance(OFFLINE)).getSongsFromSDCard();
 		fileObserver.startWatching();
 		// if (isMyServiceRunning()) {
 		// UpdateUiFromServiceController.getInstance().updateUI(APP_START);

@@ -12,4 +12,6 @@ public class ArtistsFragment extends CategoryListContentFragment  {
 		// TODO Auto-generated method stub
 		return ARTIST;
 	}
+
+
 }
