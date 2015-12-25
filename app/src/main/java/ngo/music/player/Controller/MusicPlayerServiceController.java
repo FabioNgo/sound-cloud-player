@@ -44,9 +44,10 @@ public class MusicPlayerServiceController extends Observable implements Constant
      * json file name which store data
      */
     private String filename = "playing.json";
-    MusicPlayerServiceController(){
+    public MusicPlayerServiceController(){
         this.queueManager = (QueueManager) ModelManager.getInstance(QUEUE);
         try {
+            filename = filePath+"/"+filename;
             JSONObject object = new JSONObject(fileContentToString());
             currentSong = (Song) ModelManager.getInstance(OFFLINE).get("song_id",object.getString("song_id"))[0];
             computeNextSong();
@@ -249,6 +250,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
 
     public void setCurrentSong(Song currentSong) {
         this.currentSong = currentSong;
+        computeNextSong();
         storeData();
         setChanged();
         notifyObservers(currentSong);

@@ -130,8 +130,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play next Song when click to next button or at the end of current song
 	 */
 	public void playNextSong() {
+		MusicPlayerServiceController.getInstance().setCurrentSong(MusicPlayerServiceController.getInstance().getNextSong());
 		playNewSong(false);
-		MusicPlayerServiceController.getInstance().computeNextSong();
 	}
 
 	/**
@@ -139,8 +139,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
-		Song song = MusicPlayerServiceController.getInstance().getPreviousSong();
-		playSong(song);
+		MusicPlayerServiceController.getInstance().setCurrentSong(MusicPlayerServiceController.getInstance().getPreviousSong());
+		playNewSong(false);
 
 	}
 

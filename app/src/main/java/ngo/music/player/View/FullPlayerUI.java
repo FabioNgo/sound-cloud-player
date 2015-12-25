@@ -144,6 +144,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				MusicPlayerServiceController.getInstance().changeLoopState();
+				updateLoop();
 			}
 		});
 	}
@@ -164,6 +165,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				// TODO Auto-generated method stub
 
 				MusicPlayerServiceController.getInstance().setShuffle();
+				updateShuffle();
 
 			}
 		});
