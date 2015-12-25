@@ -200,7 +200,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
+        setChanged();
         this.notifyObservers(this.models);
     }
 

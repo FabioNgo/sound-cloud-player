@@ -274,6 +274,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void playNewSong(int position, Song[] queue) {
 		// incase of the queue in put is songQueue itself
 		((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
+		MusicPlayerServiceController.getInstance().setCurrentSong(queue[position]);
 		playNewSong(true);
 	}
 
@@ -532,7 +533,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	private void playSong(Song song) {
-		MusicPlayerServiceController.getInstance().setPlayingSongID(song.getId());
+		MusicPlayerServiceController.getInstance().setCurrentSong(song);
 		MusicPlayerServiceController.getInstance().setStoppedTime(0);
 		try {
 			String link = song.getAttribute("link");

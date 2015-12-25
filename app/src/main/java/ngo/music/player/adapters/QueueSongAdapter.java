@@ -2,11 +2,15 @@ package ngo.music.player.adapters;
 
 import android.content.Context;
 
+import java.util.Observable;
+
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
 import ngo.music.player.View.MusicPlayerMainActivity;
+import ngo.music.player.service.MusicPlayerService;
 
 public class QueueSongAdapter extends LiteListSongAdapter {
 
@@ -15,8 +19,7 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
-		// TODO Auto-generated constructor stub
-		ModelManager a = ModelManager.getInstance(QUEUE);
+		MusicPlayerServiceController.getInstance().addObserver(this);
 	}
 
 	public static QueueSongAdapter getInstance() {
@@ -35,6 +38,16 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 		return ((QueueManager) ModelManager.getInstance(QUEUE)).getAllSong();
 
 
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		super.update(observable,data);
+		if(observable instanceof MusicPlayerServiceController){
+			if(data instanceof  Song){
+				notifyDataSetChanged();
+			}
+		}
 	}
 
 	@Override

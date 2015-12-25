@@ -98,16 +98,7 @@ public class QueueManager extends CategoryManager implements Constants, Constant
         storeData();
     }
 
-    @Override
-    protected JSONObject createSongJSONObject(String songID) {
-        JSONObject object =  super.createSongJSONObject(songID);
-        try {
-            object.put("stoppedTime", "0");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return object;
-    }
+
     public void replaceQueue(Song[] songs){
         JSONArray array = new JSONArray();
         for(int i=0;i<songs.length;i++){

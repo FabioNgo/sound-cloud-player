@@ -23,6 +23,7 @@ import java.util.Observer;
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
 import ngo.music.player.ViewHolder.SongInListViewHolder;
 import ngo.music.player.View.MusicPlayerMainActivity;
@@ -30,7 +31,7 @@ import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 import ngo.music.player.service.MusicPlayerService;
 
-public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements Constants.Models {
+public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements Constants.Models,Observer {
 	protected View rootView;
 	protected Context context;
 	protected int resource;
@@ -177,9 +178,10 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 
 
 	public void update(Observable observable, Object data) {
-		this.songs = getSongsFromData(data);
-		System.out.println(this.songs.length);
-		notifyDataSetChanged();
+		if(observable instanceof ModelManager) {
+			this.songs = getSongsFromData(data);
+			notifyDataSetChanged();
+		}
 
 	}
 
