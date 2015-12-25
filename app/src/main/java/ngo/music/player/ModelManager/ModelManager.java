@@ -42,7 +42,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
     /**
      * Auto increment suffix of id to ensure all ids are different
      */
-    private int currentIDSuffix;
+    protected int currentIDSuffix;
     /**
      * file path where store json files
      */
@@ -72,7 +72,6 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
      */
     private static ModelManager createNewInstance(int type) {
         // TODO Auto-generated method stub
-        System.out.println(type);
         switch (type) {
             case Constants.Models.OFFLINE:
                 return new OfflineSongManager();
@@ -98,12 +97,15 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
      * @see {@link Constants
      */
     public static ModelManager getInstance(int type) {
+
         if (managers == null) {
             managers = new ModelManager[Constants.Models.SIZE];
         }
+        for(int i=0;i<Constants.Models.SIZE;i++){
+            ModelManager a = managers[i];
+        }
         if (managers[type] == null) {
             ModelManager a = createNewInstance(type);
-            System.out.println(a.toString());
             managers[type] = a;
         }
 
@@ -156,6 +158,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
     @Override
     public void clearModels() {
         models.clear();
+        currentIDSuffix = 0;
     }
 
     @Override
@@ -197,6 +200,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
         this.notifyObservers(this.models);
     }
 
@@ -357,5 +361,75 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         return model;
     }
 
+    @Override
+    public ModelInterface[] get(String key, JSONArray value) {
+        ArrayList<Model> temp = new ArrayList<>();
+        for (Model model: models) {
+            JSONObject object = model.getJSONObject();
+            try {
+                if(object.getJSONArray(key).equals(value)){
+                    temp.add(model);
+                }
+            } catch (JSONException e) {
+                continue;
+            }
+        }
+        Model[] output = new Model[temp.size()];
+        temp.toArray(output);
+        return output;
+    }
 
+    @Override
+    public ModelInterface[] get(String key, int value) {
+        ArrayList<Model> temp = new ArrayList<>();
+        for (Model model: models) {
+            JSONObject object = model.getJSONObject();
+            try {
+                if(object.getInt(key) == value){
+                    temp.add(model);
+                }
+            } catch (JSONException e) {
+                continue;
+            }
+        }
+        Model[] output = new Model[temp.size()];
+        temp.toArray(output);
+        return output;
+    }
+
+    @Override
+    public ModelInterface[] get(String key, JSONObject value) {
+        ArrayList<Model> temp = new ArrayList<>();
+        for (Model model: models) {
+            JSONObject object = model.getJSONObject();
+            try {
+                if(object.getJSONObject(key).equals(value)){
+                    temp.add(model);
+                }
+            } catch (JSONException e) {
+                continue;
+            }
+        }
+        Model[] output = new Model[temp.size()];
+        temp.toArray(output);
+        return output;
+    }
+
+    @Override
+    public ModelInterface[] get(String key, String value) {
+        ArrayList<Model> temp = new ArrayList<>();
+        for (Model model: models) {
+            JSONObject object = model.getJSONObject();
+            try {
+                if(object.getString(key).equals(value)){
+                    temp.add(model);
+                }
+            } catch (JSONException e) {
+                continue;
+            }
+        }
+        Model[] output = new Model[temp.size()];
+        temp.toArray(output);
+        return output;
+    }
 }

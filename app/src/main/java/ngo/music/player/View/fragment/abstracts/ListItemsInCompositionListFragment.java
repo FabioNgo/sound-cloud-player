@@ -1,4 +1,4 @@
-package ngo.music.player.boundary.fragment.abstracts;
+package ngo.music.player.View.fragment.abstracts;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -15,9 +15,9 @@ import android.widget.ListView;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.adapters.SongsInCateAdapter;
-import ngo.music.player.boundary.fragment.real.ListItemInAlbumFragment;
-import ngo.music.player.boundary.fragment.real.ListItemInArtistFragment;
-import ngo.music.player.boundary.fragment.real.ListItemInPlaylistFragment;
+import ngo.music.player.View.fragment.real.ListItemInAlbumFragment;
+import ngo.music.player.View.fragment.real.ListItemInArtistFragment;
+import ngo.music.player.View.fragment.real.ListItemInPlaylistFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.service.MusicPlayerService;
 

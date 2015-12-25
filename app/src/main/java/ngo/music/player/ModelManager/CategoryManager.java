@@ -29,10 +29,10 @@ public abstract class CategoryManager extends ModelManager implements Constants.
     }
 
     //return array of jsonObject of songs
-    public JSONObject[] getSongsFromCategory(String categoryTitle) {
+    public JSONObject[] getSongsFromCategory(String id) {
         Category category = null;
         for (Model model : models) {
-            if (model.getAttribute("title").equals(categoryTitle)) {
+            if (model.getId().equals(id)) {
                 category = (Category) model;
                 break;
             }
@@ -65,4 +65,47 @@ public abstract class CategoryManager extends ModelManager implements Constants.
             e.printStackTrace();
         }
     }
+    protected JSONObject createSongJSONObject(String songID){
+        JSONObject songObject = new JSONObject();
+        try {
+            songObject.put("id", songID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return songObject;
+    }
+    public void addSongToCategory(String songID, String categoryID){
+        Category category = (Category) get(categoryID);
+
+        JSONArray array = category.getJSONObject().optJSONArray("songs");
+        JSONObject songObject = createSongJSONObject(songID);
+        array.put(songObject);
+        try {
+            category.getJSONObject().put("songs", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        storeData();
+    }
+    public void removeSongFromCategory(String songID, String categoryID){
+        Category category = (Category) get(categoryID);
+
+        JSONArray array = category.getJSONObject().optJSONArray("songs");
+        for(int i=0;i<array.length();i++){
+            try {
+                if(array.getString(Integer.parseInt("id")).equals(songID)){
+                    array.remove(i);
+                }
+            } catch (JSONException e) {
+                continue;
+            }
+        }
+        try {
+            category.getJSONObject().put("songs",array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        storeData();
+    }
+
 }

@@ -1,16 +1,23 @@
-package ngo.music.player.boundary.fragment.abstracts;
+package ngo.music.player.View.fragment.abstracts;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
 import ngo.music.player.adapters.LiteListSongAdapter;
 import ngo.music.player.helper.Constants;
@@ -24,8 +31,7 @@ import ngo.music.player.service.MusicPlayerService;
  */
 public abstract class ListContentFragment extends Fragment implements
 		Constants.MusicService, Constants.Models, Constants.Appplication,
-		OnItemClickListener, Comparable<ListContentFragment> {
-	public static int numFragmentsLoading = 0;
+		OnItemClickListener, Comparable<ListContentFragment>,Observer {
 	protected View rootView;
 	protected ArrayAdapter<?> adapter;
 	protected int category;
@@ -36,13 +42,32 @@ public abstract class ListContentFragment extends Fragment implements
 		// TODO Auto-generated constructor stub
 
 		category = getCategory();
+		Observable observable = ModelManager.getInstance(category);
+		if(observable !=null){
+			observable.addObserver(this);
+		}
 	}
-	/**
-	 * 
-	 * @return true if list song need to load more when scroll to the bottom of the list
-	 * else @return false
-	 */
-	protected abstract boolean hasLoadMore();
+	@Override
+	final public View onCreateView(LayoutInflater inflater,
+								   ViewGroup container, Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+
+		rootView = inflater.inflate(R.layout.list_view, container, false);
+		listView = (ListView) rootView.findViewById(R.id.items_list);
+		toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
+		adapter = getAdapter();
+		load();
+
+		if(hasToolbar()){
+
+			setUpToolBar(toolbar);
+		}else{
+			toolbar.setVisibility(View.GONE);
+		}
+
+		load();
+		return rootView;
+	}
 	/**
 	 * 
 	 * @return true if list song fragment has toolbar
@@ -77,12 +102,10 @@ public abstract class ListContentFragment extends Fragment implements
 	 *
 	 */
 	public void load() {
-		adapter.notifyDataSetChanged();
 		listView = (ListView) rootView.findViewById(R.id.items_list);
 
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(this);
-		UIController.getInstance().addAdapter(adapter);
 		updateToolbar(toolbar);
 
 	}
@@ -103,35 +126,7 @@ public abstract class ListContentFragment extends Fragment implements
 
 
 	}
-	/**
-	 * Update content in list
-	 */
-	public void update() {
 
-		adapter.notifyDataSetChanged();
-		updateToolbar(toolbar);
-		// for (int i = 0; i <= listView.getLastVisiblePosition()
-		// - listView.getFirstVisiblePosition(); i++) {
-		// View v = listView.getChildAt(i);
-		// if (v != null) {
-		//
-		// SongInListViewHolder holder = (SongInListViewHolder) v.getTag();
-		// try {
-		//
-		// adapter.setLayoutInformation(
-		// i + listView.getFirstVisiblePosition(), holder, v);
-		// } catch (IndexOutOfBoundsException e) {
-		// /**
-		// * When this exception occur, some item has been deleted in
-		// * list.
-		// */
-		// break;
-		//
-		// }
-		// }
-		// }
-
-	}
 
 	
 	/**
@@ -142,5 +137,4 @@ public abstract class ListContentFragment extends Fragment implements
 		// TODO Auto-generated method stub
 		return this.getClass().toString().compareTo(another.getClass().toString());
 	}
-
 }

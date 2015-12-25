@@ -1,4 +1,4 @@
-package ngo.music.player.boundary;
+package ngo.music.player.View;
 
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 
 import ngo.music.player.Controller.MenuController;
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
@@ -86,7 +87,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				switch (arg0.getItemId()) {
 				case R.id.full_player_add_playlist:
 					Song[] songs = new Song[1];
-					songs[0] = MusicPlayerService.getInstance().getCurrentSong();
+					songs[0] = MusicPlayerServiceController.getInstance().getCurrentSong();
 					MenuController.getInstance(songs).addToPlaylist();
 					break;
 				case R.id.full_player_share:
@@ -142,7 +143,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().changeLoopState();
+				MusicPlayerServiceController.getInstance().changeLoopState();
 			}
 		});
 	}
@@ -162,7 +163,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 
-				MusicPlayerService.getInstance().setShuffle();
+				MusicPlayerServiceController.getInstance().setShuffle();
 
 			}
 		});
@@ -256,7 +257,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	 */
 	public void updateShuffle() {
 		// TODO Auto-generated method stub
-		if (MusicPlayerService.getInstance().isShuffle()) {
+		if (MusicPlayerServiceController.getInstance().isShuffle()) {
 			((ImageView)rootView.findViewById(R.id.full_player_shuffle)).setImageResource(R.drawable.ic_media_shuffle);
 		} else {
 
@@ -266,10 +267,10 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	public void updateLoop() {
 		// TODO Auto-generated method stub
-		if (MusicPlayerService.getInstance().getLoopState() == MODE_LOOP_ONE) {
+		if (MusicPlayerServiceController.getInstance().getLoopState() == MODE_LOOP_ONE) {
 			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_loop_1);
 		}
-		if (MusicPlayerService.getInstance().getLoopState() == MODE_LOOP_ALL) {
+		if (MusicPlayerServiceController.getInstance().getLoopState() == MODE_LOOP_ALL) {
 			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_loop);
 		}
 	}

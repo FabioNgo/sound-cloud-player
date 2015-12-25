@@ -1,4 +1,4 @@
-package ngo.music.player.boundary;
+package ngo.music.player.View;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,14 +26,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Random;
 
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.OfflineSongManager;
+import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
 import ngo.music.player.adapters.OfflineTabsAdapter;
-import ngo.music.player.boundary.fragment.abstracts.ListContentFragment;
-import ngo.music.player.boundary.fragment.real.QueueFragment;
+import ngo.music.player.View.fragment.abstracts.ListContentFragment;
+import ngo.music.player.View.fragment.real.QueueFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 import ngo.music.player.helper.States;
@@ -261,9 +263,9 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 */
 	private void configMusicPlayerService() {
 		// if (!isMyServiceRunning()) {
-		while (ListContentFragment.numFragmentsLoading != 0
-				|| PlayerUI.numberPlayerLoading != 0)
-			;
+//		while (ListContentFragment.numFragmentsLoading != 0
+//				|| PlayerUI.numberPlayerLoading != 0)
+//			;
 		// ProgressDialog dialog = new ProgressDialog(this);
 		// dialog.setTitle("Loading...");
 		// SystemClock.sleep(1000);
@@ -381,18 +383,12 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		switch (item.getItemId()) {
 		case R.id.main_shuffle_all:
 			Song[] songs = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
-			Random random = new Random(System.currentTimeMillis());
 			int position = 0;
-			try {
-				position = Math.abs(random.nextInt())
-						% MusicPlayerService.getInstance().getQueueSize();
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+
 
 			MusicPlayerService.getInstance().playNewSong(position, songs);
-			if (!MusicPlayerService.getInstance().isShuffle()) {
-				MusicPlayerService.getInstance().setShuffle();
+			if (!MusicPlayerServiceController.getInstance().isShuffle()) {
+				MusicPlayerServiceController.getInstance().setShuffle();
 			}
 			break;
 

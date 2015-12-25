@@ -20,8 +20,8 @@ import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
 import ngo.music.player.ViewHolder.CompositionViewHolder;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
-import ngo.music.player.boundary.fragment.abstracts.ListItemsInCompositionListFragment;
+import ngo.music.player.View.MusicPlayerMainActivity;
+import ngo.music.player.View.fragment.abstracts.ListItemsInCompositionListFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 

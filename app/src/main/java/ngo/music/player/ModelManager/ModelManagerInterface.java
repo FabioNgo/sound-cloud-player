@@ -1,5 +1,6 @@
 package ngo.music.player.ModelManager;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import ngo.music.player.Model.ModelInterface;
@@ -8,6 +9,34 @@ import ngo.music.player.Model.ModelInterface;
  * Created by fabiongo on 12/24/2015.
  */
 public interface ModelManagerInterface {
+    /**
+     * Find model by key-value attribute
+     * @param key attribute
+     * @param value only JSONArray value
+     * @return ModelInterface
+     */
+    ModelInterface[] get(String key,JSONArray value);
+    /**
+     * Find model by key-value attribute
+     * @param key attribute
+     * @param value only JSONObject value
+     * @return ModelInterface
+     */
+    ModelInterface[] get(String key,JSONObject value);
+    /**
+     * Find model by key-value attribute
+     * @param key attribute
+     * @param value only int value
+     * @return ModelInterface
+     */
+    ModelInterface[] get(String key,int value);
+    /**
+     * Find model by key-value attribute
+     * @param key attribute
+     * @param value only string value
+     * @return ModelInterface
+     */
+    ModelInterface[] get(String key,String value);
     /**
      * Get Model with id
      *

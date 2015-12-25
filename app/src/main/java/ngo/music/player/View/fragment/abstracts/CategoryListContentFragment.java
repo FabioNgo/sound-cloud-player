@@ -1,4 +1,4 @@
-package ngo.music.player.boundary.fragment.abstracts;
+package ngo.music.player.View.fragment.abstracts;
 
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -6,9 +6,9 @@ import android.widget.ArrayAdapter;
 
 import ngo.music.player.ViewHolder.CompositionViewHolder;
 import ngo.music.player.adapters.CategoryListAdapter;
-import ngo.music.player.boundary.fragment.real.AlbumsFragment;
-import ngo.music.player.boundary.fragment.real.ArtistsFragment;
-import ngo.music.player.boundary.fragment.real.PlaylistFragment;
+import ngo.music.player.View.fragment.real.AlbumsFragment;
+import ngo.music.player.View.fragment.real.ArtistsFragment;
+import ngo.music.player.View.fragment.real.PlaylistFragment;
 import ngo.music.player.helper.Constants;
 
 /**
@@ -18,7 +18,7 @@ import ngo.music.player.helper.Constants;
  *
  */
 public abstract class CategoryListContentFragment extends
-		NoRefreshListContentFragment implements Constants.Models {
+		ListContentFragment implements Constants.Models {
 
 	int type = -1;
 
@@ -65,11 +65,7 @@ public abstract class CategoryListContentFragment extends
 		return null;
 	}
 
-	@Override
-	protected boolean hasLoadMore() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+
 
 	@Override
 	protected boolean hasToolbar() {
@@ -83,11 +79,7 @@ public abstract class CategoryListContentFragment extends
 
 	}
 
-	@Override
-	protected void setUpLoadMore() {
-		// TODO Auto-generated method stub
 
-	}
 
 	@Override
 	protected void updateToolbar(Toolbar toolbar) {

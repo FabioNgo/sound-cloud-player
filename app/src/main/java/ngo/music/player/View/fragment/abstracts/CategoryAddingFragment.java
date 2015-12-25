@@ -1,4 +1,4 @@
-package ngo.music.player.boundary.fragment.abstracts;
+package ngo.music.player.View.fragment.abstracts;
 
 import android.app.Dialog;
 import android.os.Bundle;

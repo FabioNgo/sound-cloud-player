@@ -1,4 +1,4 @@
-package ngo.music.player.boundary.fragment.real;
+package ngo.music.player.View.fragment.real;
 
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
@@ -8,35 +8,26 @@ import android.widget.ArrayAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Observable;
 import java.util.Random;
 
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
+import ngo.music.player.View.fragment.abstracts.ListContentFragment;
 import ngo.music.player.adapters.QueueSongAdapter;
-import ngo.music.player.boundary.fragment.abstracts.NoRefreshListContentFragment;
 import ngo.music.player.service.MusicPlayerService;
 
-public class QueueFragment extends NoRefreshListContentFragment {
-	
-
-	
-
-	@Override
-	protected boolean hasLoadMore() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	
+public class QueueFragment extends ListContentFragment {
 
 	@Override
 	protected ArrayAdapter<?> getAdapter() {
 		// TODO Auto-generated method stub
 		return QueueSongAdapter.getInstance();
 	}
+
 
 	@Override
 	protected int getCategory() {
@@ -73,16 +64,15 @@ public class QueueFragment extends NoRefreshListContentFragment {
 							}
 						}
 						Random random = new Random(System.currentTimeMillis());
-						int position = Math.abs(random.nextInt())
-								% MusicPlayerService.getInstance().getQueueSize();
+						int position = 0;
 						MusicPlayerService.getInstance().playNewSong(position, songs);
-						if (!MusicPlayerService.getInstance().isShuffle()) {
-							MusicPlayerService.getInstance().setShuffle();
+						if (!MusicPlayerServiceController.getInstance().isShuffle()) {
+							MusicPlayerServiceController.getInstance().setShuffle();
 						}
 						break;
 
 					case R.id.queue_clear:
-						MusicPlayerService.getInstance().clearQueue();
+//						MusicPlayerService.getInstance().clearQueue();
 						break;
 
 					case R.id.queue_settings:
@@ -98,15 +88,13 @@ public class QueueFragment extends NoRefreshListContentFragment {
 	@Override
 	protected void updateToolbar(Toolbar toolbar) {
 		// TODO Auto-generated method stub
-		toolbar.setSubtitle(String.valueOf(MusicPlayerService.getInstance()
-				.getQueueSize()) + " songs");
+		toolbar.setSubtitle(String.valueOf((QueueSongAdapter.getInstance().getCount())) + " songs");
 	}
+
+
 
 	@Override
-	protected void setUpLoadMore() {
-		// TODO Auto-generated method stub
-		
+	public void update(Observable observable, Object data) {
+
 	}
-
-
 }

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.helper.Constants;
 
 public abstract class CategoryTitlesListAdapter extends ArrayAdapter<String> implements Constants.Models {

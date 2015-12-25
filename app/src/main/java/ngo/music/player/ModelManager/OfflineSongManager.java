@@ -9,7 +9,7 @@ import org.json.JSONObject;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
 import ngo.music.player.Model.OfflineSong;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.View.MusicPlayerMainActivity;
 
 /**
  * Created by fabiongo on 12/24/2015.
@@ -35,12 +35,12 @@ public class OfflineSongManager extends SongManager {
     public JSONObject getJSONObjectFromCursor(Cursor c) {
         JSONObject object = new JSONObject();
         try {
+            object.put("song_id", c.getString(c.getColumnIndex(MediaStore.Audio.Media._ID)));
             object.put("title", c.getString(c.getColumnIndex(MediaStore.Audio.Media.TITLE)));
             object.put("artist", c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
             object.put("album", c.getString(c.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
             object.put("link", c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA)));
             object.put("duration", c.getString(c.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-            System.out.println(object.toString());
             return object;
         } catch (JSONException e) {
             return null;

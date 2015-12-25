@@ -2,14 +2,11 @@ package ngo.music.player.adapters;
 
 import android.content.Context;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import ngo.music.player.Model.Song;
-import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
+import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.View.MusicPlayerMainActivity;
 
 public class QueueSongAdapter extends LiteListSongAdapter {
 
@@ -19,6 +16,7 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
 		// TODO Auto-generated constructor stub
+		ModelManager a = ModelManager.getInstance(QUEUE);
 	}
 
 	public static QueueSongAdapter getInstance() {
@@ -34,17 +32,9 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 	@Override
 	public Song[] getSongs() {
 
-		JSONObject[] array = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
-		Song[] result = new Song[array.length];
+		return ((QueueManager) ModelManager.getInstance(QUEUE)).getAllSong();
 
-		for (int i = 0; i < array.length; i++) {
-			try {
-				result[i] = (Song) ModelManager.getInstance(QUEUE).get(array[i].getString("id"));
-			} catch (JSONException e) {
-				continue;
-			}
-		}
-		return result;
+
 	}
 
 	@Override
@@ -53,6 +43,8 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 		return R.menu.song_queue_menu;
 	}
 
-
-
+	@Override
+	protected Song[] getSongsFromData(Object data) {
+		return ((QueueManager)ModelManager.getInstance(QUEUE)).getAllSong();
+	}
 }

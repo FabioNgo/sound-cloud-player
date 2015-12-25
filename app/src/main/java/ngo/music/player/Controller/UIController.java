@@ -11,18 +11,18 @@ import java.util.ArrayList;
 
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.View.LitePlayerUI;
 import ngo.music.player.adapters.CategoryListAdapter;
 import ngo.music.player.adapters.CategoryTitlesListAdapter;
 import ngo.music.player.adapters.LiteListSongAdapter;
 import ngo.music.player.adapters.OfflineSongAdapter;
 import ngo.music.player.adapters.QueueSongAdapter;
 import ngo.music.player.adapters.SongsInCateAdapter;
-import ngo.music.player.boundary.FullPlayerUI;
-import ngo.music.player.boundary.LitePlayerUI;
-import ngo.music.player.boundary.PlayerUI;
-import ngo.music.player.boundary.fragment.abstracts.CategoryListContentFragment;
-import ngo.music.player.boundary.fragment.abstracts.ListContentFragment;
-import ngo.music.player.boundary.fragment.real.QueueFragment;
+import ngo.music.player.View.FullPlayerUI;
+import ngo.music.player.View.PlayerUI;
+import ngo.music.player.View.fragment.abstracts.CategoryListContentFragment;
+import ngo.music.player.View.fragment.abstracts.ListContentFragment;
+import ngo.music.player.View.fragment.real.QueueFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 import ngo.music.player.helper.States;
@@ -190,7 +190,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	 */
 	public void startTimer() {
 
-		timer = new CountDownTimer(MusicPlayerService.getInstance()
+		timer = new CountDownTimer(MusicPlayerServiceController.getInstance()
 				.getDuration()
 				- MusicPlayerService.getInstance().getCurrentTime(), 1000) {
 
@@ -199,11 +199,11 @@ public class UIController implements Constants.MusicService, Constants.Data,
 				// TODO Auto-generated method stub
 				long currentTime = MusicPlayerService.getInstance()
 						.getCurrentTime();
-				long duration = MusicPlayerService.getInstance().getDuration();
+				long duration = MusicPlayerServiceController.getInstance().getDuration();
 				double ratio = (currentTime * 100.0) / duration;
 				if ((currentTime * 100) / duration == 50 && canAnnounceNextSong) {
 					String format = String.format("Next song: %s",
-							MusicPlayerService.getInstance().getNextSong()
+							MusicPlayerServiceController.getInstance().getNextSong()
 									.getAttribute("title"));
 					Helper.makeToastTake(format,
 							MusicPlayerService.getInstance());
@@ -251,7 +251,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	 */
 	public void updateUiWhilePlayingMusic(final int TAG) {
 		// TODO Auto-generated method stub
-		Song curSong = MusicPlayerService.getInstance().getCurrentSong();
+		Song curSong = MusicPlayerServiceController.getInstance().getCurrentSong();
 		String format = "";
 		if (curSong != null) {
 			switch (TAG) {
@@ -264,7 +264,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 
 						format = String
 								.format("Song playing: %s \nNext song: %s",
-										curSong.getAttribute("title"), MusicPlayerService
+										curSong.getAttribute("title"), MusicPlayerServiceController
 												.getInstance().getNextSong()
 												.getAttribute("title"));
 						Helper.makeToastTake(format,
@@ -340,7 +340,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 				int degree = (int) Math.round(360
 						* (double) MusicPlayerService.getInstance()
 								.getCurrentTime()
-						/ MusicPlayerService.getInstance().getDuration());
+						/ MusicPlayerServiceController.getInstance().getDuration());
 				for (PlayerUI fragment : playerUiFragments) {
 
 					fragment.updateMusicProgress();
@@ -385,7 +385,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 	public void updateUiAppChanged(final int TAG) {
 
 		// TODO Auto-generated method stub
-		Song curSong = MusicPlayerService.getInstance().getCurrentSong();
+		Song curSong = MusicPlayerServiceController.getInstance().getCurrentSong();
 		switch (TAG) {
 		case APP_RUNNING:
 			if (!MusicPlayerService.isLoaded) {
@@ -406,7 +406,7 @@ public class UIController implements Constants.MusicService, Constants.Data,
 						int degree = (int) Math.round(360
 								* (double) MusicPlayerService.getInstance()
 										.getCurrentTime()
-								/ MusicPlayerService.getInstance()
+								/ MusicPlayerServiceController.getInstance()
 										.getDuration());
 						progressbar.setProgressDegree(degree);
 						progressbar
@@ -448,64 +448,64 @@ public class UIController implements Constants.MusicService, Constants.Data,
 		return null;
 	}
 
-	/**
-	 * Update UI related application
-	 * 
-	 * @param TAG
-	 *            OFFLINE_SONG_CHANGED: When offline songs database changed.
-	 *            QUEUE_CHANGED: When queue changed
-	 * 
-	 */
-	public void updateUiWhenDataChanged(final int TAG) {
-		// TODO Auto-generated method stub
-		switch (TAG) {
-		case OFFLINE_SONG_CHANGED:
-			OfflineSongAdapter.getInstance().updateSongs();
-			CategoryListAdapter.getInstance(ALBUM).update();
-			CategoryListAdapter.getInstance(ARTIST).update();
-			break;
-		case QUEUE_CHANGED:
-			for (ListAdapter arrayAdapter : adapters) {
-
-				if (arrayAdapter instanceof QueueSongAdapter) {
-					((QueueSongAdapter) arrayAdapter).updateSongs();
-				}
-
-			}
-			getListContentFragment(QueueFragment.class.toString()).update();
-			break;
-		case PLAYLIST_CHANGED:
-			CategoryTitlesListAdapter.getInstance(PLAYLIST).updateCategory();
-			CategoryListContentFragment.getInstance(PLAYLIST).update();
-			break;
-		case ITEM_IN_PLAYLIST_CHANGED:
-			if (SongsInCateAdapter.getInstance(PLAYLIST) != null) {
-				SongsInCateAdapter.getInstance(PLAYLIST).update();
-			}
-			if (CategoryListContentFragment.getInstance(PLAYLIST) != null) {
-				CategoryListContentFragment.getInstance(PLAYLIST).update();
-			}
-
-			break;
-		case ALBUM_CHANGED:
-
-			CategoryListContentFragment.getInstance(ALBUM).update();
-			break;
-		case ITEM_IN_ALBUM_CHANGED:
-			if (SongsInCateAdapter.getInstance(ALBUM) != null) {
-				SongsInCateAdapter.getInstance(ALBUM).update();
-			}
-			if (CategoryListContentFragment.getInstance(ALBUM) != null) {
-				CategoryListContentFragment.getInstance(ALBUM).update();
-			}
-
-			break;
-
-		default:
-			break;
-		}
-
-	}
+//	/**
+//	 * Update UI related application
+//	 *
+//	 * @param TAG
+//	 *            OFFLINE_SONG_CHANGED: When offline songs database changed.
+//	 *            QUEUE_CHANGED: When queue changed
+//	 *
+//	 */
+//	public void updateUiWhenDataChanged(final int TAG) {
+//		// TODO Auto-generated method stub
+//		switch (TAG) {
+//		case OFFLINE_SONG_CHANGED:
+//			OfflineSongAdapter.getInstance().updateSongs();
+//			CategoryListAdapter.getInstance(ALBUM).update();
+//			CategoryListAdapter.getInstance(ARTIST).update();
+//			break;
+//		case QUEUE_CHANGED:
+//			for (ListAdapter arrayAdapter : adapters) {
+//
+//				if (arrayAdapter instanceof QueueSongAdapter) {
+//					((QueueSongAdapter) arrayAdapter).updateSongs();
+//				}
+//
+//			}
+//			getListContentFragment(QueueFragment.class.toString()).update();
+//			break;
+//		case PLAYLIST_CHANGED:
+//			CategoryTitlesListAdapter.getInstance(PLAYLIST).updateCategory();
+//			CategoryListContentFragment.getInstance(PLAYLIST).update();
+//			break;
+//		case ITEM_IN_PLAYLIST_CHANGED:
+//			if (SongsInCateAdapter.getInstance(PLAYLIST) != null) {
+//				SongsInCateAdapter.getInstance(PLAYLIST).update();
+//			}
+//			if (CategoryListContentFragment.getInstance(PLAYLIST) != null) {
+//				CategoryListContentFragment.getInstance(PLAYLIST).update();
+//			}
+//
+//			break;
+//		case ALBUM_CHANGED:
+//
+//			CategoryListContentFragment.getInstance(ALBUM).update();
+//			break;
+//		case ITEM_IN_ALBUM_CHANGED:
+//			if (SongsInCateAdapter.getInstance(ALBUM) != null) {
+//				SongsInCateAdapter.getInstance(ALBUM).update();
+//			}
+//			if (CategoryListContentFragment.getInstance(ALBUM) != null) {
+//				CategoryListContentFragment.getInstance(ALBUM).update();
+//			}
+//
+//			break;
+//
+//		default:
+//			break;
+//		}
+//
+//	}
 
 	
 	

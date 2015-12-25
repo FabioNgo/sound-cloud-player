@@ -14,7 +14,7 @@ import android.widget.TextView;
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.helper.Constants;
 
 public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements

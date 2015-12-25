@@ -1,7 +1,7 @@
-package ngo.music.player.boundary.fragment.real;
+package ngo.music.player.View.fragment.real;
 
 import ngo.music.player.Model.Song;
-import ngo.music.player.boundary.fragment.abstracts.CategoryAddingFragment;
+import ngo.music.player.View.fragment.abstracts.CategoryAddingFragment;
 
 public class PlaylistAddingFragment extends CategoryAddingFragment {
 

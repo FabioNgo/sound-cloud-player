@@ -1,4 +1,4 @@
-package ngo.music.player.boundary;
+package ngo.music.player.View;
 
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Helper;
@@ -34,7 +35,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 				if (hasTextTime()) {
 					currentTimeText.setText(Helper.toFormatedTime(MusicPlayerService.getInstance()
 							.getCurrentTime()));
-					durationText.setText(Helper.toFormatedTime(MusicPlayerService.getInstance()
+					durationText.setText(Helper.toFormatedTime(MusicPlayerServiceController.getInstance()
 							.getDuration()));
 				}
 			}

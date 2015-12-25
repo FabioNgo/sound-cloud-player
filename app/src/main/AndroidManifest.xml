@@ -25,7 +25,7 @@
         android:theme="@style/AppTheme" >
 
         <activity
-            android:name="ngo.music.player.boundary.MusicPlayerMainActivity"
+            android:name="ngo.music.player.View.MusicPlayerMainActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" >
             <intent-filter>

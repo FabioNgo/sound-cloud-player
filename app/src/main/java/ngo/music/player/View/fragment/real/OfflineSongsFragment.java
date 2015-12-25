@@ -1,22 +1,22 @@
-package ngo.music.player.boundary.fragment.real;
+package ngo.music.player.View.fragment.real;
 
 import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 
-import ngo.music.player.adapters.OfflineSongAdapter;
-import ngo.music.player.boundary.fragment.abstracts.NoRefreshListContentFragment;
+import java.util.Observable;
 
-public class OfflineSongsFragment extends NoRefreshListContentFragment {
+import ngo.music.player.ModelManager.ModelManager;
+import ngo.music.player.View.fragment.abstracts.ListContentFragment;
+import ngo.music.player.adapters.OfflineSongAdapter;
+
+public class OfflineSongsFragment extends ListContentFragment {
 
 	public ArrayAdapter<?> getAdapter() {
 		// TODO Auto-generated method stub
 		return OfflineSongAdapter.getInstance();
 	}
 
-	@Override
-	protected boolean hasLoadMore() {
-		return false;
-	}
+
 
 	@Override
 	protected boolean hasToolbar() {
@@ -41,10 +41,9 @@ public class OfflineSongsFragment extends NoRefreshListContentFragment {
 	}
 
 
-    @Override
-    protected void setUpLoadMore() {
 
-    }
+	@Override
+	public void update(Observable observable, Object data) {
 
-
+	}
 }

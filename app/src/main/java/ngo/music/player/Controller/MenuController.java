@@ -6,9 +6,9 @@ import android.view.MenuItem;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
-import ngo.music.player.boundary.fragment.abstracts.CategoryAddingFragment;
-import ngo.music.player.boundary.fragment.real.PlaylistAddingFragment;
+import ngo.music.player.View.MusicPlayerMainActivity;
+import ngo.music.player.View.fragment.abstracts.CategoryAddingFragment;
+import ngo.music.player.View.fragment.real.PlaylistAddingFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.service.MusicPlayerService;
 
@@ -43,7 +43,7 @@ public class MenuController implements OnMenuItemClickListener, Constants.Models
 		// TODO Auto-generated method stub
 		switch (arg0.getItemId()) {
 		case R.id.list_addQueue:
-			MusicPlayerService.getInstance().addSongToQueue(songs[0]);
+//			MusicPlayerService.getInstance().addSongToQueue(songs[0]);
 			break;
 		case R.id.list_playNext:
 			MusicPlayerService.getInstance().addToNext(songs[0]);

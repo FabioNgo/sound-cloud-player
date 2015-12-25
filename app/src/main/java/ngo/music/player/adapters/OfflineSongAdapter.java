@@ -2,10 +2,12 @@ package ngo.music.player.adapters;
 
 import android.content.Context;
 
+import java.util.ArrayList;
+
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.View.MusicPlayerMainActivity;
 
 public class OfflineSongAdapter extends LiteListSongAdapter {
 	
@@ -13,7 +15,14 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 
 	public OfflineSongAdapter(Context context, int resource) {
 		super(context, resource);
-		ModelManager.getInstance(OFFLINE).addObserver(this);
+	}
+
+	@Override
+	protected Song[] getSongsFromData(Object data) {
+		ArrayList<Song> data1 = (ArrayList<Song>) data;
+		Song[] output = new Song[data1.size()];
+		data1.toArray(output);
+		return output;
 	}
 
 	public static OfflineSongAdapter getInstance() {

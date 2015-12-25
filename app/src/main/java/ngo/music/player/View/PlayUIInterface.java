@@ -1,4 +1,4 @@
-package ngo.music.player.boundary;
+package ngo.music.player.View;
 
 import ngo.music.player.Model.Song;
 

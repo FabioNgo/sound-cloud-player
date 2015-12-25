@@ -1,4 +1,4 @@
-package ngo.music.player.boundary;
+package ngo.music.player.View;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,7 @@ import com.volley.api.AppController;
 import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.View.PlayerUI;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 

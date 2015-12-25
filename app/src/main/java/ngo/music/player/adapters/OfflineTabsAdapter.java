@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import ngo.music.player.boundary.fragment.abstracts.CategoryListContentFragment;
-import ngo.music.player.boundary.fragment.real.OfflineSongsFragment;
+import ngo.music.player.View.fragment.abstracts.CategoryListContentFragment;
+import ngo.music.player.View.fragment.real.OfflineSongsFragment;
 import ngo.music.player.helper.Constants;
 
 public class OfflineTabsAdapter extends FragmentPagerAdapter implements

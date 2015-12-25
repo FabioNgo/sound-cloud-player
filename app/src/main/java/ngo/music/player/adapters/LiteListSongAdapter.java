@@ -21,15 +21,16 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ngo.music.player.Controller.MenuController;
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.ViewHolder.SongInListViewHolder;
-import ngo.music.player.boundary.MusicPlayerMainActivity;
+import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 import ngo.music.player.service.MusicPlayerService;
 
-public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements Constants.Models,Observer {
+public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements Constants.Models {
 	protected View rootView;
 	protected Context context;
 	protected int resource;
@@ -125,8 +126,8 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 		/**
 		 * Set background , to indicate which song is playing
 		 */
-		if (MusicPlayerService.getInstance().getCurrentSongId()
-				.compareTo(songs[position].getId()) == 0) {
+		if (MusicPlayerServiceController.getInstance().getCurrentSong()
+				.equals(songs[position])) {
 
 			viewHolder.background.setBackgroundResource(R.color.primary_light);
 		} else {
@@ -174,13 +175,15 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 
 	}
 
-	@Override
+
 	public void update(Observable observable, Object data) {
-		ArrayList<Song> newData = (ArrayList<Song>) data;
-		newData.toArray(this.songs);
+		this.songs = getSongsFromData(data);
+		System.out.println(this.songs.length);
 		notifyDataSetChanged();
 
 	}
+
+	protected abstract Song[] getSongsFromData(Object data);
 
 	public abstract Song[] getSongs();
 	public abstract int getSongMenuId();

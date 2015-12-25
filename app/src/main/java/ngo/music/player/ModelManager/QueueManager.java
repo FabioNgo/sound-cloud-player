@@ -1,6 +1,11 @@
 package ngo.music.player.ModelManager;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
 import ngo.music.player.Model.Queue;
@@ -11,7 +16,8 @@ public class QueueManager extends CategoryManager implements Constants, Constant
         Constants.SoundCloudExploreConstant, Constants.Models,
         Constants.MusicService, Constants.Data {
 
-
+    private String playingSongId ="";
+    private int stoppedTime = 0;
     @Override
     protected int setType() {
         return QUEUE;
@@ -27,8 +33,26 @@ public class QueueManager extends CategoryManager implements Constants, Constant
         return "";
     }
 
-    public Song getAllSong() {
-        return null;
+    public Song[] getAllSong() {
+        String id = this.models.get(0).getId();
+        JSONObject[] objects =  getSongsFromCategory(id);
+        Song[] output = new Song[objects.length];
+        // if there is no queue, let queue contain all songs
+        if(output.length == 0){
+            output = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
+            replaceQueue(output);
+
+        }else {
+            for (int i = 0; i < output.length; i++) {
+                try {
+                    output[i] = (Song) SongManager.getInstance(OFFLINE).get("song_id", objects[i].getString("id"))[0];
+                } catch (JSONException e) {
+                    continue;
+                }
+            }
+
+        }
+        return output;
     }
 
     @Override
@@ -37,4 +61,73 @@ public class QueueManager extends CategoryManager implements Constants, Constant
 
         return this.models.toArray(models);
     }
+
+    @Override
+    public void loadData() {
+        super.loadData();
+        if(this.models.size() == 0 ){
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("title","queue");
+                jsonObject.put("songs", new JSONArray());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            generate(jsonObject);
+            storeData();
+        }
+    }
+
+    @Override
+    public void addSongToCategory(String songID, String categoryID){
+        Category category = (Category) get(categoryID);
+        JSONObject songObject = new JSONObject();
+        try {
+            songObject.put("id",songID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONArray array = category.getJSONObject().optJSONArray("songs");
+
+        array.put(songObject);
+        try {
+            category.getJSONObject().put("songs", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        storeData();
+    }
+
+    @Override
+    protected JSONObject createSongJSONObject(String songID) {
+        JSONObject object =  super.createSongJSONObject(songID);
+        try {
+            object.put("stoppedTime", "0");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+    public void replaceQueue(Song[] songs){
+        JSONArray array = new JSONArray();
+        for(int i=0;i<songs.length;i++){
+            JSONObject songObject = createSongJSONObject(songs[i].getAttribute("song_id"));
+            array.put(songObject);
+        }
+
+        try {
+            this.models.get(0).getJSONObject().put("songs",array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        storeData();
+    }
+    public void removeSongFromQueue(Song song) {
+		// TODO Auto-generated method stub
+		String id = song.getAttribute("song_id");
+        String cateId = this.models.get(0).getId();
+        removeSongFromCategory(id,cateId);
+
+	}
+
 }
