@@ -167,6 +167,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 
 				switch (TAG) {
 					case MUSIC_PLAYING:
+
 						musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause_progress);
 						updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 						play();

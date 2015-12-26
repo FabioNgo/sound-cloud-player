@@ -10,6 +10,7 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Constants;
@@ -34,6 +35,8 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		Helper.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
 
+
+		updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 		return rootView;
 	}
 

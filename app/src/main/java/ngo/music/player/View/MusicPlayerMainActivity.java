@@ -145,10 +145,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		 * Tab Sliding
 		 */
 		configTabSliding();
-		/*
-		 * Music Player Service must be at last
-		 */
-		configMusicPlayerService();
+
 
 	}
 
@@ -433,6 +430,10 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
+		/*
+		 * Music Player Service must be at last
+		 */
+		configMusicPlayerService();
 //		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		// Bind to LocalService
 

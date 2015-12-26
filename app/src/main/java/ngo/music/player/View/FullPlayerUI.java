@@ -65,7 +65,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 */
 		updateShuffle();
 		updateLoop();
-
+		updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 		return rootView;
 
 	}

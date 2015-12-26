@@ -78,7 +78,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		super.onStartCommand(intent, flags, startId);
 		isLoaded = true;
-		MusicPlayerServiceController.getInstance().notifyObservers(APP_RUNNING);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PAUSE,true);
 		return START_STICKY;
 	}
 
@@ -106,6 +106,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			MusicPlayerServiceController.getInstance().startTimer();
 			try {
 				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("link"));
+
 				mediaPlayer.prepareAsync();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -141,7 +142,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		mediaPlayer.start();
 		States.musicPlayerState = MUSIC_PLAYING;
-		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PLAYING);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PLAYING,true);
 	}
 
 	@Override
@@ -164,7 +165,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED,true);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 			int loopState = MusicPlayerServiceController.getInstance().getLoopState();
 			if (loopState == MODE_LOOP_ONE) {
@@ -188,7 +189,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		}
 		States.musicPlayerState = MUSIC_PAUSE;
-		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PAUSE);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PAUSE,true);
 	}
 
 	@Override
@@ -213,7 +214,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_CUR_POINT_CHANGED);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_CUR_POINT_CHANGED,true);
 	}
 
 	/**
@@ -225,6 +226,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			playMedia();
 
 		} else if (States.musicPlayerState == MUSIC_STOPPED) {
+
 			mediaPlayer.seekTo(MusicPlayerServiceController.getInstance().getStoppedTime());
 			playMedia();
 
@@ -529,7 +531,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void release() {
 		// TODO Auto-generated method stub
 		States.musicPlayerState = MUSIC_STOPPED;
-		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED);
+
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED,true);
 		MusicPlayerServiceController.getInstance().stopTimer();
 		cancelNoti();
 		mediaPlayer.stop();

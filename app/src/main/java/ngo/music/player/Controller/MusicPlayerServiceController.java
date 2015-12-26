@@ -242,7 +242,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
         JSONObject object = new JSONObject();
         try {
             object.put("song_id",currentSong.getAttribute("song_id"));
-            object.put("stopped_time", stoppedTime);
+            object.put("stopped_time", MusicPlayerService.getInstance().getCurrentTime());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -325,5 +325,13 @@ public class MusicPlayerServiceController extends Observable implements Constant
         if (timer != null) {
             timer.cancel();
         }
+        storeData();
+    }
+
+    public void notifyObservers(Object data, boolean forceChanged) {
+        if(forceChanged){
+            this.setChanged();
+        }
+        super.notifyObservers(data);
     }
 }
