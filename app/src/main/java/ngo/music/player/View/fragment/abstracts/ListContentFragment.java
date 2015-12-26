@@ -15,7 +15,6 @@ import android.widget.ListView;
 import java.util.Observable;
 import java.util.Observer;
 
-import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;

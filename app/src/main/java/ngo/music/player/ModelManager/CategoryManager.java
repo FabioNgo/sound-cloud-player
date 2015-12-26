@@ -87,14 +87,49 @@ public abstract class CategoryManager extends ModelManager implements Constants.
         }
         storeData();
     }
+    public void removeSongFromAllCategories(String songID){
+        for (Model model:models) {
+            Category category = (Category)model;
+            JSONArray array = category.getJSONObject().optJSONArray("songs");
+            for(int i=0;i<array.length();i++){
+                try {
+                    if(array.getJSONObject(i).getString("id").equals(songID)){
+                        array.remove(i);
+                        break;
+                    }
+                } catch (JSONException e) {
+                    continue;
+                }
+            }
+            try {
+                category.getJSONObject().put("songs",array);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        storeData();
+
+    }
+    public void removeAllSongFromCategory(String categoryID) {
+        Category category = (Category) get(categoryID);
+
+        JSONArray array = new JSONArray();
+        try {
+            category.getJSONObject().put("songs", array);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        storeData();
+    }
     public void removeSongFromCategory(String songID, String categoryID){
         Category category = (Category) get(categoryID);
 
         JSONArray array = category.getJSONObject().optJSONArray("songs");
         for(int i=0;i<array.length();i++){
             try {
-                if(array.getString(Integer.parseInt("id")).equals(songID)){
+                if(array.getJSONObject(i).getString("id").equals(songID)){
                     array.remove(i);
+                    break;
                 }
             } catch (JSONException e) {
                 continue;

@@ -28,7 +28,7 @@ import ngo.music.player.helper.Constants;
  * Created by fabiongo on 12/24/2015.
  */
 public abstract class ModelManager extends Observable implements ModelManagerInterface {
-    private static ModelManager[] managers;
+    private static ArrayList<ModelManager> managers;
     /**
      * models to control
      */
@@ -61,7 +61,6 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         models = new ArrayList<>();
         currentIDSuffix = 0;
         loadData();
-        managers = new ModelManager[Constants.Models.SIZE];
     }
 
     /**
@@ -99,17 +98,20 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
     public static ModelManager getInstance(int type) {
 
         if (managers == null) {
-            managers = new ModelManager[Constants.Models.SIZE];
+            managers = new ArrayList<>(Constants.Models.SIZE);
+            for(int i=0;i<Constants.Models.SIZE;i++){
+                managers.add(createNewInstance(i));
+            }
         }
-        for(int i=0;i<Constants.Models.SIZE;i++){
-            ModelManager a = managers[i];
-        }
-        if (managers[type] == null) {
-            ModelManager a = createNewInstance(type);
-            managers[type] = a;
-        }
+//        for(int i=0;i<Constants.Models.SIZE;i++){
+//            ModelManager a = managers[i];
+//        }
+//        if (managers[type] == null) {
+//            managers[type]  = createNewInstance(type);
+//
+//        }
 
-        return managers[type];
+        return managers.get(type);
     }
 
     /**
@@ -201,7 +203,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
             e.printStackTrace();
         }
         setChanged();
-        this.notifyObservers(this.models);
+        notifyObservers(this.models);
     }
 
     @Override
@@ -212,6 +214,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
                 models.remove(i);
             }
         }
+        storeData();
     }
 
     /**

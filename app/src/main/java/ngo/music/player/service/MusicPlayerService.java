@@ -20,21 +20,12 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.Random;
-import java.util.Stack;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
-import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.OfflineSong;
 import ngo.music.player.Model.Song;
-import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
@@ -59,8 +50,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	private int seekForwardTime = 5 * 1000;
 	private int seekBackwardTime = 5 * 1000;
-	private String nextSongId = ""; // assign specific song played next
-	private long timeLastStop;
 
 	public MusicPlayerService() {
 		instance = this;
@@ -89,7 +78,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		super.onStartCommand(intent, flags, startId);
 		isLoaded = true;
-		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
+		MusicPlayerServiceController.getInstance().notifyObservers(APP_RUNNING);
 		return START_STICKY;
 	}
 
@@ -114,6 +103,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.reset();
+			MusicPlayerServiceController.getInstance().startTimer();
 			try {
 				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("link"));
 				mediaPlayer.prepareAsync();
@@ -131,7 +121,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNextSong() {
 		MusicPlayerServiceController.getInstance().setCurrentSong(MusicPlayerServiceController.getInstance().getNextSong());
-		playNewSong(false);
 	}
 
 	/**
@@ -140,7 +129,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void playPreviousSong() {
 		// TODO Auto-generated method stub
 		MusicPlayerServiceController.getInstance().setCurrentSong(MusicPlayerServiceController.getInstance().getPreviousSong());
-		playNewSong(false);
 
 	}
 
@@ -153,7 +141,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		mediaPlayer.start();
 		States.musicPlayerState = MUSIC_PLAYING;
-		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_PLAYING);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PLAYING);
 	}
 
 	@Override
@@ -176,8 +164,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-
-		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 			int loopState = MusicPlayerServiceController.getInstance().getLoopState();
 			if (loopState == MODE_LOOP_ONE) {
@@ -201,7 +188,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		}
 		States.musicPlayerState = MUSIC_PAUSE;
-		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_PAUSE);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PAUSE);
 	}
 
 	@Override
@@ -226,8 +213,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onSeekComplete(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		UIController.getInstance().updateUiWhilePlayingMusic(
-				MUSIC_CUR_POINT_CHANGED);
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_CUR_POINT_CHANGED);
 	}
 
 	/**
@@ -239,7 +225,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			playMedia();
 
 		} else if (States.musicPlayerState == MUSIC_STOPPED) {
-			mediaPlayer.seekTo((int) timeLastStop);
+			mediaPlayer.seekTo(MusicPlayerServiceController.getInstance().getStoppedTime());
 			playMedia();
 
 		} else {
@@ -275,7 +261,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// incase of the queue in put is songQueue itself
 		((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
 		MusicPlayerServiceController.getInstance().setCurrentSong(queue[position]);
-		playNewSong(true);
 	}
 
 	/**
@@ -295,7 +280,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 					getApplicationContext());
 			return;
 		}
-		// System.out.println ("PLAY NEW SONG = " + song.getId());
 		if (startNow) {
 
 			States.musicPlayerState = MUSIC_PLAYING;
@@ -327,7 +311,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public long getCurrentTime() {
 		if (States.musicPlayerState == MUSIC_STOPPED) {
-			return timeLastStop;
+			return MusicPlayerServiceController.getInstance().getStoppedTime();
 		}
 		if (mediaPlayer != null) {
 			return mediaPlayer.getCurrentPosition();
@@ -533,8 +517,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	private void playSong(Song song) {
-		MusicPlayerServiceController.getInstance().setCurrentSong(song);
-		MusicPlayerServiceController.getInstance().setStoppedTime(0);
 		try {
 			String link = song.getAttribute("link");
 			mediaPlayer.reset();
@@ -554,8 +536,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void release() {
 		// TODO Auto-generated method stub
 		States.musicPlayerState = MUSIC_STOPPED;
-		UIController.getInstance().updateUiWhilePlayingMusic(MUSIC_STOPPED);
-
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED);
+		MusicPlayerServiceController.getInstance().stopTimer();
 		cancelNoti();
 		mediaPlayer.stop();
 		mediaPlayer.release();
@@ -564,17 +546,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		stopSelf();
 	}
 
-	/**
-	 * Set song be the next song to be played
-	 *
-	 * @param song
-	 */
-	public void addToNext(Song song) {
-		// TODO Auto-generated method stub
-//		addSongToQueue(song);
-		nextSongId = song.getId();
 
-	}
 
 
 
@@ -596,6 +568,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	@Override
 	public void update(Observable observable, Object data) {
+		if(observable instanceof MusicPlayerServiceController){
+			if(data instanceof Song){
+				playNewSong(false);
+			}
+		}
 	}
 
 	public class MusicPlayerServiceBinder extends Binder {

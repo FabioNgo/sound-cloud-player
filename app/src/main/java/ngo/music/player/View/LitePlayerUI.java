@@ -10,10 +10,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.volley.api.AppController;
 
-import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
-import ngo.music.player.View.PlayerUI;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 
@@ -28,7 +26,6 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		numberPlayerLoading++;
 		rootView = inflater.inflate(R.layout.liteplayer, container, false);
 		iniMusicProgressBar();
 
@@ -37,8 +34,6 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		Helper.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
 
-		UIController.getInstance().addPlayerUiFragment(this);
-		numberPlayerLoading--;
 		return rootView;
 	}
 

@@ -18,7 +18,6 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
-import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Constants;
@@ -38,7 +37,6 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		numberPlayerLoading++;
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
 		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
@@ -67,8 +65,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 */
 		updateShuffle();
 		updateLoop();
-		UIController.getInstance().addPlayerUiFragment(this);
-		numberPlayerLoading--;
+
 		return rootView;
 
 	}

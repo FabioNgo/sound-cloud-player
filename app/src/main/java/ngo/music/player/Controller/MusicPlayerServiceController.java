@@ -1,6 +1,9 @@
 package ngo.music.player.Controller;
 
+import android.os.CountDownTimer;
 import android.os.Environment;
+
+import com.todddavies.components.progressbar.ProgressWheel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,12 +24,15 @@ import ngo.music.player.Model.Queue;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.QueueManager;
+import ngo.music.player.View.PlayerUI;
 import ngo.music.player.helper.Constants;
+import ngo.music.player.helper.Helper;
+import ngo.music.player.service.MusicPlayerService;
 
 /**
  * Created by fabiongo on 12/25/2015.
  */
-public class MusicPlayerServiceController extends Observable implements Constants.Models {
+public class MusicPlayerServiceController extends Observable implements Constants.Models, Constants.MusicService {
     private static MusicPlayerServiceController instance = null;
     private int stoppedTime;
 
@@ -35,6 +41,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
     private Song nextSong;
     private Stack<Song> stackSongplayed;
     private QueueManager queueManager;
+    boolean canAnnounceNextSong;
     private boolean isShuffle = true;
     /**
      * file path where store json files
@@ -44,12 +51,15 @@ public class MusicPlayerServiceController extends Observable implements Constant
      * json file name which store data
      */
     private String filename = "playing.json";
+    private CountDownTimer timer;
+
     public MusicPlayerServiceController(){
         this.queueManager = (QueueManager) ModelManager.getInstance(QUEUE);
         try {
             filename = filePath+"/"+filename;
             JSONObject object = new JSONObject(fileContentToString());
             currentSong = (Song) ModelManager.getInstance(OFFLINE).get("song_id",object.getString("song_id"))[0];
+            notifyObservers(currentSong);
             computeNextSong();
             stoppedTime = object.getInt("stopped_time");
         } catch (JSONException e) {
@@ -254,5 +264,67 @@ public class MusicPlayerServiceController extends Observable implements Constant
         storeData();
         setChanged();
         notifyObservers(currentSong);
+        String format = String
+                .format("Song playing: %s \nNext song: %s",
+                        currentSong.getAttribute("title"), nextSong.getAttribute("title"));
+        Helper.makeToastTake(format,
+                MusicPlayerService.getInstance());
+        canAnnounceNextSong = true;
+    }
+    /**
+     * Start timer, to update info from service after 1 second
+     */
+    public void startTimer() {
+
+        timer = new CountDownTimer(MusicPlayerServiceController.getInstance()
+                .getDuration()
+                - MusicPlayerService.getInstance().getCurrentTime(), 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // TODO Auto-generated method stub
+                long currentTime = MusicPlayerService.getInstance()
+                        .getCurrentTime();
+                long duration = MusicPlayerServiceController.getInstance().getDuration();
+
+                if ((currentTime * 100) / duration == 50 && canAnnounceNextSong) {
+                    String format = String.format("Next song: %s",
+                            MusicPlayerServiceController.getInstance().getNextSong()
+                                    .getAttribute("title"));
+                    Helper.makeToastTake(format,
+                            MusicPlayerService.getInstance());
+                    canAnnounceNextSong = false;
+                }
+                notifyObservers(MUSIC_PROGRESS);
+//
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        };
+        timer.start();
+    }
+    public int getStoppedTime() {
+        return stoppedTime;
+    }
+    /**
+     * Set song be the next song to be played
+     *
+     * @param song
+     */
+    public void addToNext(Song song) {
+        // TODO Auto-generated method stub
+        nextSong = song;
+    }
+    /**
+     * Stop updating info from service
+     */
+    public void stopTimer() {
+        // TODO Auto-generated method stub
+        if (timer != null) {
+            timer.cancel();
+        }
     }
 }

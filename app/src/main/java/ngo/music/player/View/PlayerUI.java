@@ -3,17 +3,24 @@ package ngo.music.player.View;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 import com.todddavies.components.progressbar.ProgressWheel;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.adapters.LiteListSongAdapter;
+import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
+import ngo.music.player.helper.States;
 import ngo.music.player.service.MusicPlayerService;
 
-public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>, PlayUIInterface {
+public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>, PlayUIInterface,Observer, Constants.MusicService,Constants.Appplication{
 	public static int numberPlayerLoading= 0;
 	protected ProgressWheel musicProgressBar;
 	protected View rootView = null;
@@ -40,6 +47,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 				}
 			}
 		};
+		MusicPlayerServiceController.getInstance().addObserver(this);
 	}
 	
 	/**
@@ -144,5 +152,52 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 	public int compareTo(PlayerUI another) {
 		// TODO Auto-generated method stub
 		return this.getClass().toString().compareTo(another.getClass().toString());
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		if(observable instanceof MusicPlayerServiceController){
+			if(data instanceof Song){
+				Song song = (Song) data;
+
+				updateSongInfo(song);
+			}else {
+				int TAG = (int) data;
+				switch (TAG) {
+					case MUSIC_PLAYING:
+						if (States.appState == APP_RUNNING) {
+							musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause_progress);
+							updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
+							play();
+						}
+						break;
+					case MUSIC_PROGRESS:
+						double ratio = (MusicPlayerService.getInstance().getCurrentTime() * 100.0) / MusicPlayerServiceController.getInstance().getDuration();
+						musicProgressBar.setProgressDegree((int) (ratio * 3.6));
+						updateMusicProgress();
+						break;
+					case MUSIC_PAUSE:
+						if (States.appState == APP_RUNNING) {
+							pause();
+							musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+						}
+						break;
+					case MUSIC_CUR_POINT_CHANGED:
+
+						int degree = (int) Math.round(360
+								* (double) MusicPlayerService.getInstance().getCurrentTime()
+								/ MusicPlayerServiceController.getInstance().getDuration());
+						updateMusicProgress();
+						musicProgressBar.setProgressDegree(degree);
+						break;
+					case MUSIC_STOPPED:
+						if (States.appState == APP_RUNNING) {
+							stop();
+							musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+						}
+						break;
+				}
+			}
+		}
 	}
 }

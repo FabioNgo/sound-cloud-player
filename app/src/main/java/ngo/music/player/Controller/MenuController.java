@@ -5,6 +5,7 @@ import android.view.MenuItem;
 
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
+import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
 import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.View.fragment.abstracts.CategoryAddingFragment;
@@ -43,10 +44,10 @@ public class MenuController implements OnMenuItemClickListener, Constants.Models
 		// TODO Auto-generated method stub
 		switch (arg0.getItemId()) {
 		case R.id.list_addQueue:
-//			MusicPlayerService.getInstance().addSongToQueue(songs[0]);
+			((QueueManager)ModelManager.getInstance(QUEUE)).addSongToQueue(songs[0]);
 			break;
 		case R.id.list_playNext:
-			MusicPlayerService.getInstance().addToNext(songs[0]);
+			MusicPlayerServiceController.getInstance().addToNext(songs[0]);
 			break;
 		case R.id.list_addToPlaylist:
 			addToPlaylist();
@@ -55,19 +56,21 @@ public class MenuController implements OnMenuItemClickListener, Constants.Models
 			ModelManager.getInstance(OFFLINE).remove(songs[0].getId());
 			break;
 		case R.id.queue_removeFromQueue:
-			ModelManager.getInstance(QUEUE).remove(songs[0].getId());
+			ModelManager a = ModelManager.getInstance(QUEUE);
+					((QueueManager) ModelManager.getInstance(QUEUE)).removeSongFromQueue(songs[0]);
 			break;
 		case R.id.queue_playNext:
-			MusicPlayerService.getInstance().addToNext(songs[0]);
+			MusicPlayerServiceController.getInstance().addToNext(songs[0]);
 			break;
 		case R.id.queue_addToPlaylist:
-
 			addToPlaylist();
 			break;
 		case R.id.queue_delete:
 			ModelManager.getInstance(OFFLINE).remove(songs[0].getId());
 			break;
-			
+		case R.id.queue_clear:
+			((QueueManager)ModelManager.getInstance(QUEUE)).clearQueue();
+			break;
 		default:
 			break;
 		}

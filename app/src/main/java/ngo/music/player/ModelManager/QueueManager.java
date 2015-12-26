@@ -5,6 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
@@ -40,13 +41,16 @@ public class QueueManager extends CategoryManager implements Constants, Constant
         // if there is no queue, let queue contain all songs
         if(output.length == 0){
             output = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
-            replaceQueue(output);
+            if(output.length != 0){
+                replaceQueue(output);
+            }
+
 
         }else {
             for (int i = 0; i < output.length; i++) {
                 try {
                     output[i] = (Song) SongManager.getInstance(OFFLINE).get("song_id", objects[i].getString("id"))[0];
-                } catch (JSONException e) {
+                } catch (JSONException  e) {
                     continue;
                 }
             }
@@ -117,8 +121,38 @@ public class QueueManager extends CategoryManager implements Constants, Constant
 		// TODO Auto-generated method stub
 		String id = song.getAttribute("song_id");
         String cateId = this.models.get(0).getId();
-        removeSongFromCategory(id,cateId);
+        removeSongFromCategory(id, cateId);
+        if(MusicPlayerServiceController.getInstance().getCurrentSong().equals(song)){
+            MusicPlayerServiceController.getInstance().setCurrentSong(MusicPlayerServiceController.getInstance().getNextSong());
+
+        }
 
 	}
 
+    public void addSongToQueue(Song song) {
+        try {
+            JSONArray array = this.models.get(0).getJSONObject().getJSONArray("songs");
+            for(int i=0;i<array.length();i++){
+                try {
+                    if(array.getJSONObject(i).getString("id").equals(song.getAttribute("song_id"))){
+                        return;
+                    }
+                } catch (JSONException e) {
+                    continue;
+                }
+            }
+            JSONObject object = new JSONObject();
+            object.put("id", song.getAttribute("song_id"));
+            array.put(object);
+            this.models.get(0).getJSONObject().put("songs", array);
+            storeData();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    public void clearQueue(){
+        String queueId = this.models.get(0).getId();
+        removeAllSongFromCategory(queueId);
+        this.addSongToQueue(MusicPlayerServiceController.getInstance().getCurrentSong());
+    }
 }

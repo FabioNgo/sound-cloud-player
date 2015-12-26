@@ -6,10 +6,14 @@ import android.provider.MediaStore;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
 import ngo.music.player.Model.OfflineSong;
+import ngo.music.player.Model.Song;
 import ngo.music.player.View.MusicPlayerMainActivity;
+import ngo.music.player.helper.Constants;
 
 /**
  * Created by fabiongo on 12/24/2015.
@@ -69,9 +73,27 @@ public class OfflineSongManager extends SongManager {
     }
 
     @Override
+    public void remove(String id) {
+
+        Song song = (Song) get(id);
+        File file = new File(song.getAttribute("link"));
+        boolean deleted = file.delete();
+        for(int i=0;i< Models.SIZE;i++){
+            ModelManager temp = ModelManager.getInstance(i);
+            if(temp instanceof CategoryManager){
+                ((CategoryManager)temp).removeSongFromAllCategories(song.getAttribute("song_id"));
+            }
+        }
+        super.remove(id);
+    }
+
+    @Override
     public ModelInterface[] getAll() {
         Model[] models = new OfflineSong[this.models.size()];
-
+        if(models.length == 0){
+            getSongsFromSDCard();
+            models = new OfflineSong[this.models.size()];
+        }
         return this.models.toArray(models);
     }
 }

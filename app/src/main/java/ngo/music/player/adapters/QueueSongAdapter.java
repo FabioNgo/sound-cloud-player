@@ -20,6 +20,8 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 	public QueueSongAdapter(Context context, int resource) {
 		super(context, resource);
 		MusicPlayerServiceController.getInstance().addObserver(this);
+		ModelManager.getInstance(QUEUE).addObserver(this);
+		ModelManager a = ModelManager.getInstance(QUEUE);
 	}
 
 	public static QueueSongAdapter getInstance() {

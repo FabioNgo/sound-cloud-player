@@ -24,17 +24,13 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Random;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
-import ngo.music.player.Controller.UIController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.OfflineSongManager;
-import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
 import ngo.music.player.adapters.OfflineTabsAdapter;
-import ngo.music.player.View.fragment.abstracts.ListContentFragment;
 import ngo.music.player.View.fragment.real.QueueFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
@@ -119,7 +115,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		Intent intent = getIntent();
 		if ("CallFromNoti".equals(intent.getAction())) {
 
-			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
+//			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		}
 
 		/*
@@ -418,14 +414,14 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onPause() {
 		// TODO Auto-generated method stub
 		super.onPause();
-		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+//		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
 		super.onResume();
-		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
+//		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		((OfflineSongManager) ModelManager.getInstance(OFFLINE)).getSongsFromSDCard();
 		fileObserver.startWatching();
 		// if (isMyServiceRunning()) {
@@ -437,7 +433,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
+//		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		// Bind to LocalService
 
 	}
@@ -454,7 +450,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onStop();
 		fileObserver.stopWatching();
-		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+//		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 
 	/**
