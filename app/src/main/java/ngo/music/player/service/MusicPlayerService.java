@@ -230,7 +230,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		} else {
 
-			playNewSong(true);
+			playNewSong();
 
 		}
 		updateNotification();
@@ -259,6 +259,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNewSong(int position, Song[] queue) {
 		// incase of the queue in put is songQueue itself
+		States.musicPlayerState = MUSIC_PLAYING;
 		((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
 		MusicPlayerServiceController.getInstance().setCurrentSong(queue[position]);
 	}
@@ -266,11 +267,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	/**
 	 * Play new song
 	 *
-	 * @param startNow
-	 *            : true if want to play immediately, False: play when user
-	 *            press start1
 	 */
-	private void playNewSong(boolean startNow) {
+	private void playNewSong() {
 		mediaPlayer.stop();
 		// System.out.println("PLAY NEW SONG 2");
 		Song song = MusicPlayerServiceController.getInstance().getCurrentSong();
@@ -280,17 +278,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 					getApplicationContext());
 			return;
 		}
-		if (startNow) {
-
-			States.musicPlayerState = MUSIC_PLAYING;
-		}
 		updateNotification();
-		if (States.musicPlayerState == MUSIC_PLAYING) {
-
-			playSong(song);
+		playSong(song);
 
 
-		}
+
 
 	}
 
@@ -314,7 +306,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			return MusicPlayerServiceController.getInstance().getStoppedTime();
 		}
 		if (mediaPlayer != null) {
-			return mediaPlayer.getCurrentPosition();
+			int currentPosition = mediaPlayer.getCurrentPosition();
+			return currentPosition;
 		}
 		return -1;
 	}
@@ -491,7 +484,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void restartSong() {
 		mediaPlayer.reset();
-		playNewSong(false);
+		playNewSong();
 	}
 
 
@@ -570,7 +563,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void update(Observable observable, Object data) {
 		if(observable instanceof MusicPlayerServiceController){
 			if(data instanceof Song){
-				playNewSong(false);
+				playNewSong();
 			}
 		}
 	}

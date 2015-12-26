@@ -156,6 +156,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 
 	@Override
 	public void update(Observable observable, Object data) {
+
 		if(observable instanceof MusicPlayerServiceController){
 			if(data instanceof Song){
 				Song song = (Song) data;
@@ -163,13 +164,13 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 				updateSongInfo(song);
 			}else {
 				int TAG = (int) data;
+
 				switch (TAG) {
 					case MUSIC_PLAYING:
-						if (States.appState == APP_RUNNING) {
-							musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause_progress);
-							updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
-							play();
-						}
+						musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause_progress);
+						updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
+						play();
+
 						break;
 					case MUSIC_PROGRESS:
 						double ratio = (MusicPlayerService.getInstance().getCurrentTime() * 100.0) / MusicPlayerServiceController.getInstance().getDuration();
@@ -177,10 +178,9 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 						updateMusicProgress();
 						break;
 					case MUSIC_PAUSE:
-						if (States.appState == APP_RUNNING) {
-							pause();
-							musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
-						}
+						pause();
+						musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+
 						break;
 					case MUSIC_CUR_POINT_CHANGED:
 
@@ -191,10 +191,10 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 						musicProgressBar.setProgressDegree(degree);
 						break;
 					case MUSIC_STOPPED:
-						if (States.appState == APP_RUNNING) {
-							stop();
-							musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
-						}
+
+						stop();
+						musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+
 						break;
 				}
 			}

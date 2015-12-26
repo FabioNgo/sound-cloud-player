@@ -276,9 +276,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
      */
     public void startTimer() {
 
-        timer = new CountDownTimer(MusicPlayerServiceController.getInstance()
-                .getDuration()
-                - MusicPlayerService.getInstance().getCurrentTime(), 1000) {
+        timer = new CountDownTimer(Long.MAX_VALUE, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -295,13 +293,14 @@ public class MusicPlayerServiceController extends Observable implements Constant
                             MusicPlayerService.getInstance());
                     canAnnounceNextSong = false;
                 }
-                notifyObservers(MUSIC_PROGRESS);
+                MusicPlayerServiceController.getInstance().setChanged();
+                MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PROGRESS);
 //
             }
 
             @Override
             public void onFinish() {
-
+                this.start();
             }
         };
         timer.start();
