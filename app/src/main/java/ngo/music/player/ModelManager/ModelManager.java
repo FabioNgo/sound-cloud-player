@@ -348,6 +348,9 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
             case Constants.Models.ALBUM:
                 model = new Album(object);
                 break;
+            case Constants.Models.ARTIST:
+                model = new Artist(object);
+                break;
             default:
                 return null;
         }

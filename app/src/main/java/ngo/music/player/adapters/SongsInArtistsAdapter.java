@@ -4,7 +4,7 @@ import android.content.Context;
 
 import ngo.music.player.Model.Category;
 
-public class SongsInArtistsAdapter extends SongsInCateAdapter {
+public class SongsInArtistsAdapter extends SongsInCategoryAdapter {
 	static SongsInArtistsAdapter instance;
 	public SongsInArtistsAdapter(Context context, int resource,
 			Category cate) {

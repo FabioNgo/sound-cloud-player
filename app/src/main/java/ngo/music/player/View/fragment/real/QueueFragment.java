@@ -70,7 +70,7 @@ public class QueueFragment extends ListContentFragment {
 						break;
 
 					case R.id.queue_clear:
-//						MusicPlayerService.getInstance().clearQueue();
+						((QueueManager)ModelManager.getInstance(QUEUE)).clearQueue();
 						break;
 
 					case R.id.queue_settings:
@@ -99,7 +99,10 @@ public class QueueFragment extends ListContentFragment {
 	public void update(Observable observable, Object data) {
 		if(observable instanceof QueueManager){
 			Song[] songs = ((QueueManager) observable).getAllSong();
-			toolbar.setSubtitle(String.valueOf(songs.length) + " songs");
+			if(toolbar!=null){
+				toolbar.setSubtitle(String.valueOf(songs.length) + " songs");
+			}
+
 		}
 	}
 }

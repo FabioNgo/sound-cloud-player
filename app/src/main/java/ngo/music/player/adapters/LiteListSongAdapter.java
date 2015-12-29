@@ -127,8 +127,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 		/**
 		 * Set background , to indicate which song is playing
 		 */
-		if (MusicPlayerServiceController.getInstance().getCurrentSong()
-				.equals(songs[position])) {
+		if (songs[position].equals(MusicPlayerServiceController.getInstance().getCurrentSong())) {
 
 			viewHolder.background.setBackgroundResource(R.color.primary_light);
 		} else {

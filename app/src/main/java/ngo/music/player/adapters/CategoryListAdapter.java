@@ -225,7 +225,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 					((CategoryManager)ModelManager.getInstance(type)).updateTitle(holder.editText.getText().toString(),holder.objectId);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-//					Helper.makeToastTake(e.getMessage(), context);
+//					Helper.makeToastText(e.getMessage(), context);
 					return;
 				}
 				holder.items[0].setVisibility(View.VISIBLE);

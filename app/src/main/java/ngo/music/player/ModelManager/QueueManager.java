@@ -14,7 +14,7 @@ import ngo.music.player.Model.Song;
 import ngo.music.player.helper.Constants;
 
 public class QueueManager extends CategoryManager implements Constants, Constants.SongConstants,
-        Constants.SoundCloudExploreConstant, Constants.Models,
+        Constants.Models,
         Constants.MusicService, Constants.Data {
 
     private String playingSongId ="";
@@ -38,14 +38,14 @@ public class QueueManager extends CategoryManager implements Constants, Constant
         String id = this.models.get(0).getId();
         Song[] output =  getSongsFromCategory(id);
         // if there is no queue, let queue contain all songs
-        if(output.length == 0){
-            output = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
-            if(output.length != 0){
-                replaceQueue(output);
-            }
-
-
-        }
+//        if(output.length == 0){
+//            output = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
+//            if(output.length != 0){
+//                replaceQueue(output);
+//            }
+//
+//
+//        }
         return output;
     }
 
@@ -144,5 +144,6 @@ public class QueueManager extends CategoryManager implements Constants, Constant
         String queueId = this.models.get(0).getId();
         removeAllSongFromCategory(queueId);
         this.addSongToQueue(MusicPlayerServiceController.getInstance().getCurrentSong());
+        MusicPlayerServiceController.getInstance().computeNextSong();
     }
 }

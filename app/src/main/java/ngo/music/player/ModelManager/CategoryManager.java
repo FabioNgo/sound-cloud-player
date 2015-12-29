@@ -51,17 +51,18 @@ public abstract class CategoryManager extends ModelManager implements Constants.
     }
 
 
-    public void newCategory(String title) {
+    public Model newCategory(String title) {
         JSONObject object = new JSONObject();
+        Model output = null;
         try {
             object.put("title", title);
             JSONArray songArray = new JSONArray();
-            object.put("songs",songArray);
-            generate(object);
-            storeData();
+            object.put("songs", songArray);
+            output = (Model) generate(object);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return output;
     }
     protected JSONObject createSongJSONObject(String songID){
         JSONObject songObject = new JSONObject();

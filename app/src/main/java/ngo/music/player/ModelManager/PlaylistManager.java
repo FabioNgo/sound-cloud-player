@@ -1,5 +1,7 @@
 package ngo.music.player.ModelManager;
 
+import org.json.JSONObject;
+
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
@@ -30,5 +32,12 @@ public class PlaylistManager extends OfflineCategoryManager {
         get(categoryId).setAttribute("title",newtitle);
         this.setChanged();
         storeData();
+    }
+
+    @Override
+    public Model newCategory(String title) {
+        Playlist object = (Playlist) super.newCategory(title);
+        storeData();
+        return object;
     }
 }

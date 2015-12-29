@@ -3,9 +3,6 @@ package ngo.music.player.Controller;
 import android.os.CountDownTimer;
 import android.os.Environment;
 
-import com.todddavies.components.progressbar.ProgressWheel;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -19,12 +16,9 @@ import java.util.Observable;
 import java.util.Random;
 import java.util.Stack;
 
-import ngo.music.player.Model.Model;
-import ngo.music.player.Model.Queue;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.QueueManager;
-import ngo.music.player.View.PlayerUI;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 import ngo.music.player.service.MusicPlayerService;
@@ -55,6 +49,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
 
     public MusicPlayerServiceController(){
         this.queueManager = (QueueManager) ModelManager.getInstance(QUEUE);
+        stackSongplayed = new Stack<>();
         try {
             filename = filePath+"/"+filename;
             JSONObject object = new JSONObject(fileContentToString());
@@ -62,7 +57,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
             notifyObservers(currentSong);
             computeNextSong();
             stoppedTime = object.getInt("stopped_time");
-            stackSongplayed = new Stack<>();
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -155,7 +150,14 @@ public class MusicPlayerServiceController extends Observable implements Constant
                 nextSong = currentSong;
             }
             if (size == 0) {
-                nextSong = null;
+                queue = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
+                if(queue.length == 0){
+                    nextSong = null;
+                }else{
+                    ((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
+                    nextSong = queue[0];
+                }
+
             }
         }
     }
@@ -259,7 +261,10 @@ public class MusicPlayerServiceController extends Observable implements Constant
 
     }
     public void pushStackPlayed(Song song){
-        this.stackSongplayed.push(song);
+        if(song!=null){
+            this.stackSongplayed.push(song);
+        }
+
     }
     public void clearStack(){
         this.stackSongplayed.clear();
@@ -275,7 +280,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
         String format = String
                 .format("Song playing: %s \nNext song: %s",
                         currentSong.getAttribute("title"), nextSong.getAttribute("title"));
-        Helper.makeToastTake(format,
+        Helper.makeToastText(format,
                 MusicPlayerService.getInstance());
         canAnnounceNextSong = true;
     }
@@ -292,18 +297,18 @@ public class MusicPlayerServiceController extends Observable implements Constant
                 long currentTime = MusicPlayerService.getInstance()
                         .getCurrentTime();
                 long duration = MusicPlayerServiceController.getInstance().getDuration();
-
-                if ((currentTime * 100) / duration == 50 && canAnnounceNextSong) {
-                    String format = String.format("Next song: %s",
-                            MusicPlayerServiceController.getInstance().getNextSong()
-                                    .getAttribute("title"));
-                    Helper.makeToastTake(format,
-                            MusicPlayerService.getInstance());
-                    canAnnounceNextSong = false;
+                if(duration!=0) {
+                    if ((currentTime * 100) / duration == 50 && canAnnounceNextSong) {
+                        String format = String.format("Next song: %s",
+                                MusicPlayerServiceController.getInstance().getNextSong()
+                                        .getAttribute("title"));
+                        Helper.makeToastText(format,
+                                MusicPlayerService.getInstance());
+                        canAnnounceNextSong = false;
+                    }
+                    MusicPlayerServiceController.getInstance().setChanged();
+                    MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PROGRESS);
                 }
-                MusicPlayerServiceController.getInstance().setChanged();
-                MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PROGRESS);
-//
             }
 
             @Override

@@ -122,7 +122,16 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNextSong() {
 		MusicPlayerServiceController.getInstance().pushStackPlayed(MusicPlayerServiceController.getInstance().getCurrentSong());
-		MusicPlayerServiceController.getInstance().setCurrentSong(MusicPlayerServiceController.getInstance().getNextSong());
+		Song nextSong = MusicPlayerServiceController.getInstance().getNextSong();
+		if(nextSong == null){
+			MusicPlayerServiceController.getInstance().computeNextSong(); // try to compute next song to get new NextSong
+			nextSong = MusicPlayerServiceController.getInstance().getNextSong();
+			//no song to play
+			if(nextSong == null){
+				Helper.makeToastText("No song to play", MusicPlayerMainActivity.getActivity());
+			}
+		}
+		MusicPlayerServiceController.getInstance().setCurrentSong(nextSong);
 
 	}
 
@@ -151,14 +160,14 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public boolean onError(MediaPlayer mp, int what, int extra) {
 		switch (what) {
 		case MediaPlayer.MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK:
-			Helper.makeToastTake(
+			Helper.makeToastText(
 					"MEDIA_ERROR_NOT_VALID_FOR_PROGRESSIVE_PLAYBACK",
 					getApplicationContext());
 		case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
-			Helper.makeToastTake("MEDIA_ERROR_SERVER_DIED" + extra,
+			Helper.makeToastText("MEDIA_ERROR_SERVER_DIED" + extra,
 					getApplicationContext());
 		case MediaPlayer.MEDIA_ERROR_UNKNOWN:
-			Helper.makeToastTake("MEDIA_ERROR_UNKNOWN" + extra,
+			Helper.makeToastText("MEDIA_ERROR_UNKNOWN" + extra,
 					getApplicationContext());
 		}
 		return false;
@@ -198,7 +207,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void onBufferingUpdate(MediaPlayer mp, int percent) {
 		// TODO Auto-generated method stub
 		// this.percent = percent;
-		// //Helper.makeToastTake(""+percent,
+		// //Helper.makeToastText(""+percent,
 		// MusicPlayerService.getInstance());
 		// if(mp.getDuration()*percent/100<mp.getCurrentPosition()+5000){
 		// pause();
@@ -223,7 +232,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play the current song when press start button
 	 */
 	public void playCurrentSong() {
-
+		if(MusicPlayerServiceController.getInstance().getCurrentSong()== null){
+			MusicPlayerServiceController.getInstance().computeNextSong();
+			playNextSong();
+			return;
+		}
 		if (States.musicPlayerState == MUSIC_PAUSE) {
 			playMedia();
 
@@ -284,7 +297,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		Song song = MusicPlayerServiceController.getInstance().getCurrentSong();
 
 		if (song == null) {
-			Helper.makeToastTake("No song to play",
+			Helper.makeToastText("No song to play",
 					getApplicationContext());
 			return;
 		}

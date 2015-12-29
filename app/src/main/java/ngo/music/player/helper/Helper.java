@@ -145,7 +145,7 @@ public class Helper {
 		return Math.round(px / density);
 	}
 
-	public static void makeToastTake(String text, Context context) {
+	public static void makeToastText(String text, Context context) {
 		Toast toast = Toast.makeText(context, text, Toast.LENGTH_LONG);
 		LinearLayout layout = (LinearLayout) toast.getView();
 		

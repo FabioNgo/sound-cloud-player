@@ -183,102 +183,17 @@ public interface Constants {
 		int APP_STOPPED = 1;
 	}
 	
-	interface TabContant{
-		int ARTISTS = 0;
-		int ALBUMS = 1;
-		int SONGS = 2;
-		int PLAYLISTS = 3;
-		int GENRES = 4;
-		int SUB_GENRES = 5;
-		int USERS = 6;
-		int ABOUT_US = 7;
-		String DEFAULT_ID = "deafault_id";
-	}
+
 
 	interface Models {
 
-		int ARTIST = 0;
+		int ARTIST = 3;
 		int PLAYLIST = 1;
 		int ALBUM = 2;
-		int OFFLINE = 3;
+		int OFFLINE = 0;
 		int QUEUE = 4;
 		//		int FAVORITE = 5;
 		int SIZE = 5;
 	}
-	interface SoundCloudExploreConstant{
-		
-		
-		String TRENDING_MUSIC_LINK = "https://api-v2.soundcloud.com/explore/Popular%2BMusic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String TRENDING_AUDIO_LINK = "https://api-v2.soundcloud.com/explore/popular%2Baudio?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String ALTERNATIVE_ROCK_LINK ="https://api-v2.soundcloud.com/explore/alternative%2Brock?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String AMBIENT_LINK = "https://api-v2.soundcloud.com/explore/ambient?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String CLASSICAL_LINK = "https://api-v2.soundcloud.com/explore/classical?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String COUNTRY_LINK  = "https://api-v2.soundcloud.com/explore/country?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String DANCE_EDM_LINK = "https://api-v2.soundcloud.com/explore/dance%2B%26%2Bedm?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String DEEP_HOUSE_LINK = "https://api-v2.soundcloud.com/explore/deep%2Bhouse?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String DISCO_LINK = "https://api-v2.soundcloud.com/explore/disco?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String DRUM_BASS_LINK = "https://api-v2.soundcloud.com/explore/drum%2B%26%2Bbass?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String DUBSTEP_LINK = "https://api-v2.soundcloud.com/explore/dubstep?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String DANCE_HALL_LINK = "https://api-v2.soundcloud.com/explore/dancehall?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String ELECTRONIC_LINK = "https://api-v2.soundcloud.com/explore/electronic?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-		String FOLK_LINK = "https://api-v2.soundcloud.com/explore/folk%2B%26%2Bsinger-songwriter?tag=out-of-experiment&limit=10&offset=0&linked_partitioning=1";
-	}
-	
-	interface PlaylistConstant{
-		String PLAYLIST_ID = "id";
-		String PLAYLIST_TITLE = "title";
-		String PLAYLIST_CREATED_AT = "created_at";
-		String PLAYLIST_CREATOR_ID = "user_id";
-		String PLAYLIST_CREATOR = "user";
-		String PLAYLIST_PERMALINK_URL = "permalink_url";
-		String PLAYLIST_ARTWORK_URL = "artwork_url";
-		String PLAYLIST_DESCRIPTION = "description";
-		String PLAYLIST_DURATION = "duration";
-		
-				
-		
-	}
-	
-	interface DatabaseConstant{
-		int DATABASE_VERSION = 1;
-		 String DATABASE_NAME = "musicplayer";
-		// Contacts table name
-				String LOGIN_TABLE_NAME = "login";
-				 String SONG_TABLE_NAME = "song";
-				 String ARTIST_TABLE_NAME = "artist";
-				
-				
 
-				// Contacts Table Columns names
-				 String LOGIN_KEY_ID = "id";
-				 String LOGIN_KEY_TOKEN  = "token";
-				
-				
-				/*
-				 * User table columns names
-				 */
-				 String SONG_KEY_ID = "id";
-				 String SONG_KEY_TITLE = "title";
-				 String SONG_KEY_ARTWORK_URL = "artwork_url";
-				 String SONG_KEY_STREAM_URL = "stream_url";
-
-				 String SONG_KEY_TAG = "tag";
-				 String SONG_KEY_ARTIST = "artist";
-				 String SONG_KEY_GERNE = "gerne";
-				 String SONG_KEY_DURATION = "duration";
-
-
-				
-				
-				
-
-				// Artist Table Columns names
-				 String ARTIST_KEY_ID = "id";
-				 String ARTIST_KEY_USERNAME = "username";
-				 String ARTIST_KEY_FULLNAME = "fullname";
-				 String ARTIST_KEY_ARTWORK_URL = "artwork";
-				 String ARTIST_KEY_CITY = "city";
-				 String ARTIST_KEY_COUNTRY = "country";
-				
-	}
 }

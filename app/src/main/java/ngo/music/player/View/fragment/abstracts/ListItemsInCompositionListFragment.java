@@ -12,24 +12,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
-import ngo.music.player.ModelManager.AlbumManager;
-import ngo.music.player.ModelManager.ArtistManager;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
-import ngo.music.player.ModelManager.OfflineSongManager;
-import ngo.music.player.ModelManager.PlaylistManager;
-import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
 import ngo.music.player.View.fragment.real.ListItemsInAlbumFragment;
 import ngo.music.player.View.fragment.real.ListItemsInArtistFragment;
 import ngo.music.player.View.fragment.real.ListItemsInPlaylistFragment;
-import ngo.music.player.adapters.SongsInCateAdapter;
+import ngo.music.player.adapters.SongsInCategoryAdapter;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.service.MusicPlayerService;
 
@@ -42,7 +35,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 	Category category;
 	View rootView;
 	Song[] songs;
-	SongsInCateAdapter adapter;
+	SongsInCategoryAdapter adapter;
 	int type;
 	static ArrayList<ListItemsInCompositionListFragment> children;
 	public ListItemsInCompositionListFragment(){
@@ -64,7 +57,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 		if (children == null) {
 			children = new ArrayList<>(Constants.Models.SIZE);
 			for(int i=0;i<Constants.Models.SIZE;i++){
-				children.add(createNewInstance(type));
+				children.add(createNewInstance(i));
 			}
 		}
 
@@ -120,7 +113,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 				MusicPlayerService.getInstance().playNewSong(position, songs);
 			}
 		});
-		adapter = SongsInCateAdapter.createInstance(getType(),R.layout.song_in_cate,category);
+		adapter = SongsInCategoryAdapter.createInstance(getType(), R.layout.song_in_cate, category);
 		listPlaylist.setAdapter(adapter);
 
 		return rootView;
