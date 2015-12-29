@@ -11,6 +11,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
@@ -20,7 +23,7 @@ import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.helper.Constants;
 
 public abstract class SongsInCategoryAdapter extends ArrayAdapter<Song> implements
-		Constants.Models {
+		Constants.Models,Observer {
 	public static SongsInCategoryAdapter instance = null;
 	Context context;
 	int resource;
@@ -41,6 +44,7 @@ public abstract class SongsInCategoryAdapter extends ArrayAdapter<Song> implemen
 		canRemoveItem = setCanRemoveItem();
 		this.category = category;
 		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(category.getId());
+		ModelManager.getInstance(type).addObserver(this);
 		
 	}
 
@@ -199,10 +203,12 @@ public abstract class SongsInCategoryAdapter extends ArrayAdapter<Song> implemen
 		return songs.length;
 	}
 
-	public void update() {
-		// TODO Auto-generated method stub
-		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(category.getId());
-		this.notifyDataSetChanged();
-	}
 
+	@Override
+	public void update(Observable observable, Object data) {
+		if(observable instanceof CategoryManager){
+			songs = ((CategoryManager) observable).getSongsFromCategory(category.getId());
+			this.notifyDataSetChanged();
+		}
+	}
 }

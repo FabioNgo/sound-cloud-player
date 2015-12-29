@@ -13,6 +13,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
@@ -31,7 +33,7 @@ import ngo.music.player.service.MusicPlayerService;
  * @author Fabio Ngo
  *
  */
-public abstract class ListItemsInCompositionListFragment extends DialogFragment implements Constants.Models {
+public abstract class ListItemsInCompositionListFragment extends DialogFragment implements Constants.Models,Observer {
 	Category category;
 	View rootView;
 	Song[] songs;
@@ -40,6 +42,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 	static ArrayList<ListItemsInCompositionListFragment> children;
 	public ListItemsInCompositionListFragment(){
 		type = getType();
+		ModelManager.getInstance(type).addObserver(this);
 	}
 	public void setCategory(Category category){
 		this.category = category;
@@ -119,10 +122,14 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 		return rootView;
 	}
 
-	public void update(){
-		adapter.update();
-		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
-		toolbar.setSubtitle(adapter.getCount()+" song(s)");
+
+
+	@Override
+	public void update(Observable observable, Object data) {
+		if(observable instanceof CategoryManager){
+			Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
+			songs = ((CategoryManager) observable).getSongsFromCategory(category.getId());
+			toolbar.setSubtitle(songs.length+" song(s)");
+		}
 	}
-	
 }

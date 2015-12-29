@@ -270,7 +270,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            : list of the songs want to play
 	 */
 	public void playNewSong(int position, Song[] queue) {
-		// incase of the queue in put is songQueue itself
+		if(queue.length == 0){
+			Helper.makeToastText("No song to play",MusicPlayerMainActivity.getActivity());
+			return;
+		}
+
 		MusicPlayerServiceController.getInstance().clearStack();
 		States.musicPlayerState = MUSIC_PLAYING;
 		((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
