@@ -62,6 +62,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
             notifyObservers(currentSong);
             computeNextSong();
             stoppedTime = object.getInt("stopped_time");
+            stackSongplayed = new Stack<>();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -105,7 +106,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
      * @return Song
      */
     public Song getPreviousSong(){
-        stackSongplayed.pop();
+
 
         if (stackSongplayed.isEmpty()) {
 
@@ -113,7 +114,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
             return nextSong;
 
         } else {
-            return stackSongplayed.peek();
+            return stackSongplayed.pop();
         }
     }
     public void setStoppedTime(int time){
@@ -257,9 +258,16 @@ public class MusicPlayerServiceController extends Observable implements Constant
         }
 
     }
-
+    public void pushStackPlayed(Song song){
+        this.stackSongplayed.push(song);
+    }
+    public void clearStack(){
+        this.stackSongplayed.clear();
+    }
     public void setCurrentSong(Song currentSong) {
+
         this.currentSong = currentSong;
+
         computeNextSong();
         storeData();
         setChanged();

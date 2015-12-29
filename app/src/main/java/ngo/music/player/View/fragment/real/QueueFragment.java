@@ -3,6 +3,9 @@ package ngo.music.player.View.fragment.real;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import org.json.JSONException;
@@ -17,6 +20,7 @@ import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
 import ngo.music.player.View.fragment.abstracts.ListContentFragment;
+import ngo.music.player.adapters.LiteListSongAdapter;
 import ngo.music.player.adapters.QueueSongAdapter;
 import ngo.music.player.service.MusicPlayerService;
 
@@ -91,7 +95,11 @@ public class QueueFragment extends ListContentFragment {
 		toolbar.setSubtitle(String.valueOf((QueueSongAdapter.getInstance().getCount())) + " songs");
 	}
 
-
+	@Override
+	public void onItemClick(AdapterView<?> parent, View arg1, int position, long id) {
+		MusicPlayerService.getInstance().playSongInQueue(position);
+		return;
+	}
 
 	@Override
 	public void update(Observable observable, Object data) {

@@ -121,7 +121,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 * Play next Song when click to next button or at the end of current song
 	 */
 	public void playNextSong() {
+		MusicPlayerServiceController.getInstance().pushStackPlayed(MusicPlayerServiceController.getInstance().getCurrentSong());
 		MusicPlayerServiceController.getInstance().setCurrentSong(MusicPlayerServiceController.getInstance().getNextSong());
+
 	}
 
 	/**
@@ -240,12 +242,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// sendBroadcast(TAG_START);
 	}
 
-//	/**
-//	 * Play song from queue
-//	 *
-//	 * @param position
-//	 *            : position in queue
-//	 */
+
 //	public void playSongInQueue(int position) {
 //		currentSongPosition = position;
 //		playNewSong(true);
@@ -261,11 +258,22 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 */
 	public void playNewSong(int position, Song[] queue) {
 		// incase of the queue in put is songQueue itself
+		MusicPlayerServiceController.getInstance().clearStack();
 		States.musicPlayerState = MUSIC_PLAYING;
 		((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
 		MusicPlayerServiceController.getInstance().setCurrentSong(queue[position]);
 	}
-
+	/**
+	 * Play song from queue
+	 *
+	 * @param position
+	 *            : position in queue
+	 */
+	public void playSongInQueue(int position){
+		Song[] queue = ((QueueManager) ModelManager.getInstance(QUEUE)).getAllSong();
+		MusicPlayerServiceController.getInstance().pushStackPlayed(MusicPlayerServiceController.getInstance().getCurrentSong());
+		MusicPlayerServiceController.getInstance().setCurrentSong(queue[position]);
+	}
 	/**
 	 * Play new song
 	 *
