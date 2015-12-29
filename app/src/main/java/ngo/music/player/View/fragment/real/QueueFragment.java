@@ -11,13 +11,16 @@ import android.widget.ArrayAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
+import ngo.music.player.Model.Model;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
+import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
 import ngo.music.player.View.fragment.abstracts.ListContentFragment;
 import ngo.music.player.adapters.LiteListSongAdapter;
@@ -94,6 +97,9 @@ public class QueueFragment extends ListContentFragment {
 
 	@Override
 	public void update(Observable observable, Object data) {
-
+		if(observable instanceof QueueManager){
+			Song[] songs = ((QueueManager) observable).getAllSong();
+			toolbar.setSubtitle(String.valueOf(songs.length) + " songs");
+		}
 	}
 }

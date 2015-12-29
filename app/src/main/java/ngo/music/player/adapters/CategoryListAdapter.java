@@ -50,7 +50,9 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		this.resource = resource;
 
 	}
-
+	public Song[] getSongs(int position){
+		return ((CategoryManager)ModelManager.getInstance(type)).getSongsFromCategory(categories[position].getId());
+	}
 	public static CategoryListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
 

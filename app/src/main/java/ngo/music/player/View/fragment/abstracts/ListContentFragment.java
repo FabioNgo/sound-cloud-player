@@ -18,6 +18,7 @@ import java.util.Observer;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
+import ngo.music.player.adapters.CategoryListAdapter;
 import ngo.music.player.adapters.LiteListSongAdapter;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.service.MusicPlayerService;
@@ -118,6 +119,12 @@ public abstract class ListContentFragment extends Fragment implements
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
 			Song[] songs = ((LiteListSongAdapter) adapter).getSongs();
 			MusicPlayerService.getInstance().playNewSong(position,
+					songs);
+			return;
+		}
+		if(adapter instanceof CategoryListAdapter){
+			Song[] songs = ((CategoryListAdapter) adapter).getSongs(position);
+			MusicPlayerService.getInstance().playNewSong(0,
 					songs);
 			return;
 		}
