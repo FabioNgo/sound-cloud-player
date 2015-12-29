@@ -137,5 +137,8 @@ public abstract class CategoryManager extends ModelManager implements Constants.
         }
         storeData();
     }
+    public void updateTitle(String newtitle, String categoryId){
+
+    }
 
 }

@@ -168,11 +168,14 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 
 
 		Song[] songs = getSongsFromCat(category.getId());
+		holder.objectId = category.getId();
 		/*
 		 * Set song titles
 		 */
 		holder.items[0].setText(category.getAttribute("title")); // playlist name
-
+		/*
+		 * Set song titles
+		 */
 		for (int i = 0; i < holder.items.length-1; i++) {
 			String content = "" + (i + 1) + ". ";
 			if(i<songs.length) {
@@ -225,10 +228,10 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				try {
-//					ModelManager.getInstance(type).updateTitle((String) holder.items[0].getText(),holder.editText.getText().toString());
+					((CategoryManager)ModelManager.getInstance(type)).updateTitle(holder.editText.getText().toString(),holder.objectId);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
-					Helper.makeToastTake(e.getMessage(), context);
+//					Helper.makeToastTake(e.getMessage(), context);
 					return;
 				}
 				holder.items[0].setVisibility(View.VISIBLE);

@@ -10,7 +10,7 @@ import ngo.music.player.R;
 public class CompositionViewHolder {
 
 	// TODO Auto-generated constructor stubpublic class ViewHolder {
-
+	public String objectId= "";
 	public TextView[] items;
 	public ImageView menu;
 	public EditText editText;

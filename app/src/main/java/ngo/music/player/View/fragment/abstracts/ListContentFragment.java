@@ -55,7 +55,6 @@ public abstract class ListContentFragment extends Fragment implements
 		listView = (ListView) rootView.findViewById(R.id.items_list);
 		toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
 		adapter = getAdapter();
-		load();
 
 		if(hasToolbar()){
 
