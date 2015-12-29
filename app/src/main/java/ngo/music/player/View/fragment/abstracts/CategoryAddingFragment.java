@@ -20,6 +20,10 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Observable;
+import java.util.Observer;
+
+import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
@@ -27,11 +31,14 @@ import ngo.music.player.R;
 import ngo.music.player.adapters.CategoryTitlesListAdapter;
 import ngo.music.player.helper.Constants;
 
-public abstract class CategoryAddingFragment extends DialogFragment implements Constants.Models {
+public abstract class CategoryAddingFragment extends DialogFragment implements Constants.Models,Observer {
 
 	Song[] songs;
 	CategoryAddingFragment instance = null;
 	private int type;
+	public CategoryAddingFragment(){
+
+	}
 	/**
 	 * 
 	 * @param songs
@@ -41,6 +48,7 @@ public abstract class CategoryAddingFragment extends DialogFragment implements C
 		this.songs = songs;
 		this.type = setType();
 		instance = this;
+		ModelManager.getInstance(type).addObserver(this);
 	}
 
 
@@ -136,24 +144,20 @@ public abstract class CategoryAddingFragment extends DialogFragment implements C
 			public void onItemClick(AdapterView<?> arg0, View parentView, int position,
 					long id) {
 				// TODO Auto-generated method stub
-				String categoryName = CategoryTitlesListAdapter.getInstance(type).getItem(position);
-				try {
-//					CategoryController.getInstance(type).addSongsToCategory(categoryName, songs);
-					
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					Log.e("add song to playlist",e.toString());
-				}
-				finally{
-					instance.dismiss();
-				}
+				Category category = CategoryTitlesListAdapter.getInstance(type).getItem(position);
+
+				((CategoryManager)ModelManager.getInstance(type)).addSongToCategory(songs[0].getAttribute("song_id"), category.getId());
+				instance.dismiss();
+
 			}
 		});
-		
-		
+
+
 		listCategory.setAdapter(CategoryTitlesListAdapter.getInstance(type));
 	}
-	
-	
 
+	@Override
+	public void update(Observable observable, Object data) {
+
+	}
 }

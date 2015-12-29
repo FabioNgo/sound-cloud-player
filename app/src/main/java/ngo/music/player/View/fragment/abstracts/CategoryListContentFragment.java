@@ -4,6 +4,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import java.util.Observable;
+
 import ngo.music.player.ViewHolder.CompositionViewHolder;
 import ngo.music.player.adapters.CategoryListAdapter;
 import ngo.music.player.View.fragment.real.AlbumsFragment;
@@ -93,46 +95,7 @@ public abstract class CategoryListContentFragment extends
 	 */
 	protected abstract int getCategory();
 
-	/**
-	 * Update UI when playlist change (Update Single exsited view in list View)
-	 *
-	 */
-	public void update() {
 
-		CategoryListAdapter adapter = (CategoryListAdapter) listView
-				.getAdapter();
-		// System.out.println (listView.get);
-		/**
-		 * ADAPTER BI TRA VE NULL
-		 */
-		if (adapter == null)
-			return;
-		adapter.update();
-
-		for (int i = 0; i <= listView.getLastVisiblePosition()
-				- listView.getFirstVisiblePosition(); i++) {
-			View v = listView.getChildAt(i);
-			if (v != null) {
-
-				CompositionViewHolder holder = (CompositionViewHolder) v
-						.getTag();
-				try {
-					adapter.setLayoutInformation(
-							holder,
-							adapter.getWholeItem(i
-									+ listView.getFirstVisiblePosition()), v);
-				} catch (IndexOutOfBoundsException e) {
-					/**
-					 * When this exception occur, some item has been deleted in
-					 * list.
-					 */
-					break;
-
-				}
-			}
-		}
-		adapter.update();
-	}
 
 	@Override
 	protected ArrayAdapter<?> getAdapter() {

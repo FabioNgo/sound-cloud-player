@@ -13,8 +13,10 @@ import android.widget.ArrayAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
+import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
@@ -25,10 +27,10 @@ import ngo.music.player.View.fragment.abstracts.ListItemsInCompositionListFragme
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 
-public abstract class CategoryListAdapter extends ArrayAdapter<String>
-		implements Constants.Models {
+public abstract class CategoryListAdapter extends ArrayAdapter<Category>
+		implements Constants.Models, Observer {
 	private static final int NUM_ITEM_IN_ONE_CATEGORY = 5;
-	protected ArrayList<String> categories;
+	protected Category[] categories;
 	Context context;
 	int resource;
 	CompositionViewHolder holder = null;
@@ -42,7 +44,8 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 		type = setType();
 		canDelete = setCanDelete();
 		canEdit = setCanEdit();
-		this.categories = getCategories();
+		this.categories = (Category[]) ModelManager.getInstance(type).getAll();
+		ModelManager.getInstance(type).addObserver(this);
 		this.context = context;
 		this.resource = resource;
 
@@ -110,32 +113,23 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 	 */
 	protected abstract int setType();
 
-	/**
-	 * get categories (songs and title) in list of item sets
-	 * 
-	 * @return categories
-	 */
-	protected ArrayList<String> getCategories() {
-		return new ArrayList<String>();
-//		return CategoryController.getInstance(type).getCategoryString();
-	}
 
 	/**
 	 * get item from specific categories
 	 * 
-	 * @param cat
+	 * @param id
 	 *            : category
 	 * @return list of songs
 	 */
-	protected Song[] getSongsFromCat(String cat) {
+	protected Song[] getSongsFromCat(String id) {
 		System.out.println ("GET SONGS FROM CATE");
 
 //		return new ArrayList<Song>();
-		JSONObject[] array = ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(cat);
+		JSONObject[] array = ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(id);
 		Song[] result = new Song[array.length];
 		for (int i = 0; i < result.length; i++) {
 			try {
-				result[i] = (Song) ModelManager.getInstance(OFFLINE).get(array[i].getString("id"));
+				result[i] = (Song) ModelManager.getInstance(OFFLINE).get("song_id",array[i].getString("id"))[0];
 			} catch (JSONException e) {
 				continue;
 			}
@@ -159,31 +153,33 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 			holder = (CompositionViewHolder) v.getTag();
 		}
 
-		setLayoutInformation(holder, categories.get(position), v);
+		setLayoutInformation(holder, categories[position], v);
 
 		return v;
 	}
 
 	/**
 	 * @param
+	 * @param category
 	 * @param v
 	 */
 	public void setLayoutInformation(final CompositionViewHolder holder,
-			String catString, View v) {
+			Category category, View v) {
 
-		String[] catData = getSongsTitleFromCat(catString);
 
+		Song[] songs = getSongsFromCat(category.getId());
 		/*
 		 * Set song titles
 		 */
-		for (int i = 0; i < holder.items.length; i++) {
-			if (i == 0) {
-				holder.items[i].setText(catData[0]); // playlist name
-			} else {
+		holder.items[0].setText(category.getAttribute("title")); // playlist name
 
-				String content = "" + i + ". " + catData[i];
-				holder.items[i].setText(content);
+		for (int i = 0; i < holder.items.length-1; i++) {
+			String content = "" + (i + 1) + ". ";
+			if(i<songs.length) {
+				content = content + songs[i].getAttribute("title");
 			}
+			holder.items[i+1].setText(content);
+
 
 		}
 
@@ -322,43 +318,26 @@ public abstract class CategoryListAdapter extends ArrayAdapter<String>
 		});
 	}
 
-	private String[] getSongsTitleFromCat(String catString) {
-		// TODO Auto-generated method stub
-		String[] temp = catString.split(String.valueOf('\1'));
-		String[] result = new String[holder.items.length];
-		for (int i = 0; i < result.length; i++) {
-			result[i] = "";
-			if (i < temp.length) {
-				result[i] = temp[i];
-			}
-		}
-		return result;
-	}
 
-	/**
-	 * get only title of category
-	 */
+
 	@Override
-	public String getItem(int position) {
-		String[] temp = categories.get(position).split(String.valueOf('\1'));
-		return temp[0];
+	public Category getItem(int position) {
+		return categories[position];
 	}
 
-	/**
-	 * get title and content of a category
-	 */
-	public String getWholeItem(int position) throws IndexOutOfBoundsException {
-		return categories.get(position);
-	}
 
 	@Override
 	public int getCount() {
-		return categories.size();
+		return categories.length;
 	}
 
-	public void update() {
-		categories = getCategories();
-		this.notifyDataSetChanged();
+	@Override
+	public void update(Observable observable, Object data) {
+		if(observable instanceof ModelManager) {
+			this.categories = (Category[]) ModelManager.getInstance(type).getAll();
+
+			notifyDataSetChanged();
+		}
 	}
 
 	@Override

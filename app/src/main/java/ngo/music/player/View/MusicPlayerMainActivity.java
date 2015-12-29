@@ -117,11 +117,8 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 //			UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		}
-
-		/*
-		 * Get data from other activity
-		 */
-		// getDataFromOtherActivity();
+		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+		toolbar.setTitle(getResources().getString(R.string.app_name));
 		/*
 		 * get Screen size
 		 */
@@ -130,6 +127,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		activity = this;
 
 		// bindService(musicPlayerServiceIntent, mConnection, 0);
+
 
 		/*
 		 * Sliding Menu
@@ -148,26 +146,6 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 
 	}
-
-	// /**
-	// * Get data which transfered from other activity
-	// */
-	// private void getDataFromOtherActivity() {
-	// try {
-	// SoundCloudUserController soundCloudUserController =
-	// SoundCloudUserController
-	// .getInstance();
-	//
-	//
-	//
-	//
-	// Bundle bundle = getIntent().getExtras();
-	// defaultTabPosition = bundle.getInt(Constants.TabContant.DEFAULT_ID);
-	//
-	// } catch (NullPointerException e) {
-	//
-	// }
-	// }
 
 	/**
 	 * Tab Sliding
@@ -327,46 +305,10 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 	}
 
-	// @Override
-	// public boolean onPrepareOptionsMenu(Menu menu) {
-	// // TODO Auto-generated method stub
-	//
-	// //getMenuInflater().inflate(R.menu.main_menu, menu);
-	// System.out.println ("TYPE = " + type);
-	// if (type == SOUNDCLOUD_EXPLORE){
-	// View v = (View) menu.findItem(R.id.search);
-	// //v.setVisibility(View.VISIBLE);
-	// }
-	// return true;
-	// }
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_menu, menu);
-		// if (type == SOUNDCLOUD_EXPLORE){
-		// View v = (View) menu.findItem(R.id.search);
-		// v.setVisibility(View.VISIBLE);
-		// }
-		/** Get the action view of the menu item whose id is search */
-		// View v = (View) menu.findItem(R.id.search).getActionView();
-		//
-		//
-		// /** Get the edit text from the action view */
-		// EditText txtSearch = ( EditText ) v.findViewById(R.id.txt_search);
-		//
-		// /** Setting an action listener */
-		// txtSearch.setOnEditorActionListener(new OnEditorActionListener() {
-		//
-		// @Override
-		// public boolean onEditorAction(TextView v, int actionId, KeyEvent
-		// event) {
-		// Toast.makeText(getBaseContext(), "Search : " + v.getText(),
-		// Toast.LENGTH_SHORT).show();
-		// return false;
-		// }
-		//
-		//
-		// });
 
 		return true;
 	}

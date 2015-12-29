@@ -5,9 +5,14 @@ import ngo.music.player.View.fragment.abstracts.CategoryAddingFragment;
 
 public class PlaylistAddingFragment extends CategoryAddingFragment {
 
+	public PlaylistAddingFragment(){
+		super();
+	}
+	/**
+	 * @param songs
+	 */
 	public PlaylistAddingFragment(Song[] songs) {
 		super(songs);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

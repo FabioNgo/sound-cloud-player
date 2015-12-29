@@ -20,7 +20,6 @@ public class PlaylistManager extends OfflineCategoryManager {
     @Override
     public ModelInterface[] getAll() {
         Model[] models = new Playlist[this.models.size()];
-
         return this.models.toArray(models);
     }
 }
