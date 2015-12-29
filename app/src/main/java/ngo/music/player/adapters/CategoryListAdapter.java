@@ -295,8 +295,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 							fragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(),"Show songs in cate");
 							break;
 						case R.id.composition_list_item_delete:
-//							CategoryController.getInstance(type)
-//									.removeCategory(cat);
+							ModelManager.getInstance(type).remove(holder.objectId);
 							break;
 							default:
 								break;
