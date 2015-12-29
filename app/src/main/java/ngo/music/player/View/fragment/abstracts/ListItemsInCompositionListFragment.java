@@ -12,12 +12,24 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+
+import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
+import ngo.music.player.ModelManager.AlbumManager;
+import ngo.music.player.ModelManager.ArtistManager;
+import ngo.music.player.ModelManager.CategoryManager;
+import ngo.music.player.ModelManager.ModelManager;
+import ngo.music.player.ModelManager.OfflineSongManager;
+import ngo.music.player.ModelManager.PlaylistManager;
+import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
+import ngo.music.player.View.fragment.real.ListItemsInAlbumFragment;
+import ngo.music.player.View.fragment.real.ListItemsInArtistFragment;
+import ngo.music.player.View.fragment.real.ListItemsInPlaylistFragment;
 import ngo.music.player.adapters.SongsInCateAdapter;
-import ngo.music.player.View.fragment.real.ListItemInAlbumFragment;
-import ngo.music.player.View.fragment.real.ListItemInArtistFragment;
-import ngo.music.player.View.fragment.real.ListItemInPlaylistFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.service.MusicPlayerService;
 
@@ -27,37 +39,58 @@ import ngo.music.player.service.MusicPlayerService;
  *
  */
 public abstract class ListItemsInCompositionListFragment extends DialogFragment implements Constants.Models {
-	Song[] songs;
-	String cat = "";
-	int category = -1;
+	Category category;
 	View rootView;
+	Song[] songs;
 	SongsInCateAdapter adapter;
-
-	protected ListItemsInCompositionListFragment(Song[] songs, String cat) {
-		// TODO Auto-generated constructor stub
-		this.songs = songs;
-		this.cat = cat;
-		category = getCategory();
+	int type;
+	static ArrayList<ListItemsInCompositionListFragment> children;
+	public ListItemsInCompositionListFragment(){
+		type = getType();
 	}
+	public void setCategory(Category category){
+		this.category = category;
+		songs = ((CategoryManager) ModelManager.getInstance(getType())).getSongsFromCategory(category.getId());
+	}
+	/**
+	 * Get ListItemsInCompositionListFragment instance depending on the type, to implement singleton pattern
+	 *
+	 * @param type - type of Controller
+	 * @return null if no matched type is passed in
+	 * @see {@link Constants
+	 */
+	public static ListItemsInCompositionListFragment getInstance(int type) {
 
-	public static ListItemsInCompositionListFragment createInstance(Song[] songs,
-																	String catTitle, int type) {
+		if (children == null) {
+			children = new ArrayList<>(Constants.Models.SIZE);
+			for(int i=0;i<Constants.Models.SIZE;i++){
+				children.add(createNewInstance(type));
+			}
+		}
+
+		return children.get(type);
+	}
+	/**
+	 * Create new Controller instance to implement singleton pattern
+	 *
+	 * @param type - type of Controller
+	 * @return null if the type does not match declared types in {@link Constants}
+	 */
+	private static ListItemsInCompositionListFragment createNewInstance(int type) {
 		// TODO Auto-generated method stub
 		switch (type) {
-			case PLAYLIST:
-				return new ListItemInPlaylistFragment(songs, catTitle);
-
-			case ALBUM:
-				return new ListItemInAlbumFragment(songs, catTitle);
-			case ARTIST:
-				return new ListItemInArtistFragment(songs, catTitle);
-
+			case Constants.Models.PLAYLIST:
+				return new ListItemsInPlaylistFragment();
+			case Constants.Models.ALBUM:
+				return new ListItemsInAlbumFragment();
+			case Constants.Models.ARTIST:
+				return new ListItemsInArtistFragment();
 			default:
 				return null;
 		}
-	}
 
-	protected abstract int getCategory();
+	}
+	protected abstract int getType();
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -74,7 +107,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 		// TODO Auto-generated method stub
 		rootView  = inflater.inflate(R.layout.list_items_in_conposition_list_layout, container,false);
 		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
-		toolbar.setTitle(cat);
+		toolbar.setTitle(category.getAttribute("title"));
 		toolbar.setSubtitle(songs.length + " song(s)");
 
 		final ListView listPlaylist = (ListView)rootView.findViewById(R.id.list_items_composition_list);
@@ -87,7 +120,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 				MusicPlayerService.getInstance().playNewSong(position, songs);
 			}
 		});
-		adapter = SongsInCateAdapter.createInstance(category,R.layout.song_in_cate,cat);
+		adapter = SongsInCateAdapter.createInstance(getType(),R.layout.song_in_cate,category);
 		listPlaylist.setAdapter(adapter);
 
 		return rootView;

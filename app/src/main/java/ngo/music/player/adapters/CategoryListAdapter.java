@@ -125,15 +125,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		System.out.println ("GET SONGS FROM CATE");
 
 //		return new ArrayList<Song>();
-		JSONObject[] array = ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(id);
-		Song[] result = new Song[array.length];
-		for (int i = 0; i < result.length; i++) {
-			try {
-				result[i] = (Song) ModelManager.getInstance(OFFLINE).get("song_id",array[i].getString("id"))[0];
-			} catch (JSONException e) {
-				continue;
-			}
-		}
+		Song[] result = ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(id);
 		return result;
 	}
 
@@ -293,16 +285,14 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 
 					@Override
 					public boolean onMenuItemClick(MenuItem arg0) {
-						String cat = (String) holder.items[0].getText();
 						// TODO Auto-generated method stub
 						switch (arg0.getItemId()) {
 						case R.id.composition_list_item_shows:
 
-							ListItemsInCompositionListFragment.createInstance(
-									getSongsFromCat(cat), cat, type).show(
-									MusicPlayerMainActivity.getActivity()
-											.getSupportFragmentManager(),
-									"Show songs in cate");
+							ListItemsInCompositionListFragment fragment = ListItemsInCompositionListFragment.getInstance(type);
+							Category category = (Category) ModelManager.getInstance(type).get(holder.objectId);
+							fragment.setCategory(category);
+							fragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(),"Show songs in cate");
 							break;
 						case R.id.composition_list_item_delete:
 //							CategoryController.getInstance(type)

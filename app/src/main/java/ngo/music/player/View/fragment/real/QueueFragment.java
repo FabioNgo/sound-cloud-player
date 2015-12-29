@@ -58,16 +58,7 @@ public class QueueFragment extends ListContentFragment {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
 					case R.id.queue_shuffle_all:
-						JSONObject[] array = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
-						Song[] songs = new Song[array.length];
-						for (int i = 0; i < songs.length; i++) {
-							try {
-								songs[i] = (Song) ModelManager.getInstance(OFFLINE).get(array[i].getString("id"));
-							} catch (JSONException e) {
-								continue;
-							}
-						}
-						Random random = new Random(System.currentTimeMillis());
+						Song[] songs = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
 						int position = 0;
 						MusicPlayerService.getInstance().playNewSong(position, songs);
 						if (!MusicPlayerServiceController.getInstance().isShuffle()) {

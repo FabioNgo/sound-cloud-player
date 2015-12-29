@@ -3,16 +3,17 @@ package ngo.music.player.View.fragment.real;
 import ngo.music.player.Model.Song;
 import ngo.music.player.View.fragment.abstracts.ListItemsInCompositionListFragment;
 
-public class ListItemInArtistFragment extends
+public class ListItemsInArtistFragment extends
 		ListItemsInCompositionListFragment {
 
-	public ListItemInArtistFragment(Song[] songs, String cat) {
-		super(songs, cat);
-		// TODO Auto-generated constructor stub
+
+
+	public ListItemsInArtistFragment() {
+
 	}
 
 	@Override
-	protected int getCategory() {
+	protected int getType() {
 		// TODO Auto-generated method stub
 		return ARTIST;
 	}

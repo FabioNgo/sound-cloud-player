@@ -2,10 +2,12 @@ package ngo.music.player.adapters;
 
 import android.content.Context;
 
+import ngo.music.player.Model.Category;
+
 public class SongsInArtistsAdapter extends SongsInCateAdapter {
 	static SongsInArtistsAdapter instance;
 	public SongsInArtistsAdapter(Context context, int resource,
-			String cate) {
+			Category cate) {
 		
 		super(context, resource, cate);
 		// TODO Auto-generated constructor stub

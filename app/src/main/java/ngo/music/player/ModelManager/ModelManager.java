@@ -103,13 +103,6 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
                 managers.add(createNewInstance(i));
             }
         }
-//        for(int i=0;i<Constants.Models.SIZE;i++){
-//            ModelManager a = managers[i];
-//        }
-//        if (managers[type] == null) {
-//            managers[type]  = createNewInstance(type);
-//
-//        }
 
         return managers.get(type);
     }
@@ -341,7 +334,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         }
 
 
-        Model model = null;
+        Model model;
         switch (type) {
             case Constants.Models.OFFLINE:
                 model = new OfflineSong(object);

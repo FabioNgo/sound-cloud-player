@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import ngo.music.player.Controller.MenuController;
+import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.View.MusicPlayerMainActivity;
@@ -22,14 +23,14 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 	public static SongsInCateAdapter instance = null;
 	Context context;
 	int resource;
-	String cat;
+	Category category;
 	private View v;
 	private int type = -1;
 	private boolean canRemoveItem;
 	private Song[] songs;
 
 	public SongsInCateAdapter(Context context, int resource,
-			 String cat) {
+			 Category category) {
 		// TODO Auto-generated constructor stub
 		super(context, resource);
 		this.context = context;
@@ -37,8 +38,8 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 
 		type = setType();
 		canRemoveItem = setCanRemoveItem();
-		this.cat = cat;
-		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(cat);
+		this.category = category;
+		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(category.getId());
 		
 	}
 
@@ -48,24 +49,24 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 	 *            in Constants.Models
 	 * @param resource
 	 * @param
-	 * @param cate
+	 * @param category
 	 * @return
 	 */
 	public static SongsInCateAdapter createInstance(int type, int resource,
-			 String cate) {
+			 Category category) {
 		switch (type) {
 		case PLAYLIST:
 			return new SongsInPlaylistAdapter(
 					MusicPlayerMainActivity.getActivity(), resource,
-					cate);
+					category);
 		case ALBUM:
 			return new SongsInAlbumsAdapter(
 					MusicPlayerMainActivity.getActivity(), resource,
-					cate);
+					category);
 		case ARTIST:
 			return new SongsInArtistsAdapter(
 					MusicPlayerMainActivity.getActivity(), resource,
-					cate);
+					category);
 		default:
 			return null;
 		}
@@ -201,7 +202,7 @@ public abstract class SongsInCateAdapter extends ArrayAdapter<Song> implements
 
 	public void update() {
 		// TODO Auto-generated method stub
-		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(cat);
+		songs = CategoryListAdapter.getInstance(type).getSongsFromCat(category.getId());
 		this.notifyDataSetChanged();
 	}
 

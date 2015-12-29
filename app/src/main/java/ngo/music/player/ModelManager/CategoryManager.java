@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
+import ngo.music.player.Model.Song;
 import ngo.music.player.helper.Constants;
 
 public abstract class CategoryManager extends ModelManager implements Constants.Data, Constants,
@@ -22,7 +23,7 @@ public abstract class CategoryManager extends ModelManager implements Constants.
     }
 
     //return array of jsonObject of songs
-    public JSONObject[] getSongsFromCategory(String id) {
+    public Song[] getSongsFromCategory(String id) {
         Category category = null;
         for (Model model : models) {
             if (model.getId().equals(id)) {
@@ -32,14 +33,16 @@ public abstract class CategoryManager extends ModelManager implements Constants.
         }
         if (category == null) {
             Log.e("category", "null");
-            return new JSONObject[0];
+            return new Song[0];
         }
         JSONArray array = category.getJSONObject().optJSONArray("songs");
 
-        JSONObject[] songs = new JSONObject[array.length()];
+        Song[] songs = new Song[array.length()];
         for (int i = 0; i < array.length(); i++) {
             try {
-                songs[i] = array.getJSONObject(i);
+
+                String songId = array.getJSONObject(i).getString("id");
+                songs[i] = (Song) ModelManager.getInstance(OFFLINE).get("song_id",songId)[0];
             } catch (JSONException e) {
                 e.printStackTrace();
             }

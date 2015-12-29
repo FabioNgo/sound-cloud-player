@@ -36,8 +36,7 @@ public class QueueManager extends CategoryManager implements Constants, Constant
 
     public Song[] getAllSong() {
         String id = this.models.get(0).getId();
-        JSONObject[] objects =  getSongsFromCategory(id);
-        Song[] output = new Song[objects.length];
+        Song[] output =  getSongsFromCategory(id);
         // if there is no queue, let queue contain all songs
         if(output.length == 0){
             output = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
@@ -45,15 +44,6 @@ public class QueueManager extends CategoryManager implements Constants, Constant
                 replaceQueue(output);
             }
 
-
-        }else {
-            for (int i = 0; i < output.length; i++) {
-                try {
-                    output[i] = (Song) SongManager.getInstance(OFFLINE).get("song_id", objects[i].getString("id"))[0];
-                } catch (JSONException  e) {
-                    continue;
-                }
-            }
 
         }
         return output;
