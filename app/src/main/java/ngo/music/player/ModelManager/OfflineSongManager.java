@@ -7,6 +7,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
@@ -76,8 +77,18 @@ public class OfflineSongManager extends SongManager {
     public void remove(String id) {
 
         Song song = (Song) get(id);
+//        Files
         File file = new File(song.getAttribute("link"));
-        boolean deleted = file.delete();
+        boolean deleted = false;
+        try {
+            deleted = file.getCanonicalFile().delete();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+//        MusicPlayerMainActivity.getActivity().deleteFile(song.getAttribute("link"));
+        if(!deleted){
+            return;
+        }
         for(int i=0;i< Models.SIZE;i++){
             ModelManager temp = ModelManager.getInstance(i);
             if(temp instanceof CategoryManager){

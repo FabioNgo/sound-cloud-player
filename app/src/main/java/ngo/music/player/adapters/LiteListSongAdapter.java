@@ -81,14 +81,13 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 		Helper.setImageViewSize(
 				Helper.dpToPx(50, getContext()),
 				Helper.dpToPx(50, getContext()), viewHolder.avatar);
-		String artworkUrl = "";
-		if (artworkUrl.equals("")) {
-			Log.i("AVA", "no image url");
-			Drawable drawable = context.getResources().getDrawable(
-					R.drawable.ic_launcher);
+//		String artworkUrl = "";
 
-			viewHolder.avatar.setImageDrawable(drawable);
-		}
+//		Drawable drawable = context.getResources().getDrawable(
+//				R.drawable.ic_launcher);
+//
+//		viewHolder.avatar.
+
 		/**
 		 * set menu
 		 */
