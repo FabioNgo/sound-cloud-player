@@ -2,6 +2,7 @@ package ngo.music.player.adapters;
 
 import android.content.Context;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
@@ -35,7 +36,7 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 	}
 
 	@Override
-	public Song[] getSongs() {
+	public ArrayList<Song> getSongs() {
 
 		return ((QueueManager) ModelManager.getInstance(QUEUE)).getAllSong();
 
@@ -59,7 +60,7 @@ public class QueueSongAdapter extends LiteListSongAdapter {
 	}
 
 	@Override
-	protected Song[] getSongsFromData(Object data) {
+	protected ArrayList<Song> getSongsFromData(Object data) {
 		return ((QueueManager)ModelManager.getInstance(QUEUE)).getAllSong();
 	}
 }

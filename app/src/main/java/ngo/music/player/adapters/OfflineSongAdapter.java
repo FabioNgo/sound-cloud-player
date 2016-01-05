@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
+import ngo.music.player.Model.Model;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
@@ -23,11 +24,8 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 	}
 
 	@Override
-	protected Song[] getSongsFromData(Object data) {
-		ArrayList<Song> data1 = (ArrayList<Song>) data;
-		Song[] output = new Song[data1.size()];
-		data1.toArray(output);
-		return output;
+	protected ArrayList<Song> getSongsFromData(Object data) {
+		return (ArrayList<Song>) data;
 	}
 
 	public static OfflineSongAdapter getInstance() {
@@ -68,9 +66,15 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 	}
 
 	@Override
-	public Song[] getSongs() {
+	public ArrayList<Song> getSongs() {
 		// TODO Auto-generated method stub
-		return (Song[]) ModelManager.getInstance(OFFLINE).getAll();
+		ArrayList<Model> temp = ModelManager.getInstance(OFFLINE).getAll();
+		ArrayList<Song> output = new ArrayList<>();
+		for (Model model:temp) {
+			output.add((Song) model);
+		}
+
+		return output;
 	}
 	@Override
 	public int getSongMenuId() {

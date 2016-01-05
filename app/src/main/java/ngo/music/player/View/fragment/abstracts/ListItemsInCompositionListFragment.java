@@ -36,7 +36,7 @@ import ngo.music.player.service.MusicPlayerService;
 public abstract class ListItemsInCompositionListFragment extends DialogFragment implements Constants.Models,Observer {
 	Category category;
 	View rootView;
-	Song[] songs;
+	ArrayList<Song> songs;
 	SongsInCategoryAdapter adapter;
 	int type;
 	static ArrayList<ListItemsInCompositionListFragment> children;
@@ -104,7 +104,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 		rootView  = inflater.inflate(R.layout.list_items_in_conposition_list_layout, container,false);
 		Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
 		toolbar.setTitle(category.getAttribute("title"));
-		toolbar.setSubtitle(songs.length + " song(s)");
+		toolbar.setSubtitle(songs.size() + " song(s)");
 
 		final ListView listPlaylist = (ListView)rootView.findViewById(R.id.list_items_composition_list);
 		listPlaylist.setOnItemClickListener(new OnItemClickListener() {
@@ -129,7 +129,7 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 		if(observable instanceof CategoryManager){
 			Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
 			songs = ((CategoryManager) observable).getSongsFromCategory(category.getId());
-			toolbar.setSubtitle(songs.length+" song(s)");
+			toolbar.setSubtitle(songs.size() +" song(s)");
 		}
 	}
 }

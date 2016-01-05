@@ -12,10 +12,12 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Random;
 import java.util.Stack;
 
+import ngo.music.player.Model.Model;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.QueueManager;
@@ -117,11 +119,12 @@ public class MusicPlayerServiceController extends Observable implements Constant
     }
     public void computeNextSong() {
         int nextPosition;
-        Song[] queue = this.queueManager.getAllSong();
+        ArrayList<Song> queue = this.queueManager.getAllSong();
         int currentSongPosition = 0;
-        int size = queue.length;
+        int size = queue.size();
+
         for(int i=0;i<size;i++){
-            if(queue[i].equals(currentSong)){
+            if(queue.get(i).equals(currentSong)){
                 currentSongPosition = i;
                 break;
             }
@@ -141,21 +144,25 @@ public class MusicPlayerServiceController extends Observable implements Constant
 
             }
 
-            nextSong = queue[nextPosition];
+            nextSong = queue.get(currentSongPosition);
         } else {
             if (size == 2) {
-                nextSong = queue[(currentSongPosition + 1) % 2];
+                nextSong = queue.get((currentSongPosition + 1) % 2);
             }
             if (size == 1) {
                 nextSong = currentSong;
             }
             if (size == 0) {
-                queue = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
-                if(queue.length == 0){
+                ArrayList<Model> songs = ModelManager.getInstance(OFFLINE).getAll();
+                queue.clear();
+                for (Model model:songs) {
+                    queue.add((Song) model);
+                }
+                if(queue.size() == 0){
                     nextSong = null;
                 }else{
                     ((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
-                    nextSong = queue[0];
+                    nextSong = queue.get(0);
                 }
 
             }

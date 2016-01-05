@@ -13,10 +13,12 @@ import android.widget.ArrayAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import ngo.music.player.Model.Category;
+import ngo.music.player.Model.Model;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
@@ -30,7 +32,7 @@ import ngo.music.player.helper.Helper;
 public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		implements Constants.Models, Observer {
 	private static final int NUM_ITEM_IN_ONE_CATEGORY = 5;
-	protected Category[] categories;
+	protected ArrayList<Model> categories;
 	Context context;
 	int resource;
 	CompositionViewHolder holder = null;
@@ -44,14 +46,14 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		type = setType();
 		canDelete = setCanDelete();
 		canEdit = setCanEdit();
-		this.categories = (Category[]) ModelManager.getInstance(type).getAll();
+		this.categories = ModelManager.getInstance(type).getAll();
 		ModelManager.getInstance(type).addObserver(this);
 		this.context = context;
 		this.resource = resource;
 
 	}
-	public Song[] getSongs(int position){
-		return ((CategoryManager)ModelManager.getInstance(type)).getSongsFromCategory(categories[position].getId());
+	public ArrayList<Song> getSongs(int position){
+		return ((CategoryManager)ModelManager.getInstance(type)).getSongsFromCategory(categories.get(position).getId());
 	}
 	public static CategoryListAdapter createNewInstance(int type) {
 		// TODO Auto-generated method stub
@@ -123,12 +125,12 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 	 *            : category
 	 * @return list of songs
 	 */
-	protected Song[] getSongsFromCat(String id) {
-		System.out.println ("GET SONGS FROM CATE");
+	protected ArrayList<Song> getSongsFromCat(String id) {
+//		System.out.println ("GET SONGS FROM CATE");
 
 //		return new ArrayList<Song>();
-		Song[] result = ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(id);
-		return result;
+		return ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(id);
+
 	}
 
 	@Override
@@ -147,7 +149,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 			holder = (CompositionViewHolder) v.getTag();
 		}
 
-		setLayoutInformation(holder, categories[position], v);
+		setLayoutInformation(holder, (Category) categories.get(position), v);
 
 		return v;
 	}
@@ -161,7 +163,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 			Category category, View v) {
 
 
-		Song[] songs = getSongsFromCat(category.getId());
+		ArrayList<Song> songs = getSongsFromCat(category.getId());
 		holder.objectId = category.getId();
 		/*
 		 * Set song titles
@@ -172,8 +174,8 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		 */
 		for (int i = 0; i < holder.items.length-1; i++) {
 			String content = "" + (i + 1) + ". ";
-			if(i<songs.length) {
-				content = content + songs[i].getAttribute("title");
+			if(i<songs.size()) {
+				content = content + songs.get(i).getAttribute("title");
 			}
 			holder.items[i+1].setText(content);
 
@@ -316,19 +318,19 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 
 	@Override
 	public Category getItem(int position) {
-		return categories[position];
+		return (Category) categories.get(position);
 	}
 
 
 	@Override
 	public int getCount() {
-		return categories.length;
+		return categories.size();
 	}
 
 	@Override
 	public void update(Observable observable, Object data) {
 		if(observable instanceof ModelManager) {
-			this.categories = (Category[]) ModelManager.getInstance(type).getAll();
+			this.categories = ModelManager.getInstance(type).getAll();
 
 			notifyDataSetChanged();
 		}

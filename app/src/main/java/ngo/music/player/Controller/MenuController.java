@@ -11,7 +11,6 @@ import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.View.fragment.abstracts.CategoryAddingFragment;
 import ngo.music.player.View.fragment.real.PlaylistAddingFragment;
 import ngo.music.player.helper.Constants;
-import ngo.music.player.service.MusicPlayerService;
 
 public class MenuController implements OnMenuItemClickListener, Constants.Models {
 	private static MenuController instance = null;
@@ -44,7 +43,7 @@ public class MenuController implements OnMenuItemClickListener, Constants.Models
 		// TODO Auto-generated method stub
 		switch (arg0.getItemId()) {
 		case R.id.list_addQueue:
-			((QueueManager)ModelManager.getInstance(QUEUE)).addSongToQueue(songs[0]);
+			((QueueManager)ModelManager.getInstance(QUEUE)).addSongToCategory(songs[0]);
 			break;
 		case R.id.list_playNext:
 			MusicPlayerServiceController.getInstance().addToNext(songs[0]);
@@ -56,8 +55,7 @@ public class MenuController implements OnMenuItemClickListener, Constants.Models
 			ModelManager.getInstance(OFFLINE).remove(songs[0].getId());
 			break;
 		case R.id.queue_removeFromQueue:
-			ModelManager a = ModelManager.getInstance(QUEUE);
-					((QueueManager) ModelManager.getInstance(QUEUE)).removeSongFromQueue(songs[0]);
+			((QueueManager) ModelManager.getInstance(QUEUE)).removeSongFromCategory(songs[0]);
 			break;
 		case R.id.queue_playNext:
 			MusicPlayerServiceController.getInstance().addToNext(songs[0]);

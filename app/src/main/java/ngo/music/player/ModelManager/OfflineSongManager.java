@@ -27,10 +27,6 @@ public class OfflineSongManager extends SongManager {
         return OFFLINE;
     }
 
-    @Override
-    protected String setFilename() {
-        return "offline_song.json";
-    }
 
     @Override
     public String modelToString(ModelInterface model) {
@@ -53,11 +49,11 @@ public class OfflineSongManager extends SongManager {
 
 
     }
-
-    public void getSongsFromSDCard() {
+    @Override
+    public void loadData() {
         clearModels();
-        Cursor c = MusicPlayerMainActivity
-                .getActivity()
+        MusicPlayerMainActivity activity = MusicPlayerMainActivity.getActivity();
+        Cursor c = activity
                 .getContentResolver()
                 .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
                         MediaStore.Audio.Media.IS_MUSIC + "!=0", null, null);
@@ -69,8 +65,19 @@ public class OfflineSongManager extends SongManager {
                 }
             }
         }
-        storeData();
+        this.setChanged();
+        this.notifyObservers(this.models);
         c.close();
+    }
+
+    @Override
+    public void storeData() {
+
+    }
+
+    @Override
+    protected void initialize() {
+
     }
 
     @Override
@@ -96,15 +103,5 @@ public class OfflineSongManager extends SongManager {
             }
         }
         super.remove(id);
-    }
-
-    @Override
-    public ModelInterface[] getAll() {
-        Model[] models = new OfflineSong[this.models.size()];
-        if(models.length == 0){
-            getSongsFromSDCard();
-            models = new OfflineSong[this.models.size()];
-        }
-        return this.models.toArray(models);
     }
 }

@@ -35,7 +35,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 	protected View rootView;
 	protected Context context;
 	protected int resource;
-	protected Song[] songs;
+	protected ArrayList<Song> songs;
 	SongInListViewHolder viewHolder = null;
 
 	public LiteListSongAdapter(Context context, int resource) {
@@ -70,7 +70,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 	 */
 	public void setLayoutInformation(int position,
 			final SongInListViewHolder viewHolder, View v) {
-		final Song song = songs[position];
+		final Song song = songs.get(position);
 		this.viewHolder = viewHolder;
 		/**
 		 * Set avatar for song
@@ -126,7 +126,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 		/**
 		 * Set background , to indicate which song is playing
 		 */
-		if (songs[position].equals(MusicPlayerServiceController.getInstance().getCurrentSong())) {
+		if (song.equals(MusicPlayerServiceController.getInstance().getCurrentSong())) {
 
 			viewHolder.background.setBackgroundResource(R.color.primary_light);
 		} else {
@@ -139,18 +139,18 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 		 * Set time
 		 */
 
-		viewHolder.duration.setText(Helper.toFormatedTime(Long.parseLong(songs[position].getAttribute("duration"))));
+		viewHolder.duration.setText(Helper.toFormatedTime(Long.parseLong(songs.get(position).getAttribute("duration"))));
 
 	}
 
 	@Override
 	public Song getItem(int position) {
-		return songs[position];
+		return songs.get(position);
 	}
 
 	@Override
 	public int getCount() {
-		return songs.length;
+		return songs.size();
 	}
 
 	public void updateSongs() {
@@ -162,11 +162,11 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 	@Override
 	public void clear() {
 		// TODO Auto-generated method stub
-		songs = new Song[0];
+		songs.clear();
 	}
 
 	public ArrayList<String> getSongIds() {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		for (Song song : songs) {
 			result.add(song.getId());
 		}
@@ -183,8 +183,8 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 
 	}
 
-	protected abstract Song[] getSongsFromData(Object data);
+	protected abstract ArrayList<Song> getSongsFromData(Object data);
 
-	public abstract Song[] getSongs();
+	public abstract ArrayList<Song> getSongs();
 	public abstract int getSongMenuId();
 }

@@ -22,13 +22,13 @@ import ngo.music.player.helper.Constants;
 public abstract class CategoryTitlesListAdapter extends ArrayAdapter<Category> implements Constants.Models,Observer {
 	
 	private int type;
-	private Category[] categories;
+	private ArrayList<Model> categories;
 
 	protected CategoryTitlesListAdapter() {
 		super(MusicPlayerMainActivity.getActivity(), R.layout.single_playlist_list_adding);
 		// TODO Auto-generated constructor stub
 		type = setType();
-		categories = (Category[])  ModelManager.getInstance(type).getAll();
+		categories = ModelManager.getInstance(type).getAll();
 		ModelManager.getInstance(type).addObserver(this);
 	}
 
@@ -76,14 +76,13 @@ public abstract class CategoryTitlesListAdapter extends ArrayAdapter<Category> i
 	private void setLayoutInformation(int position, View v) {
 		// TODO Auto-generated method stub
 		TextView tv = (TextView) v.findViewById(R.id.single_playlist_title);
-		tv.setText(categories[position].getAttribute("title"));
+		tv.setText(categories.get(position).getAttribute("title"));
 	}
 
 	@Override
 	public void update(Observable observable, Object data) {
 		if(observable instanceof ModelManager) {
-			ArrayList<Model> temp = (ArrayList<Model>) data;
-			categories = temp.toArray(categories);
+			this.categories = (ArrayList<Model>) data;
 //			categories = (Category[]) data;
 			notifyDataSetChanged();
 		}
@@ -92,11 +91,11 @@ public abstract class CategoryTitlesListAdapter extends ArrayAdapter<Category> i
 
 	@Override
 	public Category getItem(int position) {
-		return categories[position];
+		return (Category) categories.get(position);
 	}
 
 	@Override
 	public int getCount() {
-		return categories.length;
+		return categories.size();
 	}
 }

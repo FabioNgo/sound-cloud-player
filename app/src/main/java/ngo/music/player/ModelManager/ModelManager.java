@@ -1,17 +1,9 @@
 package ngo.music.player.ModelManager;
 
-import android.os.Environment;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -43,25 +35,20 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
      * Auto increment suffix of id to ensure all ids are different
      */
     protected int currentIDSuffix;
-    /**
-     * file path where store json files
-     */
-    private String filePath = Environment.getExternalStorageDirectory().getPath() + "/Music Player";
-    /**
-     * json file name which store data
-     */
-    private String filename;
+
 
     /**
      * In constructor, {@code type}, {@code filename} will be initialized, {@code models} will be loaded from json file
      */
     protected ModelManager() {
+        initialize();
         type = setType();
-        filename = filePath + "/" + setFilename();
         models = new ArrayList<>();
         currentIDSuffix = 0;
         loadData();
     }
+
+    protected abstract void initialize();
 
     /**
      * Create new Controller instance to implement singleton pattern
@@ -107,48 +94,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         return managers.get(type);
     }
 
-    /**
-     * Read json file as one string
-     *
-     * @return the generated string from json file
-     */
-    private String fileContentToString() {
-        String result = "";
-        BufferedReader br = null;
 
-        try {
-
-            String sCurrentLine;
-            File folder = new File(filePath);
-            if (!folder.exists()) {
-                folder.mkdir();
-            }
-            File yourFile = new File(filename);
-            if (!yourFile.exists()) {
-                yourFile.createNewFile();
-                PrintWriter printWriter = new PrintWriter(filename);
-                printWriter.write("[]");
-                printWriter.close();
-
-            }
-            br = new BufferedReader(new FileReader(filename));
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                result += sCurrentLine + "\n";
-            }
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null) br.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return result;
-
-    }
 
     @Override
     public void clearModels() {
@@ -156,48 +102,9 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         currentIDSuffix = 0;
     }
 
-    @Override
-    public void loadData() {
-        // TODO Auto-generated method stub
-        JSONArray jsonArray;
-        try {
-            jsonArray = new JSONArray(fileContentToString());
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                Model model = createModel(jsonArray.getJSONObject(i));
-                String[] strings = new String[0];
-                if (model != null) {
-                    strings = model.getId().split("_");
-                }
-                int value = Integer.valueOf(strings[1]);
-                if (value > currentIDSuffix) {
-                    currentIDSuffix = value;
-                }
-                models.add(model);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
 
-    @Override
-    public void storeData() {
-        // TODO Auto-generated method stub
-        JSONArray jsonArray = new JSONArray();
-        for (Model model : models) {
-            jsonArray.put(model.getJSONObject());
-        }
-        try {
-            PrintWriter printWriter = new PrintWriter(filename);
-            printWriter.write(jsonArray.toString());
-            printWriter.close();
-        } catch (FileNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        setChanged();
-        notifyObservers(this.models);
-    }
+
 
     @Override
     public void remove(String id) {
@@ -217,7 +124,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
      * @return the model containing {@code object}. The type of model depends on the type of controller
      * @see {@link Constants
      */
-    private Model createModel(JSONObject object) {
+    protected Model createModel(JSONObject object) {
         switch (type) {
             case Constants.Models.OFFLINE:
                 return new OfflineSong(object);
@@ -241,12 +148,6 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
      */
     protected abstract int setType();
 
-    /**
-     * set the  {@code filename} for each Controller
-     *
-     * @return the filename users want to set
-     */
-    protected abstract String setFilename();
 
     @Override
     public void listModels(ModelInterface[] models) {
@@ -254,9 +155,9 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         if (models.length == 0) {
             System.out.println("Empty List");
         }
-        for (int i = 0; i < models.length; i++) {
-            System.out.println(String.format("%d. %s", i, modelToString(models[i])));
-        }
+//        for (int i = 0; i < models.length; i++) {
+//            System.out.println(String.format("%d. %s", i, modelToString(models[i])));
+//        }
     }
 
     @Override
@@ -317,7 +218,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         // TODO Auto-generated method stub
         currentIDSuffix++;
         String id;
-        id = String.format("%d_%d", type, currentIDSuffix);
+        id = String.format("%d",currentIDSuffix);
         return id;
     }
 
@@ -430,5 +331,10 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         Model[] output = new Model[temp.size()];
         temp.toArray(output);
         return output;
+    }
+
+    @Override
+    public ArrayList<Model> getAll() {
+        return this.models;
     }
 }

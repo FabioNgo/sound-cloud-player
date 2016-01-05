@@ -3,6 +3,9 @@ package ngo.music.player.ModelManager;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
 
 /**
@@ -129,5 +132,5 @@ public interface ModelManagerInterface {
 
     void clearModels();
 
-    ModelInterface[] getAll();
+    ArrayList<Model> getAll();
 }

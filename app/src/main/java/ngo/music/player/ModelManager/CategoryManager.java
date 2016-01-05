@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
@@ -23,7 +25,7 @@ public abstract class CategoryManager extends ModelManager implements Constants.
     }
 
     //return array of jsonObject of songs
-    public Song[] getSongsFromCategory(String id) {
+    public ArrayList<Song> getSongsFromCategory(String id) {
         Category category = null;
         for (Model model : models) {
             if (model.getId().equals(id)) {
@@ -33,16 +35,17 @@ public abstract class CategoryManager extends ModelManager implements Constants.
         }
         if (category == null) {
             Log.e("category", "null");
-            return new Song[0];
+            return new ArrayList<>();
         }
         JSONArray array = category.getJSONObject().optJSONArray("songs");
 
-        Song[] songs = new Song[array.length()];
+        ArrayList<Song> songs = new ArrayList<>();
         for (int i = 0; i < array.length(); i++) {
             try {
 
                 String songId = array.getJSONObject(i).getString("id");
-                songs[i] = (Song) ModelManager.getInstance(OFFLINE).get("song_id",songId)[0];
+                Song song = (Song) ModelManager.getInstance(OFFLINE).get("song_id",songId)[0];
+                songs.add(song);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

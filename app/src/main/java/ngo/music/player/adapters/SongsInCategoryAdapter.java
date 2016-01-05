@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -31,7 +32,7 @@ public abstract class SongsInCategoryAdapter extends ArrayAdapter<Song> implemen
 	private View v;
 	private int type = -1;
 	private boolean canRemoveItem;
-	private Song[] songs;
+	private ArrayList<Song> songs;
 
 	public SongsInCategoryAdapter(Context context, int resource,
 								  Category category) {
@@ -119,7 +120,7 @@ public abstract class SongsInCategoryAdapter extends ArrayAdapter<Song> implemen
 	 */
 	private void setLayoutInformation(int position, View v) {
 
-		final Song song = songs[position];
+		final Song song = songs.get(position);
 		/**
 		 * Set avatar for song
 		 */
@@ -195,12 +196,12 @@ public abstract class SongsInCategoryAdapter extends ArrayAdapter<Song> implemen
 	@Override
 	public Song getItem(int position) {
 
-		return songs[position];
+		return songs.get(position);
 	}
 
 	@Override
 	public int getCount() {
-		return songs.length;
+		return songs.size();
 	}
 
 

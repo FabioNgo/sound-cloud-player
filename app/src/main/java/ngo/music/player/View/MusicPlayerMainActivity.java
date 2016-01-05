@@ -24,8 +24,10 @@ import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
+import ngo.music.player.Model.Model;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.OfflineSongManager;
@@ -72,14 +74,14 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	// activity = this;
 	//
 	// }
-	private FileObserver fileObserver = new FileObserver(Environment.getExternalStorageDirectory().getPath()) {
-		@Override
-		public void onEvent(int event, String path) {
-			if (event == FileObserver.ALL_EVENTS) {
-				((OfflineSongManager) ModelManager.getInstance(OFFLINE)).getSongsFromSDCard();
-			}
-		}
-	};
+//	private FileObserver fileObserver = new FileObserver(Environment.getExternalStorageDirectory().getPath()) {
+//		@Override
+//		public void onEvent(int event, String path) {
+//			if (event == FileObserver.ALL_EVENTS) {
+//				((OfflineSongManager) ModelManager.getInstance(OFFLINE)).getSongsFromSDCard();
+//			}
+//		}
+//	};
 
 	public static MusicPlayerMainActivity getActivity() {
 		return activity;
@@ -317,7 +319,11 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.main_shuffle_all:
-			Song[] songs = (Song[]) ModelManager.getInstance(OFFLINE).getAll();
+			ArrayList<Model> models = ModelManager.getInstance(OFFLINE).getAll();
+			ArrayList<Song> songs = new ArrayList<>();
+			for (Model model:models) {
+				songs.add((Song) model);
+			}
 			int position = 0;
 
 
@@ -361,8 +367,8 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 //		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
-		((OfflineSongManager) ModelManager.getInstance(OFFLINE)).getSongsFromSDCard();
-		fileObserver.startWatching();
+//		((OfflineSongManager) ModelManager.getInstance(OFFLINE)).getSongsFromSDCard();
+//		fileObserver.startWatching();
 		// if (isMyServiceRunning()) {
 		// UpdateUiFromServiceController.getInstance().updateUI(APP_START);
 		// }
@@ -392,7 +398,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	protected void onStop() {
 		// TODO Auto-generated method stub
 		super.onStop();
-		fileObserver.stopWatching();
+//		fileObserver.stopWatching();
 //		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
 	}
 

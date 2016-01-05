@@ -20,6 +20,7 @@ import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -263,14 +264,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	/**
 	 * Play a list of online song
-	 *
-	 * @param position
+	 *  @param position
 	 *            : position of first song in the list
 	 * @param queue
-	 *            : list of the songs want to play
 	 */
-	public void playNewSong(int position, Song[] queue) {
-		if(queue.length == 0){
+	public void playNewSong(int position, ArrayList<Song> queue) {
+		if(queue.size() == 0){
 			Helper.makeToastText("No song to play",MusicPlayerMainActivity.getActivity());
 			return;
 		}
@@ -278,7 +277,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		MusicPlayerServiceController.getInstance().clearStack();
 		States.musicPlayerState = MUSIC_PLAYING;
 		((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
-		MusicPlayerServiceController.getInstance().setCurrentSong(queue[position]);
+		MusicPlayerServiceController.getInstance().setCurrentSong(queue.get(position));
 	}
 	/**
 	 * Play song from queue
@@ -287,9 +286,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *            : position in queue
 	 */
 	public void playSongInQueue(int position){
-		Song[] queue = ((QueueManager) ModelManager.getInstance(QUEUE)).getAllSong();
+		ArrayList<Song> queue = ((QueueManager) ModelManager.getInstance(QUEUE)).getAllSong();
 		MusicPlayerServiceController.getInstance().pushStackPlayed(MusicPlayerServiceController.getInstance().getCurrentSong());
-		MusicPlayerServiceController.getInstance().setCurrentSong(queue[position]);
+		MusicPlayerServiceController.getInstance().setCurrentSong(queue.get(position));
 	}
 	/**
 	 * Play new song

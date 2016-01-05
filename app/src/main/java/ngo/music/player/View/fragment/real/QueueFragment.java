@@ -4,26 +4,19 @@ import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.Random;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
-import ngo.music.player.Model.Model;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
 import ngo.music.player.View.fragment.abstracts.ListContentFragment;
-import ngo.music.player.adapters.LiteListSongAdapter;
 import ngo.music.player.adapters.QueueSongAdapter;
 import ngo.music.player.service.MusicPlayerService;
 
@@ -61,7 +54,7 @@ public class QueueFragment extends ListContentFragment {
 				// TODO Auto-generated method stub
 				switch (item.getItemId()) {
 					case R.id.queue_shuffle_all:
-						Song[] songs = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
+						ArrayList<Song> songs = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
 						int position = 0;
 						MusicPlayerService.getInstance().playNewSong(position, songs);
 						if (!MusicPlayerServiceController.getInstance().isShuffle()) {
@@ -98,9 +91,9 @@ public class QueueFragment extends ListContentFragment {
 	@Override
 	public void update(Observable observable, Object data) {
 		if(observable instanceof QueueManager){
-			Song[] songs = ((QueueManager) observable).getAllSong();
+			ArrayList<Song> songs = ((QueueManager) observable).getAllSong();
 			if(toolbar!=null){
-				toolbar.setSubtitle(String.valueOf(songs.length) + " songs");
+				toolbar.setSubtitle(String.valueOf(songs.size()) + " songs");
 			}
 
 		}

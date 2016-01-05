@@ -12,6 +12,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -117,13 +118,13 @@ public abstract class ListContentFragment extends Fragment implements
 
 		if (adapter instanceof LiteListSongAdapter) {
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
-			Song[] songs = ((LiteListSongAdapter) adapter).getSongs();
+			ArrayList<Song> songs = ((LiteListSongAdapter) adapter).getSongs();
 			MusicPlayerService.getInstance().playNewSong(position,
 					songs);
 			return;
 		}
 		if(adapter instanceof CategoryListAdapter){
-			Song[] songs = ((CategoryListAdapter) adapter).getSongs(position);
+			ArrayList<Song> songs = ((CategoryListAdapter) adapter).getSongs(position);
 			MusicPlayerService.getInstance().playNewSong(0,
 					songs);
 			return;
