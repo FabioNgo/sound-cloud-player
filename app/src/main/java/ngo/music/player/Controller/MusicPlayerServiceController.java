@@ -144,7 +144,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
 
             }
 
-            nextSong = queue.get(currentSongPosition);
+            nextSong = queue.get(nextPosition);
         } else {
             if (size == 2) {
                 nextSong = queue.get((currentSongPosition + 1) % 2);
