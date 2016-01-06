@@ -236,21 +236,23 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		if(MusicPlayerServiceController.getInstance().getCurrentSong()== null){
 			MusicPlayerServiceController.getInstance().computeNextSong();
 			playNextSong();
-			return;
+
+		}else{
+			if (States.musicPlayerState == MUSIC_PAUSE|| States.musicPlayerState == MUSIC_INTERUPTED) {
+				playMedia();
+
+			} else if (States.musicPlayerState == MUSIC_STOPPED) {
+
+				mediaPlayer.seekTo(MusicPlayerServiceController.getInstance().getStoppedTime());
+				playMedia();
+
+			} else {
+
+				playNewSong();
+
+			}
 		}
-		if (States.musicPlayerState == MUSIC_PAUSE) {
-			playMedia();
 
-		} else if (States.musicPlayerState == MUSIC_STOPPED) {
-
-			mediaPlayer.seekTo(MusicPlayerServiceController.getInstance().getStoppedTime());
-			playMedia();
-
-		} else {
-
-			playNewSong();
-
-		}
 		updateNotification();
 		return;
 		// sendBroadcast(TAG_START);
