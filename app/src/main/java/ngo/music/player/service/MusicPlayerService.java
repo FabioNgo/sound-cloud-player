@@ -25,6 +25,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
+import ngo.music.player.Controller.PlaybackActionController;
 import ngo.music.player.Model.OfflineSong;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
@@ -33,7 +34,6 @@ import ngo.music.player.R;
 import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
-import ngo.music.player.helper.MusicPlayerBroadcastReceiver;
 import ngo.music.player.helper.States;
 
 public class MusicPlayerService extends Service implements OnErrorListener,
@@ -447,7 +447,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	private PendingIntent createPendingIntent(String action) {
 		// TODO Auto-generated method stub
-		Intent intent = new Intent(this, MusicPlayerBroadcastReceiver.class);
+		Intent intent = new Intent(this, PlaybackActionController.class);
 		intent.setAction(action);
 		PendingIntent pendingIntent = PendingIntent.getBroadcast(
 				getApplicationContext(), 0, intent, 0);

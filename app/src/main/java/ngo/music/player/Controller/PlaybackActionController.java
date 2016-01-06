@@ -1,12 +1,13 @@
-package ngo.music.player.helper;
+package ngo.music.player.Controller;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import ngo.music.player.helper.Constants;
 import ngo.music.player.service.MusicPlayerService;
 
-public class MusicPlayerBroadcastReceiver extends BroadcastReceiver implements Constants.MusicService {
+public class PlaybackActionController extends BroadcastReceiver implements Constants.MusicService {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();

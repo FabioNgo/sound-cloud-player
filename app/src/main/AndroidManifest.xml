@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
@@ -41,9 +43,18 @@
             android:name="ngo.music.player.service.MusicPlayerService"
             android:launchMode="singleTop" />
 
-        <receiver android:name="ngo.music.player.helper.MusicPlayerBroadcastReceiver" >
+        <receiver android:name="ngo.music.player.Controller.PlaybackActionController" >
         </receiver>
-
+        <receiver android:name="ngo.music.player.Controller.IncomingCallController">
+            <intent-filter>
+                <action android:name="android.intent.action.PHONE_STATE" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="ngo.music.player.Controller.OutgoingCallController">
+            <intent-filter>
+                <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+            </intent-filter>
+        </receiver>
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
