@@ -29,6 +29,7 @@ public class ArtistManager extends CategoryManager implements Observer{
 
     @Override
     public void loadData() {
+        clearModels();
         ArrayList<Model> songs = ModelManager.getInstance(OFFLINE).getAll();
         for (Model model:songs) {
             Song song = (Song) model;

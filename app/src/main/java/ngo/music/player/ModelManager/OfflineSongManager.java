@@ -1,7 +1,12 @@
 package ngo.music.player.ModelManager;
 
+import android.content.ContentUris;
+import android.database.ContentObserver;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Handler;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,6 +14,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.IOException;
 
+import ngo.music.player.Controller.MediaStoreObserver;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
 import ngo.music.player.Model.OfflineSong;
@@ -21,6 +27,20 @@ import ngo.music.player.helper.Constants;
  */
 public class OfflineSongManager extends SongManager {
 
+    Handler handler;
+    MediaStoreObserver observer;
+
+    public OfflineSongManager() {
+        super();
+        handler= new Handler();
+        observer = MediaStoreObserver.getInstance(MusicPlayerMainActivity.getActivity().getContentResolver(), MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, new MediaStoreObserver.OnChangeListener() {
+            @Override
+            public void onChange() {
+                loadData();
+            }
+        });
+
+    }
 
     @Override
     protected int setType() {
@@ -94,23 +114,27 @@ public class OfflineSongManager extends SongManager {
 
         Song song = (Song) get(id);
 //        Files
-        File file = new File(song.getAttribute("link"));
+        File file = new File(song.getLink());
+
         boolean deleted = false;
-        try {
-            deleted = file.getCanonicalFile().delete();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-//        MusicPlayerMainActivity.getActivity().deleteFile(song.getAttribute("link"));
+
+            deleted = file.delete();
+
         if(!deleted){
             return;
         }
+        Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        Uri itemUri = ContentUris.withAppendedId(contentUri, Long.parseLong(id));
+        MusicPlayerMainActivity.getActivity().getContentResolver().delete(itemUri,null,null);
+        super.remove(id);
         for(int i=0;i< Models.SIZE;i++){
             ModelManager temp = ModelManager.getInstance(i);
             if(temp instanceof CategoryManager){
-                ((CategoryManager)temp).removeSongFromAllCategories(song.getAttribute("song_id"));
+                ((CategoryManager)temp).removeSongFromAllCategories(song.getId());
             }
         }
+        setChanged();
+        notifyObservers(this.models);
         super.remove(id);
     }
 }
