@@ -36,7 +36,7 @@ public class OfflineSongManager extends SongManager {
     public JSONObject getJSONObjectFromCursor(Cursor c) {
         JSONObject object = new JSONObject();
         try {
-            object.put("song_id", c.getString(c.getColumnIndex(MediaStore.Audio.Media._ID)));
+            object.put("id", c.getString(c.getColumnIndex(MediaStore.Audio.Media._ID)));
             object.put("title", c.getString(c.getColumnIndex(MediaStore.Audio.Media.TITLE)));
             object.put("artist", c.getString(c.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
             object.put("album", c.getString(c.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
@@ -47,8 +47,17 @@ public class OfflineSongManager extends SongManager {
             return null;
         }
 
-
     }
+
+    @Override
+    public String generateID(JSONObject object) {
+        try {
+            return object.getString("id");
+        } catch (JSONException e) {
+            return "";
+        }
+    }
+
     @Override
     public void loadData() {
         clearModels();

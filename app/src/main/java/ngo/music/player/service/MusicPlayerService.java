@@ -106,7 +106,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.reset();
 			MusicPlayerServiceController.getInstance().startTimer();
 			try {
-				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("link"));
+				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getLink());
 
 				mediaPlayer.prepareAsync();
 			} catch (Exception e) {
@@ -357,8 +357,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		String subTitle = "";
 		Song song = MusicPlayerServiceController.getInstance().getCurrentSong();
 		if (song != null) {
-			title = song.getAttribute("title");
-			subTitle = song.getAttribute("artist");
+			title = song.getName();
+			subTitle = song.getArtist();
 		}
 		/**
 		 * Big view
@@ -539,7 +539,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	private void playSong(Song song) {
 		try {
-			String link = song.getAttribute("link");
+			String link = song.getLink();
 			mediaPlayer.reset();
 
 			mediaPlayer.setDataSource(link);

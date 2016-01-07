@@ -45,7 +45,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		String title = "";
 		if (song != null) {
-			title = song.getAttribute("title");
+			title = song.getName();
 		}
 		TextView title_text = (TextView) rootView
 				.findViewById(R.id.lite_player_title);
@@ -58,7 +58,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		String subtitle = "";
 		if (song != null) {
 
-			subtitle = song.getAttribute("artist") + " | " + song.getAttribute("album");
+			subtitle = song.getArtist() + " | " + song.getAlbum();
 		}
 		TextView subtitle_text = (TextView) rootView
 				.findViewById(R.id.lite_player_subtitle);

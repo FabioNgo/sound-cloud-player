@@ -116,13 +116,13 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 		 * Set title
 		 */
 
-		viewHolder.title.setText(song.getAttribute("title"));
+		viewHolder.title.setText(song.getName());
 
 		/*
 		 * Set sub title
 		 */
 
-		viewHolder.subtitle.setText(song.getAttribute("artist"));
+		viewHolder.subtitle.setText(song.getArtist());
 		/**
 		 * Set background , to indicate which song is playing
 		 */

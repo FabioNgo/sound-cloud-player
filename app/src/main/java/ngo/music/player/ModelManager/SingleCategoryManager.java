@@ -82,7 +82,7 @@ public abstract class SingleCategoryManager extends CategoryManager {
     }
     public void removeSongFromCategory(Song song) {
         // TODO Auto-generated method stub
-        String id = song.getAttribute("song_id");
+        String id = song.getId();
         String cateId = this.models.get(0).getId();
         removeSongFromCategory(id, cateId);
     }
@@ -91,7 +91,7 @@ public abstract class SingleCategoryManager extends CategoryManager {
             JSONArray array = this.models.get(0).getJSONObject().getJSONArray("songs");
             for(int i=0;i<array.length();i++){
                 try {
-                    if(array.getJSONObject(i).getString("id").equals(song.getAttribute("song_id"))){
+                    if(array.getJSONObject(i).getString("id").equals(song.getId())){
                         return;
                     }
                 } catch (JSONException e) {
@@ -99,7 +99,7 @@ public abstract class SingleCategoryManager extends CategoryManager {
                 }
             }
             JSONObject object = new JSONObject();
-            object.put("id", song.getAttribute("song_id"));
+            object.put("id", song.getId());
             array.put(object);
             this.models.get(0).getJSONObject().put("songs", array);
             setChanged();

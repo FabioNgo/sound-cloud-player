@@ -44,7 +44,7 @@ public abstract class CategoryManager extends ModelManager implements Constants.
             try {
 
                 String songId = array.getJSONObject(i).getString("id");
-                Song song = (Song) ModelManager.getInstance(OFFLINE).get("song_id",songId)[0];
+                Song song = (Song) ModelManager.getInstance(OFFLINE).get(songId);
                 songs.add(song);
             } catch (JSONException e) {
                 e.printStackTrace();

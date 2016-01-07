@@ -32,7 +32,7 @@ import ngo.music.player.helper.Helper;
 public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		implements Constants.Models, Observer {
 	private static final int NUM_ITEM_IN_ONE_CATEGORY = 5;
-	protected ArrayList<Model> categories;
+	protected ArrayList<Category> categories;
 	Context context;
 	int resource;
 	CompositionViewHolder holder = null;
@@ -46,7 +46,13 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		type = setType();
 		canDelete = setCanDelete();
 		canEdit = setCanEdit();
-		this.categories = ModelManager.getInstance(type).getAll();
+		this.categories = new ArrayList<>();
+		ArrayList<Model> temp = ModelManager.getInstance(type).getAll();
+		for (Model model :temp) {
+			if(model instanceof Category){
+				categories.add((Category) model);
+			}
+		}
 		ModelManager.getInstance(type).addObserver(this);
 		this.context = context;
 		this.resource = resource;
@@ -149,7 +155,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 			holder = (CompositionViewHolder) v.getTag();
 		}
 
-		setLayoutInformation(holder, (Category) categories.get(position), v);
+		setLayoutInformation(holder, categories.get(position), v);
 
 		return v;
 	}
@@ -168,14 +174,14 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		/*
 		 * Set song titles
 		 */
-		holder.items[0].setText(category.getAttribute("title")); // playlist name
+		holder.items[0].setText(category.getTitle()); // playlist name
 		/*
 		 * Set song titles
 		 */
 		for (int i = 0; i < holder.items.length-1; i++) {
 			String content = "" + (i + 1) + ". ";
 			if(i<songs.size()) {
-				content = content + songs.get(i).getAttribute("title");
+				content = content + songs.get(i).getName();
 			}
 			holder.items[i+1].setText(content);
 
@@ -318,7 +324,7 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 
 	@Override
 	public Category getItem(int position) {
-		return (Category) categories.get(position);
+		return categories.get(position);
 	}
 
 
@@ -330,7 +336,13 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 	@Override
 	public void update(Observable observable, Object data) {
 		if(observable instanceof ModelManager) {
-			this.categories = ModelManager.getInstance(type).getAll();
+			this.categories.clear();
+			ArrayList<Model> temp = ModelManager.getInstance(type).getAll();
+			for (Model model :temp) {
+				if(model instanceof Category){
+					categories.add((Category) model);
+				}
+			}
 
 			notifyDataSetChanged();
 		}

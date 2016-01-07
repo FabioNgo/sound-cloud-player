@@ -98,7 +98,7 @@ public interface ModelManagerInterface {
      *
      * @return the id depending the calling function moment
      */
-    String generateID();
+    String generateID(JSONObject object);
 
     /**
      * list out all models

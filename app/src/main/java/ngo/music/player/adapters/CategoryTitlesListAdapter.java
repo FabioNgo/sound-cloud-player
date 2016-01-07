@@ -22,13 +22,19 @@ import ngo.music.player.helper.Constants;
 public abstract class CategoryTitlesListAdapter extends ArrayAdapter<Category> implements Constants.Models,Observer {
 	
 	private int type;
-	private ArrayList<Model> categories;
+	private ArrayList<Category> categories;
 
 	protected CategoryTitlesListAdapter() {
 		super(MusicPlayerMainActivity.getActivity(), R.layout.single_playlist_list_adding);
 		// TODO Auto-generated constructor stub
 		type = setType();
-		categories = ModelManager.getInstance(type).getAll();
+		this.categories = new ArrayList<>();
+		ArrayList<Model> temp = ModelManager.getInstance(type).getAll();
+		for (Model model :temp) {
+			if(model instanceof Category){
+				categories.add((Category) model);
+			}
+		}
 		ModelManager.getInstance(type).addObserver(this);
 	}
 
@@ -76,14 +82,20 @@ public abstract class CategoryTitlesListAdapter extends ArrayAdapter<Category> i
 	private void setLayoutInformation(int position, View v) {
 		// TODO Auto-generated method stub
 		TextView tv = (TextView) v.findViewById(R.id.single_playlist_title);
-		tv.setText(categories.get(position).getAttribute("title"));
+		tv.setText(((Category)categories.get(position)).getTitle());
 	}
 
 	@Override
 	public void update(Observable observable, Object data) {
 		if(observable instanceof ModelManager) {
-			this.categories = (ArrayList<Model>) data;
+			ArrayList<Model> temp = (ArrayList<Model>) data;
 //			categories = (Category[]) data;
+			this.categories = new ArrayList<>();
+			for (Model model : temp) {
+				if(model instanceof Category){
+					categories.add((Category) model);
+				}
+			}
 			notifyDataSetChanged();
 		}
 
@@ -91,7 +103,7 @@ public abstract class CategoryTitlesListAdapter extends ArrayAdapter<Category> i
 
 	@Override
 	public Category getItem(int position) {
-		return (Category) categories.get(position);
+		return categories.get(position);
 	}
 
 	@Override

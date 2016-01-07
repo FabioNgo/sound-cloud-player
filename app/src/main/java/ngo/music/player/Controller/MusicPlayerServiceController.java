@@ -55,7 +55,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
         try {
             filename = filePath+"/"+filename;
             JSONObject object = new JSONObject(fileContentToString());
-            currentSong = (Song) ModelManager.getInstance(OFFLINE).get("song_id",object.getString("song_id"))[0];
+            currentSong = (Song) ModelManager.getInstance(OFFLINE).get(object.getString("song_id"));
             notifyObservers(currentSong);
             computeNextSong();
             stoppedTime = object.getInt("stopped_time");
@@ -251,7 +251,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
         // TODO Auto-generated method stub
         JSONObject object = new JSONObject();
         try {
-            object.put("song_id",currentSong.getAttribute("song_id"));
+            object.put("song_id",currentSong.getId());
             object.put("stopped_time", MusicPlayerService.getInstance().getCurrentTime());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -286,7 +286,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
         notifyObservers(currentSong);
         String format = String
                 .format("Song playing: %s \nNext song: %s",
-                        currentSong.getAttribute("title"), nextSong.getAttribute("title"));
+                        currentSong.getName(), nextSong.getName());
         Helper.makeToastText(format,
                 MusicPlayerService.getInstance());
         canAnnounceNextSong = true;
@@ -308,7 +308,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
                     if ((currentTime * 100) / duration == 50 && canAnnounceNextSong) {
                         String format = String.format("Next song: %s",
                                 MusicPlayerServiceController.getInstance().getNextSong()
-                                        .getAttribute("title"));
+                                        .getName());
                         Helper.makeToastText(format,
                                 MusicPlayerService.getInstance());
                         canAnnounceNextSong = false;

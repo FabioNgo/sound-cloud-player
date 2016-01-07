@@ -214,7 +214,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
     }
 
     @Override
-    public String generateID() {
+    public String generateID(JSONObject object) {
         // TODO Auto-generated method stub
         currentIDSuffix++;
         String id;
@@ -226,7 +226,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
     public ModelInterface generate(JSONObject object) {
         // TODO Auto-generated method stub
 
-        String id = generateID();
+        String id = generateID(object);
         object.remove("id");
         try {
             object.put("id", id);

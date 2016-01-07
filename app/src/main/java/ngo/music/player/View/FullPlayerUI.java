@@ -234,7 +234,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		if (song == null)
 			return;
-		String title = song.getAttribute("title");
+		String title = song.getName();
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setTitle(title);
@@ -245,7 +245,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		if (song == null)
 			return;
-		String subtitle = song.getAttribute("artist") + " | " + song.getAttribute("album");
+		String subtitle = song.getArtist() + " | " + song.getAlbum();
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setSubtitle(subtitle);

@@ -35,15 +35,15 @@ public class ArtistManager extends CategoryManager implements Observer{
             Artist currentArtist = null;
             for (Model model2: this.models ) {
                 Artist artist = (Artist) model2;
-                if(song.getAttribute("artist").equals(artist.getAttribute("title"))){
+                if(song.getArtist().equals(artist.getTitle())){
                     currentArtist = artist;
                     break;
                 }
             }
             if(currentArtist == null){
-                currentArtist = (Artist) newCategory(song.getAttribute("artist"));
+                currentArtist = (Artist) newCategory(song.getArtist());
             }
-            JSONObject object = createSongJSONObject(song.getAttribute("song_id"));
+            JSONObject object = createSongJSONObject(song.getId());
             try {
                 currentArtist.getJSONObject().getJSONArray("songs").put(object);
             } catch (JSONException e) {

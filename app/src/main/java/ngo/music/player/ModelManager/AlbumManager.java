@@ -34,15 +34,15 @@ public class AlbumManager extends CategoryManager implements Observer {
             Album currentAlbum = null;
             for (Model model2: this.models ) {
                 Album album = (Album) model2;
-                if(song.getAttribute("album").equals(album.getAttribute("title"))){
+                if(song.getAlbum().equals(album.getTitle())){
                     currentAlbum = album;
                     break;
                 }
             }
             if(currentAlbum == null){
-                currentAlbum = (Album) newCategory(song.getAttribute("album"));
+                currentAlbum = (Album) newCategory(song.getAlbum());
             }
-            JSONObject object = createSongJSONObject(song.getAttribute("song_id"));
+            JSONObject object = createSongJSONObject(song.getId());
             try {
                 currentAlbum.getJSONObject().getJSONArray("songs").put(object);
             } catch (JSONException e) {

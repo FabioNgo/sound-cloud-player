@@ -16,11 +16,9 @@ public abstract class Song extends Model {
         return this.object.optString("title");
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Song) {
-            if (Objects.equals(this.getAttribute("song_id"), ((Model) obj).getAttribute("song_id"))) return true;
-        }
-        return false;
-    }
+    public abstract String getName();
+    public abstract String getArtist();
+    public abstract String getAlbum();
+    public abstract String getLink();
+
 }

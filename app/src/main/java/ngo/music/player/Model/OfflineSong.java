@@ -10,4 +10,24 @@ public class OfflineSong extends Song {
         super(jsonObject);
     }
 
+    @Override
+    public String getName() {
+        return getAttribute("title");
+    }
+
+    @Override
+    public String getArtist() {
+        return getAttribute("artist");
+    }
+
+    @Override
+    public String getAlbum() {
+        return getAttribute("album");
+    }
+
+    @Override
+    public String getLink() {
+        return getAttribute("link");
+    }
+
 }
