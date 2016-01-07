@@ -35,7 +35,7 @@ public class QueueManager extends SingleCategoryManager implements Constants, Co
     public void replaceQueue(ArrayList<Song> songs){
         JSONArray array = new JSONArray();
         for (Song song:songs) {
-            JSONObject songObject = createSongJSONObject(song.getAttribute("song_id"));
+            JSONObject songObject = createSongJSONObject(song.getId());
             array.put(songObject);
         }
 

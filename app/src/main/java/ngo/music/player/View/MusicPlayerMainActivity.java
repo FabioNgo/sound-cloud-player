@@ -44,10 +44,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		Constants.Appplication {
 
 
-	/*
-	 * If true : Display Fragment with tab : Trending Music, Audio...... If
-	 * False: Display Fragment with tab : My music ......
-	 */
+
 	public static int type = 0;
 	/**
 	 * Search Query
