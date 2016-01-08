@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
@@ -56,7 +57,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_duration);
 		waveFormView = (WaveFormView)rootView.findViewById(R.id.wave_form_view);
 		waveFormView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
-		WaveFormController.getInstance().addObserver(waveFormView);
+//		WaveFormController.getInstance().addObserver(waveFormView);
 		/**
 		 * Config Tool Bar
 		 * 
@@ -366,5 +367,24 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		return true;
 	}
 
+	@Override
+	public void update(Observable observable, Object data) {
+		super.update(observable, data);
+		if(observable instanceof MusicPlayerServiceController){
+			if(!(data instanceof Song)){
+				int TAG = (int) data;
+				switch (TAG) {
+					case MUSIC_PROGRESS:
+						updateWaveForm();
+						break;
+				}
+			}
+		}
+	}
+
+	private void updateWaveForm(){
+//		System.out.println("Ad");
+		waveFormView.updateVisualizer(WaveFormController.getInstance().waveformValues, WaveFormController.getInstance().length);
+	}
 	
 }

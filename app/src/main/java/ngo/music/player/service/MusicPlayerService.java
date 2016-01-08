@@ -15,10 +15,12 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
+import android.media.audiofx.Visualizer;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.util.ArrayList;
@@ -113,13 +115,13 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getLink());
 
 				mediaPlayer.prepareAsync();
-//				WaveFormController.getInstance().setUpVisualizer();
+				WaveFormController.getInstance().setUpVisualizer();
 				HeadSetController receiver = HeadSetController.getInstance();
 				IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
 				registerReceiver(receiver, intentFilter);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e("ini media", e.getMessage());
 			}
 		}
 
@@ -160,6 +162,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 
 		mediaPlayer.start();
+		WaveFormController.getInstance().visualizer.setEnabled(true);
 		States.musicPlayerState = MUSIC_PLAYING;
 		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PLAYING,true);
 	}
@@ -203,7 +206,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private void pauseMedia() {
 		// TODO Auto-generated method stub
 		if (mediaPlayer.isPlaying()) {
-
+			WaveFormController.getInstance().visualizer.setEnabled(false);
 			mediaPlayer.pause();
 
 		}
@@ -593,6 +596,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		if (States.musicPlayerState == MUSIC_PLAYING) {
 			playMedia();
 		}
+		WaveFormController.getInstance().setDuration(mp.getDuration());
 	}
 
 	@Override

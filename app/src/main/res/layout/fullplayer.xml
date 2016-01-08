@@ -30,10 +30,10 @@
 			android:src="@drawable/song_image"/>
 		<ngo.music.player.View.WaveFormView
 			android:id="@+id/wave_form_view"
-			android:background="@color/accent"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />
 		<RelativeLayout
+			android:visibility="gone"
 			android:id="@+id/opacity_layout"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
