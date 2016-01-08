@@ -80,6 +80,15 @@ public abstract class CategoryManager extends ModelManager implements Constants.
         Category category = (Category) get(categoryID);
 
         JSONArray array = category.getJSONObject().optJSONArray("songs");
+        for(int i=0;i<array.length();i++){
+            try {
+                if(array.getJSONObject(i).getString("id") == songID){
+                    return;
+                }
+            } catch (JSONException e) {
+                continue;
+            }
+        }
         JSONObject songObject = createSongJSONObject(songID);
         array.put(songObject);
         try {

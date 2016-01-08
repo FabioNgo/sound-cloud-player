@@ -26,6 +26,7 @@ import java.util.Observer;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.PlaybackActionController;
+import ngo.music.player.Controller.WaveFormController;
 import ngo.music.player.Model.OfflineSong;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
@@ -105,15 +106,16 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.reset();
 			MusicPlayerServiceController.getInstance().startTimer();
+
 			try {
 				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getLink());
 
 				mediaPlayer.prepareAsync();
+				WaveFormController.getInstance().setUpVisualizer();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
 		}
 
 	}

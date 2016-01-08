@@ -104,8 +104,8 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 						popup.getMenu());
 
 				// registering popup with OnMenuItemClickListener
-				Song[] songs = new Song[1];
-				songs[0] = song;
+				ArrayList<Song> songs = new ArrayList<>();
+				songs.add(song);
 				popup.setOnMenuItemClickListener(MenuController
 						.getInstance(songs));
 

@@ -20,6 +20,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -28,12 +29,14 @@ import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
+import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.adapters.CategoryTitlesListAdapter;
 import ngo.music.player.helper.Constants;
+import ngo.music.player.helper.Helper;
 
 public abstract class CategoryAddingFragment extends DialogFragment implements Constants.Models,Observer {
 
-	Song[] songs;
+	ArrayList<Song> songs;
 	CategoryAddingFragment instance = null;
 	private int type;
 	public CategoryAddingFragment(){
@@ -43,7 +46,7 @@ public abstract class CategoryAddingFragment extends DialogFragment implements C
 	 * 
 	 * @param songs
 	 */
-	public CategoryAddingFragment(Song[] songs) {
+	public CategoryAddingFragment(ArrayList<Song> songs) {
 		// TODO Auto-generated constructor stub
 		this.songs = songs;
 		this.type = setType();
@@ -146,7 +149,8 @@ public abstract class CategoryAddingFragment extends DialogFragment implements C
 				// TODO Auto-generated method stub
 				Category category = CategoryTitlesListAdapter.getInstance(type).getItem(position);
 
-				((CategoryManager)ModelManager.getInstance(type)).addSongToCategory(songs[0].getAttribute("song_id"), category.getId());
+				((CategoryManager)ModelManager.getInstance(type)).addSongToCategory(songs.get(0).getId(), category.getId());
+				Helper.makeToastText("Done", MusicPlayerMainActivity.getActivity());
 				instance.dismiss();
 
 			}

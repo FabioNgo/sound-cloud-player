@@ -11,6 +11,11 @@ public class OfflineSong extends Song {
     }
 
     @Override
+    public int getType() {
+        return OFFLINE;
+    }
+
+    @Override
     public String getName() {
         return getAttribute("title");
     }

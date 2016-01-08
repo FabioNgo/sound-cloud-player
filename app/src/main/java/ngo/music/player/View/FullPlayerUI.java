@@ -1,5 +1,6 @@
 package ngo.music.player.View;
 
+import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
@@ -16,8 +17,11 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.util.ArrayList;
+
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
+import ngo.music.player.Controller.WaveFormController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Constants;
@@ -30,6 +34,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private ImageView shuffle;
 	private NetworkImageView songImage;
 	private RelativeLayout artistInfo;
+	private WaveFormView waveFormView;
+	private Visualizer visualizer;
 
 
 	
@@ -48,18 +54,22 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_current_time);
 		durationText = (TextView) rootView
 				.findViewById(R.id.full_player_duration);
-		
-		
+		waveFormView = (WaveFormView)rootView.findViewById(R.id.wave_form_view);
+		waveFormView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
+		WaveFormController.getInstance().addObserver(waveFormView);
 		/**
 		 * Config Tool Bar
 		 * 
 		 */
 		configToolbar();
-		/*
+		/**
 		 * Config buttons in UI
 		 */
 		configButton();
-
+		/**
+		 * config waveFormView
+		 */
+		iniAudio();
 		/**
 		 * updateUI
 		 */
@@ -67,6 +77,17 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		updateLoop();
 		updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 		return rootView;
+
+	}
+
+	private void iniAudio() {
+
+//		visualizer = WaveFormController.getInstance().visualizer;
+//		// Make sure the visualizer is enabled only when you actually want to
+//		// receive data, and
+//		// when it makes sense to receive data.
+//		if()
+//		visualizer.setEnabled(true);
 
 	}
 
@@ -83,8 +104,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				// TODO Auto-generated method stub
 				switch (arg0.getItemId()) {
 				case R.id.full_player_add_playlist:
-					Song[] songs = new Song[1];
-					songs[0] = MusicPlayerServiceController.getInstance().getCurrentSong();
+					ArrayList<Song> songs = new ArrayList<>();
+					songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
 					MenuController.getInstance(songs).addToPlaylist();
 					break;
 				case R.id.full_player_share:

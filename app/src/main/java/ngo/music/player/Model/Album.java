@@ -8,4 +8,9 @@ public class Album extends Category {
     public Album(JSONObject object) {
         super(object);
     }
+
+    @Override
+    public int getType() {
+        return ALBUM;
+    }
 }

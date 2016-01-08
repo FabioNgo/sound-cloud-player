@@ -46,23 +46,23 @@ public class ZingSongManager extends SongManager {
      */
     @Override
     public void loadData() {
-        clearModels();
-        MusicPlayerMainActivity activity = MusicPlayerMainActivity.getActivity();
-        Cursor c = activity
-                .getContentResolver()
-                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
-                        MediaStore.Audio.Media.IS_MUSIC + "!=0", null, null);
-        if (c != null) {
-            while (c.moveToNext()) {
-                String url = c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA));
-                if (url.endsWith(".mp3")) {
-                    generate(getJSONObjectFromCursor(c));
-                }
-            }
-        }
-        this.setChanged();
-        this.notifyObservers(this.models);
-        c.close();
+//        clearModels();
+//        MusicPlayerMainActivity activity = MusicPlayerMainActivity.getActivity();
+//        Cursor c = activity
+//                .getContentResolver()
+//                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
+//                        MediaStore.Audio.Media.IS_MUSIC + "!=0", null, null);
+//        if (c != null) {
+//            while (c.moveToNext()) {
+//                String url = c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA));
+//                if (url.endsWith(".mp3")) {
+//                    generate(getJSONObjectFromCursor(c));
+//                }
+//            }
+//        }
+//        this.setChanged();
+//        this.notifyObservers(this.models);
+//        c.close();
     }
 
     /**
@@ -73,12 +73,12 @@ public class ZingSongManager extends SongManager {
 
     }
 
-    /**
-     * Get a song from xml from mp3 zing
-     * @param xml
-     * @return
-     */
-    private ZingSong (String xml){
-
-    }
+//    /**
+//     * Get a song from xml from mp3 zing
+//     * @param xml
+//     * @return
+//     */
+//    private ZingSong (String xml){
+//
+//    }
 }

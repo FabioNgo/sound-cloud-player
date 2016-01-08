@@ -29,7 +29,7 @@ public abstract class SingleCategoryManager extends CategoryManager {
     }
 
 
-    public void addSongToCategory(String songID){
+    public void addSongsToCategory(String songID){
         Category category = (Category) this.models.get(0);
         addSongToCategory(songID,category.getId());
         notifyObservers(this.models);
@@ -86,22 +86,24 @@ public abstract class SingleCategoryManager extends CategoryManager {
         String cateId = this.models.get(0).getId();
         removeSongFromCategory(id, cateId);
     }
-    public void addSongToCategory(Song song) {
+    public void addSongsToCategory(ArrayList<Song> songs) {
         try {
-            JSONArray array = this.models.get(0).getJSONObject().getJSONArray("songs");
-            for(int i=0;i<array.length();i++){
-                try {
-                    if(array.getJSONObject(i).getString("id").equals(song.getId())){
-                        return;
+            for (Song song :songs) {
+                JSONArray array = this.models.get(0).getJSONObject().getJSONArray("songs");
+                for(int i=0;i<array.length();i++){
+                    try {
+                        if(array.getJSONObject(i).getString("id").equals(song.getId())){
+                            return;
+                        }
+                    } catch (JSONException e) {
+                        continue;
                     }
-                } catch (JSONException e) {
-                    continue;
                 }
+                JSONObject object = new JSONObject();
+                object.put("id", song.getId());
+                array.put(object);
+                this.models.get(0).getJSONObject().put("songs", array);
             }
-            JSONObject object = new JSONObject();
-            object.put("id", song.getId());
-            array.put(object);
-            this.models.get(0).getJSONObject().put("songs", array);
             setChanged();
             notifyObservers(this.models);
             storeData();

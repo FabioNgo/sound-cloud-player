@@ -23,15 +23,20 @@
 		<!-- AVATAR OF SONG -->
 
 		<com.android.volley.toolbox.NetworkImageView
+			android:visibility="gone"
 			android:id="@+id/full_player_song_image"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:src="@drawable/song_image"/>
-
+		<ngo.music.player.View.WaveFormView
+			android:id="@+id/wave_form_view"
+			android:background="@color/accent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
 		<RelativeLayout
 			android:id="@+id/opacity_layout"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:alpha="0.6"
 			android:background="#212121"
 			android:gravity="bottom">
@@ -40,8 +45,8 @@
 
 		<RelativeLayout
 			android:id="@+id/artist_info"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:gravity="bottom">
 
 			<!-- AVATAR OF Artist -->

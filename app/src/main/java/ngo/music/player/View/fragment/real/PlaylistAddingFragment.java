@@ -1,5 +1,7 @@
 package ngo.music.player.View.fragment.real;
 
+import java.util.ArrayList;
+
 import ngo.music.player.Model.Song;
 import ngo.music.player.View.fragment.abstracts.CategoryAddingFragment;
 
@@ -11,7 +13,7 @@ public class PlaylistAddingFragment extends CategoryAddingFragment {
 	/**
 	 * @param songs
 	 */
-	public PlaylistAddingFragment(Song[] songs) {
+	public PlaylistAddingFragment(ArrayList<Song> songs) {
 		super(songs);
 	}
 
