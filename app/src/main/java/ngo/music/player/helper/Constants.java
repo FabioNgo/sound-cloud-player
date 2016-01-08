@@ -156,8 +156,8 @@ public interface Constants {
 		int MUSIC_PLAYING = 0;
 		int MUSIC_STOPPED = 1;
 		int MUSIC_PAUSE = 2;
-		int MUSIC_INTERUPTED = 3;
-		int MUSIC_FREE = 4;
+		int MUSIC_ON_PHONE = 3;
+		int MUSIC_HEADSET_UNPLUG = 4;
 		int MUSIC_CUR_POINT_CHANGED = 5;
 		int SERVICE_STOP = 6;
 		int MUSIC_PROGRESS = 7;

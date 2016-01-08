@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import ngo.music.player.Controller.HeadSetController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.PlaybackActionController;
 import ngo.music.player.Controller.WaveFormController;
@@ -111,7 +113,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getLink());
 
 				mediaPlayer.prepareAsync();
-				WaveFormController.getInstance().setUpVisualizer();
+//				WaveFormController.getInstance().setUpVisualizer();
+				HeadSetController receiver = HeadSetController.getInstance();
+				IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
+				registerReceiver(receiver, intentFilter);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -240,7 +245,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			playNextSong();
 
 		}else{
-			if (States.musicPlayerState == MUSIC_PAUSE|| States.musicPlayerState == MUSIC_INTERUPTED) {
+			if (States.musicPlayerState == MUSIC_PAUSE|| States.musicPlayerState == MUSIC_HEADSET_UNPLUG || States.musicPlayerState == MUSIC_ON_PHONE) {
 				playMedia();
 
 			} else if (States.musicPlayerState == MUSIC_STOPPED) {
