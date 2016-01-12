@@ -89,5 +89,8 @@
             android:name="com.facebook.NativeAppCallContentProvider"
             android:authorities="com.facebook.app.NativeAppCallContentProvider889973167688262"
             android:exported="true" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="7db72c4c3ed14f23017e5c324cdd54ed622e09cc" />
     </application>
 </manifest>

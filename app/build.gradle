@@ -1,5 +1,14 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'io.fabric'
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
+    }
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 android {
     compileSdkVersion 23
     buildToolsVersion '23.0.1'
@@ -18,7 +27,10 @@ android {
         }
     }
 }
-
+repositories {
+    mavenCentral()
+    maven { url 'https://maven.fabric.io/public' }
+}
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/androidasync-2.0.5.jar')
@@ -37,4 +49,7 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:7.3.0'
     compile 'com.google.android.gms:play-services-identity:7.3.0'
     compile project(':slidingmenu')
+    compile('com.crashlytics.sdk.android:crashlytics:2.5.5@aar') {
+        transitive = true;
+    }
 }

@@ -2,8 +2,8 @@ package ngo.music.player.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.FileObserver;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -109,7 +109,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-
+		Fabric.with(this, new Crashlytics());
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
 		if ("CallFromNoti".equals(intent.getAction())) {
