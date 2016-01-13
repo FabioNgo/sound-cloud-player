@@ -6,6 +6,7 @@ import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -24,6 +25,7 @@ import java.util.Observable;
 import java.util.concurrent.TimeUnit;
 
 import co.mobiwise.library.MaskProgressView;
+import co.mobiwise.library.OnProgressDraggedListener;
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.WaveFormController;
@@ -43,7 +45,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private TextView currentTimeText;
 	private TextView durationText;
 	MaskProgressView maskProgressView;
-
+	private boolean draggingSeekbar = false;
 
 	public FullPlayerUI(){
 		super();
@@ -59,8 +61,10 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				// TODO Auto-generated method stub
 //				maskProgressView.setmCurrentSeconds((int) (MusicPlayerService.getInstance().getCurrentTime()/1000));
 				float index = MusicPlayerService.getInstance().getCurrentTime()/(float)MusicPlayerServiceController.getInstance().getDuration();
+				if(!draggingSeekbar){
+					maskProgressView.setIndexY(index);
+				}
 
-				maskProgressView.setIndexY(index);
 
 			}
 		};
@@ -71,6 +75,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
+
 //		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
 				.findViewById(R.id.full_player_song_image);
@@ -115,7 +120,33 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private void setupSeekbar() {
 		maskProgressView = (MaskProgressView) rootView.findViewById(R.id.seekbar);
 		maskProgressView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
-		maskProgressView.setmMaxSeconds(Integer.parseInt((MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("duration")))/1000);
+		maskProgressView.setmMaxSeconds(Integer.parseInt((MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("duration"))) / 1000);
+		maskProgressView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				MusicPlayerMainActivity.getActivity().disableSliding();
+				v.onTouchEvent(event);
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					MusicPlayerMainActivity.getActivity().enableSliding();
+					return true;
+				}
+				return true;
+			}
+		});
+		maskProgressView.setOnProgressDraggedListener(new OnProgressDraggedListener() {
+			@Override
+			public void onProgressDragged(int position) {
+				MusicPlayerService.getInstance().seekTo(position);
+				draggingSeekbar = false;
+			}
+
+			@Override
+			public void onProgressDragging(int position) {
+				draggingSeekbar = true;
+
+			}
+		});
+
 
 	}
 
@@ -430,4 +461,6 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		super.play();
 		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration())/1000);
 	}
+
+
 }

@@ -75,9 +75,6 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 
 	@Override
 	public void updateMusicProgress() {
-		if (MusicPlayerService.getInstance().isPlaying()) {
-			play();
-		}
 		runnable.run();
 	}
 
@@ -115,6 +112,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 				int TAG = (int) data;
 
 				switch (TAG) {
+					// start play song
 					case MUSIC_PLAYING:
 
 

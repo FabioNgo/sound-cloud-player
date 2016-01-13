@@ -313,7 +313,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		mediaPlayer.stop();
 		// System.out.println("PLAY NEW SONG 2");
 		Song song = MusicPlayerServiceController.getInstance().getCurrentSong();
-
+		States.musicPlayerState = MUSIC_PLAYING;
 		if (song == null) {
 			Helper.makeToastText("No song to play",
 					getApplicationContext());
@@ -355,14 +355,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 
 
-	/**
-	 * Check if media is playing or not
-	 *
-	 * @return
-	 */
-	public boolean isPlaying() {
-		return States.musicPlayerState == MUSIC_PLAYING;
-	}
 
 	private void updateNotification() {
 		// System.out.println("NOTIFICATION");
@@ -555,7 +547,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		try {
 			String link = song.getLink();
 			mediaPlayer.reset();
-//			mediaPlayer.seekTo(0);
 
 			mediaPlayer.setDataSource(link);
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -598,7 +589,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		if (States.musicPlayerState == MUSIC_PLAYING) {
+		if (States.musicPlayerState != MUSIC_STOPPED) {
 			playMedia();
 		}
 //		WaveFormController.getInstance().setDuration(mp.getDuration());
@@ -610,6 +601,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			if(data instanceof Song){
 				playNewSong();
 			}
+		}
+	}
+
+	public void seekTo(int position) {
+		if(States.musicPlayerState == MUSIC_PLAYING){
+			mediaPlayer.seekTo(position*1000);
 		}
 	}
 

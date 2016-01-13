@@ -281,14 +281,20 @@ public class MusicPlayerServiceController extends Observable implements Constant
     public void clearStack(){
         this.stackSongplayed.clear();
     }
-    public void setCurrentSong(Song currentSong) {
+    public void setCurrentSong(final Song currentSong) {
 
         this.currentSong = currentSong;
-        try {
-            WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Thread readfileThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        readfileThread.start();
         computeNextSong();
         storeData();
         setChanged();

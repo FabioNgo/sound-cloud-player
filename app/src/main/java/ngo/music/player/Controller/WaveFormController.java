@@ -11,6 +11,8 @@ import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 import java.util.Observable;
 
+import ngo.music.player.View.MusicPlayerMainActivity;
+
 /**
  * Created by fabiongo on 1/8/2016.
  */
@@ -208,9 +210,9 @@ public class WaveFormController extends Observable {
         extractor.release();
         extractor = null;
         codec.stop();
-        long stop = System.currentTimeMillis();
+//        long stop = System.currentTimeMillis();
 
-        Log.i("1st step",String.valueOf((stop-start))+" ms");
+//        Log.i("1st step",String.valueOf((stop-start))+" ms");
         codec.release();
         codec = null;
         // Temporary hack to make it work with the old version.
@@ -225,7 +227,7 @@ public class WaveFormController extends Observable {
         int gain, value;
         int frameLens = (int) ((1000 * mAvgBitRate / 8) *
                 ((float) getSamplesPerFrame() / mSampleRate));
-        start = System.currentTimeMillis();
+//        start = System.currentTimeMillis();
 
         for (i = 0; i < mNumFrames; i++) {
             gain = -1;
@@ -245,10 +247,16 @@ public class WaveFormController extends Observable {
                     ((float) getSamplesPerFrame() / mSampleRate));
         }
         mDecodedSamples.rewind();
-        stop = System.currentTimeMillis();
-        Log.i("2nd step",String.valueOf((stop-start))+" ms");
+//        stop = System.currentTimeMillis();
+//        Log.i("2nd step",String.valueOf((stop-start))+" ms");
         this.setChanged();
-        notifyObservers();
+        MusicPlayerMainActivity.getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                notifyObservers();
+            }
+        });
+
     }
 
 }
