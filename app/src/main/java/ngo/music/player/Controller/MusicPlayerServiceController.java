@@ -30,7 +30,7 @@ import ngo.music.player.service.MusicPlayerService;
  */
 public class MusicPlayerServiceController extends Observable implements Constants.Models, Constants.MusicService {
     private static MusicPlayerServiceController instance = null;
-    private int stoppedTime;
+    private int stoppedTime=0;
 
     private Song currentSong;
     private int loopState = 0;
@@ -63,7 +63,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
             }
             notifyObservers(currentSong);
             computeNextSong();
-            stoppedTime = object.getInt("stopped_time");
+//            stoppedTime = object.getInt("stopped_time");
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,6 +1,5 @@
 package ngo.music.player.View;
 
-import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
@@ -22,7 +21,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.concurrent.TimeUnit;
 
+import co.mobiwise.library.MaskProgressView;
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.WaveFormController;
@@ -39,19 +40,38 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private NetworkImageView songImage;
 	private RelativeLayout artistInfo;
 	private WaveFormView waveFormView;
-	private Visualizer visualizer;
+	private TextView currentTimeText;
+	private TextView durationText;
+	MaskProgressView maskProgressView;
 
 
 	public FullPlayerUI(){
 		super();
 		WaveFormController.getInstance().addObserver(this);
 	}
+
+	@Override
+	protected Runnable setRunnable() {
+		return new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+//				maskProgressView.setmCurrentSeconds((int) (MusicPlayerService.getInstance().getCurrentTime()/1000));
+				float index = MusicPlayerService.getInstance().getCurrentTime()/(float)MusicPlayerServiceController.getInstance().getDuration();
+
+				maskProgressView.setIndexY(index);
+
+			}
+		};
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
-		iniMusicProgressBar();
+//		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
 				.findViewById(R.id.full_player_song_image);
 		Helper.setImageViewSize(MusicPlayerMainActivity.screenWidth,
@@ -63,6 +83,10 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_duration);
 		waveFormView = (WaveFormView)rootView.findViewById(R.id.wave_form_view);
 		waveFormView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
+		setupSeekbar();
+		//seekbar
+
+
 		try {
 			WaveFormController.getInstance().ReadFile(new File(MusicPlayerServiceController.getInstance().getCurrentSong().getLink()));
 		} catch (IOException e) {
@@ -79,10 +103,6 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		 */
 		configButton();
 		/**
-		 * config waveFormView
-		 */
-		iniAudio();
-		/**
 		 * updateUI
 		 */
 		updateShuffle();
@@ -92,14 +112,19 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	}
 
-	private void iniAudio() {
+	private void setupSeekbar() {
+		maskProgressView = (MaskProgressView) rootView.findViewById(R.id.seekbar);
+		maskProgressView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
+		maskProgressView.setmMaxSeconds(Integer.parseInt((MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("duration")))/1000);
 
-//		visualizer = WaveFormController.getInstance().visualizer;
-//		// Make sure the visualizer is enabled only when you actually want to
-//		// receive data, and
-//		// when it makes sense to receive data.
-//		if()
-//		visualizer.setEnabled(true);
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+			currentTimeText.setText(Helper.toFormatedTime(0));
+			durationText.setText(Helper.toFormatedTime(0));
+
 
 	}
 
@@ -373,12 +398,6 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 
 	@Override
-	protected boolean hasTextTime() {
-		// TODO Auto-generated method stub
-		return true;
-	}
-
-	@Override
 	public void update(Observable observable, Object data) {
 		super.update(observable, data);
 		if(observable instanceof MusicPlayerServiceController){
@@ -400,5 +419,15 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		Log.i("update wave", "update");
 		waveFormView.updateWaveForm();
 	}
-	
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void play() {
+		super.play();
+		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration())/1000);
+	}
 }

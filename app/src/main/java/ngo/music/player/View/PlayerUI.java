@@ -21,11 +21,9 @@ import ngo.music.player.helper.States;
 import ngo.music.player.service.MusicPlayerService;
 
 public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>, PlayUIInterface,Observer, Constants.MusicService,Constants.Appplication{
-	public static int numberPlayerLoading= 0;
-	protected ProgressWheel musicProgressBar;
+
 	protected View rootView = null;
-	TextView currentTimeText;
-	TextView durationText;
+
 	Runnable runnable;
 	
 	public PlayerUI() {
@@ -34,27 +32,15 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 		/**
 		 * Runnable for timer
 		 */
-		runnable = new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				if (hasTextTime()) {
-					currentTimeText.setText(Helper.toFormatedTime(MusicPlayerService.getInstance()
-							.getCurrentTime()));
-					durationText.setText(Helper.toFormatedTime(MusicPlayerServiceController.getInstance()
-							.getDuration()));
-				}
-			}
-		};
+		runnable = setRunnable();
 		MusicPlayerServiceController.getInstance().addObserver(this);
 	}
-	
+
 	/**
-	 * Player UI has text time or not
+	 * Setup runnable for updating ui while music is playing
 	 * @return
 	 */
-	protected abstract boolean hasTextTime();
+	protected abstract Runnable setRunnable();
 	/**
 	 * update Title of the song
 	 */
@@ -87,9 +73,6 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 
 	protected abstract void updateOtherInfo(Song song);
 
-	/**
-	 * update music progress Bar and Displayed Time
-	 */
 	@Override
 	public void updateMusicProgress() {
 		if (MusicPlayerService.getInstance().isPlaying()) {
@@ -98,38 +81,13 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 		runnable.run();
 	}
 
-	@Override
-	public void pause() {
 
-	}
 
 	@Override
 	public void play() {
 		runnable.run();
 	}
 
-	protected void iniMusicProgressBar() {
-		musicProgressBar = (ProgressWheel) rootView
-				.findViewById(R.id.player_progress_bar);
-
-		musicProgressBar
-				.setBackgroundResource(R.drawable.ic_media_play_progress);
-		musicProgressBar.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().startPause();
-			}
-		});
-	}
-
-	public ProgressWheel getProgressBar() {
-		return musicProgressBar;
-	}
-
-	@Override
-	public abstract void update();
 
 	/**
 	 * Update Image
@@ -138,16 +96,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 	 */
 	protected abstract void updateImage(Song song);
 
-	@Override
-	public void stop() {
-		// TODO Auto-generated method stub
-		
-		if (hasTextTime()) {
-			currentTimeText.setText(Helper.toFormatedTime(0));
-			durationText.setText(Helper.toFormatedTime(0));
-		}
 
-	}
 	@Override
 	public int compareTo(PlayerUI another) {
 		// TODO Auto-generated method stub
@@ -168,34 +117,25 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 				switch (TAG) {
 					case MUSIC_PLAYING:
 
-						musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause_progress);
+
 						updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 						play();
 
 						break;
 					case MUSIC_PROGRESS:
-						double ratio = (MusicPlayerService.getInstance().getCurrentTime() * 100.0) / MusicPlayerServiceController.getInstance().getDuration();
-						musicProgressBar.setProgressDegree((int) (ratio * 3.6));
+
 						updateMusicProgress();
 						break;
 					case MUSIC_PAUSE:
 						pause();
-						musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+
 
 						break;
 					case MUSIC_CUR_POINT_CHANGED:
-
-						int degree = (int) Math.round(360
-								* (double) MusicPlayerService.getInstance().getCurrentTime()
-								/ MusicPlayerServiceController.getInstance().getDuration());
 						updateMusicProgress();
-						musicProgressBar.setProgressDegree(degree);
 						break;
 					case MUSIC_STOPPED:
-
 						stop();
-						musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
-
 						break;
 				}
 			}
