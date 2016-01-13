@@ -29,6 +29,7 @@
 			android:layout_height="match_parent"
 			android:src="@drawable/song_image"/>
 		<ngo.music.player.View.WaveFormView
+			android:background="@color/title_gray"
 			android:id="@+id/wave_form_view"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />

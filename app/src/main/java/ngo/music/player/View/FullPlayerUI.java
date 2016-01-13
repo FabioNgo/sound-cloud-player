@@ -4,6 +4,7 @@ import android.media.audiofx.Visualizer;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,8 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -39,7 +42,10 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private Visualizer visualizer;
 
 
-	
+	public FullPlayerUI(){
+		super();
+		WaveFormController.getInstance().addObserver(this);
+	}
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -57,6 +63,11 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_duration);
 		waveFormView = (WaveFormView)rootView.findViewById(R.id.wave_form_view);
 		waveFormView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
+		try {
+			WaveFormController.getInstance().ReadFile(new File(MusicPlayerServiceController.getInstance().getCurrentSong().getLink()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 //		WaveFormController.getInstance().addObserver(waveFormView);
 		/**
 		 * Config Tool Bar
@@ -99,25 +110,25 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		toolbar.setLogo(R.drawable.logo);
 		toolbar.inflateMenu(R.menu.full_player_menu);
 		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem arg0) {
 				// TODO Auto-generated method stub
 				switch (arg0.getItemId()) {
-				case R.id.full_player_add_playlist:
-					ArrayList<Song> songs = new ArrayList<>();
-					songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
-					MenuController.getInstance(songs).addToPlaylist();
-					break;
-				case R.id.full_player_share:
-					/**
-					 * TU dien
-					 */
-					break;
-				case R.id.full_player_add_favorite:
-					
-				default:
-					break;
+					case R.id.full_player_add_playlist:
+						ArrayList<Song> songs = new ArrayList<>();
+						songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
+						MenuController.getInstance(songs).addToPlaylist();
+						break;
+					case R.id.full_player_share:
+						/**
+						 * TU dien
+						 */
+						break;
+					case R.id.full_player_add_favorite:
+
+					default:
+						break;
 				}
 				return false;
 			}
@@ -375,16 +386,19 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				int TAG = (int) data;
 				switch (TAG) {
 					case MUSIC_PROGRESS:
-						updateWaveForm();
+//						updateWaveForm();
 						break;
 				}
 			}
 		}
+		if(observable instanceof WaveFormController){
+			updateWaveForm();
+		}
 	}
 
 	private void updateWaveForm(){
-//		System.out.println("Ad");
-		waveFormView.updateVisualizer(WaveFormController.getInstance().waveformValues, WaveFormController.getInstance().length);
+		Log.i("update wave", "update");
+		waveFormView.updateWaveForm();
 	}
 	
 }

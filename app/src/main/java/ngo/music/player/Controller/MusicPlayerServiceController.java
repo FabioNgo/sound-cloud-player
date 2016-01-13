@@ -56,6 +56,11 @@ public class MusicPlayerServiceController extends Observable implements Constant
             filename = filePath+"/"+filename;
             JSONObject object = new JSONObject(fileContentToString());
             currentSong = (Song) ModelManager.getInstance(OFFLINE).get(object.getString("song_id"));
+            try {
+                WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             notifyObservers(currentSong);
             computeNextSong();
             stoppedTime = object.getInt("stopped_time");
@@ -279,7 +284,11 @@ public class MusicPlayerServiceController extends Observable implements Constant
     public void setCurrentSong(Song currentSong) {
 
         this.currentSong = currentSong;
-
+        try {
+            WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         computeNextSong();
         storeData();
         setChanged();
