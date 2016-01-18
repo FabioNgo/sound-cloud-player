@@ -6,6 +6,9 @@
 	<item
 		android:id="@+id/composition_list_item_delete"
 		android:title="Delete"/>
-	
+	<item
+		android:id="@+id/composition_list_item_add_to_queue"
+		android:title="Add To Queue"
+		/>
 
 </menu>

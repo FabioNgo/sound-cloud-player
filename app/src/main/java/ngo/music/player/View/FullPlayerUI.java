@@ -3,8 +3,10 @@ package ngo.music.player.View;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
@@ -16,8 +18,17 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Observable;
+import java.util.concurrent.TimeUnit;
+
+import co.mobiwise.library.MaskProgressView;
+import co.mobiwise.library.OnProgressDraggedListener;
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
+import ngo.music.player.Controller.WaveFormController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Constants;
@@ -30,15 +41,42 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private ImageView shuffle;
 	private NetworkImageView songImage;
 	private RelativeLayout artistInfo;
+	private WaveFormView waveFormView;
+	private TextView currentTimeText;
+	private TextView durationText;
+	MaskProgressView maskProgressView;
+	private boolean draggingSeekbar = false;
+
+	public FullPlayerUI(){
+		super();
+		WaveFormController.getInstance().addObserver(this);
+	}
+
+	@Override
+	protected Runnable setRunnable() {
+		return new Runnable() {
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+//				maskProgressView.setmCurrentSeconds((int) (MusicPlayerService.getInstance().getCurrentTime()/1000));
+				float index = MusicPlayerService.getInstance().getCurrentTime()/(float)MusicPlayerServiceController.getInstance().getDuration();
+				if(!draggingSeekbar){
+					maskProgressView.setIndexY(index);
+				}
 
 
-	
+			}
+		};
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		rootView = inflater.inflate(R.layout.fullplayer, container, false);
-		iniMusicProgressBar();
+
+//		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
 				.findViewById(R.id.full_player_song_image);
 		Helper.setImageViewSize(MusicPlayerMainActivity.screenWidth,
@@ -48,18 +86,27 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_current_time);
 		durationText = (TextView) rootView
 				.findViewById(R.id.full_player_duration);
-		
-		
+		waveFormView = (WaveFormView)rootView.findViewById(R.id.wave_form_view);
+		waveFormView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
+		setupSeekbar();
+		//seekbar
+
+
+		try {
+			WaveFormController.getInstance().ReadFile(new File(MusicPlayerServiceController.getInstance().getCurrentSong().getLink()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		WaveFormController.getInstance().addObserver(waveFormView);
 		/**
 		 * Config Tool Bar
 		 * 
 		 */
 		configToolbar();
-		/*
+		/**
 		 * Config buttons in UI
 		 */
 		configButton();
-
 		/**
 		 * updateUI
 		 */
@@ -70,6 +117,48 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	}
 
+	private void setupSeekbar() {
+		maskProgressView = (MaskProgressView) rootView.findViewById(R.id.seekbar);
+		maskProgressView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
+		maskProgressView.setmMaxSeconds(Integer.parseInt((MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("duration"))) / 1000);
+		maskProgressView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				MusicPlayerMainActivity.getActivity().disableSliding();
+				v.onTouchEvent(event);
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					MusicPlayerMainActivity.getActivity().enableSliding();
+					return true;
+				}
+				return true;
+			}
+		});
+		maskProgressView.setOnProgressDraggedListener(new OnProgressDraggedListener() {
+			@Override
+			public void onProgressDragged(int position) {
+				MusicPlayerService.getInstance().seekTo(position);
+				draggingSeekbar = false;
+			}
+
+			@Override
+			public void onProgressDragging(int position) {
+				draggingSeekbar = true;
+
+			}
+		});
+
+
+	}
+
+	@Override
+	public void stop() {
+		// TODO Auto-generated method stub
+			currentTimeText.setText(Helper.toFormatedTime(0));
+			durationText.setText(Helper.toFormatedTime(0));
+
+
+	}
+
 	private void configToolbar() {
 		// TODO Auto-generated method stub
 		Toolbar toolbar = (Toolbar) rootView
@@ -77,25 +166,25 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		toolbar.setLogo(R.drawable.logo);
 		toolbar.inflateMenu(R.menu.full_player_menu);
 		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-			
+
 			@Override
 			public boolean onMenuItemClick(MenuItem arg0) {
 				// TODO Auto-generated method stub
 				switch (arg0.getItemId()) {
-				case R.id.full_player_add_playlist:
-					Song[] songs = new Song[1];
-					songs[0] = MusicPlayerServiceController.getInstance().getCurrentSong();
-					MenuController.getInstance(songs).addToPlaylist();
-					break;
-				case R.id.full_player_share:
-					/**
-					 * TU dien
-					 */
-					break;
-				case R.id.full_player_add_favorite:
-					
-				default:
-					break;
+					case R.id.full_player_add_playlist:
+						ArrayList<Song> songs = new ArrayList<>();
+						songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
+						MenuController.getInstance(songs).addToPlaylist();
+						break;
+					case R.id.full_player_share:
+						/**
+						 * TU dien
+						 */
+						break;
+					case R.id.full_player_add_favorite:
+
+					default:
+						break;
 				}
 				return false;
 			}
@@ -340,10 +429,38 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 
 	@Override
-	protected boolean hasTextTime() {
-		// TODO Auto-generated method stub
-		return true;
+	public void update(Observable observable, Object data) {
+		super.update(observable, data);
+		if(observable instanceof MusicPlayerServiceController){
+			if(!(data instanceof Song)){
+				int TAG = (int) data;
+				switch (TAG) {
+					case MUSIC_PROGRESS:
+//						updateWaveForm();
+						break;
+				}
+			}
+		}
+		if(observable instanceof WaveFormController){
+			updateWaveForm();
+		}
 	}
 
-	
+	private void updateWaveForm(){
+		Log.i("update wave", "update");
+		waveFormView.updateWaveForm();
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void play() {
+		super.play();
+		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration())/1000);
+	}
+
+
 }

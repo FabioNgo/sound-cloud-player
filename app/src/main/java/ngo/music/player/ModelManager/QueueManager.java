@@ -8,10 +8,10 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
-import ngo.music.player.Model.Model;
 import ngo.music.player.Model.ModelInterface;
 import ngo.music.player.Model.Song;
 import ngo.music.player.helper.Constants;
+import ngo.music.player.service.MusicPlayerService;
 
 public class QueueManager extends SingleCategoryManager implements Constants, Constants.SongConstants,
         Constants.Models,
@@ -58,7 +58,9 @@ public class QueueManager extends SingleCategoryManager implements Constants, Co
     public void clearQueue(){
         String queueId = this.models.get(0).getId();
         removeAllSongFromCategory(queueId);
-        this.addSongToCategory(MusicPlayerServiceController.getInstance().getCurrentSong());
+        ArrayList<Song> songs = new ArrayList<>();
+        songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
+        this.addSongsToCategory(songs);
         MusicPlayerServiceController.getInstance().computeNextSong();
     }
 }

@@ -36,11 +36,11 @@ public class IncomingCallController extends BroadcastReceiver implements Constan
 					if(States.musicPlayerState == MUSIC_PLAYING){
 
 						MusicPlayerService.getInstance().pause();
-						States.musicPlayerState = MUSIC_INTERUPTED;
+						States.musicPlayerState = MUSIC_ON_PHONE;
 					}
 					break;
 				case TelephonyManager.CALL_STATE_IDLE:
-					if(States.musicPlayerState == MUSIC_INTERUPTED){
+					if(States.musicPlayerState == MUSIC_ON_PHONE){
 
 						MusicPlayerService.getInstance().playCurrentSong();
 						States.musicPlayerState = MUSIC_PLAYING;

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
@@ -152,30 +153,9 @@ public abstract class SongsInCategoryAdapter extends ArrayAdapter<Song> implemen
 							.setVisible(false);
 				}
 				// registering popup with OnMenuItemClickListener
-				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
-					@Override
-					public boolean onMenuItemClick(MenuItem arg0) {
-						// TODO Auto-generated method stub
-						switch (arg0.getItemId()) {
-						case R.id.song_cat_remove:
-							((CategoryManager) ModelManager.getInstance(type))
-									.removeSongFromCategory(song.getAttribute("song_id"), category.getId());
-							break;
-						case R.id.song_cat_add:
-//							Song[] songs = new Song[1];
-//							songs[0] = song;
-//							MenuController.getInstance(songs).addToPlaylist();
-//							break;
-
-						default:
-							break;
-						}
-
-						return false;
-					}
-				});
-
+				ArrayList<Song> songs = new ArrayList<>();
+				songs.add(song);
+				popup.setOnMenuItemClickListener(MenuController.getInstance(songs,category));
 				popup.show(); // showing popup menu
 			}
 		});

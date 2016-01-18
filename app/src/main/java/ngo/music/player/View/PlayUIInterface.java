@@ -24,5 +24,8 @@ public interface PlayUIInterface {
      */
     void update();
 
+    /**
+     * Update Ui when stop music
+     */
     void stop();
 }

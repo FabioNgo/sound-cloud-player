@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.todddavies.components.progressbar.ProgressWheel;
 import com.volley.api.AppController;
 
 import ngo.music.player.Controller.MusicPlayerServiceController;
@@ -15,12 +16,13 @@ import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
+import ngo.music.player.service.MusicPlayerService;
 
 public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 	NetworkImageView image;
 
-	
+	protected ProgressWheel musicProgressBar;
 
 
 	@Override
@@ -38,6 +40,31 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 		updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 		return rootView;
+	}
+	protected void iniMusicProgressBar() {
+		musicProgressBar = (ProgressWheel) rootView
+				.findViewById(R.id.player_progress_bar);
+
+		musicProgressBar
+				.setBackgroundResource(R.drawable.ic_media_play_progress);
+		musicProgressBar.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				MusicPlayerService.getInstance().startPause();
+			}
+		});
+	}
+	@Override
+	protected Runnable setRunnable() {
+		return new Runnable() {
+			@Override
+			public void run() {
+				double ratio = (MusicPlayerService.getInstance().getCurrentTime() * 100.0) / MusicPlayerServiceController.getInstance().getDuration();
+				musicProgressBar.setProgressDegree((int) (ratio * 3.6));
+			}
+		};
 	}
 
 	@Override
@@ -76,6 +103,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		}
 	}
 
+
 	@Override
 	protected void updateOtherInfo(Song song) {
 		// TODO Auto-generated method stub
@@ -88,9 +116,18 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 	}
 
 	@Override
-	protected boolean hasTextTime() {
-		// TODO Auto-generated method stub
-		return false;
+	public void stop() {
+		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
 	}
 
+	@Override
+	public void play() {
+		super.play();
+		musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause_progress);
+	}
+
+	@Override
+	public void pause() {
+		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+	}
 }

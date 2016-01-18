@@ -117,6 +117,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
                 models.remove(i);
             }
         }
+
         storeData();
     }
 

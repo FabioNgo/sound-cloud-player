@@ -126,7 +126,11 @@ public abstract class ListItemsInCompositionListFragment extends DialogFragment 
 
 	@Override
 	public void update(Observable observable, Object data) {
+		if(rootView == null){
+			return;
+		}
 		if(observable instanceof CategoryManager){
+
 			Toolbar toolbar = (Toolbar)rootView.findViewById(R.id.list_items_composition_list_toolbar);
 			songs = ((CategoryManager) observable).getSongsFromCategory(category.getId());
 			toolbar.setSubtitle(songs.size() +" song(s)");

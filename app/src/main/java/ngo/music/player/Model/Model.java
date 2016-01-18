@@ -5,17 +5,19 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+import ngo.music.player.helper.Constants;
+
 /**
  * Created by fabiongo on 12/24/2015.
  */
-public abstract class Model implements ModelInterface, Comparable<Model> {
+public abstract class Model implements ModelInterface, Comparable<Model>,Constants.Models {
     JSONObject object;
 
     public Model(JSONObject object) {
         // TODO Auto-generated constructor stub
         this.object = object;
     }
-
+    public abstract int getType();
     @Override
     public String getId() {
         try {

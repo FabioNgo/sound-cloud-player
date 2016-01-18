@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	xmlns:app="http://schemas.android.com/tools">
 
 	<android.support.v7.widget.Toolbar
 		xmlns:sothree="http://schemas.android.com/apk/res-auto"
@@ -23,15 +24,35 @@
 		<!-- AVATAR OF SONG -->
 
 		<com.android.volley.toolbox.NetworkImageView
+			android:visibility="gone"
 			android:id="@+id/full_player_song_image"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:src="@drawable/song_image"/>
+		<ngo.music.player.View.WaveFormView
+			android:background="@color/title_gray"
+			android:id="@+id/wave_form_view"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent" />
+		<co.mobiwise.library.MaskProgressView
 
+			android:id="@+id/seekbar"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:progressEmptyColor="#4E3C51"
+			app:progressLoadedColor="#E91E64"
+			app:coverMaskColor="#80000000"
+			app:durationTextColor="#FFFFFF"
+			app:durationTextSize="15sp"
+			app:coverImage="@drawable/ic_launcher"
+			app:placeHolder="@drawable/ic_launcher"
+			app:progressHeight="20dp"
+			app:currentProgress="23"/>
 		<RelativeLayout
+			android:visibility="gone"
 			android:id="@+id/opacity_layout"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:alpha="0.6"
 			android:background="#212121"
 			android:gravity="bottom">
@@ -40,8 +61,8 @@
 
 		<RelativeLayout
 			android:id="@+id/artist_info"
-			android:layout_width="fill_parent"
-			android:layout_height="fill_parent"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
 			android:gravity="bottom">
 
 			<!-- AVATAR OF Artist -->

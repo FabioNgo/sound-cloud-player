@@ -2,8 +2,8 @@ package ngo.music.player.View;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.FileObserver;
+import com.crashlytics.android.Crashlytics;
+import io.fabric.sdk.android.Fabric;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -66,6 +66,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	private PagerSlidingTabStrip tabs;
 	private ViewPager pager;
 	private int defaultTabPosition = 0;
+
 	// public MusicPlayerMainActivity() {
 	// // TODO Auto-generated constructor stub
 	// activity = this;
@@ -79,7 +80,14 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 //			}
 //		}
 //	};
-
+	public void disableSliding(){
+		this.mLayout.setSlidingEnabled(false);
+//		this.setSlidingActionBarEnabled(false);
+	}
+	public void enableSliding(){
+		this.mLayout.setSlidingEnabled(true);
+//		this.setSlidingActionBarEnabled(true);
+	}
 	public static MusicPlayerMainActivity getActivity() {
 		return activity;
 	}
@@ -109,7 +117,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		View decorView = getWindow().getDecorView();
 		decorView
 				.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-
+		Fabric.with(this, new Crashlytics());
 		setContentView(R.layout.activity_main);
 		Intent intent = getIntent();
 		if ("CallFromNoti".equals(intent.getAction())) {
@@ -180,7 +188,9 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	 * Sliding Up Panel
 	 */
 	private void configSlidingUpPanel() {
+
 		mLayout = (SlidingUpPanelLayout) findViewById(R.id.sliding_layout);
+
 		mLayout.setPanelSlideListener(new PanelSlideListener() {
 			@Override
 			public void onPanelSlide(View panel, float slideOffset) {

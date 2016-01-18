@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnBufferingUpdateListener;
@@ -14,18 +15,24 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.media.MediaPlayer.OnInfoListener;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.media.MediaPlayer.OnSeekCompleteListener;
+import android.media.audiofx.Visualizer;
 import android.os.Binder;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.RemoteViews;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import ngo.music.player.Controller.HeadSetController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.PlaybackActionController;
+import ngo.music.player.Controller.WaveFormController;
 import ngo.music.player.Model.OfflineSong;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
@@ -104,16 +111,21 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnPreparedListener(this);
 			mediaPlayer.reset();
+//			mediaPlayer.seekTo(0);
 			MusicPlayerServiceController.getInstance().startTimer();
+
 			try {
 				mediaPlayer.setDataSource(MusicPlayerServiceController.getInstance().getCurrentSong().getLink());
 
 				mediaPlayer.prepareAsync();
+//				WaveFormController.getInstance().setUpVisualizer();
+				HeadSetController receiver = HeadSetController.getInstance();
+				IntentFilter intentFilter = new IntentFilter(AudioManager.ACTION_HEADSET_PLUG);
+				registerReceiver(receiver, intentFilter);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e("ini media", e.getMessage());
 			}
-
 		}
 
 	}
@@ -153,6 +165,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 
 		mediaPlayer.start();
+//		WaveFormController.getInstance().visualizer.setEnabled(true);
 		States.musicPlayerState = MUSIC_PLAYING;
 		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PLAYING,true);
 	}
@@ -196,7 +209,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private void pauseMedia() {
 		// TODO Auto-generated method stub
 		if (mediaPlayer.isPlaying()) {
-
+//			WaveFormController.getInstance().visualizer.setEnabled(false);
 			mediaPlayer.pause();
 
 		}
@@ -238,7 +251,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			playNextSong();
 
 		}else{
-			if (States.musicPlayerState == MUSIC_PAUSE|| States.musicPlayerState == MUSIC_INTERUPTED) {
+			if (States.musicPlayerState == MUSIC_PAUSE|| States.musicPlayerState == MUSIC_HEADSET_UNPLUG || States.musicPlayerState == MUSIC_ON_PHONE) {
 				playMedia();
 
 			} else if (States.musicPlayerState == MUSIC_STOPPED) {
@@ -300,7 +313,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		mediaPlayer.stop();
 		// System.out.println("PLAY NEW SONG 2");
 		Song song = MusicPlayerServiceController.getInstance().getCurrentSong();
-
+		States.musicPlayerState = MUSIC_PLAYING;
 		if (song == null) {
 			Helper.makeToastText("No song to play",
 					getApplicationContext());
@@ -342,14 +355,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 
 
-	/**
-	 * Check if media is playing or not
-	 *
-	 * @return
-	 */
-	public boolean isPlaying() {
-		return States.musicPlayerState == MUSIC_PLAYING;
-	}
 
 	private void updateNotification() {
 		// System.out.println("NOTIFICATION");
@@ -538,6 +543,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	private void playSong(Song song) {
+
 		try {
 			String link = song.getLink();
 			mediaPlayer.reset();
@@ -583,9 +589,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	@Override
 	public void onPrepared(MediaPlayer mp) {
 		// TODO Auto-generated method stub
-		if (States.musicPlayerState == MUSIC_PLAYING) {
+		if (States.musicPlayerState != MUSIC_STOPPED) {
 			playMedia();
 		}
+//		WaveFormController.getInstance().setDuration(mp.getDuration());
 	}
 
 	@Override
@@ -594,6 +601,12 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 			if(data instanceof Song){
 				playNewSong();
 			}
+		}
+	}
+
+	public void seekTo(int position) {
+		if(States.musicPlayerState == MUSIC_PLAYING){
+			mediaPlayer.seekTo(position*1000);
 		}
 	}
 

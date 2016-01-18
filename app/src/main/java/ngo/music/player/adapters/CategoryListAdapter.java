@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Model.Category;
 import ngo.music.player.Model.Model;
 import ngo.music.player.Model.Song;
@@ -291,30 +292,10 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 							.setVisible(false);
 				}
 				// registering popup with OnMenuItemClickListener
-				popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+				Category category = (Category) ModelManager.getInstance(type).get(holder.objectId);
+				ArrayList<Song> songs = ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(category.getId());
 
-					@Override
-					public boolean onMenuItemClick(MenuItem arg0) {
-						// TODO Auto-generated method stub
-						switch (arg0.getItemId()) {
-						case R.id.composition_list_item_shows:
-
-							ListItemsInCompositionListFragment fragment = ListItemsInCompositionListFragment.getInstance(type);
-							Category category = (Category) ModelManager.getInstance(type).get(holder.objectId);
-							fragment.setCategory(category);
-							fragment.show(MusicPlayerMainActivity.getActivity().getSupportFragmentManager(),"Show songs in cate");
-							break;
-						case R.id.composition_list_item_delete:
-							ModelManager.getInstance(type).remove(holder.objectId);
-							break;
-							default:
-								break;
-						}
-
-						return false;
-					}
-				});
-
+				popup.setOnMenuItemClickListener(MenuController.getInstance(songs,category));
 				popup.show(); // showing popup menu
 			}
 		});

@@ -30,7 +30,7 @@ import ngo.music.player.service.MusicPlayerService;
  */
 public class MusicPlayerServiceController extends Observable implements Constants.Models, Constants.MusicService {
     private static MusicPlayerServiceController instance = null;
-    private int stoppedTime;
+    private int stoppedTime=0;
 
     private Song currentSong;
     private int loopState = 0;
@@ -56,9 +56,14 @@ public class MusicPlayerServiceController extends Observable implements Constant
             filename = filePath+"/"+filename;
             JSONObject object = new JSONObject(fileContentToString());
             currentSong = (Song) ModelManager.getInstance(OFFLINE).get(object.getString("song_id"));
+            try {
+                WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             notifyObservers(currentSong);
             computeNextSong();
-            stoppedTime = object.getInt("stopped_time");
+//            stoppedTime = object.getInt("stopped_time");
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -276,10 +281,20 @@ public class MusicPlayerServiceController extends Observable implements Constant
     public void clearStack(){
         this.stackSongplayed.clear();
     }
-    public void setCurrentSong(Song currentSong) {
+    public void setCurrentSong(final Song currentSong) {
 
         this.currentSong = currentSong;
-
+        Thread readfileThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        readfileThread.start();
         computeNextSong();
         storeData();
         setChanged();

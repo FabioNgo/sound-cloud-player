@@ -18,10 +18,10 @@ public class OutgoingCallController extends BroadcastReceiver implements Constan
 		if(States.musicPlayerState == MUSIC_PLAYING){
 
 			MusicPlayerService.getInstance().pause();
-			States.musicPlayerState = MUSIC_INTERUPTED;
+			States.musicPlayerState = MUSIC_ON_PHONE;
 			return;
 		}
-		if(States.musicPlayerState == MUSIC_INTERUPTED){
+		if(States.musicPlayerState == MUSIC_ON_PHONE){
 
 			MusicPlayerService.getInstance().playCurrentSong();
 			States.musicPlayerState = MUSIC_PLAYING;

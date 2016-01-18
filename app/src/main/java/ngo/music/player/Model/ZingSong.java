@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.Override;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -25,10 +26,17 @@ public class ZingSong extends Song {
 
         return getAttribute("title");
     }
+    @Override
+    public int getType() {
+        return ZING;
+    }
+
+
 
     @Override
     public String getArtist() {
         return getAttribute("artist");
+
     }
 
     @Override
@@ -56,6 +64,5 @@ public class ZingSong extends Song {
     public String getDuration() {
         return getAttribute("duration")+"000";
     }
-
 
 }
