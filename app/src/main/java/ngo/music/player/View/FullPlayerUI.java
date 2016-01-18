@@ -31,6 +31,7 @@ import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
+import ngo.music.player.helper.States;
 import ngo.music.player.service.MusicPlayerService;
 
 
@@ -87,12 +88,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		//seekbar
 
 
-		try {
-			WaveFormController.getInstance().ReadFile(new File(MusicPlayerServiceController.getInstance().getCurrentSong().getLink()));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-//		WaveFormController.getInstance().addObserver(waveFormView);
+		WaveFormController.getInstance().ReadFile(new File(MusicPlayerServiceController.getInstance().getCurrentSong().getLink()));
+		//		WaveFormController.getInstance().addObserver(waveFormView);
 		/**
 		 * Config Tool Bar
 		 * 
@@ -407,8 +404,16 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		}
 	}
 
+	/**
+	 * resume player from pause
+	 */
+	@Override
+	public void resume() {
+		super.resume();
+		playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+	}
+
 	private void updateWaveForm(){
-		Log.i("update wave", "update");
 		waveFormView.updateWaveForm();
 	}
 
@@ -421,6 +426,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	public void play() {
 		super.play();
 		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration()) / 1000);
+
 		playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
 	}
 

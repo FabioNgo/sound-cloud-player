@@ -166,8 +166,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		mediaPlayer.start();
 //		WaveFormController.getInstance().visualizer.setEnabled(true);
-		States.musicPlayerState = MUSIC_PLAYING;
-		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_PLAYING,true);
+
 	}
 
 	@Override
@@ -253,11 +252,15 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}else{
 			if (States.musicPlayerState == MUSIC_PAUSE|| States.musicPlayerState == MUSIC_HEADSET_UNPLUG || States.musicPlayerState == MUSIC_ON_PHONE) {
 				playMedia();
+				States.musicPlayerState = MUSIC_RESUME;
+				MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_RESUME, true);
 
 			} else if (States.musicPlayerState == MUSIC_STOPPED) {
 
 				mediaPlayer.seekTo(MusicPlayerServiceController.getInstance().getStoppedTime());
 				playMedia();
+				States.musicPlayerState = MUSIC_NEW_SONG;
+				MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_NEW_SONG, true);
 
 			} else {
 
@@ -290,7 +293,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		}
 
 		MusicPlayerServiceController.getInstance().clearStack();
-		States.musicPlayerState = MUSIC_PLAYING;
+		States.musicPlayerState = MUSIC_NEW_SONG;
 		((QueueManager)ModelManager.getInstance(QUEUE)).replaceQueue(queue);
 		MusicPlayerServiceController.getInstance().setCurrentSong(queue.get(position));
 	}
@@ -313,7 +316,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		mediaPlayer.stop();
 		// System.out.println("PLAY NEW SONG 2");
 		Song song = MusicPlayerServiceController.getInstance().getCurrentSong();
-		States.musicPlayerState = MUSIC_PLAYING;
+		States.musicPlayerState = MUSIC_NEW_SONG;
 		if (song == null) {
 			Helper.makeToastText("No song to play",
 					getApplicationContext());
@@ -383,7 +386,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		bigView.setTextViewText(R.id.noti_title, title);
 		bigView.setTextViewText(R.id.noti_content, subTitle);
 
-		if (States.musicPlayerState == MUSIC_PLAYING) {
+		if (States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME) {
 			bigView.setImageViewResource(R.id.noti_play_pause,
 					R.drawable.ic_media_pause);
 		} else {
@@ -405,7 +408,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				createPendingIntent(NOTI_ACTION_CANCEL));
 		smallView.setTextViewText(R.id.noti_title, title);
 		smallView.setTextViewText(R.id.noti_content, subTitle);
-		if (States.musicPlayerState == MUSIC_PLAYING) {
+		if (States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME) {
 			smallView.setImageViewResource(R.id.noti_play_pause,
 					R.drawable.ic_media_pause);
 		} else {
@@ -467,7 +470,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void startPause() {
 		// TODO Auto-generated method stub
 
-		if (States.musicPlayerState != MUSIC_PLAYING) {
+		if (!(States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME)) {
 			playCurrentSong();
 		} else {
 			pause();
@@ -477,41 +480,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 
 
-	/**
-	 * Fast forward of playing song
-	 */
-	public void forwardSong() {
-		if (mediaPlayer != null) {
-			if (States.musicPlayerState != MUSIC_PLAYING) {
-				playCurrentSong();
-			}
-			int currentPosition = mediaPlayer.getCurrentPosition();
-			if (currentPosition + seekForwardTime <= mediaPlayer.getDuration()) {
-				mediaPlayer.seekTo(currentPosition + seekForwardTime);
-
-			} else {
-				playNextSong();
-			}
-		}
-	}
-
-	/**
-	 * rewind of playing song
-	 */
-	public void rewindSong() {
-		if (mediaPlayer != null) {
-			if (States.musicPlayerState != MUSIC_PLAYING) {
-				playCurrentSong();
-			}
-			int currentPosition = mediaPlayer.getCurrentPosition();
-			if (currentPosition - seekBackwardTime >= 0) {
-				mediaPlayer.seekTo(currentPosition - seekBackwardTime);
-
-			} else {
-				playPreviousSong();
-			}
-		}
-	}
 
 
 
@@ -592,6 +560,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 		if (States.musicPlayerState != MUSIC_STOPPED) {
 			playMedia();
+			States.musicPlayerState = MUSIC_NEW_SONG;
+			MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_NEW_SONG, true);
 		}
 //		WaveFormController.getInstance().setDuration(mp.getDuration());
 	}
@@ -609,7 +579,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	public void seekTo(int position) {
-		if(States.musicPlayerState == MUSIC_PLAYING){
+		if(States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME){
 			mediaPlayer.seekTo(position*1000);
 		}
 	}

@@ -28,7 +28,7 @@ public class HeadSetController extends BroadcastReceiver implements Constants.Mu
         switch (state) {
             //unplug
             case 0:
-                if (States.musicPlayerState == MUSIC_PLAYING) {
+                if (States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME) {
 
                     MusicPlayerService.getInstance().pause();
                     States.musicPlayerState = MUSIC_HEADSET_UNPLUG;
@@ -39,7 +39,7 @@ public class HeadSetController extends BroadcastReceiver implements Constants.Mu
                 if (States.musicPlayerState == MUSIC_HEADSET_UNPLUG) {
 
                     MusicPlayerService.getInstance().playCurrentSong();
-                    States.musicPlayerState = MUSIC_PLAYING;
+                    States.musicPlayerState = MUSIC_RESUME;
                 }
                 break;
             default:

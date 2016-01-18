@@ -6,6 +6,7 @@ import android.media.MediaFormat;
 import android.util.Log;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
@@ -55,9 +56,8 @@ public class WaveFormController extends Observable {
         boolean reportProgress(double fractionComplete);
     }
 
-    public void ReadFile(File inputFile)
-            throws java.io.FileNotFoundException,
-            java.io.IOException {
+    public void ReadFile(File inputFile){
+        mNumFrames = 0;
         long start = System.currentTimeMillis();
         MediaExtractor extractor = new MediaExtractor();
         MediaFormat format = null;
@@ -67,7 +67,18 @@ public class WaveFormController extends Observable {
         String[] components = mInputFile.getPath().split("\\.");
         String mFileType = components[components.length - 1];
         int mFileSize = (int) mInputFile.length();
-        extractor.setDataSource(mInputFile.getPath());
+        try {
+            extractor.setDataSource(mInputFile.getPath());
+        } catch (IOException e) {
+            MusicPlayerMainActivity.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    setChanged();
+                    notifyObservers();
+                }
+            });
+            return;
+        }
         int numTracks = extractor.getTrackCount();
         // find and select the first audio track present in the file.
         for (i = 0; i < numTracks; i++) {
@@ -83,7 +94,12 @@ public class WaveFormController extends Observable {
         int expectedNumSamples =
                 (int) ((format.getLong(MediaFormat.KEY_DURATION) / 20000000.f) * mSampleRate + 0.5f);
 
-        MediaCodec codec = MediaCodec.createDecoderByType(format.getString(MediaFormat.KEY_MIME));
+        MediaCodec codec = null;
+        try {
+            codec = MediaCodec.createDecoderByType(format.getString(MediaFormat.KEY_MIME));
+        } catch (IOException e) {
+            return;
+        }
         codec.configure(format, null, null, 0);
 
         codec.start();

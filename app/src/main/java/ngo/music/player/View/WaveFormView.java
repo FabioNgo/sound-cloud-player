@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -55,6 +56,7 @@ public class WaveFormView extends View {
      */
     public void computeDoublesForAllZoomLevels() {
         int numFrames = WaveFormController.getInstance().getNumFrames();
+
         int[] frameGains = WaveFormController.getInstance().getFrameGains();
         double[] smoothedGains = new double[numFrames];
         if (numFrames == 1) {
@@ -100,7 +102,9 @@ public class WaveFormView extends View {
     }
     @Override
     protected void onDraw(Canvas canvas) {
+
         super.onDraw(canvas);
+        canvas.drawColor(0, PorterDuff.Mode.CLEAR);
         mRect.set(0, 0, getWidth(), getHeight());
         if(heights == null){
             return;

@@ -56,11 +56,11 @@ public class MusicPlayerServiceController extends Observable implements Constant
             filename = filePath+"/"+filename;
             JSONObject object = new JSONObject(fileContentToString());
             currentSong = (Song) ModelManager.getInstance(OFFLINE).get(object.getString("song_id"));
-            try {
-                WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
-            } catch (IOException e) {
-                e.printStackTrace();
+            if(currentSong == null){
+                return;
             }
+
+            WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
             notifyObservers(currentSong);
             computeNextSong();
 //            stoppedTime = object.getInt("stopped_time");
@@ -297,11 +297,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
         Thread readfileThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                WaveFormController.getInstance().ReadFile(new File(currentSong.getLink()));
             }
         });
         readfileThread.start();

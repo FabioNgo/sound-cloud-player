@@ -113,13 +113,14 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 
 				switch (TAG) {
 					// start play song
-					case MUSIC_PLAYING:
+					case MUSIC_NEW_SONG:
 
 
 						updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 						play();
-
 						break;
+					case MUSIC_RESUME:
+						resume();
 					case MUSIC_PROGRESS:
 
 						updateMusicProgress();
@@ -138,5 +139,10 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 				}
 			}
 		}
+	}
+
+	@Override
+	public void resume(){
+		runnable.run();
 	}
 }

@@ -127,4 +127,10 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 	public void pause() {
 		playPauseBtn.setImageResource(android.R.drawable.ic_media_play);
 	}
+
+	@Override
+	public void resume() {
+		super.resume();
+		playPauseBtn.setImageResource(android.R.drawable.ic_media_pause);
+	}
 }

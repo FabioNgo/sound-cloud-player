@@ -15,7 +15,7 @@ public class OutgoingCallController extends BroadcastReceiver implements Constan
 	public void onReceive(Context context, Intent intent) {
 		// TELEPHONY MANAGER class object to register one listner
 
-		if(States.musicPlayerState == MUSIC_PLAYING){
+		if(States.musicPlayerState == MUSIC_NEW_SONG){
 
 			MusicPlayerService.getInstance().pause();
 			States.musicPlayerState = MUSIC_ON_PHONE;
@@ -24,7 +24,7 @@ public class OutgoingCallController extends BroadcastReceiver implements Constan
 		if(States.musicPlayerState == MUSIC_ON_PHONE){
 
 			MusicPlayerService.getInstance().playCurrentSong();
-			States.musicPlayerState = MUSIC_PLAYING;
+			States.musicPlayerState = MUSIC_RESUME;
 			return;
 		}
 		

@@ -15,10 +15,20 @@ public interface PlayUIInterface {
 
     void updateMusicProgress();
 
+    /**
+     * call when pause playing song
+     */
     void pause();
 
+    /**
+     * call when play new song
+     */
     void play();
 
+    /**
+     * resume player from pause
+     */
+    void resume();
     /**
      * Update Ui when stop music
      */

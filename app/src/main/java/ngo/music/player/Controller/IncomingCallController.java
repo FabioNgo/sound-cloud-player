@@ -33,7 +33,7 @@ public class IncomingCallController extends BroadcastReceiver implements Constan
 			Log.i("call state", String.valueOf(state));
 			switch (state){
 				case TelephonyManager.CALL_STATE_RINGING:
-					if(States.musicPlayerState == MUSIC_PLAYING){
+					if(States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME){
 
 						MusicPlayerService.getInstance().pause();
 						States.musicPlayerState = MUSIC_ON_PHONE;
@@ -43,7 +43,7 @@ public class IncomingCallController extends BroadcastReceiver implements Constan
 					if(States.musicPlayerState == MUSIC_ON_PHONE){
 
 						MusicPlayerService.getInstance().playCurrentSong();
-						States.musicPlayerState = MUSIC_PLAYING;
+						States.musicPlayerState = MUSIC_RESUME;
 					}
 					break;
 				default:
