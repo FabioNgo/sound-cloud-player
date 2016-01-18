@@ -1,11 +1,10 @@
 package ngo.music.player.View;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.Toolbar.OnMenuItemClickListener;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
-import java.util.concurrent.TimeUnit;
 
 import co.mobiwise.library.MaskProgressView;
 import co.mobiwise.library.OnProgressDraggedListener;
@@ -38,14 +36,16 @@ import ngo.music.player.service.MusicPlayerService;
 
 public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
-	private ImageView shuffle;
+	private FloatingActionButton playerMode;
+	private ImageView addToPlaylist;
 	private NetworkImageView songImage;
 	private RelativeLayout artistInfo;
 	private WaveFormView waveFormView;
-	private TextView currentTimeText;
-	private TextView durationText;
-	MaskProgressView maskProgressView;
+	private RelativeLayout functionalButtonsContainer;
+	private MaskProgressView maskProgressView;
 	private boolean draggingSeekbar = false;
+	private ImageView playPauseButton;
+
 
 	public FullPlayerUI(){
 		super();
@@ -81,11 +81,6 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.full_player_song_image);
 		Helper.setImageViewSize(MusicPlayerMainActivity.screenWidth,
 				MusicPlayerMainActivity.screenWidth, songImage);
-
-		currentTimeText = (TextView) rootView
-				.findViewById(R.id.full_player_current_time);
-		durationText = (TextView) rootView
-				.findViewById(R.id.full_player_duration);
 		waveFormView = (WaveFormView)rootView.findViewById(R.id.wave_form_view);
 		waveFormView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
 		setupSeekbar();
@@ -110,8 +105,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		/**
 		 * updateUI
 		 */
-		updateShuffle();
-		updateLoop();
+		updatePlayerMode();
+
 		updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 		return rootView;
 
@@ -120,13 +115,13 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private void setupSeekbar() {
 		maskProgressView = (MaskProgressView) rootView.findViewById(R.id.seekbar);
 		maskProgressView.getLayoutParams().height = MusicPlayerMainActivity.screenWidth;
-		maskProgressView.setmMaxSeconds(Integer.parseInt((MusicPlayerServiceController.getInstance().getCurrentSong().getAttribute("duration"))) / 1000);
+		maskProgressView.setmMaxSeconds((MusicPlayerServiceController.getInstance().getCurrentSong().getDuration() / 1000));
 		maskProgressView.setOnTouchListener(new View.OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				MusicPlayerMainActivity.getActivity().disableSliding();
 				v.onTouchEvent(event);
-				if(event.getAction() == MotionEvent.ACTION_UP){
+				if (event.getAction() == MotionEvent.ACTION_UP) {
 					MusicPlayerMainActivity.getActivity().enableSliding();
 					return true;
 				}
@@ -152,11 +147,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	@Override
 	public void stop() {
-		// TODO Auto-generated method stub
-			currentTimeText.setText(Helper.toFormatedTime(0));
-			durationText.setText(Helper.toFormatedTime(0));
-
-
+		playPauseButton.setImageResource(android.R.drawable.ic_media_play);
 	}
 
 	private void configToolbar() {
@@ -164,157 +155,150 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
 		toolbar.setLogo(R.drawable.logo);
-		toolbar.inflateMenu(R.menu.full_player_menu);
-		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-			@Override
-			public boolean onMenuItemClick(MenuItem arg0) {
-				// TODO Auto-generated method stub
-				switch (arg0.getItemId()) {
-					case R.id.full_player_add_playlist:
-						ArrayList<Song> songs = new ArrayList<>();
-						songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
-						MenuController.getInstance(songs).addToPlaylist();
-						break;
-					case R.id.full_player_share:
-						/**
-						 * TU dien
-						 */
-						break;
-					case R.id.full_player_add_favorite:
-
-					default:
-						break;
-				}
-				return false;
-			}
-		});
+//		toolbar.inflateMenu(R.menu.full_player_menu);
+//		toolbar.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+//
+//			@Override
+//			public boolean onMenuItemClick(MenuItem arg0) {
+//				// TODO Auto-generated method stub
+//				switch (arg0.getItemId()) {
+//					case R.id.full_player_add_playlist:
+//						ArrayList<Song> songs = new ArrayList<>();
+//						songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
+//						MenuController.getInstance(songs).addToPlaylist();
+//						break;
+//					case R.id.full_player_share:
+//						/**
+//						 * TU dien
+//						 */
+//						break;
+//					case R.id.full_player_add_favorite:
+//
+//					default:
+//						break;
+//				}
+//				return false;
+//			}
+//		});
 	}
 
 	/**
 	 * Config rewind, fastforward, shuffle, loop button
 	 */
 	private void configButton() {
-		/**
-		 * Rewind button
-		 */
-		configRewindButton();
-		/**
-		 * Fast forward button
-		 */
-		configFastForwardButton();
-		/**
-		 * Shuffle button
-		 */
-		configShuffleButton();
-		/**
-		 * Loop button
-		 */
-		configLoopButton();
+
+		configPrevSongButton();
+
+		configNextSongButton();
+		configPlayPauseButton();
+		configFunctionalButtons();
+
 	}
 
-	/**
-	 * 
-	 */
-	private void configLoopButton() {
-		ImageView loop = (ImageView) rootView
-				.findViewById(R.id.full_player_loop);
-
+	private void configPlayPauseButton() {
+		playPauseButton = (ImageView) rootView.findViewById(R.id.play_pause_button);
 		Helper.setImageViewSize(
-				MusicPlayerMainActivity.screenWidth / 10,
-				MusicPlayerMainActivity.screenWidth / 10, loop);
-		updateLoop();
-		loop.setOnClickListener(new OnClickListener() {
-
+				Helper.getWidthInPercent(8.3),
+				Helper.getWidthInPercent(8.3), playPauseButton);
+		playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+		playPauseButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MusicPlayerServiceController.getInstance().changeLoopState();
-				updateLoop();
+				MusicPlayerService.getInstance().startPause();
 			}
 		});
 	}
 
 	/**
-	 * 
+	 * Functional button ( player mode, share,favortite,....)
 	 */
-	private void configShuffleButton() {
-		shuffle = (ImageView) rootView.findViewById(R.id.full_player_shuffle);
+	private void configFunctionalButtons() {
+//		functionalButtonsContainer = (RelativeLayout)rootView.findViewById(R.id.full_player_func_btn_container);
+//		functionalButtonsContainer.getLayoutParams().height = Helper.getHeightInPercent(8.3);
+		/**
+		 * Buttons
+		 */
+		playerMode = (FloatingActionButton) rootView.findViewById(R.id.full_player_mode);
+//		playerMode.getLayoutParams().width = Helper.getWidthInPercent(25);
+
 		Helper.setImageViewSize(
-				MusicPlayerMainActivity.screenWidth / 10,
-				MusicPlayerMainActivity.screenWidth / 10, shuffle);
-
-		shuffle.setOnClickListener(new OnClickListener() {
-
+				Helper.getWidthInPercent(8.3),
+				Helper.getWidthInPercent(8.3), playerMode);
+		playerMode.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-
-				MusicPlayerServiceController.getInstance().setShuffle();
-				updateShuffle();
-
+				MusicPlayerServiceController.getInstance().setPlayerMode();
+				updatePlayerMode();
 			}
 		});
+		addToPlaylist = (ImageView) rootView.findViewById(R.id.full_player_add_playlist);
+		addToPlaylist.getLayoutParams().width = Helper.getWidthInPercent(25);
+		Helper.setImageViewSize(
+				Helper.getWidthInPercent(8.3),
+				Helper.getWidthInPercent(8.3), addToPlaylist);
+		addToPlaylist.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ArrayList<Song> songs = new ArrayList<>();
+				songs.add(MusicPlayerServiceController.getInstance().getCurrentSong());
+				MenuController.getInstance(songs).addToPlaylist();
+			}
+		});
+
 	}
-
+	public void updatePlayerMode(){
+		switch (MusicPlayerServiceController.getInstance().getPlayerMode()){
+			case MODE_IN_ORDER:
+				playerMode.setImageResource(R.drawable.ic_media_loop);
+				break;
+			case MODE_LOOP_ONE:
+				playerMode.setImageResource(R.drawable.ic_media_loop_1);
+				break;
+			case MODE_SHUFFLE:
+				playerMode.setImageResource(R.drawable.ic_media_shuffle);
+				break;
+			default:
+				return;
+		}
+	}
 	/**
-	 * 
+	 * Next song button
 	 */
-	private void configFastForwardButton() {
-		ImageView ff = (ImageView) rootView.findViewById(R.id.full_player_ff);
+	private void configNextSongButton() {
+		ImageView prevSong = (ImageView) rootView.findViewById(R.id.full_player_next_song);
 		Helper.setImageViewSize(
-				MusicPlayerMainActivity.screenWidth / 10,
-				MusicPlayerMainActivity.screenWidth / 10, ff);
-		ff.setOnClickListener(new OnClickListener() {
+				Helper.getWidthInPercent(8.3),
+				Helper.getWidthInPercent(8.3), prevSong);
 
+		prevSong.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().forwardSong();
-			}
-		});
-		ff.setOnLongClickListener(new OnLongClickListener() {
-
-			@Override
-			public boolean onLongClick(View v) {
 				// TODO Auto-generated method stub
 				MusicPlayerService.getInstance().playNextSong();
-				return true;
 			}
 		});
 	}
 
 	/**
-	 * 
+	 * Previous song button
 	 */
-	private void configRewindButton() {
-		ImageView rew = (ImageView) rootView.findViewById(R.id.full_player_rew);
-		// Helper.ScaleImageViewW(MainActivity.screenWidth / 10, rew);
+	private void configPrevSongButton() {
+		ImageView prevSong = (ImageView) rootView.findViewById(R.id.full_player_prev_song);
 		Helper.setImageViewSize(
-				MusicPlayerMainActivity.screenWidth / 10,
-				MusicPlayerMainActivity.screenWidth / 10, rew);
+				Helper.getWidthInPercent(8.3),
+				Helper.getWidthInPercent(8.3), prevSong);
 
-		rew.setOnClickListener(new OnClickListener() {
-
+		prevSong.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().rewindSong();
+				MusicPlayerService.getInstance().playPreviousSong();
 			}
 		});
-		rew.setOnLongClickListener(new OnLongClickListener() {
 
-			@Override
-			public boolean onLongClick(View v) {
-				// TODO Auto-generated method stub
-				if (MusicPlayerService.getInstance().getCurrentTime() < 5000) {
-					MusicPlayerService.getInstance().playPreviousSong();
-				} else {
-					MusicPlayerService.getInstance().restartSong();
-				}
-				return true;
-			}
-		});
 	}
 
 	
@@ -334,41 +318,18 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 		if (song == null)
 			return;
+
 		String subtitle = song.getArtist() + " | " + song.getAlbum();
 		Toolbar toolbar = (Toolbar) rootView
 				.findViewById(R.id.full_player_toolbar);
+		if(subtitle.equals(" | ")){
+			subtitle = "";
+		}
 		toolbar.setSubtitle(subtitle);
 	}
 
-	/**
-	 * Display different icon of shuffle
-	 */
-	public void updateShuffle() {
-		// TODO Auto-generated method stub
-		if (MusicPlayerServiceController.getInstance().isShuffle()) {
-			((ImageView)rootView.findViewById(R.id.full_player_shuffle)).setImageResource(R.drawable.ic_media_shuffle);
-		} else {
 
-			((ImageView)rootView.findViewById(R.id.full_player_shuffle)).setImageResource(R.drawable.ic_media_not_shuffle);
-		}
-	}
 
-	public void updateLoop() {
-		// TODO Auto-generated method stub
-		if (MusicPlayerServiceController.getInstance().getLoopState() == MODE_LOOP_ONE) {
-			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_loop_1);
-		}
-		if (MusicPlayerServiceController.getInstance().getLoopState() == MODE_LOOP_ALL) {
-			((ImageView) rootView.findViewById(R.id.full_player_loop)).setImageResource(R.drawable.ic_media_loop);
-		}
-	}
-
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-		updateShuffle();
-		updateLoop();
-	}
 
 	@Override
 	public void onDestroy() {
@@ -453,14 +414,16 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	@Override
 	public void pause() {
-
+		playPauseButton.setImageResource(android.R.drawable.ic_media_play);
 	}
 
 	@Override
 	public void play() {
 		super.play();
-		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration())/1000);
+		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration()) / 1000);
+		playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
 	}
+
 
 
 }

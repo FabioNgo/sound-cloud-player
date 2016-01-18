@@ -162,10 +162,11 @@ public interface Constants {
 		int SERVICE_STOP = 6;
 		int MUSIC_PROGRESS = 7;
 		/**
-		 * LOOP CONSTANTS
+		 * PLAYER MODE CONSTANTS
 		 */
-		int MODE_LOOP_ALL = 0;
+		int MODE_SHUFFLE = 0;
 		int MODE_LOOP_ONE = 1;
+		int MODE_IN_ORDER = 2;
 		/**
 		 * NOTIFICATION ACTION
 		 */

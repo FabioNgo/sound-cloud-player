@@ -33,7 +33,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
     private int stoppedTime=0;
 
     private Song currentSong;
-    private int loopState = 0;
+    private int playerMode = 0;
     private Song nextSong;
     private Stack<Song> stackSongplayed;
     private QueueManager queueManager;
@@ -82,12 +82,45 @@ public class MusicPlayerServiceController extends Observable implements Constant
      * @return
      */
     public Song getCurrentSong() {
-        if(currentSong == null){
+        if(currentSong == null) {
+            JSONObject nullSong = null;
 
-            if(nextSong == null){
-                computeNextSong();
+            try {
+                nullSong = new JSONObject("{\"id\":\"-1\"}");
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-            return nextSong;
+            return new Song(nullSong) {
+                @Override
+                public int getType() {
+                    return OFFLINE;
+                }
+
+                @Override
+                public String getName() {
+                    return "";
+                }
+
+                @Override
+                public String getArtist() {
+                    return "";
+                }
+
+                @Override
+                public String getAlbum() {
+                    return "";
+                }
+
+                @Override
+                public String getLink() {
+                    return "";
+                }
+
+                @Override
+                public int getDuration() {
+                    return 1;
+                }
+            };
         }
         return currentSong;
 
@@ -181,35 +214,12 @@ public class MusicPlayerServiceController extends Observable implements Constant
     public long getDuration() {
         Song song = getCurrentSong();
         if (song != null) {
-            return Long.parseLong(getCurrentSong().getAttribute("duration"));
+            return getCurrentSong().getDuration();
         } else {
             return 0;
         }
     }
-    /**
-     * set playing suffle when play a list
-     */
-    public void setShuffle() {
-        // TODO Auto-generated method stub
-        isShuffle = !isShuffle;
-        this.notifyObservers(isShuffle);
 
-    }
-    public boolean isShuffle() {
-        return isShuffle;
-    }
-
-    public int getLoopState() {
-        return loopState;
-    }
-    /**
-     * change Loop State
-     */
-    public void changeLoopState() {
-        loopState++;
-        loopState = loopState % 2;
-//        UIController.getInstance().updateUiWhilePlayingMusic(-1);
-    }
     /**
      * Read json file as one string
      *
@@ -368,5 +378,16 @@ public class MusicPlayerServiceController extends Observable implements Constant
             this.setChanged();
         }
         super.notifyObservers(data);
+    }
+    //shuffle, loop one, in order
+    public void setPlayerMode() {
+        playerMode = (playerMode+1)%3;
+    }
+    //shuffle, loop one, in order
+    public void setPlayerMode(int playerMode) {
+        this.playerMode = playerMode;
+    }
+    public int getPlayerMode() {
+        return playerMode;
     }
 }

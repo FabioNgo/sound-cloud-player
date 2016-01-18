@@ -45,7 +45,6 @@ dependencies {
     compile project(':facebook')
     compile project(':pagersliding')
     compile project(':progresswheel')
-    compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.google.android.gms:play-services-ads:7.3.0'
     compile 'com.google.android.gms:play-services-identity:7.3.0'
     compile project(':slidingmenu')
@@ -53,4 +52,9 @@ dependencies {
         transitive = true;
     }
     compile project(':markprogress')
+    compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:appcompat-v7:23.0.+'
+    compile 'com.android.support:cardview-v7:23.0.+'
+    compile 'com.android.support:recyclerview-v7:23.0.+'
+    compile 'com.android.support:percent:23.1.0'
 }

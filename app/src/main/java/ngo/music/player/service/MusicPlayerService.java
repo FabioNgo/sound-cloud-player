@@ -192,7 +192,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		// TODO Auto-generated method stub
 		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED,true);
 		if (States.musicPlayerState != MUSIC_STOPPED) {
-			int loopState = MusicPlayerServiceController.getInstance().getLoopState();
+			int loopState = MusicPlayerServiceController.getInstance().getPlayerMode();
 			if (loopState == MODE_LOOP_ONE) {
 				restartSong();
 			} else {
@@ -546,6 +546,7 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		try {
 			String link = song.getLink();
+
 			mediaPlayer.reset();
 
 			mediaPlayer.setDataSource(link);
@@ -599,6 +600,9 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public void update(Observable observable, Object data) {
 		if(observable instanceof MusicPlayerServiceController){
 			if(data instanceof Song){
+				if(((Song) data).getLink().equals("")){
+					return;
+				}
 				playNewSong();
 			}
 		}

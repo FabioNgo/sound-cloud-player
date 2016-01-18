@@ -20,11 +20,6 @@ public interface PlayUIInterface {
     void play();
 
     /**
-     * Implement other update
-     */
-    void update();
-
-    /**
      * Update Ui when stop music
      */
     void stop();

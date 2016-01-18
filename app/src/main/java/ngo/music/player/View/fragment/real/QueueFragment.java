@@ -57,9 +57,7 @@ public class QueueFragment extends ListContentFragment {
 						ArrayList<Song> songs = ((CategoryManager) ModelManager.getInstance(QUEUE)).getSongsFromCategory("queue");
 						int position = 0;
 						MusicPlayerService.getInstance().playNewSong(position, songs);
-						if (!MusicPlayerServiceController.getInstance().isShuffle()) {
-							MusicPlayerServiceController.getInstance().setShuffle();
-						}
+						MusicPlayerServiceController.getInstance().setPlayerMode(MODE_SHUFFLE);
 						break;
 
 					case R.id.queue_clear:

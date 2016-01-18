@@ -20,5 +20,6 @@ public abstract class Song extends Model {
     public abstract String getArtist();
     public abstract String getAlbum();
     public abstract String getLink();
+    public abstract int getDuration();
 
 }

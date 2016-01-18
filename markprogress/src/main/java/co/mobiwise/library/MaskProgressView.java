@@ -551,6 +551,9 @@ public class MaskProgressView extends View {
      * @return
      */
     private int calculateCurrentSeconds(float mCurrentProgressPosition) {
+        if(mMaxSeconds == 0){
+            return 0;
+        }
         return (int) (mCurrentProgressPosition * mMaxSeconds) / mWidth;
     }
 
@@ -571,6 +574,9 @@ public class MaskProgressView extends View {
      * @return
      */
     private int calculateCurrentPositionFromCurrentSeconds(int mCurrentSeconds) {
+        if(mMaxSeconds == 0){
+            return 0;
+        }
         return mWidth * mCurrentSeconds / mMaxSeconds;
     }
 

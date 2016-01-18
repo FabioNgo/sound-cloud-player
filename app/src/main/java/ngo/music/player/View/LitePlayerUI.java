@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
@@ -21,7 +22,7 @@ import ngo.music.player.service.MusicPlayerService;
 public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 	NetworkImageView image;
-
+	ImageView playPauseBtn;
 	protected ProgressWheel musicProgressBar;
 
 
@@ -36,7 +37,15 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 				.findViewById(R.id.lite_player_image);
 		Helper.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
+		playPauseBtn = (ImageView)rootView.findViewById(R.id.player_play_pause_btn);
+		playPauseBtn.setOnClickListener(new View.OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				MusicPlayerService.getInstance().startPause();
+			}
+		});
 
 		updateSongInfo(MusicPlayerServiceController.getInstance().getCurrentSong());
 		return rootView;
@@ -45,16 +54,6 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		musicProgressBar = (ProgressWheel) rootView
 				.findViewById(R.id.player_progress_bar);
 
-		musicProgressBar
-				.setBackgroundResource(R.drawable.ic_media_play_progress);
-		musicProgressBar.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MusicPlayerService.getInstance().startPause();
-			}
-		});
 	}
 	@Override
 	protected Runnable setRunnable() {
@@ -87,6 +86,9 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 			subtitle = song.getArtist() + " | " + song.getAlbum();
 		}
+		if(subtitle.equals(" | ")){
+			subtitle = "";
+		}
 		TextView subtitle_text = (TextView) rootView
 				.findViewById(R.id.lite_player_subtitle);
 		subtitle_text.setText(subtitle);
@@ -109,25 +111,20 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public void update() {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void stop() {
-		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+		playPauseBtn.setImageResource(android.R.drawable.ic_media_play);
 	}
 
 	@Override
 	public void play() {
 		super.play();
-		musicProgressBar.setBackgroundResource(R.drawable.ic_media_pause_progress);
+		playPauseBtn.setImageResource(android.R.drawable.ic_media_pause);
 	}
 
 	@Override
 	public void pause() {
-		musicProgressBar.setBackgroundResource(R.drawable.ic_media_play_progress);
+		playPauseBtn.setImageResource(android.R.drawable.ic_media_play);
 	}
 }

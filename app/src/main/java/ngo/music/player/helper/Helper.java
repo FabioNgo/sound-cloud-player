@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
 
+import ngo.music.player.View.MusicPlayerMainActivity;
+
 /**
  *
  * @author Fabio Ngo Class store basic functions ( most-used functions)
@@ -35,12 +37,28 @@ import java.util.concurrent.TimeUnit;
 public class Helper {
 	private static String filePath = Environment.getExternalStorageDirectory().getPath() + "/Music Player";
 
-		/**
-         * Set Image size of ImageView
-         * @param width width of image. < 0 if not set
-         * @param height height of image. <0 if not set
-         * @param imageView image want to be set size
-         */
+	/**
+	 * get length in the ratio of the screen width
+	 * @param percent from 0-100
+	 * @return length
+	 */
+	public static int getWidthInPercent(double percent){
+		return (int) (MusicPlayerMainActivity.screenWidth * (double)percent/100);
+	}
+	/**
+	 * get length in the ratio of the screen height
+	 * @param percent from 0-100
+	 * @return length
+	 */
+	public static int getHeightInPercent(double percent){
+		return (int) (MusicPlayerMainActivity.screenHeight * (double)percent/100);
+	}
+	/**
+	 * Set Image size of ImageView
+	 * @param width width of image. < 0 if not set
+	 * @param height height of image. <0 if not set
+	 * @param imageView image want to be set size
+	 */
 	public static void setImageViewSize(int width, int height,
 			ImageView imageView) {
 		if (width > 0){

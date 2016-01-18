@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
+	android:background="@color/primary"
 	xmlns:app="http://schemas.android.com/tools">
 
 	<android.support.v7.widget.Toolbar
@@ -19,6 +19,7 @@
 		android:id="@+id/song_info_field"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+
 		android:layout_below="@+id/full_player_toolbar">
 
 		<!-- AVATAR OF SONG -->
@@ -30,7 +31,7 @@
 			android:layout_height="match_parent"
 			android:src="@drawable/song_image"/>
 		<ngo.music.player.View.WaveFormView
-			android:background="@color/title_gray"
+			android:background="@color/primary_text"
 			android:id="@+id/wave_form_view"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent" />
@@ -106,75 +107,63 @@
 	</FrameLayout>
 
 	<RelativeLayout
+		android:id="@+id/full_player_media_btn_container"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
 		android:layout_below="@+id/song_info_field">
 
-		<com.todddavies.components.progressbar.ProgressWheel
-			android:id="@+id/player_progress_bar"
+		<ImageView
+			android:id="@+id/play_pause_button"
 			android:layout_width="150dp"
 			android:layout_height="150dp"
 			android:layout_centerHorizontal="true"
-			android:layout_centerVertical="true"
-			ProgressWheel:barColor="@color/primary_dark"
-			ProgressWheel:barLength="60dp"
-			ProgressWheel:barWidth="15dp"
-			ProgressWheel:rimColor="@color/primary_light"
-			ProgressWheel:rimWidth="15dp"/>
+			android:layout_centerVertical="true"/>
 
-		<TextView
-			android:id="@+id/full_player_current_time"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:layout_toStartOf="@+id/player_progress_bar"
-			android:text="00:00"
-			android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-			android:textColor="@color/secondary_text"/>
 
-		<TextView
-			android:id="@+id/full_player_duration"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_centerVertical="true"
-			android:layout_toEndOf="@+id/player_progress_bar"
-			android:text="00:00"
-			android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
-			android:textColor="@color/secondary_text"/>
 
 		<ImageView
-			android:id="@+id/full_player_ff"
+			android:id="@+id/full_player_next_song"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:layout_toEndOf="@+id/full_player_duration"
-			android:src="@drawable/ic_media_ff"/>
+			android:layout_toEndOf="@+id/play_pause_button"
+			android:padding="10dp"
+			android:src="@android:drawable/ic_media_next"/>
 
 		<ImageView
-			android:id="@+id/full_player_rew"
+			android:id="@+id/full_player_prev_song"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
-			android:layout_toStartOf="@+id/full_player_current_time"
-			android:src="@drawable/ic_media_rew"/>
-
-		<ImageView
-			android:id="@+id/full_player_shuffle"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/full_player_current_time"
-			android:layout_marginTop="20dp"
-			android:layout_toStartOf="@+id/player_progress_bar"
-			android:src="@drawable/ic_media_shuffle"/>
-
-		<ImageView
-			android:id="@+id/full_player_loop"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/full_player_duration"
-			android:layout_marginTop="20dp"
-			android:layout_toEndOf="@+id/player_progress_bar"
-			android:src="@drawable/ic_media_loop"/>
+			android:layout_toStartOf="@+id/play_pause_button"
+			android:src="@android:drawable/ic_media_previous"/>
 	</RelativeLayout>
+	<RelativeLayout
+		android:id="@+id/full_player_func_btn_container"
+		android:layout_width="match_parent"
+		android:layout_below="@+id/full_player_media_btn_container"
 
+		android:layout_height="match_parent">
+
+		<android.support.design.widget.FloatingActionButton
+
+			android:layout_margin="16dp"
+			android:id="@+id/full_player_mode"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_alignParentStart="true"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true"
+			/>
+		<ImageView
+			android:id="@+id/full_player_add_playlist"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_toEndOf="@+id/full_player_mode"
+			android:padding="10dp"
+			android:layout_centerVertical="true"
+			android:layout_centerHorizontal="true"
+			android:src="@android:drawable/ic_menu_add"/>
+
+	</RelativeLayout>
 </RelativeLayout>

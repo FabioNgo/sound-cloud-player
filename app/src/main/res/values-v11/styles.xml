@@ -8,8 +8,9 @@
 	<style name="AppBaseTheme" parent="Theme.AppCompat">
 		<item name="windowActionBar">false</item>
 		<item name="android:windowNoTitle">true</item>
-		<item name="colorPrimary">#ffff9431</item>
-		<item name="colorPrimaryDark">#ffD56600</item>
+		<item name="colorPrimary">@color/primary</item>
+		<item name="colorPrimaryDark">@color/primary_dark</item>
+		<item name="colorAccent">#FF5722</item>
 		<!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to

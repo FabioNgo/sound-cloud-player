@@ -335,9 +335,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 
 			MusicPlayerService.getInstance().playNewSong(position, songs);
-			if (!MusicPlayerServiceController.getInstance().isShuffle()) {
-				MusicPlayerServiceController.getInstance().setShuffle();
-			}
+			MusicPlayerServiceController.getInstance().setPlayerMode(MODE_SHUFFLE);
 			break;
 
 		case R.id.main_sort_by:

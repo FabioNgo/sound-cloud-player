@@ -36,4 +36,9 @@ public class ZingSong extends Song {
     public String getLink() {
         return null;
     }
+
+    @Override
+    public int getDuration() {
+        return 0;
+    }
 }
