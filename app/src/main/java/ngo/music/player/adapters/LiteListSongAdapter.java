@@ -139,7 +139,7 @@ public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements 
 		 * Set time
 		 */
 		try{
-			viewHolder.duration.setText(Helper.toFormatedTime(Long.parseLong(songs.get(position).getDuration())));
+			viewHolder.duration.setText(Helper.toFormatedTime(songs.get(position).getDuration()));
 		}catch (Exception e){
 			e.printStackTrace();
 		}

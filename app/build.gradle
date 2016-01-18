@@ -56,7 +56,7 @@ dependencies {
 // Testing-only dependencies
     // Testing-only dependencies
     // Force usage of support annotations in the test app, since it is internally used by the runner module.
-    androidTestCompile 'com.android.support:support-annotations:23.0.1'
+    androidTestCompile 'com.android.support:support-annotations:23.1.1'
     androidTestCompile 'com.android.support.test:runner:0.4'
     androidTestCompile 'org.hamcrest:hamcrest-library:1.3'
 

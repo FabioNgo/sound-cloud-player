@@ -61,8 +61,8 @@ public class ZingSong extends Song {
     }
 
     @Override
-    public String getDuration() {
-        return getAttribute("duration")+"000";
+    public int getDuration() {
+        return Integer.parseInt(getAttribute("duration")+"000");
     }
 
 }

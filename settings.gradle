@@ -1,1 +1,1 @@
-include ':markprogress', ':apache_lib', ':facebook', ':pagersliding', ':progresswheel'
+include ':markprogress', ':apache_lib', ':facebook', ':pagersliding', ':progresswheel','app',':slidingmenu',':slidingup',':markprogress'
