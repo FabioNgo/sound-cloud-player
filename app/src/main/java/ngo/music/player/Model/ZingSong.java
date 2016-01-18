@@ -1,6 +1,15 @@
 package ngo.music.player.Model;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.Override;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * Created by Luis Ngo on 6/1/2016.
@@ -13,32 +22,47 @@ public class ZingSong extends Song {
     }
 
     @Override
+    public String getName() {
+
+        return getAttribute("title");
+    }
+    @Override
     public int getType() {
-        return -1;
+        return ZING;
     }
 
-    @Override
-    public String getName() {
-        return null;
-    }
+
 
     @Override
     public String getArtist() {
-        return null;
+        return getAttribute("artist");
+
     }
 
     @Override
     public String getAlbum() {
-        return null;
+
+        return getAttribute("album");
     }
+
+
 
     @Override
     public String getLink() {
-        return null;
+        JSONObject source = null;
+        try {
+            source = getJSONObject().getJSONObject("source");
+            return source.getString("128");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
-    public int getDuration() {
-        return 0;
+    public String getDuration() {
+        return getAttribute("duration")+"000";
     }
+
 }

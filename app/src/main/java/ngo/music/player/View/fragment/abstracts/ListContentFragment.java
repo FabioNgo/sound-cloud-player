@@ -119,6 +119,7 @@ public abstract class ListContentFragment extends Fragment implements
 		if (adapter instanceof LiteListSongAdapter) {
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
 			ArrayList<Song> songs = ((LiteListSongAdapter) adapter).getSongs();
+			System.out.println ("POSITION = " + position);
 			MusicPlayerService.getInstance().playNewSong(position,
 					songs);
 			return;

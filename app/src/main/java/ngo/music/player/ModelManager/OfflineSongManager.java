@@ -82,21 +82,26 @@ public class OfflineSongManager extends SongManager {
     public void loadData() {
         clearModels();
         MusicPlayerMainActivity activity = MusicPlayerMainActivity.getActivity();
-        Cursor c = activity
-                .getContentResolver()
-                .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
-                        MediaStore.Audio.Media.IS_MUSIC + "!=0", null, null);
-        if (c != null) {
-            while (c.moveToNext()) {
-                String url = c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA));
-                if (url.endsWith(".mp3")) {
-                    generate(getJSONObjectFromCursor(c));
+        try {
+            Cursor c = activity
+                    .getContentResolver()
+                    .query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, null,
+                            MediaStore.Audio.Media.IS_MUSIC + "!=0", null, null);
+            if (c != null) {
+                while (c.moveToNext()) {
+                    String url = c.getString(c.getColumnIndex(MediaStore.Audio.Media.DATA));
+                    if (url.endsWith(".mp3")) {
+                        generate(getJSONObjectFromCursor(c));
+                    }
                 }
+                c.close();
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         this.setChanged();
         this.notifyObservers(this.models);
-        c.close();
+
     }
 
     @Override

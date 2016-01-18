@@ -14,6 +14,7 @@ import ngo.music.player.Model.ModelInterface;
 import ngo.music.player.Model.OfflineSong;
 import ngo.music.player.Model.Playlist;
 import ngo.music.player.Model.Queue;
+import ngo.music.player.Model.ZingSong;
 import ngo.music.player.helper.Constants;
 
 /**
@@ -69,6 +70,8 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
                 return new ArtistManager();
             case Constants.Models.QUEUE:
                 return new QueueManager();
+            case Constants.Models.ZING:
+                return new ZingManager();
             default:
                 return null;
         }
@@ -137,6 +140,8 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
                 return new Artist(object);
             case Constants.Models.QUEUE:
                 return new Queue(object);
+            case Constants.Models.ZING:
+                return new ZingSong(object);
             default:
                 return null;
         }
@@ -228,7 +233,7 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
         // TODO Auto-generated method stub
 
         String id = generateID(object);
-        object.remove("id");
+
         try {
             object.put("id", id);
         } catch (JSONException e) {
@@ -252,6 +257,9 @@ public abstract class ModelManager extends Observable implements ModelManagerInt
                 break;
             case Constants.Models.ARTIST:
                 model = new Artist(object);
+                break;
+            case Constants.Models.ZING:
+                model = new ZingSong(object);
                 break;
             default:
                 return null;

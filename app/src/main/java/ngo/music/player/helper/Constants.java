@@ -193,8 +193,10 @@ public interface Constants {
 		int ALBUM = 2;
 		int OFFLINE = 0;
 		int QUEUE = 4;
+		int ZING = 5;
 		//		int FAVORITE = 5;
-		int SIZE = 5;
+		int SIZE = 6;
+		//int ZING = 6;
 	}
 
 }

@@ -41,6 +41,7 @@ public class PlaylistManager extends CategoryManager {
         storeData();
         return object;
     }
+
     @Override
     public void loadData() {
         // TODO Auto-generated method stub
