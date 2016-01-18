@@ -80,7 +80,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
         if(currentSong == null){
 
             if(nextSong == null){
-                computeNextSong();
+//                computeNextSong();
             }
             return nextSong;
         }
@@ -176,7 +176,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
     public long getDuration() {
         Song song = getCurrentSong();
         if (song != null) {
-            return Long.parseLong(getCurrentSong().getAttribute("duration"));
+            return Long.parseLong(getCurrentSong().getDuration());
         } else {
             return 0;
         }

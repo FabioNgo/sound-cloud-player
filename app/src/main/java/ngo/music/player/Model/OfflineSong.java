@@ -30,4 +30,9 @@ public class OfflineSong extends Song {
         return getAttribute("link");
     }
 
+    @Override
+    public String getDuration() {
+        return getAttribute("duration");
+    }
+
 }
