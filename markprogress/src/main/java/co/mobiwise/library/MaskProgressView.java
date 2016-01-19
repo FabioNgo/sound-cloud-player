@@ -554,7 +554,11 @@ public class MaskProgressView extends View {
         if(mMaxSeconds == 0){
             return 0;
         }
-        return (int) (mCurrentProgressPosition * mMaxSeconds) / mWidth;
+        try {
+            return (int) (mCurrentProgressPosition * mMaxSeconds) / mWidth;
+        }catch (ArithmeticException e){
+            return 0;
+        }
     }
 
     /**

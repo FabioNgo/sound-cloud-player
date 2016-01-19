@@ -31,7 +31,7 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		rootView = inflater.inflate(R.layout.liteplayer, container, false);
+		rootView = (ViewGroup)inflater.inflate(R.layout.liteplayer, container, false);
 		iniMusicProgressBar();
 
 		image = (NetworkImageView) rootView
@@ -40,9 +40,9 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 				container.getLayoutParams().height, image);
 		playPauseBtn = (ImageView)rootView.findViewById(R.id.player_play_pause_btn);
 		if(States.musicPlayerState == MUSIC_RESUME || States.musicPlayerState == MUSIC_NEW_SONG) {
-			playPauseBtn.setImageResource(android.R.drawable.ic_media_play);
+			playPauseBtn.setImageResource(R.drawable.ic_play_arrow);
 		}else{
-			playPauseBtn.setImageResource(android.R.drawable.ic_media_pause);
+			playPauseBtn.setImageResource(R.drawable.ic_pause);
 		}
 		playPauseBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -120,23 +120,23 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 
 	@Override
 	public void stop() {
-		playPauseBtn.setImageResource(android.R.drawable.ic_media_play);
+		playPauseBtn.setImageResource(R.drawable.ic_play_arrow);
 	}
 
 	@Override
 	public void play() {
 		super.play();
-		playPauseBtn.setImageResource(android.R.drawable.ic_media_pause);
+		playPauseBtn.setImageResource(R.drawable.ic_pause);
 	}
 
 	@Override
 	public void pause() {
-		playPauseBtn.setImageResource(android.R.drawable.ic_media_play);
+		playPauseBtn.setImageResource(R.drawable.ic_play_arrow);
 	}
 
 	@Override
 	public void resume() {
 		super.resume();
-		playPauseBtn.setImageResource(android.R.drawable.ic_media_pause);
+		playPauseBtn.setImageResource(R.drawable.ic_pause);
 	}
 }

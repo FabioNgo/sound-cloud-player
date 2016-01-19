@@ -29,6 +29,7 @@ import ngo.music.player.Controller.MusicPlayerServiceController;
 import ngo.music.player.Controller.WaveFormController;
 import ngo.music.player.Model.Song;
 import ngo.music.player.R;
+import ngo.music.player.View.objects.PlayerModeButton;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 import ngo.music.player.helper.States;
@@ -37,7 +38,10 @@ import ngo.music.player.service.MusicPlayerService;
 
 public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
+	 ;
 	private FloatingActionButton playerMode;
+	private ArrayList<PlayerModeButton> playerModeSubs = new ArrayList<>(2);
+	private boolean isShownPlayerModeBtns = false;
 	private ImageView addToPlaylist;
 	private NetworkImageView songImage;
 	private RelativeLayout artistInfo;
@@ -75,7 +79,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		rootView = inflater.inflate(R.layout.fullplayer, container, false);
+		rootView = (ViewGroup) inflater.inflate(R.layout.fullplayer, container, false);
 
 //		iniMusicProgressBar();
 		songImage = (NetworkImageView) rootView
@@ -188,7 +192,37 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 		configNextSongButton();
 		configPlayPauseButton();
+		configPlayerModeButtons();
 		configFunctionalButtons();
+
+	}
+
+	private void configPlayerModeButtons() {
+		playerMode = (FloatingActionButton) rootView.findViewById(R.id.full_player_mode);
+
+		for(int i=0;i<2;i++){
+			PlayerModeButton playerModeButton = new PlayerModeButton(getContext());
+			playerModeSubs.add(playerModeButton);
+			rootView.addView(playerModeButton);
+		}
+
+		Helper.setImageViewSize(
+				Helper.getWidthInPercent(8.3),
+				Helper.getWidthInPercent(8.3), playerMode);
+		playerMode.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				if(!isShownPlayerModeBtns){
+					showPlayerModeBtns();
+
+				}else{
+					hidePlayerModeBtns();
+				}
+
+
+			}
+		});
 
 	}
 
@@ -198,9 +232,9 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 				Helper.getWidthInPercent(8.3),
 				Helper.getWidthInPercent(8.3), playPauseButton);
 		if(States.musicPlayerState == MUSIC_RESUME || States.musicPlayerState == MUSIC_NEW_SONG) {
-			playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+			playPauseButton.setImageResource(R.drawable.ic_play_arrow);
 		}else{
-			playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+			playPauseButton.setImageResource(R.drawable.ic_pause);
 		}
 		playPauseButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -217,23 +251,11 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private void configFunctionalButtons() {
 //		functionalButtonsContainer = (RelativeLayout)rootView.findViewById(R.id.full_player_func_btn_container);
 //		functionalButtonsContainer.getLayoutParams().height = Helper.getHeightInPercent(8.3);
+//		android.support.design.widget.
 		/**
 		 * Buttons
 		 */
-		playerMode = (FloatingActionButton) rootView.findViewById(R.id.full_player_mode);
-//		playerMode.getLayoutParams().width = Helper.getWidthInPercent(25);
 
-		Helper.setImageViewSize(
-				Helper.getWidthInPercent(8.3),
-				Helper.getWidthInPercent(8.3), playerMode);
-		playerMode.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				MusicPlayerServiceController.getInstance().setPlayerMode();
-				updatePlayerMode();
-			}
-		});
 		addToPlaylist = (ImageView) rootView.findViewById(R.id.full_player_add_playlist);
 		addToPlaylist.getLayoutParams().width = Helper.getWidthInPercent(25);
 		Helper.setImageViewSize(
@@ -250,20 +272,67 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		});
 
 	}
+	private void hidePlayerModeBtns() {
+		int currentPlayerMode = MusicPlayerServiceController.getInstance().getPlayerMode();
+		for (int i = 0;i<playerModeSubs.size();i++) {
+			currentPlayerMode = (currentPlayerMode +1)%PLAYER_MODE;
+			playerModeSubs.get(i).setPlayerMode(currentPlayerMode);
+			float btnGap = getResources().getDimension(R.dimen.fab_distance);
+			if(playerModeSubs.get(i).isShown()) {
+				if (i == 0) {
+					playerModeSubs.get(i).animate().setDuration(125).translationYBy(btnGap).alpha(0);
+
+				}
+				if (i == 1) {
+					playerModeSubs.get(i).animate().setDuration(250).translationYBy(2 * btnGap).alpha(0);
+
+				}
+				playerModeSubs.get(i).hide();
+			}
+		}
+		isShownPlayerModeBtns = false;
+
+	}
+	private void showPlayerModeBtns() {
+		int currentPlayerMode = MusicPlayerServiceController.getInstance().getPlayerMode();
+		for (int i = 0;i<playerModeSubs.size();i++) {
+			currentPlayerMode = (currentPlayerMode +1)%PLAYER_MODE;
+			playerModeSubs.get(i).setPlayerMode(currentPlayerMode);
+
+			float btnGap = getResources().getDimension(R.dimen.fab_distance);
+			if(!playerModeSubs.get(i).isShown()) {
+//				playerModeSubs.get(i).reset();
+				playerModeSubs.get(i).show();
+				if (i == 0) {
+					playerModeSubs.get(i).animate().setDuration(125).translationYBy(-btnGap).alpha(100);
+
+				}
+				if (i == 1) {
+					playerModeSubs.get(i).animate().setDuration(250).translationYBy(-2 * btnGap).alpha(100);
+
+				}
+			}
+
+		}
+		isShownPlayerModeBtns = true;
+
+	}
+
 	public void updatePlayerMode(){
 		switch (MusicPlayerServiceController.getInstance().getPlayerMode()){
 			case MODE_IN_ORDER:
-				playerMode.setImageResource(R.drawable.ic_media_loop);
+				playerMode.setImageResource(R.drawable.ic_repeat);
 				break;
 			case MODE_LOOP_ONE:
-				playerMode.setImageResource(R.drawable.ic_media_loop_1);
+				playerMode.setImageResource(R.drawable.ic_repeat_1);
 				break;
 			case MODE_SHUFFLE:
-				playerMode.setImageResource(R.drawable.ic_media_shuffle);
+				playerMode.setImageResource(R.drawable.ic_shuffle);
 				break;
 			default:
 				return;
 		}
+		hidePlayerModeBtns();
 	}
 	/**
 	 * Next song button
@@ -397,8 +466,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 			if(!(data instanceof Song)){
 				int TAG = (int) data;
 				switch (TAG) {
-					case MUSIC_PROGRESS:
-//						updateWaveForm();
+					case PLAYER_MODE:
+						updatePlayerMode();
 						break;
 				}
 			}
@@ -414,7 +483,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	@Override
 	public void resume() {
 		super.resume();
-		playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+		playPauseButton.setImageResource(R.drawable.ic_pause);
 	}
 
 	private void updateWaveForm(){
@@ -423,7 +492,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	@Override
 	public void pause() {
-		playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+		playPauseButton.setImageResource(R.drawable.ic_play_arrow);
 	}
 
 	@Override
@@ -431,7 +500,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		super.play();
 		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration()) / 1000);
 
-		playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+		playPauseButton.setImageResource(R.drawable.ic_pause);
 	}
 
 

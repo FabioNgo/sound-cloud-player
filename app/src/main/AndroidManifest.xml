@@ -3,45 +3,46 @@
     package="ngo.music.player"
     android:versionCode="5"
     android:versionName="0.3">
+
     <uses-sdk
         android:minSdkVersion="19"
         android:targetSdkVersion="21" />
+
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name  = "android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
 
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name="com.volley.api.AppController"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-
+        android:theme="@style/AppTheme">
         <activity
-            android:name="ngo.music.player.View.MusicPlayerMainActivity"
+            android:name=".View.MusicPlayerMainActivity"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
                 <category android:name="android.intent.category.APP_MUSIC" />
                 <category android:name="android.intent.category.DEFAULT" />
-
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -66,31 +67,37 @@
                 <data android:mimeType="application/itunes" />
             </intent-filter>
         </activity>
+
         <service
-            android:name="ngo.music.player.service.MusicPlayerService"
+            android:name=".service.MusicPlayerService"
             android:launchMode="singleTop" />
 
-        <receiver android:name="ngo.music.player.Controller.PlaybackActionController" >
-        </receiver>
-        <receiver android:name="ngo.music.player.Controller.IncomingCallController">
+        <receiver android:name=".Controller.PlaybackActionController"></receiver>
+        <receiver android:name=".Controller.IncomingCallController">
             <intent-filter>
                 <action android:name="android.intent.action.PHONE_STATE" />
             </intent-filter>
         </receiver>
-        <receiver android:name="ngo.music.player.Controller.OutgoingCallController">
+        <receiver android:name=".Controller.OutgoingCallController">
             <intent-filter>
                 <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
             </intent-filter>
         </receiver>
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <provider
             android:name="com.facebook.NativeAppCallContentProvider"
             android:authorities="com.facebook.app.NativeAppCallContentProvider889973167688262"
             android:exported="true" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="7db72c4c3ed14f23017e5c324cdd54ed622e09cc" />
+
+
     </application>
+
 </manifest>

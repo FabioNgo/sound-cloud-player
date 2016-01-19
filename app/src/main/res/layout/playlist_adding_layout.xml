@@ -35,7 +35,7 @@
 			
 			android:scaleType="center"
 			android:layout_alignParentEnd="true"
-			android:src="@drawable/ic_submit"/>
+			android:src="@drawable/ic_done"/>
 		<TextView
 			android:id="@+id/new_playlist_error_text"
 			android:padding="5dp"

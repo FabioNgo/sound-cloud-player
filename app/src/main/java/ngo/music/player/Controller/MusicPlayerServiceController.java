@@ -383,6 +383,8 @@ public class MusicPlayerServiceController extends Observable implements Constant
     //shuffle, loop one, in order
     public void setPlayerMode(int playerMode) {
         this.playerMode = playerMode;
+        this.setChanged();
+        this.notifyObservers(PLAYER_MODE);
     }
     public int getPlayerMode() {
         return playerMode;

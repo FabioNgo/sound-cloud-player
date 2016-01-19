@@ -10,8 +10,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/background" >
+        android:layout_alignParentTop="true" >
             
           <!-- AVATAR, NAME , NUMBER OF FOLLOWER -->
           <RelativeLayout 
@@ -31,7 +30,7 @@
 	    		android:id = "@+id/avatar_image_id"
 	    		android:layout_width="fill_parent"
 	    		android:layout_height="fill_parent"
-	    		android:src="@drawable/ic_action_github" />
+	    		 />
 
            	<!-- NAME -->
 	    	<TextView 
@@ -73,8 +72,7 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		      	android:layout_marginStart="4dp"
-		        android:layout_alignParentStart="true"
-		        android:src = "@drawable/home_button" />
+		        android:layout_alignParentStart="true" />
 		<TextView 
 		       android:id = "@+id/my_music_id"
 		        android:layout_marginStart="10dp"
@@ -101,8 +99,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	      	android:layout_marginStart="4dp"
-	        android:layout_alignParentStart="true"
-	        android:src="@drawable/explore_button" />
+	        android:layout_alignParentStart="true" />
        <TextView 
 	       android:id = "@+id/soundcloud_explore_id"
 	       android:layout_toEndOf="@+id/soundcloud_explore_icon"
@@ -129,8 +126,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	      	android:layout_marginStart="4dp"
-	        android:layout_alignParentStart="true"
-	        android:src="@drawable/upload_button" />
+	        android:layout_alignParentStart="true"/>
        <TextView 
 	       android:id = "@+id/acc_soundcloud_id"
 	       android:layout_toEndOf="@+id/acc_soundcloud_icon"
@@ -157,8 +153,7 @@
 	        android:layout_height="wrap_content"
 	        
 	      	android:layout_marginStart="4dp"
-	        android:layout_alignParentStart="true"
-	        android:src = "@drawable/logout_button" />
+	        android:layout_alignParentStart="true" />
 	   <TextView 
 	       android:id = "@+id/logout_id"
 	       android:layout_marginStart="10dp"

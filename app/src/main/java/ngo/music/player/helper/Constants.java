@@ -168,6 +168,7 @@ public interface Constants {
 		int MODE_SHUFFLE = 0;
 		int MODE_LOOP_ONE = 1;
 		int MODE_IN_ORDER = 2;
+		int PLAYER_MODE = 3;
 		/**
 		 * NOTIFICATION ACTION
 		 */

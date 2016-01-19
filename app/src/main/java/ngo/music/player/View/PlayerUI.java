@@ -3,6 +3,7 @@ package ngo.music.player.View;
 import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ import ngo.music.player.service.MusicPlayerService;
 
 public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>, PlayUIInterface,Observer, Constants.MusicService,Constants.Appplication{
 
-	protected View rootView = null;
+	protected ViewGroup rootView = null;
 
 	Runnable runnable;
 	
@@ -136,6 +137,7 @@ public abstract class PlayerUI extends Fragment implements Comparable<PlayerUI>,
 					case MUSIC_STOPPED:
 						stop();
 						break;
+
 				}
 			}
 		}

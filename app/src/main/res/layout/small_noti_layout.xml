@@ -46,7 +46,7 @@
 		android:layout_alignTop="@+id/noti_title"
 		android:layout_centerVertical="true"
 		android:layout_toStartOf="@+id/noti_cancel"
-		android:src="@drawable/ic_media_play"/>
+		android:src="@drawable/ic_play_arrow"/>
 
 	<ImageView
 		android:id="@+id/noti_cancel"

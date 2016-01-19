@@ -384,10 +384,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 		if (States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME) {
 			bigView.setImageViewResource(R.id.noti_play_pause,
-					R.drawable.ic_media_pause);
+					R.drawable.ic_pause);
 		} else {
 			bigView.setImageViewResource(R.id.noti_play_pause,
-					R.drawable.ic_media_play);
+					R.drawable.ic_play_arrow);
 		}
 		if (song instanceof OfflineSong) {
 			bigView.setImageViewResource(R.id.noti_icon, R.drawable.ic_launcher);
@@ -406,10 +406,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 		smallView.setTextViewText(R.id.noti_content, subTitle);
 		if (States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME) {
 			smallView.setImageViewResource(R.id.noti_play_pause,
-					R.drawable.ic_media_pause);
+					R.drawable.ic_pause);
 		} else {
 			smallView.setImageViewResource(R.id.noti_play_pause,
-					R.drawable.ic_media_play);
+					R.drawable.ic_play_arrow);
 		}
 		if (song instanceof OfflineSong) {
 			smallView.setImageViewResource(R.id.noti_icon,

@@ -19,10 +19,17 @@
     <dimen name="slidingmenu_width">100dp</dimen>
     <dimen name="list_padding">10dp</dimen>
     <dimen name="shadow_width">15dp</dimen>
-
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_margin_sub">24dp</dimen>
+    <dimen name="fab_distance">64dp</dimen>
+    <dimen name="fab_normal_size">56dp</dimen>
+    <dimen name="fab_mini_size">40dp</dimen>
     <integer name="num_cols">1</integer>
-    
+
     <bool name="large_layout">false</bool>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
 
 </resources>
 
