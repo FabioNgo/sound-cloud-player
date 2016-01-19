@@ -51,13 +51,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	private static final int NOTIFICATION_ID = 1;
 	public static boolean isLoaded;
 	private static MusicPlayerService instance;
-	public MediaPlayer mediaPlayer = null;
+	private static MediaPlayer mediaPlayer = null;
 	int percent = -1;
-
-
-
-	private int seekForwardTime = 5 * 1000;
-	private int seekBackwardTime = 5 * 1000;
 
 	public MusicPlayerService() {
 		instance = this;
@@ -77,7 +72,6 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		States.musicPlayerState = MUSIC_STOPPED;
 		isLoaded = false;
-
 		iniMediaPlayer();
 
 		updateNotification();
@@ -256,9 +250,8 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 				MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_RESUME, true);
 
 			} else if (States.musicPlayerState == MUSIC_STOPPED) {
-
-				mediaPlayer.seekTo(MusicPlayerServiceController.getInstance().getStoppedTime());
 				playMedia();
+				mediaPlayer.seekTo(MusicPlayerServiceController.getInstance().getStoppedTime());
 				States.musicPlayerState = MUSIC_NEW_SONG;
 				MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_NEW_SONG, true);
 
@@ -313,7 +306,10 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	 *
 	 */
 	private void playNewSong() {
-		mediaPlayer.stop();
+//		if(mediaPlayer.isPlaying()){
+			mediaPlayer.stop();
+//		}
+//		mediaPlayer.
 		// System.out.println("PLAY NEW SONG 2");
 		Song song = MusicPlayerServiceController.getInstance().getCurrentSong();
 		States.musicPlayerState = MUSIC_NEW_SONG;
@@ -531,15 +527,19 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 
 	public void release() {
 		// TODO Auto-generated method stub
-		States.musicPlayerState = MUSIC_STOPPED;
+		MusicPlayerServiceController.getInstance().setStoppedTime((int) getCurrentTime());
 
-		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED,true);
+
+
 		MusicPlayerServiceController.getInstance().stopTimer();
 		cancelNoti();
 		mediaPlayer.stop();
 		mediaPlayer.release();
+		mediaPlayer= null;
 		MusicPlayerMainActivity.getActivity().finish();
-
+		States.musicPlayerState = MUSIC_STOPPED;
+		MusicPlayerServiceController.getInstance().notifyObservers(MUSIC_STOPPED, true);
+		this.isLoaded = false;
 		stopSelf();
 	}
 

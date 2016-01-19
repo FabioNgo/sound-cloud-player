@@ -154,6 +154,7 @@ public class MusicPlayerServiceController extends Observable implements Constant
     }
     public void setStoppedTime(int time){
         this.stoppedTime = time;
+        storeData();
     }
     public void computeNextSong() {
         int nextPosition;

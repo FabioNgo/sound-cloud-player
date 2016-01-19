@@ -17,6 +17,7 @@ import ngo.music.player.Model.Song;
 import ngo.music.player.R;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
+import ngo.music.player.helper.States;
 import ngo.music.player.service.MusicPlayerService;
 
 public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
@@ -38,6 +39,11 @@ public class LitePlayerUI extends PlayerUI implements Constants.MusicService {
 		Helper.setImageViewSize(container.getLayoutParams().height,
 				container.getLayoutParams().height, image);
 		playPauseBtn = (ImageView)rootView.findViewById(R.id.player_play_pause_btn);
+		if(States.musicPlayerState == MUSIC_RESUME || States.musicPlayerState == MUSIC_NEW_SONG) {
+			playPauseBtn.setImageResource(android.R.drawable.ic_media_play);
+		}else{
+			playPauseBtn.setImageResource(android.R.drawable.ic_media_pause);
+		}
 		playPauseBtn.setOnClickListener(new View.OnClickListener() {
 
 			@Override

@@ -150,7 +150,10 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		 * Tab Sliding
 		 */
 		configTabSliding();
-
+		/**
+		 *
+		 */
+		configMusicPlayerService();
 
 	}
 
@@ -386,7 +389,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		/*
 		 * Music Player Service must be at last
 		 */
-		configMusicPlayerService();
+
 //		UIController.getInstance().updateUiAppChanged(APP_RUNNING);
 		// Bind to LocalService
 
@@ -405,6 +408,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		super.onStop();
 //		fileObserver.stopWatching();
 //		UIController.getInstance().updateUiAppChanged(APP_STOPPED);
+
 	}
 
 	/**

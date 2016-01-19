@@ -21,7 +21,7 @@ import ngo.music.player.Model.ModelInterface;
  * Created by Luis Ngo on 16/1/2016.
  */
 public class ZingManager extends ZingPlayListManager {
-    private static final String LINK_TOP_100_MP3 = "http://mp3.zing.vn/xhr/song?op=get-top&start=0&length=100&id=IWZ9Z088";
+    private static final String LINK_TOP_100_MP3 = "http://mp3.zing.vn/xhr/song?op=get-top&start=0&length=1&id=IWZ9Z088";
 
 
     @Override

@@ -197,7 +197,11 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		Helper.setImageViewSize(
 				Helper.getWidthInPercent(8.3),
 				Helper.getWidthInPercent(8.3), playPauseButton);
-		playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+		if(States.musicPlayerState == MUSIC_RESUME || States.musicPlayerState == MUSIC_NEW_SONG) {
+			playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+		}else{
+			playPauseButton.setImageResource(android.R.drawable.ic_media_pause);
+		}
 		playPauseButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
