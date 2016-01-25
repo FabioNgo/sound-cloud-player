@@ -1,24 +1,22 @@
 package ngo.music.player.View;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.AppCompatImageButton;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -49,7 +47,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private RelativeLayout functionalButtonsContainer;
 	private MaskProgressView maskProgressView;
 	private boolean draggingSeekbar = false;
-	private ImageView playPauseButton;
+	private AppCompatImageButton playPauseButton;
 
 
 	public FullPlayerUI(){
@@ -148,7 +146,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	@Override
 	public void stop() {
-		playPauseButton.setImageResource(android.R.drawable.ic_media_play);
+		playPauseButton.setImageResource(R.drawable.ic_play_arrow_64dp);
 	}
 
 	private void configToolbar() {
@@ -199,13 +197,8 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	private void configPlayerModeButtons() {
 		playerMode = (FloatingActionButton) rootView.findViewById(R.id.full_player_mode);
-
-		for(int i=0;i<2;i++){
-			PlayerModeButton playerModeButton = new PlayerModeButton(getContext());
-			playerModeSubs.add(playerModeButton);
-			rootView.addView(playerModeButton);
-		}
-
+		playerModeSubs.add((PlayerModeButton) rootView.findViewById(R.id.full_player_mode1));
+		playerModeSubs.add((PlayerModeButton) rootView.findViewById(R.id.full_player_mode2));
 		Helper.setImageViewSize(
 				Helper.getWidthInPercent(8.3),
 				Helper.getWidthInPercent(8.3), playerMode);
@@ -227,14 +220,17 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	}
 
 	private void configPlayPauseButton() {
-		playPauseButton = (ImageView) rootView.findViewById(R.id.play_pause_button);
+		((AppCompatImageButton)rootView.findViewById(R.id.full_player_next_song)).setSupportBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primary)));
+		((AppCompatImageButton)rootView.findViewById(R.id.full_player_prev_song)).setSupportBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primary)));
+		playPauseButton = (AppCompatImageButton) rootView.findViewById(R.id.play_pause_button);
 		Helper.setImageViewSize(
 				Helper.getWidthInPercent(8.3),
 				Helper.getWidthInPercent(8.3), playPauseButton);
+		playPauseButton.setSupportBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primary)));
 		if(States.musicPlayerState == MUSIC_RESUME || States.musicPlayerState == MUSIC_NEW_SONG) {
-			playPauseButton.setImageResource(R.drawable.ic_play_arrow);
+			playPauseButton.setImageResource(R.drawable.ic_play_arrow_64dp);
 		}else{
-			playPauseButton.setImageResource(R.drawable.ic_pause);
+			playPauseButton.setImageResource(R.drawable.ic_pause_64dp);
 		}
 		playPauseButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -275,19 +271,19 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private void hidePlayerModeBtns() {
 		int currentPlayerMode = MusicPlayerServiceController.getInstance().getPlayerMode();
 		for (int i = 0;i<playerModeSubs.size();i++) {
+			PlayerModeButton playerModeSub = playerModeSubs.get(i);
 			currentPlayerMode = (currentPlayerMode +1)%PLAYER_MODE;
-			playerModeSubs.get(i).setPlayerMode(currentPlayerMode);
+			playerModeSub.setPlayerMode(currentPlayerMode);
 			float btnGap = getResources().getDimension(R.dimen.fab_distance);
-			if(playerModeSubs.get(i).isShown()) {
+			if(playerModeSub.isShown()) {
 				if (i == 0) {
-					playerModeSubs.get(i).animate().setDuration(125).translationYBy(btnGap).alpha(0);
+					playerModeSub.animate().setDuration(125).translationYBy(btnGap).alpha(0);
 
 				}
 				if (i == 1) {
-					playerModeSubs.get(i).animate().setDuration(250).translationYBy(2 * btnGap).alpha(0);
-
+					playerModeSub.animate().setDuration(250).translationYBy(2 * btnGap).alpha(0);
 				}
-				playerModeSubs.get(i).hide();
+				playerModeSub.hide();
 			}
 		}
 		isShownPlayerModeBtns = false;
@@ -296,15 +292,15 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	private void showPlayerModeBtns() {
 		int currentPlayerMode = MusicPlayerServiceController.getInstance().getPlayerMode();
 		for (int i = 0;i<playerModeSubs.size();i++) {
+			PlayerModeButton playerModeSub = playerModeSubs.get(i);
 			currentPlayerMode = (currentPlayerMode +1)%PLAYER_MODE;
-			playerModeSubs.get(i).setPlayerMode(currentPlayerMode);
+			playerModeSub.setPlayerMode(currentPlayerMode);
 
 			float btnGap = getResources().getDimension(R.dimen.fab_distance);
-			if(!playerModeSubs.get(i).isShown()) {
-//				playerModeSubs.get(i).reset();
-				playerModeSubs.get(i).show();
+			if(!playerModeSub.isShown()) {
+				playerModeSub.show();
 				if (i == 0) {
-					playerModeSubs.get(i).animate().setDuration(125).translationYBy(-btnGap).alpha(100);
+					playerModeSub.animate().setDuration(125).translationYBy(-btnGap).alpha(100);
 
 				}
 				if (i == 1) {
@@ -483,7 +479,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 	@Override
 	public void resume() {
 		super.resume();
-		playPauseButton.setImageResource(R.drawable.ic_pause);
+		playPauseButton.setImageResource(R.drawable.ic_pause_64dp);
 	}
 
 	private void updateWaveForm(){
@@ -492,7 +488,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 
 	@Override
 	public void pause() {
-		playPauseButton.setImageResource(R.drawable.ic_play_arrow);
+		playPauseButton.setImageResource(R.drawable.ic_play_arrow_64dp);
 	}
 
 	@Override
@@ -500,7 +496,7 @@ public class FullPlayerUI extends PlayerUI implements Constants.MusicService {
 		super.play();
 		maskProgressView.setmMaxSeconds((int) (MusicPlayerServiceController.getInstance().getDuration()) / 1000);
 
-		playPauseButton.setImageResource(R.drawable.ic_pause);
+		playPauseButton.setImageResource(R.drawable.ic_pause_64dp);
 	}
 
 

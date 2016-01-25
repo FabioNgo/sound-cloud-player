@@ -4,9 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import com.crashlytics.android.Crashlytics;
 import io.fabric.sdk.android.Fabric;
+
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
@@ -17,8 +23,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
-import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelSlideListener;
 
@@ -39,9 +43,9 @@ import ngo.music.player.helper.Helper;
 import ngo.music.player.helper.States;
 import ngo.music.player.service.MusicPlayerService;
 
-public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
+public class MusicPlayerMainActivity extends AppCompatActivity implements
 		Constants.UIContant, Constants.UserContant, Constants.MusicService, Constants.Models,
-		Constants.Appplication {
+		Constants.Appplication, NavigationView.OnNavigationItemSelectedListener {
 
 
 
@@ -134,12 +138,14 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		activity = this;
 
 		// bindService(musicPlayerServiceIntent, mConnection, 0);
+		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+				this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+		drawer.setDrawerListener(toggle);
+		toggle.syncState();
 
-
-		/*
-		 * Sliding Menu
-		 */
-		configSlidingMenu(savedInstanceState);
+		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+		navigationView.setNavigationItemSelectedListener(this);
 
 		/*
 		 * Sliding Up Panel
@@ -163,6 +169,7 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	private void configTabSliding() {
 
 		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+		tabs.setTextColor(getResources().getColor(R.color.icons));
 		pager = (ViewPager) findViewById(R.id.pager);
 		pager.setOffscreenPageLimit(10);
 		FragmentPagerAdapter adapter;
@@ -265,39 +272,6 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 		// }
 	}
 
-	/**
-	 * @param savedInstanceState
-	 */
-	private void configSlidingMenu(Bundle savedInstanceState) {
-		// set the Behind View
-		setBehindContentView(R.layout.menu_frame);
-
-		// customize the SlidingMenu
-		SlidingMenu sm = getSlidingMenu();
-		sm.setShadowWidthRes(R.dimen.shadow_width);
-//		sm.setShadowDrawable(R.drawable.shadow);
-
-		sm.setBehindOffset(Helper.pxTodp(screenWidth, this));
-		sm.setFadeDegree(0.35f);
-		sm.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
-		// getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-		toolbar.setLogo(R.drawable.logo);
-//		setSupportActionBar(toolbar);
-
-//		if (savedInstanceState == null) {
-//
-//			FragmentTransaction t = this.getSupportFragmentManager()
-//					.beginTransaction();
-//			mFrag = new UserDisplayFragment();
-//
-//			t.replace(R.id.menu_frame, mFrag);
-//			t.commit();
-//		} else {
-//			mFrag = (Fragment) this.getSupportFragmentManager()
-//					.findFragmentById(R.id.menu_frame);
-//		}
-	}
 
 	/**
 	 * get screen's size;
@@ -354,11 +328,17 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 
 	@Override
 	public void onBackPressed() {
-		if (mLayout != null && mLayout.isPanelExpanded()
-				|| mLayout.isPanelAnchored()) {
-			mLayout.collapsePanel();
+		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		if (drawer.isDrawerOpen(GravityCompat.START)) {
+			drawer.closeDrawer(GravityCompat.START);
 		} else {
-			super.onBackPressed();
+
+			if (mLayout != null && mLayout.isPanelExpanded()
+					|| mLayout.isPanelAnchored()) {
+				mLayout.collapsePanel();
+			} else {
+				super.onBackPressed();
+			}
 		}
 	}
 
@@ -419,5 +399,28 @@ public class MusicPlayerMainActivity extends SlidingFragmentActivity implements
 	public void switchTab(int tab) {
 		pager.setCurrentItem(tab);
 		configTabSliding();
+	}
+	@Override
+	public boolean onNavigationItemSelected(MenuItem item) {
+		// Handle navigation view item clicks here.
+		int id = item.getItemId();
+
+		if (id == R.id.nav_camera) {
+			// Handle the camera action
+		} else if (id == R.id.nav_gallery) {
+
+		} else if (id == R.id.nav_slideshow) {
+
+		} else if (id == R.id.nav_manage) {
+
+		} else if (id == R.id.nav_share) {
+
+		} else if (id == R.id.nav_send) {
+
+		}
+
+		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+		drawer.closeDrawer(GravityCompat.START);
+		return true;
 	}
 }

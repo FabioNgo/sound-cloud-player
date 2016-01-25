@@ -3,12 +3,16 @@ package ngo.music.player.adapters;
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout.LayoutParams;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,26 +28,127 @@ import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.CategoryManager;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
-import ngo.music.player.ViewHolder.CompositionViewHolder;
 import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.View.fragment.abstracts.ListItemsInCompositionListFragment;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
+import ngo.music.player.service.MusicPlayerService;
 
-public abstract class CategoryListAdapter extends ArrayAdapter<Category>
+public abstract class CategoryListAdapter extends RecyclerView.Adapter<CategoryListAdapter.CompositionViewHolder>
 		implements Constants.Models, Observer {
 	private static final int NUM_ITEM_IN_ONE_CATEGORY = 5;
+	public static class CompositionViewHolder extends RecyclerView.ViewHolder {
+
+		// TODO Auto-generated constructor public class ViewHolder {
+		public String objectId= "";
+		public TextView[] items;
+		public ImageView menu;
+		public EditText editText;
+		public ImageView editBtn;
+		public ImageView submitBtn;
+		public ImageView clearBtn;
+		private int type = -1;
+		public CompositionViewHolder(View v, final int type) {
+			super(v);
+			this.type = type;
+			items = new TextView[NUM_ITEM_IN_ONE_CATEGORY + 1];
+			items[0] = (TextView) v
+					.findViewById(R.id.composition_view_cat);
+			items[1] = (TextView) v.findViewById(R.id.item_1);
+			items[2] = (TextView) v.findViewById(R.id.item_2);
+			items[3] = (TextView) v.findViewById(R.id.item_3);
+			items[4] = (TextView) v.findViewById(R.id.item_4);
+			items[5] = (TextView) v.findViewById(R.id.item_5);
+			menu = (ImageView)v.findViewById(R.id.composition_view_menu);
+			editText = (EditText)v.findViewById(R.id.composition_view_cat_edit);
+			editBtn = (ImageView)v.findViewById(R.id.composition_view_edit);
+			submitBtn = (ImageView)v.findViewById(R.id.composition_view_submit);
+			clearBtn = (ImageView)v.findViewById(R.id.composition_view_cancel);
+			v.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					ArrayList<Song> songs = ((CategoryManager)ModelManager.getInstance(type)).getSongsFromCategory(objectId);
+					MusicPlayerService.getInstance().playNewSong(0,
+							songs);
+					return;
+				}
+			});
+		}
+
+	}
+
 	protected ArrayList<Category> categories;
 	Context context;
 	int resource;
-	CompositionViewHolder holder = null;
 	private View v;
 	private int type = -1;
 	private boolean canDelete;
 	private boolean canEdit;
 
-	public CategoryListAdapter(Context context, int resource) {
-		super(context, resource);
+	@Override
+	public CompositionViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		LayoutInflater inflater = (LayoutInflater) parent.getContext()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View rootView = inflater.inflate(R.layout.category_view, parent, false);
+		CompositionViewHolder holder = new CompositionViewHolder(rootView,type);
+		return holder;
+	}
+
+	@Override
+	public void onBindViewHolder(final CompositionViewHolder holder, int position) {
+		Category category = categories.get(position);
+		ArrayList<Song> songs = getSongsFromCat(category.getId());
+		holder.objectId = category.getId();
+		/*
+		 * Set song titles
+		 */
+		holder.items[0].setText(category.getTitle()); // playlist name
+		/*
+		 * Set song titles
+		 */
+		for (int i = 0; i < holder.items.length-1; i++) {
+			String content = "" + (i + 1) + ". ";
+			if(i<songs.size()) {
+				content = content + songs.get(i).getName();
+			}
+			holder.items[i+1].setText(content);
+
+
+		}
+
+		/**
+		 * Menu
+		 */
+		setMenuLayout(holder);
+		/**
+		 * Edit Text
+		 */
+		holder.editText.setVisibility(View.INVISIBLE);
+		/**
+		 * Clear Button
+		 */
+		holder.clearBtn.setVisibility(View.INVISIBLE);
+		holder.clearBtn.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				holder.items[0].setVisibility(View.VISIBLE);
+				holder.editText.setVisibility(View.INVISIBLE);
+				holder.editText.getLayoutParams().height = Helper.dpToPx(20, context);
+				holder.editBtn.setVisibility(View.VISIBLE);
+				holder.clearBtn.setVisibility(View.INVISIBLE);
+				holder.submitBtn.setVisibility(View.INVISIBLE);
+			}
+		});
+		/**
+		 * submit Button
+		 */
+		setSubmitButton(holder);
+	}
+
+	public CategoryListAdapter() {
+		super();
 		type = setType();
 		canDelete = setCanDelete();
 		canEdit = setCanEdit();
@@ -55,8 +160,6 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 			}
 		}
 		ModelManager.getInstance(type).addObserver(this);
-		this.context = context;
-		this.resource = resource;
 
 	}
 	public ArrayList<Song> getSongs(int position){
@@ -67,14 +170,11 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 
 		switch (type) {
 		case PLAYLIST:
-			return new PlaylistAdapter(MusicPlayerMainActivity.getActivity()
-					.getApplicationContext(), R.layout.list_view);
+			return new PlaylistAdapter();
 		case ALBUM:
-			return new AlbumAdapter(MusicPlayerMainActivity.getActivity()
-					.getApplicationContext(), R.layout.list_view);
+			return new AlbumAdapter();
 		case ARTIST:
-			return new ArtistAdapter(MusicPlayerMainActivity.getActivity()
-					.getApplicationContext(), R.layout.list_view);
+			return new ArtistAdapter();
 
 		default:
 			return null;
@@ -133,92 +233,10 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 	 * @return list of songs
 	 */
 	protected ArrayList<Song> getSongsFromCat(String id) {
-//		System.out.println ("GET SONGS FROM CATE");
-
-//		return new ArrayList<Song>();
 		return ((CategoryManager) ModelManager.getInstance(type)).getSongsFromCategory(id);
 
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-
-		v = convertView;
-		if (v == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext()
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			v = inflater.inflate(R.layout.category_view, parent, false);
-
-			holder = new CompositionViewHolder(NUM_ITEM_IN_ONE_CATEGORY, v);
-			v.setTag(holder);
-		} else {
-			holder = (CompositionViewHolder) v.getTag();
-		}
-
-		setLayoutInformation(holder, categories.get(position), v);
-
-		return v;
-	}
-
-	/**
-	 * @param
-	 * @param category
-	 * @param v
-	 */
-	public void setLayoutInformation(final CompositionViewHolder holder,
-			Category category, View v) {
-
-
-		ArrayList<Song> songs = getSongsFromCat(category.getId());
-		holder.objectId = category.getId();
-		/*
-		 * Set song titles
-		 */
-		holder.items[0].setText(category.getTitle()); // playlist name
-		/*
-		 * Set song titles
-		 */
-		for (int i = 0; i < holder.items.length-1; i++) {
-			String content = "" + (i + 1) + ". ";
-			if(i<songs.size()) {
-				content = content + songs.get(i).getName();
-			}
-			holder.items[i+1].setText(content);
-
-
-		}
-
-		/**
-		 * Menu
-		 */
-		setMenuLayout(holder);
-		/**
-		 * Edit Text
-		 */
-		holder.editText.setVisibility(View.INVISIBLE);
-		/**
-		 * Clear Button
-		 */
-		holder.clearBtn.setVisibility(View.INVISIBLE);
-		holder.clearBtn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				holder.items[0].setVisibility(View.VISIBLE);
-				holder.editText.setVisibility(View.INVISIBLE);
-				holder.editText.getLayoutParams().height = Helper.dpToPx(20, context);
-				holder.editBtn.setVisibility(View.VISIBLE);
-				holder.clearBtn.setVisibility(View.INVISIBLE);
-				holder.submitBtn.setVisibility(View.INVISIBLE);
-			}
-		});
-		/**
-		 * submit Button
-		 */
-		setSubmitButton(holder);
-	}
 
 	/**
 	 * @param holder
@@ -301,19 +319,6 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		});
 	}
 
-
-
-	@Override
-	public Category getItem(int position) {
-		return categories.get(position);
-	}
-
-
-	@Override
-	public int getCount() {
-		return categories.size();
-	}
-
 	@Override
 	public void update(Observable observable, Object data) {
 		if(observable instanceof ModelManager) {
@@ -329,18 +334,14 @@ public abstract class CategoryListAdapter extends ArrayAdapter<Category>
 		}
 	}
 
-	@Override
-	public boolean hasStableIds() {
-		// TODO Auto-generated method stub
-		return true;
-	}
 
 	public int getAdapterType() {
 		// TODO Auto-generated method stub
 		return type;
 	}
-	
 
-
-
+	@Override
+	public int getItemCount() {
+		return categories.size();
+	}
 }

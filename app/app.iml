@@ -129,7 +129,6 @@
     <orderEntry type="library" exported="" name="org.urbanstew.soundcloudapi-0.9.3" level="project" />
     <orderEntry type="module" module-name="slidingup" exported="" />
     <orderEntry type="module" module-name="facebook" exported="" />
-    <orderEntry type="module" module-name="slidingmenu" exported="" />
     <orderEntry type="module" module-name="pagersliding" exported="" />
     <orderEntry type="module" module-name="markprogress" exported="" />
     <orderEntry type="module" module-name="apache_lib" exported="" />

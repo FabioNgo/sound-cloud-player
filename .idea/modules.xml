@@ -9,7 +9,6 @@
       <module fileurl="file://$PROJECT_DIR$/markprogress/markprogress.iml" filepath="$PROJECT_DIR$/markprogress/markprogress.iml" />
       <module fileurl="file://$PROJECT_DIR$/pagersliding/pagersliding.iml" filepath="$PROJECT_DIR$/pagersliding/pagersliding.iml" />
       <module fileurl="file://$PROJECT_DIR$/progresswheel/progresswheel.iml" filepath="$PROJECT_DIR$/progresswheel/progresswheel.iml" />
-      <module fileurl="file://$PROJECT_DIR$/slidingmenu/slidingmenu.iml" filepath="$PROJECT_DIR$/slidingmenu/slidingmenu.iml" />
       <module fileurl="file://$PROJECT_DIR$/slidingup/slidingup.iml" filepath="$PROJECT_DIR$/slidingup/slidingup.iml" />
       <module fileurl="file://$PROJECT_DIR$/sound-cloud-player.iml" filepath="$PROJECT_DIR$/sound-cloud-player.iml" />
     </modules>

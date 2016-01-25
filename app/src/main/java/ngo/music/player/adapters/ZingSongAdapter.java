@@ -16,11 +16,6 @@ public class ZingSongAdapter extends LiteListSongAdapter {
 
 	public static ZingSongAdapter instance = null;
 
-	public ZingSongAdapter(Context context, int resource) {
-		super(context, resource);
-		MusicPlayerServiceController.getInstance().addObserver(this);
-		ModelManager.getInstance(ZING).addObserver(this);
-	}
 
 	@Override
 	protected ArrayList<Song> getSongsFromData(Object data) {
@@ -30,29 +25,15 @@ public class ZingSongAdapter extends LiteListSongAdapter {
 	public static ZingSongAdapter getInstance() {
 
 		if (instance == null) {
-			instance = createNewInstance();
+			instance = new ZingSongAdapter();
 		}
 		return instance;
 	}
 
-	public static ZingSongAdapter createNewInstance() {
-		// TODO Auto-generated method stub
-		instance = new ZingSongAdapter(MusicPlayerMainActivity.getActivity()
-				.getApplicationContext(), R.layout.list_view);
-		return instance;
-	}
-
 	@Override
-	public void add(Song song) {
-		// TODO Auto-generated method stub
-//		if (!(song instanceof OfflineSong)) {
-//
-//		} else {
-//			songs.add(song);
-//		}
-
+	protected int setType() {
+		return ZING;
 	}
-
 
 	@Override
 	public void update(Observable observable, Object data) {
@@ -62,18 +43,6 @@ public class ZingSongAdapter extends LiteListSongAdapter {
 				notifyDataSetChanged();
 			}
 		}
-	}
-
-	@Override
-	public ArrayList<Song> getSongs() {
-		// TODO Auto-generated method stub
-		ArrayList<Model> temp = ModelManager.getInstance(ZING).getAll();
-		//System.out.println ("LIST MODEL SIZE = " + temp.size());
-		ArrayList<Song> output = new ArrayList<>();
-		for (Model model:temp) {
-			output.add((Song) model);
-		}
-		return output;
 	}
 	@Override
 	public int getSongMenuId() {

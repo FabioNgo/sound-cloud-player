@@ -4,191 +4,212 @@
 package ngo.music.player.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.volley.api.AppController;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
 import ngo.music.player.Controller.MenuController;
 import ngo.music.player.Controller.MusicPlayerServiceController;
+import ngo.music.player.Model.Model;
+import ngo.music.player.Model.OfflineSong;
 import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.R;
-import ngo.music.player.ViewHolder.SongInListViewHolder;
 import ngo.music.player.View.MusicPlayerMainActivity;
 import ngo.music.player.helper.Constants;
 import ngo.music.player.helper.Helper;
 import ngo.music.player.service.MusicPlayerService;
 
-public abstract class LiteListSongAdapter extends ArrayAdapter<Song> implements Constants.Models,Observer {
-	protected View rootView;
-	protected Context context;
-	protected int resource;
-	protected ArrayList<Song> songs;
-	SongInListViewHolder viewHolder = null;
-
-	public LiteListSongAdapter(Context context, int resource) {
-		super(context, resource);
-		this.context = context;
-		this.resource = resource;
-		songs = getSongs();
-		// TODO Auto-generated constructor stub
+public abstract class LiteListSongAdapter extends RecyclerView.Adapter<LiteListSongAdapter.SongInListViewHolder> implements Constants.Models,Observer {
+	public static RecyclerView.Adapter getInstance(int type) {
+		switch (type){
+			case OFFLINE:
+				if(OfflineSongAdapter.instance == null){
+					createInstance(type);
+				}
+				return OfflineSongAdapter.instance;
+			case QUEUE:
+				if(QueueSongAdapter.instance == null){
+					createInstance(type);
+				}
+				return QueueSongAdapter.instance;
+			case ZING:
+				if(ZingSongAdapter.instance == null){
+					createInstance(type);
+				}
+				return ZingSongAdapter.instance;
+			default:
+				return  null;
+		}
+	}
+	public static RecyclerView.Adapter createInstance(int type) {
+		switch (type){
+			case OFFLINE:
+				OfflineSongAdapter.instance = new OfflineSongAdapter();
+				return OfflineSongAdapter.instance;
+			case QUEUE:
+				QueueSongAdapter.instance = new QueueSongAdapter();
+				return QueueSongAdapter.instance;
+			case ZING:
+				ZingSongAdapter.instance = new ZingSongAdapter();
+				return ZingSongAdapter.instance;
+			default:
+				return  null;
+		}
 	}
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		rootView = convertView;
-		if (rootView == null) {
-			LayoutInflater inflater = (LayoutInflater) getContext()
-					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-			rootView = inflater.inflate(R.layout.song_in_list, parent, false);
-			viewHolder = new SongInListViewHolder(rootView);
-			rootView.setTag(viewHolder);
-		} else {
-			viewHolder = (SongInListViewHolder) rootView.getTag();
+	public class SongInListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+		public TextView position;
+		public ImageView menu;
+		public TextView title;
+		public TextView subtitle;
+		public TextView duration;
+		
+		private int menuId;
+		private Song item;
+
+		public SongInListViewHolder(View v, int menuID) {
+			super(v);
+			// TODO Auto-generated constructor stub
+//			background = (AppCompatImageView)v.findViewById(R.id.song_background);
+
+			position = (TextView) v.findViewById(R.id.song_position);
+			menu = (ImageView) v.findViewById(R.id.song_menu);
+			title = (TextView) v.findViewById(R.id.song_title);
+			subtitle = (TextView) v.findViewById(R.id.song_subtitle);
+			duration = (TextView)v.findViewById(R.id.song_duration);
+			this.menuId =menuID;
+			v.setOnClickListener(this);
 		}
 
-		setLayoutInformation(position, viewHolder, rootView);
-		return rootView;
-	}
+		@Override
+		public void onClick(View v) {
+			
+			MusicPlayerService.getInstance().playNewSong(getAdapterPosition(),songs);
+			return;
+		}
 
-	/**
-	 * @param position
-	 * @param v
-	 */
-	public void setLayoutInformation(int position,
-			final SongInListViewHolder viewHolder, View v) {
-		final Song song = songs.get(position);
-		this.viewHolder = viewHolder;
-		/**
-		 * Set avatar for song
-		 */
-
-		ImageLoader mImageLoader = AppController.getInstance().getImageLoader();
-
-		Helper.setImageViewSize(
-				Helper.dpToPx(50, getContext()),
-				Helper.dpToPx(50, getContext()), viewHolder.avatar);
-//		String artworkUrl = "";
-
-//		Drawable drawable = context.getResources().getDrawable(
-//				R.drawable.ic_launcher);
-//
-//		viewHolder.avatar.
-
-		/**
-		 * set menu
-		 */
-
-		viewHolder.menu.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
-						.getActivity(), v);
-				// Inflating the Popup using xml file
-				popup.getMenuInflater().inflate(getSongMenuId(),
-						popup.getMenu());
-
-				// registering popup with OnMenuItemClickListener
-				ArrayList<Song> songs = new ArrayList<>();
-				songs.add(song);
-				popup.setOnMenuItemClickListener(MenuController
-						.getInstance(songs));
-
-				popup.show(); // showing popup menu
+		public void setItem(final Song item, int pos) {
+			this.item = item;
+			position.setText(String.valueOf(pos+1));
+			title.setText(item.getName());
+			subtitle.setText(item.getArtist());
+			/**
+			 * Set time
+			 */
+			try{
+				duration.setText(Helper.toFormatedTime(item.getDuration()));
+			}catch (Exception e){
+				e.printStackTrace();
 			}
-		});
-		/*
-		 * Set title
-		 */
+			menu.setOnClickListener(new OnClickListener() {
 
-		viewHolder.title.setText(song.getName());
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					PopupMenu popup = new PopupMenu(MusicPlayerMainActivity
+							.getActivity(), v);
+					// Inflating the Popup using xml file
+					popup.getMenuInflater().inflate(menuId,
+							popup.getMenu());
 
-		/*
-		 * Set sub title
-		 */
+					// registering popup with OnMenuItemClickListener
+					ArrayList<Song> songs = new ArrayList<>();
+					songs.add(item);
+					popup.setOnMenuItemClickListener(MenuController
+							.getInstance(songs));
 
-		viewHolder.subtitle.setText(song.getArtist());
-		/**
-		 * Set background , to indicate which song is playing
-		 */
-		if (song.equals(MusicPlayerServiceController.getInstance().getCurrentSong())) {
+					popup.show(); // showing popup menu
+				}
+			});
+			/**
+			 * Set background , to indicate which song is playing
+			 */
 
-			viewHolder.background.setBackgroundResource(R.color.primary_light);
-		} else {
+			if (item.equals(MusicPlayerServiceController.getInstance().getCurrentSong())) {
+				position.setTextColor(MusicPlayerMainActivity.getActivity().getResources().getColor(R.color.primary));
+				position.setTypeface(Typeface.create("",Typeface.BOLD));
 
-			viewHolder.background
-					.setBackgroundResource(R.color.background_material_light);
+			} else {
+
+				position.setTextColor(MusicPlayerMainActivity.getActivity().getResources().getColor(R.color.primary_text));
+				position.setTypeface(Typeface.create("", Typeface.NORMAL));
+			}
+
 
 		}
-		/**
-		 * Set time
-		 */
-		try{
-			viewHolder.duration.setText(Helper.toFormatedTime(songs.get(position).getDuration()));
-		}catch (Exception e){
-			e.printStackTrace();
+	}
+	LiteListSongAdapter(){
+		type = setType();
+		MusicPlayerServiceController.getInstance().addObserver(this);
+		ModelManager.getInstance(type).addObserver(this);
+		this.songs = getSongs();
+	}
+
+	protected abstract int setType();
+
+	public ArrayList<Song> getSongs() {
+		ArrayList<Model> temp = ModelManager.getInstance(type).getAll();
+		//System.out.println ("LIST MODEL SIZE = " + temp.size());
+		ArrayList<Song> songs = new ArrayList<>();
+		for (Model model:temp) {
+			songs.add((Song) model);
 		}
+		return songs;
+	}
+
+	protected ArrayList<Song> songs;
+	private int type = -1;
 
 
+	@Override
+	public SongInListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		LayoutInflater inflater = (LayoutInflater) parent.getContext()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View rootView = inflater.inflate(R.layout.song_in_list, parent, false);
+		SongInListViewHolder viewHolder = new SongInListViewHolder(rootView, getSongMenuId());
+		return viewHolder;
 	}
 
 	@Override
-	public Song getItem(int position) {
-		return songs.get(position);
+	public void onBindViewHolder(SongInListViewHolder holder, int position) {
+		holder.setItem(songs.get(holder.getAdapterPosition()),position);
 	}
-
-	@Override
-	public int getCount() {
-		return songs.size();
-	}
-
-	public void updateSongs() {
-		// TODO Auto-generated method stub
-		songs = getSongs();
-		this.notifyDataSetChanged();
-	}
-
-	@Override
-	public void clear() {
-		// TODO Auto-generated method stub
-		songs.clear();
-	}
-
-	public ArrayList<String> getSongIds() {
-		ArrayList<String> result = new ArrayList<>();
-		for (Song song : songs) {
-			result.add(song.getId());
-		}
-		return result;
-
-	}
-
-
 	public void update(Observable observable, Object data) {
 		if(observable instanceof ModelManager) {
 			this.songs = getSongsFromData(data);
 			notifyDataSetChanged();
+
 		}
 
 	}
 
 	protected abstract ArrayList<Song> getSongsFromData(Object data);
-
-	public abstract ArrayList<Song> getSongs();
 	public abstract int getSongMenuId();
+
+	@Override
+	public int getItemCount() {
+		return songs.size();
+	}
 }

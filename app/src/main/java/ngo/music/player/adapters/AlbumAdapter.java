@@ -6,11 +6,11 @@ public class AlbumAdapter extends CategoryListAdapter {
 
 	static AlbumAdapter instance = null;
 
-	AlbumAdapter(Context context, int resource) {
-		super(context, resource);
+	AlbumAdapter() {
+		super();
 		// TODO Auto-generated constructor stub
 		instance = this;
-		
+
 	}
 
 	

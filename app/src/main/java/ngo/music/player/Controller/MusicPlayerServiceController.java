@@ -266,6 +266,9 @@ public class MusicPlayerServiceController extends Observable implements Constant
     public void storeData() {
         // TODO Auto-generated method stub
         JSONObject object = new JSONObject();
+        if(currentSong == null){
+            return;
+        }
         try {
             object.put("song_id",currentSong.getId());
             object.put("stopped_time", MusicPlayerService.getInstance().getCurrentTime());

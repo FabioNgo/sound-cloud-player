@@ -1,5 +1,6 @@
 package ngo.music.player.View.fragment.real;
 
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.widget.ArrayAdapter;
 
@@ -11,10 +12,6 @@ import ngo.music.player.adapters.OfflineSongAdapter;
 
 public class OfflineSongsFragment extends ListContentFragment {
 
-	public ArrayAdapter<?> getAdapter() {
-		// TODO Auto-generated method stub
-		return OfflineSongAdapter.getInstance();
-	}
 
 
 

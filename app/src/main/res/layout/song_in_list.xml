@@ -2,22 +2,32 @@
 <!-- Layout of the single song in a list view of songs  -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
-	android:id = "@+id/song_background"
+	android:clickable="true"
+	android:background="?android:selectableItemBackground"
 	android:layout_height="50dp">
 
-	<ImageView
-		android:id="@+id/song_image"
-		android:layout_width="50dp"
-		android:layout_height="50dp"
-		android:layout_alignParentStart="true"
-		android:src="@drawable/ic_launcher"/>
+	<TextView
+		android:id="@+id/song_position"
+		android:gravity="center"
+		android:textSize="20dp"
 
+		android:layout_width="49dp"
+		android:layout_height="49dp"
+		android:layout_alignParentStart="true"
+
+		android:src="@drawable/ic_launcher"/>
+	<View
+		android:layout_toEndOf="@+id/song_position"
+		android:layout_width="1dp"
+		android:layout_height="match_parent"
+		android:id="@+id/separator"
+		android:background="@color/secondary_text"/>
 	<TextView
 		android:id="@+id/song_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="4dp"
-		android:layout_toEndOf="@+id/song_image"
+		android:layout_toEndOf="@+id/separator"
 		android:layout_toStartOf="@+id/song_duration"
 		
 		android:singleLine="true"
@@ -31,7 +41,7 @@
 		android:layout_height="wrap_content"
 		android:layout_alignStart="@+id/song_title"
 		android:layout_below="@+id/song_title"
-		android:layout_toEndOf="@+id/song_image"
+		android:layout_toEndOf="@+id/separator"
 		android:layout_toStartOf="@+id/song_duration"
 		android:singleLine="true"
 		android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
@@ -59,5 +69,10 @@
 		android:focusable="false"
 		android:scaleType="fitCenter"
 		android:src="@drawable/ic_more_vert"/>
-
+	<View
+		android:layout_below="@+id/song_position"
+		android:layout_width="match_parent"
+		android:layout_height="0.5dp"
+		android:id="@+id/divider"
+		android:background="@color/secondary_text"/>
 </RelativeLayout>

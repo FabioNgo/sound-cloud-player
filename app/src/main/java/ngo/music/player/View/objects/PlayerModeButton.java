@@ -2,6 +2,7 @@ package ngo.music.player.View.objects;
 
 import android.content.Context;
 import android.support.design.widget.FloatingActionButton;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
@@ -19,11 +20,21 @@ import ngo.music.player.helper.Helper;
  */
 public class PlayerModeButton extends FloatingActionButton implements Constants.MusicService {
     int playerMode = -1;
-
-
     Context context;
     public PlayerModeButton(Context context) {
         super(context);
+        this.context = context;
+        initialize();
+    }
+    public PlayerModeButton(Context context, AttributeSet attrs) {
+        super(context,attrs);
+        this.context = context;
+        initialize();
+
+    }
+
+    public PlayerModeButton(Context context, AttributeSet attrs, int defStyleAttr){
+        super(context,attrs,defStyleAttr);
         this.context = context;
         initialize();
     }
@@ -31,6 +42,7 @@ public class PlayerModeButton extends FloatingActionButton implements Constants.
 
     private void initialize() {
         int size = (int) getResources().getDimension(R.dimen.fab_mini_size);
+
 
         RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(size,size);
         int margin = (int) getResources().getDimension(R.dimen.fab_margin_sub);

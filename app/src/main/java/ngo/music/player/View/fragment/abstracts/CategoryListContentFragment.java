@@ -1,12 +1,11 @@
 package ngo.music.player.View.fragment.abstracts;
 
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
 import java.util.Observable;
-
-import ngo.music.player.ViewHolder.CompositionViewHolder;
 import ngo.music.player.adapters.CategoryListAdapter;
 import ngo.music.player.View.fragment.real.AlbumsFragment;
 import ngo.music.player.View.fragment.real.ArtistsFragment;
@@ -98,7 +97,7 @@ public abstract class CategoryListContentFragment extends
 
 
 	@Override
-	protected ArrayAdapter<?> getAdapter() {
+	protected RecyclerView.Adapter getAdapter() {
 		type = getCategory();
 		return CategoryListAdapter.getInstance(type);
 		

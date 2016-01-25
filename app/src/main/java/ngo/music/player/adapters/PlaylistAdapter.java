@@ -6,13 +6,13 @@ public class PlaylistAdapter extends CategoryListAdapter {
 
 	static PlaylistAdapter instance = null;
 
-	PlaylistAdapter(Context context, int resource) {
-		super(context, resource);
+	PlaylistAdapter() {
+		super();
 		// TODO Auto-generated constructor stub
 		instance = this;
 	}
 
-	
+
 
 	@Override
 	protected int setType() {

@@ -1,7 +1,5 @@
 package ngo.music.player.adapters;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -10,27 +8,23 @@ import ngo.music.player.Model.Song;
 import ngo.music.player.ModelManager.ModelManager;
 import ngo.music.player.ModelManager.QueueManager;
 import ngo.music.player.R;
-import ngo.music.player.View.MusicPlayerMainActivity;
-import ngo.music.player.service.MusicPlayerService;
 
 public class QueueSongAdapter extends LiteListSongAdapter {
 
 
 	public static QueueSongAdapter instance = null;
 
-	public QueueSongAdapter(Context context, int resource) {
-		super(context, resource);
-		MusicPlayerServiceController.getInstance().addObserver(this);
-		ModelManager.getInstance(QUEUE).addObserver(this);
-		ModelManager a = ModelManager.getInstance(QUEUE);
+
+
+	@Override
+	protected int setType() {
+		return QUEUE;
 	}
 
 	public static QueueSongAdapter getInstance() {
 
 		if (instance == null) {
-			instance = new QueueSongAdapter(MusicPlayerMainActivity
-					.getActivity().getApplicationContext(),
-					R.layout.song_in_list);
+			instance = new QueueSongAdapter();
 		}
 		return instance;
 	}

@@ -31,9 +31,9 @@ public class MenuController implements OnMenuItemClickListener, Constants.Models
 			instance = new MenuController(songs);
 		} else {
 			instance.songs = songs;
-			instance.category = category;
-		}
 
+		}
+		instance.category = category;
 		return instance;
 	}
 	public static MenuController getInstance(ArrayList<Song> songs) {
@@ -100,6 +100,7 @@ public class MenuController implements OnMenuItemClickListener, Constants.Models
 			break;
 		case R.id.composition_list_item_delete:
 			ModelManager.getInstance(category.getType()).remove(category.getId());
+
 			break;
 		case R.id.composition_list_item_add_to_queue:
 			((QueueManager)ModelManager.getInstance(QUEUE)).addSongsToCategory(songs);

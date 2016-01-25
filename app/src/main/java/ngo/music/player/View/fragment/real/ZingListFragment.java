@@ -36,15 +36,6 @@ public class ZingListFragment extends ListContentFragment {
 		return ZING;
 	}
 
-	/**
-	 * getAdapter of the list (E.g: OfflineSongAdapter, SCSongAdapter....)
-	 *
-	 * @return
-	 */
-	@Override
-	protected ArrayAdapter<?> getAdapter() {
-		return ZingSongAdapter.getInstance();
-	}
 
 
 	@Override

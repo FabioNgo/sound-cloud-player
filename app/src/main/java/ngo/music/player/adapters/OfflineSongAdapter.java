@@ -17,11 +17,6 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 	
 	public static OfflineSongAdapter instance = null;
 
-	public OfflineSongAdapter(Context context, int resource) {
-		super(context, resource);
-		MusicPlayerServiceController.getInstance().addObserver(this);
-		ModelManager.getInstance(OFFLINE).addObserver(this);
-	}
 
 	@Override
 	protected ArrayList<Song> getSongsFromData(Object data) {
@@ -31,29 +26,15 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 	public static OfflineSongAdapter getInstance() {
 
 		if (instance == null) {
-			instance = createNewInstance();
+			instance = new OfflineSongAdapter();
 		}
 		return instance;
 	}
 
-	public static OfflineSongAdapter createNewInstance() {
-		// TODO Auto-generated method stub
-		instance = new OfflineSongAdapter(MusicPlayerMainActivity.getActivity()
-				.getApplicationContext(), R.layout.list_view);
-		return instance;
-	}
-
 	@Override
-	public void add(Song song) {
-		// TODO Auto-generated method stub
-//		if (!(song instanceof OfflineSong)) {
-//
-//		} else {
-//			songs.add(song);
-//		}
-
+	protected int setType() {
+		return OFFLINE;
 	}
-
 
 	@Override
 	public void update(Observable observable, Object data) {
@@ -63,18 +44,6 @@ public class OfflineSongAdapter extends LiteListSongAdapter {
 				notifyDataSetChanged();
 			}
 		}
-	}
-
-	@Override
-	public ArrayList<Song> getSongs() {
-		// TODO Auto-generated method stub
-		ArrayList<Model> temp = ModelManager.getInstance(OFFLINE).getAll();
-		ArrayList<Song> output = new ArrayList<>();
-		for (Model model:temp) {
-			output.add((Song) model);
-		}
-
-		return output;
 	}
 	@Override
 	public int getSongMenuId() {

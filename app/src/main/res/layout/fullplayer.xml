@@ -39,22 +39,13 @@
 			android:id="@+id/seekbar"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			app:progressEmptyColor="#4E3C51"
-			app:progressLoadedColor="#E91E64"
+			app:progressEmptyColor="@color/primary_text"
+			app:progressLoadedColor="@color/accent"
 			app:coverMaskColor="#80000000"
 			app:durationTextColor="#FFFFFF"
 			app:durationTextSize="15sp"
-			app:progressHeight="20dp"
-			app:currentProgress="23"/>
-		<RelativeLayout
-			android:visibility="gone"
-			android:id="@+id/opacity_layout"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:alpha="0.6"
-			android:background="#212121"
-			android:gravity="bottom">
-		</RelativeLayout>
+			app:progressHeight="4dp"
+			/>
 		<!-- ARTIST INFO -->
 
 		<RelativeLayout
@@ -107,32 +98,36 @@
 		android:id="@+id/full_player_media_btn_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+
 		android:layout_below="@+id/song_info_field">
 
-		<ImageView
+		<ImageButton
 			android:id="@+id/play_pause_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
+			android:backgroundTint="@color/primary"
 			android:layout_centerVertical="true"/>
 
 
 
-		<ImageView
+		<ImageButton
 			android:id="@+id/full_player_next_song"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_toEndOf="@+id/play_pause_button"
-			android:src="@drawable/ic_skip_next"/>
+			android:backgroundTint="@color/primary"
+			android:src="@drawable/ic_skip_next_64dp"/>
 
-		<ImageView
+		<ImageButton
 			android:id="@+id/full_player_prev_song"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerVertical="true"
 			android:layout_toStartOf="@+id/play_pause_button"
-			android:src="@drawable/ic_skip_previous"/>
+			android:backgroundTint="@color/primary"
+			android:src="@drawable/ic_skip_previous_64dp"/>
 	</RelativeLayout>
 
 
@@ -143,11 +138,27 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentStart="true"
+
 			android:layout_alignParentBottom="true"
 
 			/>
-
-		<ImageView
+		<ngo.music.player.View.objects.PlayerModeButton
+			android:layout_margin="@dimen/fab_margin_sub"
+			android:id="@+id/full_player_mode1"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_alignParentStart="true"
+			app:fabSize="mini"
+			android:layout_alignParentBottom="true" />
+	<ngo.music.player.View.objects.PlayerModeButton
+		android:layout_margin="@dimen/fab_margin_sub"
+		android:id="@+id/full_player_mode2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:fabSize="mini"
+		android:layout_alignParentStart="true"
+		android:layout_alignParentBottom="true" />
+		<android.support.v7.widget.AppCompatImageButton
 			android:id="@+id/full_player_add_playlist"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"

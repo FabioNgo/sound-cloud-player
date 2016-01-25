@@ -6,8 +6,8 @@ public class ArtistAdapter extends CategoryListAdapter {
 
 	static ArtistAdapter instance = null;
 
-	ArtistAdapter(Context context, int resource) {
-		super(context, resource);
+	ArtistAdapter() {
+		super();
 		// TODO Auto-generated constructor stub
 		instance = this;
 

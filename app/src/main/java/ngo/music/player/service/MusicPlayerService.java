@@ -579,8 +579,11 @@ public class MusicPlayerService extends Service implements OnErrorListener,
 	}
 
 	public void seekTo(int position) {
-		if(States.musicPlayerState == MUSIC_NEW_SONG || States.musicPlayerState == MUSIC_RESUME){
-			mediaPlayer.seekTo(position*1000);
+		mediaPlayer.seekTo(position*1000);
+		if(States.musicPlayerState == MUSIC_PAUSE || States.musicPlayerState == MUSIC_STOPPED){
+			startPause();
+
+
 		}
 	}
 

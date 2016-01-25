@@ -22,12 +22,6 @@ import ngo.music.player.service.MusicPlayerService;
 
 public class QueueFragment extends ListContentFragment {
 
-	@Override
-	protected ArrayAdapter<?> getAdapter() {
-		// TODO Auto-generated method stub
-		return QueueSongAdapter.getInstance();
-	}
-
 
 	@Override
 	protected int getCategory() {
@@ -77,7 +71,7 @@ public class QueueFragment extends ListContentFragment {
 	@Override
 	protected void updateToolbar(Toolbar toolbar) {
 		// TODO Auto-generated method stub
-		toolbar.setSubtitle(String.valueOf((QueueSongAdapter.getInstance().getCount())) + " songs");
+		toolbar.setSubtitle(String.valueOf((QueueSongAdapter.getInstance().getItemCount())) + " song(s)");
 	}
 
 	@Override

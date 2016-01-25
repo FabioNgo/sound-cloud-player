@@ -11,12 +11,13 @@
 		android:layout_height="?attr/actionBarSize"
 		sothree:theme="@style/ActionBarTheme"/>
 
-	<ListView
+	<android.support.v7.widget.RecyclerView
 		android:id="@+id/items_list"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+
 		android:layout_below="@+id/toolbar">
-	</ListView>
+	</android.support.v7.widget.RecyclerView>
 
 	<TextView
 		android:id="@+id/notice"

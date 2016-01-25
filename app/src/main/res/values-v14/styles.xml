@@ -38,7 +38,6 @@
 		<!-- All customizations that are NOT specific to a particular API-level can go here. -->
 		<item name="android:background">@color/primary</item>
 		<item name="android:textColorPrimary">@color/icons</item>
-		<item name="popupMenuStyle">@style/Widget.AppCompat.Light.PopupMenu</item>
 	</style>
 
 </resources>

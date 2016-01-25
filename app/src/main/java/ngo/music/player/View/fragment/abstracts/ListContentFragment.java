@@ -2,6 +2,9 @@ package ngo.music.player.View.fragment.abstracts;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,10 +37,10 @@ public abstract class ListContentFragment extends Fragment implements
 		Constants.MusicService, Constants.Models, Constants.Appplication,
 		OnItemClickListener, Comparable<ListContentFragment>,Observer {
 	protected View rootView;
-	protected ArrayAdapter<?> adapter;
+	protected RecyclerView.Adapter adapter;
 	protected int category;
 	protected Toolbar toolbar;
-	protected ListView listView;
+	protected RecyclerView listView;
 
 	public ListContentFragment() {
 		// TODO Auto-generated constructor stub
@@ -54,18 +57,24 @@ public abstract class ListContentFragment extends Fragment implements
 		// TODO Auto-generated method stub
 
 		rootView = inflater.inflate(R.layout.list_view, container, false);
-		listView = (ListView) rootView.findViewById(R.id.items_list);
+		listView = (RecyclerView) rootView.findViewById(R.id.items_list);
 		toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
 		adapter = getAdapter();
+		listView.setAdapter(adapter);
+		listView.setHasFixedSize(true);
+		listView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+		DefaultItemAnimator defaultItemAnimator = new DefaultItemAnimator();
+		defaultItemAnimator.setAddDuration(250);
+		defaultItemAnimator.setRemoveDuration(250);
+		listView.setItemAnimator(defaultItemAnimator);
 		if(hasToolbar()){
 
 			setUpToolBar(toolbar);
 		}else{
 			toolbar.setVisibility(View.GONE);
 		}
-
-		load();
+		updateToolbar(toolbar);
 		return rootView;
 	}
 	/**
@@ -94,21 +103,12 @@ public abstract class ListContentFragment extends Fragment implements
 	 * getAdapter of the list (E.g: OfflineSongAdapter, SCSongAdapter....)
 	 * @return
 	 */
-	protected abstract ArrayAdapter<?> getAdapter();
-
-	/**
-	 * Load fragment activity, often list view fragment
-	 *
-	 *
-	 */
-	public void load() {
-		listView = (ListView) rootView.findViewById(R.id.items_list);
-
-		listView.setAdapter(adapter);
-		listView.setOnItemClickListener(this);
-		updateToolbar(toolbar);
+	protected RecyclerView.Adapter getAdapter() {
+		int type = getCategory();
+		return LiteListSongAdapter.getInstance(type);
 
 	}
+
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View arg1, int position,
@@ -119,7 +119,6 @@ public abstract class ListContentFragment extends Fragment implements
 		if (adapter instanceof LiteListSongAdapter) {
 			// ((ArrayAdapter<OnlineSong>) adapter).notifyDataSetChanged();
 			ArrayList<Song> songs = ((LiteListSongAdapter) adapter).getSongs();
-			System.out.println ("POSITION = " + position);
 			MusicPlayerService.getInstance().playNewSong(position,
 					songs);
 			return;
@@ -144,4 +143,6 @@ public abstract class ListContentFragment extends Fragment implements
 		// TODO Auto-generated method stub
 		return this.getClass().toString().compareTo(another.getClass().toString());
 	}
+
+
 }
